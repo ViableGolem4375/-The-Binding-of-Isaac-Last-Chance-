@@ -1,0 +1,5 @@
+<entities anm2root="gfx/" version="5">
+    <entity name="Lil' Uriel" id="3" anm2path="uriel.anm2" tags="cansacrifice angel" shadowSize="11" friction="1" />
+    <entity name="Lil' Gabriel" id="3" anm2path="gabriel.anm2" tags="cansacrifice angel" shadowSize="11" friction="1" />
+    <entity name="Failed Abortion" id="3" anm2path="failed_abortion.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
+</entities>

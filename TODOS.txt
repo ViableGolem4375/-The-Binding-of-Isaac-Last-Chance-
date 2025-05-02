@@ -1,0 +1,12 @@
+- Make sure that error fixing mod is listed as a dependency for compatability with fiend folio.
+- Fix some visuals.
+- Characters need icons for birthright.
+- Need to change tainted description thing.
+- Death screen needs to differentiate between tainted/non-tainted.
+- Final Judgement visual bug fix.
+
+Item Ideas to Add:
+
+Essence Items:
+- Eden: Item that rerolls into 3 Q4 items.
+- Lilith: Make all enemies in the room friendly.

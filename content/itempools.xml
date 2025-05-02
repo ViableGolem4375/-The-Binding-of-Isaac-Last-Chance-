@@ -1,0 +1,17 @@
+<ItemPools>
+    <Pool Name="treasure">
+        <Item Name="Lucky Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dull Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Catalyst Character Sheet" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Failed Abortion" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+    </Pool>
+    <Pool Name="devil">
+        <Item Name="Unholy Mantle" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Failed Abortion" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+    </Pool>
+    <Pool Name="angel">
+        <Item Name="Lil' Uriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Lil' Gabriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Final Judgement" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+    </Pool>
+</ItemPools>

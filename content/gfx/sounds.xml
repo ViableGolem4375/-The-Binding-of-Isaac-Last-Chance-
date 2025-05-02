@@ -1,0 +1,8 @@
+<sounds root="sounds/">
+    <sound name="SWORD_SPIN_1" filename="sword_spin1.wav"/>
+    <sound name="SOUND_BERSERK_START" filename = "berserkstart.wav"/>
+    <sound name="SOUND_BERSERK_TICK" filename = "berserktick.wav"/>
+    <sound name="SOUND_BERSERK_END" filename = "berserkend.wav"/>
+    <sound name="SOUND_JUDGEMENT_START" filename = "finaljudgementstart.wav"/>
+    <sound name="SOUND_JUDGEMENT_END" filename = "finaljudgementend.wav"/>
+</sounds>

@@ -1,0 +1,7 @@
+<costumes anm2root="gfx/characters/">
+    <costume anm2path="costume_template.anm2" type="none" priority="10" />
+    <costume anm2path="costume_template_flight.anm2" type="none" priority="10" isFlying="true" />
+    <costume id="3" anm2path="unholymantle.anm2" type="passive" priority="0" />
+    <costume id="5" anm2path="judgement.anm2" type="active" priority="0" />
+    <costume id="6" anm2path="judgement.anm2" type="active" priority="0" />
+</costumes>

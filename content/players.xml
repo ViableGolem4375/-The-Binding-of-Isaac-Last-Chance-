@@ -1,0 +1,35 @@
+<players 
+        root="gfx/characters/costumes/" 
+        portraitroot="gfx/ui/stage/" 
+        nameimageroot="gfx/ui/boss/">
+    <player 
+        name="Template" 
+        skin="character_template.png" 
+        nameimage="playername_template.png" 
+        portrait="playerportrait_template.png"
+        birthright="Luck way up + luck = power!" 
+        hp="4" 
+        coins="1" 
+        keys="1" 
+        bombs="1" 
+        skinColor="-1"
+        canShoot="True" 
+    />
+    <player 
+        name="Template"
+        skin="character_template_b.png" 
+        bSkinParent="Template"
+        nameimage="playername_template_b.png" 
+        portrait="playerportrait_template_b.png"
+        birthright="Jinx breaker"
+        hp="6"
+        armor="2"
+        coins="1" 
+        keys="1" 
+        bombs="1"
+        skinColor="-1"
+        canShoot="True"
+        costumeSuffix="b"
+        costume="104"
+    />
+</players>

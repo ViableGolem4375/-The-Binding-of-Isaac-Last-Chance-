@@ -1,0 +1,86 @@
+local FamiliarData = {}
+
+---@param player EntityPlayer
+function Mod:EvaluateCache(player)
+    local effects = player:GetEffects()
+    local count = effects:GetCollectibleEffectNum(URIEL_ITEM) + player:GetCollectibleNum(URIEL_ITEM)
+    local rng = RNG()
+    local seed = math.max(Random(), 1)
+    rng:SetSeed(seed, RNG_SHIFT_INDEX_URIEL)
+
+    player:CheckFamiliar(FAMILIAR_VARIANT_URIEL, count, rng, CONFIG_URIEL)
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.EvaluateCache, CacheFlag.CACHE_FAMILIARS)
+
+---@param familiar EntityFamiliar
+function Mod:HandleInit(familiar)
+    familiar:AddToFollowers()
+    -- Store custom properties separately using the familiar's unique index
+    FamiliarData[familiar.InitSeed] = {
+        FireCooldown = 0,
+        Charge = 0
+    }
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.HandleInit, FAMILIAR_VARIANT_URIEL)
+
+---@param familiar EntityFamiliar
+function Mod:HandleUpdate(familiar)
+    local sprite = familiar:GetSprite()
+    local player = familiar.Player
+
+    local data = FamiliarData[familiar.InitSeed]
+    if not data then return end -- Safety check
+
+    local fireDirection = player:GetFireDirection()
+    local direction
+    local shootAnim
+    local doFlip = false
+
+    if fireDirection == Direction.LEFT then
+        direction = Vector(-1, 0)
+        shootAnim = "FloatShootSide"
+        doFlip = true
+    elseif fireDirection == Direction.RIGHT then
+        direction = Vector(1, 0)
+        shootAnim = "FloatShootSide"
+    elseif fireDirection == Direction.DOWN then
+        direction = Vector(0, 1)
+        shootAnim = "FloatShootDown"
+    elseif fireDirection == Direction.UP then
+        direction = Vector(0, -1)
+        shootAnim = "FloatShootUp"
+    end
+
+    if direction ~= nil and familiar.FireCooldown == 0 then
+        data.Charge = math.min(data.Charge + 1, MAX_CHARGE_URIEL)
+        --local velocity = direction * TEAR_SPEED_URIEL + player:GetTearMovementInheritance(direction)
+        local laser = Isaac.Spawn(
+            EntityType.ENTITY_LASER,
+            LaserVariant.LIGHT_BEAM,
+            0,
+            familiar.Position,
+            direction * LASER_RANGE_URIEL,
+            familiar
+        ):ToLaser()
+
+        --tear.Scale = TEAR_SCALE_URIEL
+        --tear.CollisionDamage = TEAR_DAMAGE_URIEL
+        laser.CollisionDamage = TEAR_DAMAGE_URIEL
+
+        familiar.FireCooldown = SHOOTING_TICK_COOLDOWN_URIEL
+
+        sprite.FlipX = doFlip
+        sprite:Play(shootAnim, true)
+    end
+
+    if sprite:IsFinished() then
+        sprite:Play("FloatDown")
+    end
+
+    familiar:FollowParent()
+    familiar.FireCooldown = math.max(familiar.FireCooldown - 1, 0)
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdate, FAMILIAR_VARIANT_URIEL)
