@@ -494,8 +494,14 @@ function Mod:LuckyDiceUse(item, rng, player, flags)
     for _, entity in ipairs(entities) do
         if entity.Type == EntityType.ENTITY_PICKUP and entity.Variant == PickupVariant.PICKUP_COLLECTIBLE then
             local pedestal = entity:ToPickup()
-            local newItem = predefinedItems[rng:RandomInt(#predefinedItems) + 1] -- Pick a random item from the list
-            pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
+            -- Ensure the pedestal already holds an item before rerolling
+            if pedestal.SubType ~= 0 then
+                local newItem = predefinedItems[rng:RandomInt(#predefinedItems) + 1] -- Pick a random item
+                pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
+            end
+
+            --local newItem = predefinedItems[rng:RandomInt(#predefinedItems) + 1] -- Pick a random item from the list
+            --pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
         end
     end
 
