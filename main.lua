@@ -305,12 +305,8 @@ if StageAPI and StageAPI.Loaded then
 		NoShake = false,
         Controls = "gfx/ui/matt_controls.png"
     })
-    --StageAPI.AddPlayerGraphicsInfo("Templateb", {
-        --Name = "gfx/ui/boss/playername_template.png",
-		--Portrait = "gfx/ui/stage/playerportrait_template.png",
-		--NoShake = false,
-      --  Controls = "gfx/ui/matt_controls.png"
-    --})
+--[[     Mod.luarooms = {}
+	Mod.luarooms.TT = StageAPI.RoomsList("TaintedTreasureRooms", require("resources.luarooms.reliquaryluarooms")) ]]
 end
 
 ----------------------------------------------------------------------------------------
@@ -1178,3 +1174,111 @@ function Mod:OnUseEssenceOfLilithItem(itemUsed, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseEssenceOfLilithItem, LILITH_ESSENCE)
+
+----------------------------------------------------------------------------------------
+--- Room Code Below.
+
+local RELIQUARY_POOL = {
+    LILITH_ESSENCE
+    -- Add more items as needed
+}
+
+function GetRandomCustomItem()
+    local index = math.random(#RELIQUARY_POOL)
+    return RELIQUARY_POOL[index] -- Returns a random item from the pool
+end
+
+
+-- Helper function to check if a table contains a value
+function TableContains(tbl, value)
+    for _, v in ipairs(tbl) do
+        if v == value then
+            return true
+        end
+    end
+    return false
+end
+
+function Mod:FilterItemPoolOnRoomEntry()
+    local room = Game():GetRoom()
+    local level = Game():GetLevel()
+    local roomDesc = level:GetRoomByIdx(level:GetCurrentRoomIndex())
+    local roomID = roomDesc.GridIndex -- This gives you the unique room ID
+
+
+    -- Define Room IDs that should use the custom pool
+    local customVaultRooms = {7777} -- Replace with your actual Room IDs
+
+    -- Check if the current room matches your custom rooms
+    if roomID == -3 then
+        local itemPool = Game():GetItemPool()
+
+        -- Find all collectible pedestals and reroll them
+        for _, entity in ipairs(Isaac.GetRoomEntities()) do
+            if entity.Type == EntityType.ENTITY_PICKUP then
+                local pickup = entity:ToPickup()
+                if pickup and pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE then
+                    local newItem = GetRandomCustomItem()
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false)
+                end
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.FilterItemPoolOnRoomEntry)
+
+
+-- Helper function to check if a table contains a value
+--[[ function TableContains(tbl, value)
+    for _, v in ipairs(tbl) do
+        if v == value then
+            return true
+        end
+    end
+    return false
+end
+
+function Mod:ChangeRoomBackdrop()
+    local room = Game():GetRoom()
+    local level = Game():GetLevel()
+    local roomDesc = level:GetRoomByIdx(level:GetCurrentRoomIndex())
+
+    -- **Define Room IDs that should use the custom backdrop**
+    local customRooms = {7777} -- Replace with your actual Room IDs
+
+    -- **Check if the current room matches your custom rooms using the helper function**
+    if TableContains(customRooms, roomDesc.SafeGridIndex) then
+        -- **Set a new backdrop (e.g., Cathedral)**
+        room:SetBackdropType(BackdropType.ISAAC, 21)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.ChangeRoomBackdrop) ]]
+
+--[[ StageAPI.AddCustomRoomType({
+    Name = "MyCustomRoom",
+    DefaultBackdrop = BackdropType.CATHEDRAL, -- Override backdrop
+    Shape = RoomShape.ROOMSHAPE_1x1,
+    RoomGfx = "gfx/backdrops/test.png", -- Use a custom backdrop
+})
+
+StageAPI.SetRoomItemPool("MyCustomRoom", ItemPoolType.POOL_ANGEL)
+
+StageAPI.AddCustomRoom({
+    Name = "RareCustomRoom",
+    Type = "MyCustomRoom",
+    RoomsFile = "mycustomrooms.xml",
+    Weight = 3 -- Adjust rarity
+})
+
+--StageAPI.TryLoadCustomRoom("RareCustomRoom", Game():GetLevel():GetCurrentRoomDesc()) ]]
+
+--[[ function Mod:LoadReliquary(roomdesc)
+	if roomdesc and roomdesc.Data and roomdesc.Data.Type == RoomType.ROOM_DICE then
+		if (roomdesc.Data.Variant >= 12000 and roomdesc.Data.Variant <= Mod.maxvariant) then
+			return true
+		end
+	end
+	return false
+end ]]

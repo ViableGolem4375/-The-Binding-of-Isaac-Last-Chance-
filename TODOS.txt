@@ -8,6 +8,9 @@
 
 Item Ideas to Add:
 
+- Damage amplifier
+- C+D Ult idea
+
 Essence Items:
 - Eden: Item that rerolls into 3 Q4 items.
 - Lilith: Make all enemies in the room friendly.

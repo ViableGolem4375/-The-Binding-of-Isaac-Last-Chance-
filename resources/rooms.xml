@@ -1,0 +1,13 @@
+<rooms>
+    <!-- Custom Room for StageAPI -->
+    <room type="MyCustomRoom" shape="1" difficulty="1">
+        <entity id="5" subtype="100" x="5" y="5"/> <!-- Item pedestal -->
+        <entity id="10" subtype="2" x="10" y="10"/> <!-- An enemy -->
+    </room>
+
+    <!-- Another Custom Layout -->
+    <room type="MyCustomRoom" shape="2" difficulty="2">
+        <entity id="5" subtype="300" x="7" y="7"/> <!-- Different pedestal item -->
+        <entity id="10" subtype="3" x="12" y="12"/> <!-- Another enemy -->
+    </room>
+</rooms>
