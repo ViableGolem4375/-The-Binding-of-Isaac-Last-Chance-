@@ -35,7 +35,7 @@ local TEAR_DAMAGE_FAIL = 10
 
 local FINAL_JUDGMENT_ITEM = Isaac.GetItemIdByName("Final Judgement") -- Change name as needed
 local FINAL_JUDGMENT_ITEM_VFX = Isaac.GetItemIdByName("Final Judgement VFX") -- Change name as needed
-local LILITH_ESSENCE = Isaac.GetItemIdByName(" Essence of Lilith")
+local LILITH_ESSENCE = Isaac.GetItemIdByName("Essence of Lilith")
 
 local COSTUME_FINAL_JUDGMENT = Isaac.GetCostumeIdByPath("gfx/characters/judgement.anm2")
 
@@ -847,7 +847,7 @@ local BAIT_DURATION = 180 -- Time in frames (adjust for balance)
 ---@param rng RNG
 ---@param player EntityPlayer
 function Mod:OnUseBaitItem(itemUsed, rng, player)
-    player:AnimateCollectible(LUCKY_DICE_ID, "UseItem", "PlayerPickupSparkle")
+    player:AnimateCollectible(CATALYST_SHEET_ITEM, "UseItem", "PlayerPickupSparkle")
     if itemUsed == CATALYST_SHEET_ITEM then
         -- Find all enemies in the room
         local enemies = Isaac.FindInRadius(player.Position, 1000, EntityPartition.ENEMY)
@@ -1145,3 +1145,36 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.UpdateFinalJudgmentEffect)
 
+local FRIENDLY_DURATION = 180 -- Time in frames (adjust for balance)
+
+---@param itemUsed CollectibleType
+---@param rng RNG
+---@param player EntityPlayer
+function Mod:OnUseEssenceOfLilithItem(itemUsed, rng, player)
+    player:AnimateCollectible(LILITH_ESSENCE, "UseItem", "PlayerPickupSparkle")
+
+    if itemUsed == LILITH_ESSENCE then
+        -- Find all enemies in the room
+        local enemies = Isaac.FindInRadius(player.Position, 1000, EntityPartition.ENEMY)
+
+        for _, enemy in ipairs(enemies) do
+            if enemy:IsVulnerableEnemy() and not enemy:IsBoss() then
+                -- **Apply permanent friendly effect**
+                enemy:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+
+                -- **Apply permanent charmed effect (adds the hearts visual)**
+                enemy:AddEntityFlags(EntityFlag.FLAG_CHARM)
+
+                -- **Make them persist between rooms**
+                enemy:AddEntityFlags(EntityFlag.FLAG_PERSISTENT)
+                
+                -- **Remove unnecessary timer logic**
+                enemy:GetData().BaitTimer = nil
+            end
+        end
+
+        return true -- Consume the item
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseEssenceOfLilithItem, LILITH_ESSENCE)

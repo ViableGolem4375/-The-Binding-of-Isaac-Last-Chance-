@@ -8,6 +8,6 @@
     <familiar name="Failed Abortion" gfx="failed_abortion.png" description="It's still breathing!" quality="2" cache="familiars" tags="baby offensive summonable monstermanual" />
     <active id="5" name="Final Judgement" gfx="finaljudgement.png" description="Be Afraid" quality="4" charge="0" tags="offensive nocantrip"/>
     <passive id="6" name="Final Judgement VFX" gfx="finaljudgement.png" description="I exist to make the Final Judgement VFX work!" quality="4" tags="nocantrip"/>
-    <active id="7" name="Essence of Lilith" gfx="dice.png" description="To me my children" quality="2" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
+    <active id="7" name="Essence of Lilith" gfx="essence_of_lilith.png" description="To me my children" quality="2" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
 
 </items>

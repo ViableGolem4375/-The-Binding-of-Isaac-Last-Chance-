@@ -4,6 +4,7 @@
 - Need to change tainted description thing.
 - Death screen needs to differentiate between tainted/non-tainted.
 - Final Judgement visual bug fix.
+- Need to add soul stone for new character.
 
 Item Ideas to Add:
 
