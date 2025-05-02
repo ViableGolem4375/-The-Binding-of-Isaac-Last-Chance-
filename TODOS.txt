@@ -5,6 +5,7 @@
 - Death screen needs to differentiate between tainted/non-tainted.
 - Final Judgement visual bug fix.
 - Need to add soul stone for new character.
+- Items might be rerolling empty pedestals.
 
 Item Ideas to Add:
 

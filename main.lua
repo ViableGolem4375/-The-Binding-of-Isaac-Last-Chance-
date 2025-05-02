@@ -36,7 +36,7 @@ local TEAR_DAMAGE_FAIL = 10
 local FINAL_JUDGMENT_ITEM = Isaac.GetItemIdByName("Final Judgement") -- Change name as needed
 local FINAL_JUDGMENT_ITEM_VFX = Isaac.GetItemIdByName("Final Judgement VFX") -- Change name as needed
 local LILITH_ESSENCE = Isaac.GetItemIdByName("Essence of Lilith")
-
+local RELIQUARY_TRINKET = Isaac.GetTrinketIdByName("Reliquary Access Card")
 local COSTUME_FINAL_JUDGMENT = Isaac.GetCostumeIdByPath("gfx/characters/judgement.anm2")
 
 function Mod:GiveCostumesOnInit(player)
@@ -422,7 +422,7 @@ if EID then
     EID:addCollectible(LILITH_ESSENCE, "Makes all enemies in the current room friendly upon use.")
     EID:addBirthright(templateType, "+10 luck, also gives a scaling damage up equal to 50% of Isaac's luck stat.")
     EID:addBirthright(TAINTED_TEMPLATE_TYPE, "Grants a random quality 4 item.")
-
+    EID:addTrinket(RELIQUARY_TRINKET, "Picking up this trinket will immediately teleport Isaac to a special Essence Reliquary room. This room will contain an item from a unique item pool containing various items relating to character's gimmicks.", "Reliquary Access Card")
 end
 
 --Function to handle dice item rerolls.
@@ -1176,7 +1176,7 @@ end
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseEssenceOfLilithItem, LILITH_ESSENCE)
 
 ----------------------------------------------------------------------------------------
---- Room Code Below.
+--- Room Code For Essence Reliquary Below.
 
 local RELIQUARY_POOL = {
     LILITH_ESSENCE
@@ -1205,9 +1205,8 @@ function Mod:FilterItemPoolOnRoomEntry()
     local roomDesc = level:GetRoomByIdx(level:GetCurrentRoomIndex())
     local roomID = roomDesc.GridIndex -- This gives you the unique room ID
 
-
     -- Define Room IDs that should use the custom pool
-    local customVaultRooms = {7777} -- Replace with your actual Room IDs
+    local customVaultRooms = {6969} -- Replace with your actual Room IDs
 
     -- Check if the current room matches your custom rooms
     if roomID == -3 then
@@ -1229,56 +1228,34 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.FilterItemPoolOnRoomEntry)
 
 
--- Helper function to check if a table contains a value
---[[ function TableContains(tbl, value)
-    for _, v in ipairs(tbl) do
-        if v == value then
-            return true
-        end
-    end
-    return false
-end
+--[[ function TeleportToCustomRoom()
+    local game = Game()
+    local level = game:GetLevel()
+    local roomDesc2 = level:GetRoomByIdx(level:GetCurrentRoomIndex())
+    local customRoomID = roomDesc2.GridIndex -- Replace with the actual ID you set in Basement Renovator
 
-function Mod:ChangeRoomBackdrop()
-    local room = Game():GetRoom()
-    local level = Game():GetLevel()
-    local roomDesc = level:GetRoomByIdx(level:GetCurrentRoomIndex())
-
-    -- **Define Room IDs that should use the custom backdrop**
-    local customRooms = {7777} -- Replace with your actual Room IDs
-
-    -- **Check if the current room matches your custom rooms using the helper function**
-    if TableContains(customRooms, roomDesc.SafeGridIndex) then
-        -- **Set a new backdrop (e.g., Cathedral)**
-        room:SetBackdropType(BackdropType.ISAAC, 21)
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.ChangeRoomBackdrop) ]]
-
---[[ StageAPI.AddCustomRoomType({
-    Name = "MyCustomRoom",
-    DefaultBackdrop = BackdropType.CATHEDRAL, -- Override backdrop
-    Shape = RoomShape.ROOMSHAPE_1x1,
-    RoomGfx = "gfx/backdrops/test.png", -- Use a custom backdrop
-})
-
-StageAPI.SetRoomItemPool("MyCustomRoom", ItemPoolType.POOL_ANGEL)
-
-StageAPI.AddCustomRoom({
-    Name = "RareCustomRoom",
-    Type = "MyCustomRoom",
-    RoomsFile = "mycustomrooms.xml",
-    Weight = 3 -- Adjust rarity
-})
-
---StageAPI.TryLoadCustomRoom("RareCustomRoom", Game():GetLevel():GetCurrentRoomDesc()) ]]
-
---[[ function Mod:LoadReliquary(roomdesc)
-	if roomdesc and roomdesc.Data and roomdesc.Data.Type == RoomType.ROOM_DICE then
-		if (roomdesc.Data.Variant >= 12000 and roomdesc.Data.Variant <= Mod.maxvariant) then
-			return true
-		end
-	end
-	return false
+    level.LeaveDoor = DoorSlot.DOWN0 -- Prevents normal exit if needed
+    level:ChangeRoom(customRoomID)
+    print("Teleporting player to custom room!")
 end ]]
+
+function OnTrinketPickup(player)
+    local player = Game():GetPlayer(1) -- Try different indices if needed
+    if player:HasTrinket(RELIQUARY_TRINKET) then
+        local game = Game()
+        local level = game:GetLevel()
+        local TELEPORT_ROOM_ID = -3 -- Replace with your special room ID
+        Isaac.ExecuteCommand("goto s.library.6969")
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, OnTrinketPickup)
+
+function OnNewRoom()
+    local player = Isaac.GetPlayer(0)
+    if player:HasTrinket(RELIQUARY_TRINKET) then
+        player:TryRemoveTrinket(RELIQUARY_TRINKET)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, OnNewRoom)
