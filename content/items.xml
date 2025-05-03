@@ -12,5 +12,6 @@
     <trinket id="8" name="Reliquary Access Card" gfx="reliquary_card.png" description="Access granted" />
     <active id="9" name="Amplifier" gfx="amp.png" description="Enjoy the amplifier!" quality="2" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="10" name="Amp Damage" gfx="amp.png" description="I exist to give amplifier's damage!" quality="4" tags="nocantrip quest" cache="damage"/>
+    <active id="11" name="Huh?" gfx="huh.png" description="What happened to my D6?" quality="0" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
 
 </items>

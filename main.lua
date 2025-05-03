@@ -45,6 +45,7 @@ local AMP_BEAM = Isaac.GetEntityVariantByName("Amplifier Beam")
 local AMP_AREA = Isaac.GetEntityVariantByName("Amplifier Area")
 local AMP_DMG_ITEM = Isaac.GetItemIdByName("Amp Damage")
 
+local HUH_ITEM = Isaac.GetItemIdByName("Huh?")
 
 
 function Mod:GiveCostumesOnInit(player)
@@ -433,6 +434,7 @@ if EID then
     EID:addBirthright(TAINTED_TEMPLATE_TYPE, "Grants a random quality 4 item.")
     EID:addTrinket(RELIQUARY_TRINKET, "Picking up this trinket will immediately teleport Isaac to a special Essence Reliquary room. This room will contain an item from a unique item pool containing various items relating to character's gimmicks.", "Reliquary Access Card")
     EID:addCollectible(AMP_ITEM, "Spawn a familiar which projects a damage amplification area onto the ground. Standing within this area will multiply Isaac's damage by 5. Familiar expires after 20 seconds.", "Amplifier")
+    EID:addCollectible(HUH_ITEM, "Rerolls all item pedestals in the room into The Poop.", "Huh?")
 
 end
 
@@ -1203,8 +1205,6 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateAmp)
 
---comment
-
 function Mod:OnAmpItemUse(item, rng, player, flags)
     player:AnimateCollectible(AMP_ITEM, "UseItem", "PlayerPickupSparkle")
     SFX:Play(SoundEffect.SOUND_BATTERYCHARGE, 1.5, 0, false, 0.75)
@@ -1294,7 +1294,30 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.OnFamiliarUpdate)
 
+function Mod:HuhUse(item, rng, player, flags)
+    player:AnimateCollectible(HUH_ITEM, "UseItem", "PlayerPickupSparkle")
+    local room = Game():GetRoom()
+    local entities = Isaac.GetRoomEntities()
 
+    for _, entity in ipairs(entities) do
+        if entity.Type == EntityType.ENTITY_PICKUP and entity.Variant == PickupVariant.PICKUP_COLLECTIBLE then
+            local pedestal = entity:ToPickup()
+            -- Ensure the pedestal already holds an item before rerolling
+            if pedestal.SubType ~= 0 then
+                local newItem = CollectibleType.COLLECTIBLE_POOP
+                pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
+            end
+
+            --local newItem = predefinedItems[rng:RandomInt(#predefinedItems) + 1] -- Pick a random item from the list
+            --pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
+        end
+    end
+
+    return true
+                        
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.HuhUse, HUH_ITEM) 
 
 ----------------------------------------------------------------------------------------
 --- Room Code For Essence Reliquary Below.
