@@ -2,5 +2,7 @@
     <entity name="Lil' Uriel" id="3" anm2path="uriel.anm2" tags="cansacrifice angel" shadowSize="11" friction="1" />
     <entity name="Lil' Gabriel" id="3" anm2path="gabriel.anm2" tags="cansacrifice angel" shadowSize="11" friction="1" />
     <entity name="Failed Abortion" id="3" anm2path="failed_abortion.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
-
+    <entity name="Amplifier" id="3" anm2path="amp.anm2" shadowSize="11" friction="1" />
+    <entity name="Amplifier Beam" id="1000" variant="2096" anm2path="amp_beam.anm2"/>
+    <entity name="Amplifier Area" id="1000" variant="2097" anm2path="amp_area.anm2"/>
 </entities>

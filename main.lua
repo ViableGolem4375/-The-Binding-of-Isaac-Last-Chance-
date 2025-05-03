@@ -39,6 +39,13 @@ local LILITH_ESSENCE = Isaac.GetItemIdByName("Essence of Lilith")
 local RELIQUARY_TRINKET = Isaac.GetTrinketIdByName("Reliquary Access Card")
 local COSTUME_FINAL_JUDGMENT = Isaac.GetCostumeIdByPath("gfx/characters/judgement.anm2")
 
+local AMP_ITEM = Isaac.GetItemIdByName("Amplifier")
+local FAMILIAR_VARIANT_AMP = Isaac.GetEntityVariantByName("Amplifier")
+local AMP_BEAM = Isaac.GetEntityVariantByName("Amplifier Beam")
+local AMP_AREA = Isaac.GetEntityVariantByName("Amplifier Area")
+
+
+
 function Mod:GiveCostumesOnInit(player)
     if player:GetPlayerType() ~= templateType then
         return -- End the function early. The below code doesn't run, as long as the player isn't Gabriel.
@@ -329,6 +336,7 @@ function Mod:ApplyBirthrightEffect(player)
                 data.TaintedBirthrightGiven = true -- Mark that the item has been granted
 
                 -- **Define Quality 4 Item IDs manually**
+                -- Maybe fix actives at some point.
                 local quality4Items = {
                     -- Mod items.
                     LUCKY_DICE_ID,
@@ -343,16 +351,16 @@ function Mod:ApplyBirthrightEffect(player)
                     395,  -- Tech X
                     114,  -- Mom's Knife
                     584,  -- Revelation
-                    347,  -- Mega Blast
+                    --347,  -- Mega Blast
                     35,   -- Cricket's Head
-                    681,   -- Death Certificate
-                    105, -- D6
-                    489, -- D Infinity
-                    711, -- Flip
-                    625, --Mega Mush
-                    636, --R Key
+                    --681,   -- Death Certificate
+                    --105, -- D6
+                    --489, -- D Infinity
+                    --711, -- Flip
+                    --625, --Mega Mush
+                    --636, --R Key
                     723, --Spindown Dice
-                    12, -- Magic Mushroom
+                    --12, -- Magic Mushroom
                     52, -- Dr. Fetus
                     108, -- The Wafer
                     149, -- Ipecac
@@ -1180,6 +1188,119 @@ function Mod:OnUseEssenceOfLilithItem(itemUsed, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseEssenceOfLilithItem, LILITH_ESSENCE)
+
+--[[ function SummonAmp(player)
+    local familiar = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FAMILIAR_VARIANT_AMP, 0, player.Position, Vector(0,0), player)
+    
+    -- Make the familiar stationary by preventing movement
+    familiar:AddEntityFlags(EntityFlag.FLAG_NO_PHYSICS_KNOCKBACK | EntityFlag.FLAG_NO_KNOCKBACK)
+    familiar:GetSprite():Play("Appear") -- Optional: Play spawn animation
+
+    -- Store familiar reference for later tracking
+    familiar:GetData().IsDamageAura = true
+end ]]
+
+--Mod:AddCallback(ModCallbacks.MC_USE_ITEM, SummonAmp, AMP_ITEM)
+
+--[[ function CheckNearbyPlayers()
+    local game = Game()
+    local players = game:GetNumPlayers()
+
+    for _, entity in ipairs(Isaac.GetRoomEntities()) do
+        if entity.Type == EntityType.ENTITY_FAMILIAR and entity:GetData().IsDamageAura then
+            local familiarPos = entity.Position
+            
+            for i = 0, players - 1 do
+                local player = Isaac.GetPlayer(i)
+                if player.Position:Distance(familiarPos) < 100 then -- Set range threshold
+                    player:AddCacheFlags(CacheFlag.CACHE_DAMAGE) -- Mark player for stat update
+                    player:EvaluateItems()
+                end
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, CheckNearbyPlayers)
+
+function ModifyDamage(player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_DAMAGE then
+        local game = Game()
+        
+        for _, entity in ipairs(Isaac.GetRoomEntities()) do
+            if entity.Type == EntityType.ENTITY_FAMILIAR and entity:GetData().IsDamageAura then
+                if player.Position:Distance(entity.Position) < 100 then
+                    player.Damage = player.Damage * 1.25 -- 25% damage boost
+                end
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, ModifyDamage) ]]
+
+function Mod:OnAmpItemUse(item, rng, player, flags)
+    player:AnimateCollectible(AMP_ITEM, "UseItem", "PlayerPickupSparkle")
+
+    if item == AMP_ITEM then
+        local familiar = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FAMILIAR_VARIANT_AMP, 0, player.Position, Vector(0,0), player)
+        
+        -- Make it stationary
+        familiar:AddEntityFlags(EntityFlag.FLAG_NO_PHYSICS_KNOCKBACK | EntityFlag.FLAG_NO_KNOCKBACK)
+        --familiar:GetSprite():Play("Appear")
+
+        -- Set data so it applies the aura effect
+        familiar:GetData().IsAmpFamiliar = true
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnAmpItemUse, AMP_ITEM)
+
+
+function Mod:OnFamiliarUpdate(familiar)
+    local data = familiar:GetData()
+    if data.IsAmpFamiliar then
+        familiar.SpriteOffset = Vector(0, -50) -- Moves it higher visually
+        -- Ensure there's only one circle effect tied to the familiar
+        if not data.AreaIndicator or not data.AreaIndicator:Exists() then
+            local circleEffect = Isaac.Spawn(EntityType.ENTITY_EFFECT, AMP_AREA, 0, familiar.Position, Vector(0, 0), familiar)
+            circleEffect:GetData().IsAmpCircle = true
+            data.AreaIndicator = circleEffect
+        end
+
+        -- Update the circle's position dynamically
+        local circleEffect = data.AreaIndicator
+        if circleEffect then
+            circleEffect.Position = familiar.Position -- Keep it centered on the familiar
+            circleEffect.SpriteScale = Vector(0.5, 0.5)
+            
+            -- Optional: Slight glow effect
+            circleEffect.Color = Color(1, 0.6, 0.2, 0.5) -- Semi-transparent orange
+        end
+
+
+        local players = Isaac.GetPlayer()
+        for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+            local distance = player.Position:Distance(familiar.Position)
+
+            -- Initialize stored base damage if not already set
+            if not player:GetData().BaseDamage then
+                player:GetData().BaseDamage = player.Damage
+            end
+
+            if distance < 100 then -- Adjust radius as needed
+                player.Damage = player:GetData().BaseDamage * 5 -- Apply damage boost
+            else
+                player.Damage = player:GetData().BaseDamage -- Restore base damage
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.OnFamiliarUpdate)
+
+
 
 ----------------------------------------------------------------------------------------
 --- Room Code For Essence Reliquary Below.
