@@ -43,6 +43,7 @@ local AMP_ITEM = Isaac.GetItemIdByName("Amplifier")
 local FAMILIAR_VARIANT_AMP = Isaac.GetEntityVariantByName("Amplifier")
 local AMP_BEAM = Isaac.GetEntityVariantByName("Amplifier Beam")
 local AMP_AREA = Isaac.GetEntityVariantByName("Amplifier Area")
+local AMP_DMG_ITEM = Isaac.GetItemIdByName("Amp Damage")
 
 
 
@@ -427,10 +428,12 @@ if EID then
     EID:addCollectible(FAIL_ITEM, "Familiar that fires Haemolaceria tears. Tears deal 10 damage and split into multiple smaller tears upon contact with a surface or enemy.", "Failed Abortion")
     EID:addCollectible(FINAL_JUDGMENT_ITEM, "One time use active item that spawns a circle of light beams around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire holy light beams, and random light beams from the sky targetting enemies for 30 seconds. Upon expiration, this effect causes a large explosion in the current room and immediately kills Isaac.", "Final Judgement")
     EID:addCollectible(FINAL_JUDGMENT_ITEM_VFX, "I exist to make the visuals work!", "Final Judgement VFX")
-    EID:addCollectible(LILITH_ESSENCE, "Makes all enemies in the current room friendly upon use.")
+    EID:addCollectible(LILITH_ESSENCE, "Makes all enemies in the current room friendly upon use.", "Essence of Lilith")
     EID:addBirthright(templateType, "+10 luck, also gives a scaling damage up equal to 50% of Isaac's luck stat.")
     EID:addBirthright(TAINTED_TEMPLATE_TYPE, "Grants a random quality 4 item.")
     EID:addTrinket(RELIQUARY_TRINKET, "Picking up this trinket will immediately teleport Isaac to a special Essence Reliquary room. This room will contain an item from a unique item pool containing various items relating to character's gimmicks.", "Reliquary Access Card")
+    EID:addCollectible(AMP_ITEM, "Spawn a familiar which projects a damage amplification area onto the ground. Standing within this area will multiply Isaac's damage by 5. Familiar expires after 20 seconds.", "Amplifier")
+
 end
 
 --Function to handle dice item rerolls.
@@ -1189,58 +1192,23 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseEssenceOfLilithItem, LILITH_ESSENCE)
 
---[[ function SummonAmp(player)
-    local familiar = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FAMILIAR_VARIANT_AMP, 0, player.Position, Vector(0,0), player)
-    
-    -- Make the familiar stationary by preventing movement
-    familiar:AddEntityFlags(EntityFlag.FLAG_NO_PHYSICS_KNOCKBACK | EntityFlag.FLAG_NO_KNOCKBACK)
-    familiar:GetSprite():Play("Appear") -- Optional: Play spawn animation
 
-    -- Store familiar reference for later tracking
-    familiar:GetData().IsDamageAura = true
-end ]]
-
---Mod:AddCallback(ModCallbacks.MC_USE_ITEM, SummonAmp, AMP_ITEM)
-
---[[ function CheckNearbyPlayers()
-    local game = Game()
-    local players = game:GetNumPlayers()
-
-    for _, entity in ipairs(Isaac.GetRoomEntities()) do
-        if entity.Type == EntityType.ENTITY_FAMILIAR and entity:GetData().IsDamageAura then
-            local familiarPos = entity.Position
-            
-            for i = 0, players - 1 do
-                local player = Isaac.GetPlayer(i)
-                if player.Position:Distance(familiarPos) < 100 then -- Set range threshold
-                    player:AddCacheFlags(CacheFlag.CACHE_DAMAGE) -- Mark player for stat update
-                    player:EvaluateItems()
-                end
-            end
-        end
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, CheckNearbyPlayers)
-
-function ModifyDamage(player, cacheFlag)
+function Mod:OnCacheUpdateAmp(player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_DAMAGE then
-        local game = Game()
-        
-        for _, entity in ipairs(Isaac.GetRoomEntities()) do
-            if entity.Type == EntityType.ENTITY_FAMILIAR and entity:GetData().IsDamageAura then
-                if player.Position:Distance(entity.Position) < 100 then
-                    player.Damage = player.Damage * 1.25 -- 25% damage boost
-                end
-            end
+        if player:HasCollectible(AMP_DMG_ITEM) then
+            player.Damage = player.Damage * 5
         end
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, ModifyDamage) ]]
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateAmp)
+
+
 
 function Mod:OnAmpItemUse(item, rng, player, flags)
     player:AnimateCollectible(AMP_ITEM, "UseItem", "PlayerPickupSparkle")
+    SFX:Play(SoundEffect.SOUND_BATTERYCHARGE, 1.5, 0, false, 0.75)
+
 
     if item == AMP_ITEM then
         local familiar = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FAMILIAR_VARIANT_AMP, 0, player.Position, Vector(0,0), player)
@@ -1261,6 +1229,33 @@ function Mod:OnFamiliarUpdate(familiar)
     local data = familiar:GetData()
     if data.IsAmpFamiliar then
         familiar.SpriteOffset = Vector(0, -50) -- Moves it higher visually
+         -- Track lifespan
+         if not data.SpawnTime then
+            data.SpawnTime = Game():GetFrameCount() -- Store the current frame count
+        end
+
+        -- Check if 20 seconds (600 frames) have passed
+        if Game():GetFrameCount() - data.SpawnTime >= 600 then
+            -- Remove the damage amp circle before removing the familiar
+            if data.AreaIndicator and data.AreaIndicator:Exists() then
+                data.AreaIndicator:Remove()
+                data.AreaIndicator = nil
+            end
+            
+
+            -- Reset all players' damage
+            for i = 0, Game():GetNumPlayers() - 1 do
+                local player = Game():GetPlayer(i)
+                player:RemoveCollectible(AMP_DMG_ITEM)
+            end
+
+             -- Spawn explosion effect, but ensure it doesn't damage the player
+             local explosion = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_EXPLOSION, 0, familiar.Position, Vector(0, 0), familiar)
+             explosion:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- Prevents explos
+            familiar:Remove()
+            return -- Exit the function to prevent further updates
+        end
+
         -- Ensure there's only one circle effect tied to the familiar
         if not data.AreaIndicator or not data.AreaIndicator:Exists() then
             local circleEffect = Isaac.Spawn(EntityType.ENTITY_EFFECT, AMP_AREA, 0, familiar.Position, Vector(0, 0), familiar)
@@ -1284,15 +1279,14 @@ function Mod:OnFamiliarUpdate(familiar)
             local player = Game():GetPlayer(i)
             local distance = player.Position:Distance(familiar.Position)
 
-            -- Initialize stored base damage if not already set
-            if not player:GetData().BaseDamage then
-                player:GetData().BaseDamage = player.Damage
-            end
-
             if distance < 100 then -- Adjust radius as needed
-                player.Damage = player:GetData().BaseDamage * 5 -- Apply damage boost
+                --player.Damage = player:GetData().BaseDamage * 5 -- Apply damage boost
+                if not player:HasCollectible(AMP_DMG_ITEM) then
+                    player:AddCollectible(AMP_DMG_ITEM, 0, false)
+                end
             else
-                player.Damage = player:GetData().BaseDamage -- Restore base damage
+                player:RemoveCollectible(AMP_DMG_ITEM)
+                --player.Damage = player:GetData().BaseDamage -- Restore base damage
             end
         end
     end

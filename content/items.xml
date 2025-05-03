@@ -7,9 +7,10 @@
     <active id="4" name="Catalyst Character Sheet" gfx="catalyst_character_sheet.png" description="It's in my head IT'S IN MY HEAD AAAAAAAAAAA" quality="2" maxcharges="3" chargetype="normal" tags="offensive nocantrip"/>
     <familiar name="Failed Abortion" gfx="failed_abortion.png" description="It's still breathing!" quality="2" cache="familiars" tags="baby offensive summonable monstermanual" />
     <active id="5" name="Final Judgement" gfx="finaljudgement.png" description="Be Afraid" quality="4" charge="0" tags="offensive nocantrip"/>
-    <passive id="6" name="Final Judgement VFX" gfx="finaljudgement.png" description="I exist to make the Final Judgement VFX work!" quality="4" tags="nocantrip"/>
+    <passive id="6" name="Final Judgement VFX" gfx="finaljudgement.png" description="I exist to make the Final Judgement VFX work!" quality="4" tags="nocantrip quest"/>
     <active id="7" name="Essence of Lilith" gfx="essence_of_lilith.png" description="To me my children" quality="2" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
     <trinket id="8" name="Reliquary Access Card" gfx="reliquary_card.png" description="Access granted" />
-    <active id="9" name="Amplifier" gfx="dice.png" description="Enjoy the amplifier!" quality="2" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
+    <active id="9" name="Amplifier" gfx="amp.png" description="Enjoy the amplifier!" quality="2" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
+    <passive id="10" name="Amp Damage" gfx="amp.png" description="I exist to give amplifier's damage!" quality="4" tags="nocantrip quest" cache="damage"/>
 
 </items>
