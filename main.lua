@@ -1203,7 +1203,7 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateAmp)
 
-
+--comment
 
 function Mod:OnAmpItemUse(item, rng, player, flags)
     player:AnimateCollectible(AMP_ITEM, "UseItem", "PlayerPickupSparkle")
