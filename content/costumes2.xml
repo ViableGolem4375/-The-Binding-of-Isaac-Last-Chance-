@@ -4,4 +4,6 @@
     <costume id="3" anm2path="unholymantle.anm2" type="passive" priority="0" />
     <costume id="5" anm2path="judgement.anm2" type="active" priority="0" />
     <costume id="6" anm2path="judgement.anm2" type="active" priority="0" />
+    <costume id="12" anm2path="compensator.anm2" type="passive" priority="0" />
+
 </costumes>

@@ -46,6 +46,7 @@ local AMP_AREA = Isaac.GetEntityVariantByName("Amplifier Area")
 local AMP_DMG_ITEM = Isaac.GetItemIdByName("Amp Damage")
 
 local HUH_ITEM = Isaac.GetItemIdByName("Huh?")
+local COMP_ITEM = Isaac.GetItemIdByName("The Compensator")
 
 
 function Mod:GiveCostumesOnInit(player)
@@ -1307,17 +1308,45 @@ function Mod:HuhUse(item, rng, player, flags)
                 local newItem = CollectibleType.COLLECTIBLE_POOP
                 pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
             end
-
-            --local newItem = predefinedItems[rng:RandomInt(#predefinedItems) + 1] -- Pick a random item from the list
-            --pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
         end
     end
-
-    return true
-                        
+    return true                   
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.HuhUse, HUH_ITEM) 
+
+-- Function to count quality 0 items in player's inventory
+local function CountQuality0Items(player)
+    local count = 0
+    for itemID = 1, Isaac.GetItemIdByName("Death Certificate") do -- Loops through all items
+        if player:HasCollectible(itemID) then
+            local config = Isaac.GetItemConfig():GetCollectible(itemID)
+            if config and config.Quality == 0 then
+                count = count + 1
+            end
+        end
+    end
+    return count
+end
+
+-- Apply damage boost based on quality 0 item count
+function Mod:OnCacheUpdateComp(player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_DAMAGE then
+        if player:HasCollectible(COMP_ITEM) then
+            local quality0Count = CountQuality0Items(player)
+            player.Damage = player.Damage + (quality0Count * 1)
+        end
+    end
+end
+
+function Mod:OnItemPickupComp(player)
+    player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+    player:EvaluateItems()
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateComp)
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnItemPickupComp)
+
 
 ----------------------------------------------------------------------------------------
 --- Room Code For Essence Reliquary Below.
@@ -1370,18 +1399,6 @@ function Mod:FilterItemPoolOnRoomEntry()
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.FilterItemPoolOnRoomEntry)
-
-
---[[ function TeleportToCustomRoom()
-    local game = Game()
-    local level = game:GetLevel()
-    local roomDesc2 = level:GetRoomByIdx(level:GetCurrentRoomIndex())
-    local customRoomID = roomDesc2.GridIndex -- Replace with the actual ID you set in Basement Renovator
-
-    level.LeaveDoor = DoorSlot.DOWN0 -- Prevents normal exit if needed
-    level:ChangeRoom(customRoomID)
-    print("Teleporting player to custom room!")
-end ]]
 
 function OnTrinketPickup(player)
     local player = Game():GetPlayer(1) -- Try different indices if needed

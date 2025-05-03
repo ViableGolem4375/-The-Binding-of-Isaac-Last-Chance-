@@ -7,14 +7,13 @@
 - Need to add soul stone for new character.
 - Need to remove passive q4s from tainted birthright or make it not delete the current active.
 - Fix d4 effects on tainted character maybe?
+- Compensator costume is not the right color.
 
 Item Ideas to Add:
 
-- Damage amplifier
 - C+D Ult idea
 - Proto-tech: 1 tick brimstone
 - Become back me money, no idea what this would do.
-- Huh?: D6 reskin that rerolls items into the poop.
 - Kingslayer: bosses take more damage/have less hp and only deal half heart damage.
 - Item that gives a damage boost for every Q0 item.
 - Defense tech: tech laser ring around isaac, maybe triggers when going near an enemy.
