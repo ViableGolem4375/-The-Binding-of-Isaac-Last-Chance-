@@ -14,5 +14,6 @@
     <passive id="10" name="Amp Damage" gfx="amp.png" description="I exist to give amplifier's damage!" quality="4" tags="nocantrip quest" cache="damage"/>
     <active id="11" name="Huh?" gfx="huh.png" description="What happened to my D6?" quality="0" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="12" name="The Compensator" gfx="compensator.png" description="Garbage = Power!" quality="3" tags="offensive nocantrip" cache="damage"/>
+    <trinket id="13" name="4 Leaf Clover" gfx="clover.png" description="Luck up!" cache="luck"/>
 
 </items>

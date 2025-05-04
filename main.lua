@@ -47,6 +47,8 @@ local AMP_DMG_ITEM = Isaac.GetItemIdByName("Amp Damage")
 
 local HUH_ITEM = Isaac.GetItemIdByName("Huh?")
 local COMP_ITEM = Isaac.GetItemIdByName("The Compensator")
+local CLOVER_TRINKET = Isaac.GetTrinketIdByName("4 Leaf Clover")
+
 
 
 function Mod:GiveCostumesOnInit(player)
@@ -436,6 +438,7 @@ if EID then
     EID:addTrinket(RELIQUARY_TRINKET, "Picking up this trinket will immediately teleport Isaac to a special Essence Reliquary room. This room will contain an item from a unique item pool containing various items relating to character's gimmicks.", "Reliquary Access Card")
     EID:addCollectible(AMP_ITEM, "Spawn a familiar which projects a damage amplification area onto the ground. Standing within this area will multiply Isaac's damage by 5. Familiar expires after 20 seconds.", "Amplifier")
     EID:addCollectible(HUH_ITEM, "Rerolls all item pedestals in the room into The Poop.", "Huh?")
+    EID:addTrinket(CLOVER_TRINKET, "Grants +1 luck.", "4 Leaf Clover")
 
 end
 
@@ -1346,6 +1349,25 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateComp)
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnItemPickupComp)
+
+----------------------------------------------------------------------------------------
+--- Trinket Code Below
+
+function Mod:OnCacheUpdateClover(player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_LUCK then
+        if player:HasTrinket(CLOVER_TRINKET) then
+            player.Luck = player.Luck + 1
+        end
+    end
+end
+
+function Mod:OnTrinketPickupClover(player)
+    player:AddCacheFlags(CacheFlag.CACHE_LUCK)
+    player:EvaluateItems()
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateClover)
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnTrinketPickupClover)
 
 
 ----------------------------------------------------------------------------------------
