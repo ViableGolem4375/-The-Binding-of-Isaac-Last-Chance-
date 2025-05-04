@@ -21,8 +21,6 @@ Item Ideas to Add:
 
 Trinket Ideas:
 - Black candle wick: no repeat curses.
-- Coin shard: chance to reroll q0 items.
-- 4 leaf clover: luck up.
 - Options??: can take both polaroid and negative.
 
 Essence Items:

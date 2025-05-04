@@ -48,6 +48,7 @@ local AMP_DMG_ITEM = Isaac.GetItemIdByName("Amp Damage")
 local HUH_ITEM = Isaac.GetItemIdByName("Huh?")
 local COMP_ITEM = Isaac.GetItemIdByName("The Compensator")
 local CLOVER_TRINKET = Isaac.GetTrinketIdByName("4 Leaf Clover")
+local ORB_TRINKET = Isaac.GetTrinketIdByName("Orb Shard")
 
 
 
@@ -439,6 +440,7 @@ if EID then
     EID:addCollectible(AMP_ITEM, "Spawn a familiar which projects a damage amplification area onto the ground. Standing within this area will multiply Isaac's damage by 5. Familiar expires after 20 seconds.", "Amplifier")
     EID:addCollectible(HUH_ITEM, "Rerolls all item pedestals in the room into The Poop.", "Huh?")
     EID:addTrinket(CLOVER_TRINKET, "Grants +1 luck.", "4 Leaf Clover")
+    EID:addTrinket(ORB_TRINKET, "Grants a 25% chance for quality 0 items to be automatically rerolled once.", "Orb Shard")
 
 end
 
@@ -1368,6 +1370,33 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateClover)
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnTrinketPickupClover)
+
+local REROLL_CHANCE = 0.25
+local rerolledPedestals = {} -- Table to track rerolled pedestals
+
+function Mod:OnPickupInitOrb(pickup)
+    local orbsfx = SFXManager()
+
+    if pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE then
+        local seed = pickup.InitSeed
+        if not rerolledPedestals[seed] then -- Ensures each pedestal rerolls only once
+            local player = Isaac.GetPlayer(0) -- Gets the player
+            if player:HasTrinket(ORB_TRINKET) then
+                local itemConfig = Isaac.GetItemConfig():GetCollectible(pickup.SubType)
+                if itemConfig and itemConfig.Quality == 0 then
+                    if math.random() < REROLL_CHANCE then
+                        orbsfx:Play(SoundEffect.SOUND_EDEN_GLITCH) -- Play sound effect
+                        --pickup:TryRemove() -- Removes the existing pedestal
+                        pickup:Morph(pickup.Type, pickup.Variant, game:GetItemPool():GetCollectible(ItemPoolType.POOL_TREASURE, true, pickup.InitSeed), true, true) -- Rerolls item
+                        rerolledPedestals[seed] = true -- Marks this pedestal as rerolled
+                    end
+                end
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, Mod.OnPickupInitOrb)
 
 
 ----------------------------------------------------------------------------------------
