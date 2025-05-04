@@ -15,5 +15,6 @@
     <active id="11" name="Huh?" gfx="huh.png" description="What happened to my D6?" quality="0" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="12" name="The Compensator" gfx="compensator.png" description="Garbage = Power!" quality="3" tags="offensive nocantrip" cache="damage"/>
     <trinket id="13" name="4 Leaf Clover" gfx="clover.png" description="Luck up!" cache="luck"/>
+    <trinket id="14" name="Orb Shard" gfx="orb.png" description="Destined for greatness?"/>
 
 </items>
