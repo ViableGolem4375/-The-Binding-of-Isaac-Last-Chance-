@@ -1,7 +1,6 @@
 - Make sure that error fixing mod is listed as a dependency for compatability with fiend folio.
 - Fix some visuals.
 - Characters need icons for birthright.
-- Need to change tainted description thing.
 - Death screen needs to differentiate between tainted/non-tainted.
 - Final Judgement visual bug fix.
 - Need to add soul stone for new character.
