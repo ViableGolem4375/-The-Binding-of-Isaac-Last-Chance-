@@ -21,7 +21,6 @@ Item Ideas to Add:
 
 Trinket Ideas:
 - Black candle wick: no repeat curses.
-- Options??: can take both polaroid and negative.
 
 Essence Items:
 - Eden: Item that rerolls into 3 Q4 items.

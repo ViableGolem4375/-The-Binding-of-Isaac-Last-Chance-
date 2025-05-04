@@ -16,5 +16,7 @@
     <passive id="12" name="The Compensator" gfx="compensator.png" description="Garbage = Power!" quality="3" tags="offensive nocantrip" cache="damage"/>
     <trinket id="13" name="4 Leaf Clover" gfx="clover.png" description="Luck up!" cache="luck"/>
     <trinket id="14" name="Orb Shard" gfx="orb.png" description="Destined for greatness?"/>
+    <trinket id="15" name="Stitched Photo" gfx="photo.png" description="Fate chosen?"/>
+    <trinket id="16" name="Black Candle Wick" gfx="candlewick.png" description="Curse resistance"/>
 
 </items>

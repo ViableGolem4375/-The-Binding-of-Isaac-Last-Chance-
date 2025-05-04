@@ -49,8 +49,8 @@ local HUH_ITEM = Isaac.GetItemIdByName("Huh?")
 local COMP_ITEM = Isaac.GetItemIdByName("The Compensator")
 local CLOVER_TRINKET = Isaac.GetTrinketIdByName("4 Leaf Clover")
 local ORB_TRINKET = Isaac.GetTrinketIdByName("Orb Shard")
-
-
+local PHOTO_TRINKET = Isaac.GetTrinketIdByName("Stitched Photo")
+local CANDLE_TRINKET = Isaac.GetTrinketIdByName("Black Candle Wick")
 
 function Mod:GiveCostumesOnInit(player)
     if player:GetPlayerType() ~= templateType then
@@ -441,6 +441,8 @@ if EID then
     EID:addCollectible(HUH_ITEM, "Rerolls all item pedestals in the room into The Poop.", "Huh?")
     EID:addTrinket(CLOVER_TRINKET, "Grants +1 luck.", "4 Leaf Clover")
     EID:addTrinket(ORB_TRINKET, "Grants a 25% chance for quality 0 items to be automatically rerolled once.", "Orb Shard")
+    EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.", "Stitched Photo")
+    EID:addTrinket(CANDLE_TRINKET, "Prevents seeing the same curse twice while held.", "Black Candle Wick")
 
 end
 
@@ -1397,6 +1399,67 @@ function Mod:OnPickupInitOrb(pickup)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, Mod.OnPickupInitOrb)
+
+local POLAROID_ID = CollectibleType.COLLECTIBLE_POLAROID
+local NEGATIVE_ID = CollectibleType.COLLECTIBLE_NEGATIVE
+
+function Mod:OnItemPickupPhoto(player)
+    if player:HasTrinket(PHOTO_TRINKET) then
+        if player:HasCollectible(POLAROID_ID) and not player:HasCollectible(NEGATIVE_ID) then
+            player:AddCollectible(NEGATIVE_ID)
+        elseif player:HasCollectible(NEGATIVE_ID) and not player:HasCollectible(POLAROID_ID) then
+            player:AddCollectible(POLAROID_ID)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnItemPickupPhoto)
+
+local seenCurses = {} -- Stores curses that have already appeared
+
+function Mod:OnNewLevel()
+    local game = Game()
+    local level = game:GetLevel()
+    local player = Isaac.GetPlayer(0) -- Gets the main player
+
+    if player:HasTrinket(CANDLE_TRINKET) then
+        local currentCurse = level:GetCurses()
+
+        if seenCurses[currentCurse] then
+            -- Already seen this curse, reroll to a new one
+            local newCurse = Mod:SelectNewCurse()
+            level:AddCurse(newCurse, true)
+        end
+
+        -- Mark this curse as seen
+        seenCurses[currentCurse] = true
+    end
+end
+
+function Mod:SelectNewCurse()
+    local availableCurses = {
+        LevelCurse.CURSE_OF_DARKNESS,
+        LevelCurse.CURSE_OF_THE_LOST,
+        LevelCurse.CURSE_OF_MAZE,
+        LevelCurse.CURSE_OF_BLIND,
+        LevelCurse.CURSE_OF_THE_UNKNOWN
+    }
+
+    -- Remove already seen curses
+    for i = #availableCurses, 1, -1 do
+        if seenCurses[availableCurses[i]] then
+            table.remove(availableCurses, i)
+        end
+    end
+
+    if #availableCurses > 0 then
+        return availableCurses[math.random(1, #availableCurses)]
+    end
+
+    return LevelCurse.CURSE_NONE -- If all curses were seen, remove curses
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewLevel)
 
 
 ----------------------------------------------------------------------------------------
