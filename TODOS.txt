@@ -14,13 +14,12 @@ Item Ideas to Add:
 - Proto-tech: 1 tick brimstone
 - Become back me money, no idea what this would do.
 - Kingslayer: bosses take more damage/have less hp and only deal half heart damage.
-- Item that gives a damage boost for every Q0 item.
 - Defense tech: tech laser ring around isaac, maybe triggers when going near an enemy.
 - First enemy killed respawns as a friendly variant.
 - Ban hammer: one use active that erases all enemies in the room.
 
 Trinket Ideas:
-- Black candle wick: no repeat curses.
+
 
 Essence Items:
 - Eden: Item that rerolls into 3 Q4 items.

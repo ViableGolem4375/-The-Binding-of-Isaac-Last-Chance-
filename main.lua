@@ -51,6 +51,8 @@ local CLOVER_TRINKET = Isaac.GetTrinketIdByName("4 Leaf Clover")
 local ORB_TRINKET = Isaac.GetTrinketIdByName("Orb Shard")
 local PHOTO_TRINKET = Isaac.GetTrinketIdByName("Stitched Photo")
 local CANDLE_TRINKET = Isaac.GetTrinketIdByName("Black Candle Wick")
+local BOND_ITEM = Isaac.GetItemIdByName("Eternal Bond")
+
 
 function Mod:GiveCostumesOnInit(player)
     if player:GetPlayerType() ~= templateType then
@@ -1353,6 +1355,108 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateComp)
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnItemPickupComp)
+
+local DASH_SPEED = 10 -- Adjust dash speed
+local DASH_DURATION = 7 -- Frames per dash
+local NUM_DASHES = 1 -- Total dashes
+local CREEP_DURATION = 300 -- 10 seconds (Game runs at 30fps)
+local DASH_COOLDOWN = 60 -- Cooldown between dashes
+local MAX_CHAIN_DASHES = 3 -- Limit to 3 chained dashes
+local ORIGINAL_MAX_CHAIN_DASHES = MAX_CHAIN_DASHES
+local RECHARGE_TIME = 60 -- 1 second at 30 FPS
+local i = 60
+
+local lastMoveVec = {} -- Store last movement direction for each player
+local dashingPlayers = {} -- Tracks players who are dashing
+
+function Mod:OnUseBond(_, _, player)
+    local bondsfx = SFXManager()
+    if not dashingPlayers[player.Index] then
+        dashingPlayers[player.Index] = { dashesLeft = NUM_DASHES, dashTimer = DASH_DURATION, cooldown = DASH_COOLDOWN, chargeRefreshCount = 0, chargeTimer = 0, chargeExpireTimer = 0 }
+        player:SetMinDamageCooldown(25) -- Proper invulnerability effect
+        bondsfx:Play(SoundEffect.SOUND_SWORD_SPIN, 1.5, 0, false, 0.75)
+        -- Immediately trigger first dash update to bypass animation delay
+        Mod:OnUpdateBond()
+
+    end
+    --return true
+end
+
+function Mod:OnUpdateBond()
+    local game = Game()
+    for i = 0, game:GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(i)
+        local dashData = dashingPlayers[player.Index]
+
+        if dashData then
+            if dashData.dashTimer > 0 then
+                -- Detect player's held direction
+                local moveVec = Vector(0, 0)
+
+                if Input.IsActionPressed(ButtonAction.ACTION_LEFT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_RIGHT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X + 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_UP, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_DOWN, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y + 1
+                end
+
+                -- If the player is actively moving, update lastMoveVec
+                if moveVec:Length() > 0 then
+                    lastMoveVec[player.Index] = moveVec:Normalized() * DASH_SPEED
+                end
+
+                -- Use last movement direction if no input is given
+                local finalMoveVec = lastMoveVec[player.Index] or Vector(DASH_SPEED, 0)
+                
+                -- Apply movement
+                player.Velocity = finalMoveVec
+
+
+                dashData.dashTimer = dashData.dashTimer - 1
+
+                -- Spawn creep at player's position
+                local creep = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_RED, 0, player.Position, Vector(0, 0), player)
+                creep:ToEffect():SetTimeout(CREEP_DURATION)
+                -- Adjust creep size
+                creep.SpriteScale = Vector(2.5, 2.5) -- Increase size (1.0 is default)
+
+            else
+                if MAX_CHAIN_DASHES > 0 and DASH_COOLDOWN >= 0 and MAX_CHAIN_DASHES > 0 then
+                    player:SetActiveCharge(12)
+                    MAX_CHAIN_DASHES = MAX_CHAIN_DASHES - 1
+                    print(DASH_COOLDOWN)
+                    print(MAX_CHAIN_DASHES)
+                elseif DASH_COOLDOWN == 0 or MAX_CHAIN_DASHES == 0 then
+                    player:SetActiveCharge(0)
+                    MAX_CHAIN_DASHES = 3
+                end
+                dashingPlayers[player.Index] = nil
+                player:SetMinDamageCooldown(0)
+            end
+        end
+    end
+end
+
+-- Make the creep heal friendly players on contact
+function Mod:OnCreepUpdate(creep)
+    for _, entity in ipairs(Isaac.FindInRadius(creep.Position, 30, EntityPartition.PLAYER)) do
+        local player = entity:ToPlayer()
+        if player and not player:IsDead() and player:GetMaxHearts() > player:GetHearts() then
+            player:AddHearts(1) -- Grants healing
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Mod.OnCreepUpdate, EffectVariant.PLAYER_CREEP_RED)
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseBond, BOND_ITEM)
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.OnUpdateBond)
+
 
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below
