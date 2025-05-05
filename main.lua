@@ -380,7 +380,7 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Pontius.onCachePontius)
 
-local chargeData = {}
+--[[ local chargeData = {}
 
 function Mod:OnPlayerUpdatePontius(player)
     if player:GetPlayerType() ~= pontiusType then return end -- Only apply to th
@@ -409,7 +409,90 @@ function Mod:OnPlayerUpdatePontius(player)
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPlayerUpdatePontius)
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPlayerUpdatePontius) ]]
+
+--[[ function Mod:OnPlayerUpdatePontius(player)
+    if player:GetPlayerType() ~= pontiusType then return end -- Only apply to Pontius
+
+    local PlayerData = player:GetData()
+    if PlayerData.spearframe == nil then PlayerData.spearframe = 0 end
+    if PlayerData.spearcooldown == nil then PlayerData.spearcooldown = 0 end
+    if PlayerData.lastAimDirection == nil then PlayerData.lastAimDirection = Vector(1, 0) end -- Default right
+
+
+    player.FireDelay = player.MaxFireDelay
+    if player:GetFireDirection() ~= Direction.NO_DIRECTION and PlayerData.spearcooldown == 0 then
+        PlayerData.spearframe = math.min(player.MaxFireDelay * 2, PlayerData.spearframe + 10)
+        BOff = math.ceil(255 * PlayerData.spearframe / player.MaxFireDelay / 2)
+        --local fireDirectionSpear = player:GetAimDirection()
+    elseif game:GetRoom():GetFrameCount() > 1 then
+        if PlayerData.spearframe == player.MaxFireDelay * 2 then
+            local fireDirectionSpear = player:GetAimDirection()
+            if fireDirectionSpear == Direction.LEFT then
+                Angle = 180
+            elseif fireDirectionSpear == Direction.RIGHT then
+                Angle = 0
+            elseif fireDirectionSpear == Direction.DOWN then
+                Angle = 90
+            elseif fireDirectionSpear == Direction.UP then
+                Angle = 270
+            end
+                local SpearThrow = EntityLaser.ShootAngle(LaserVariant.LIGHT_BEAM, player.Position, Angle, 1, Vector(0,0), player)
+                SpearThrow.TearFlags = player.TearFlags
+                SpearThrow.CollisionDamage = player.Damage
+            end
+        PlayerData.spearframe = 0
+    end
+    PlayerData.spearcooldown = math.max(0, PlayerData.spearcooldown - 1)
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdatePontius) ]]
+
+local spearCooldown = 0 -- Tracks time between laser shots
+local spearFireRate = 30 -- Adjust this value for desired laser speed
+
+function Mod:OnPlayerUpdatePontius(player)
+    if player:GetPlayerType() ~= pontiusType then return end -- Only apply to Pontius
+    local data = player:GetData()
+    local playerDamage = player.Damage -- Get player's current damage value
+    local fireDirectionspear = player:GetFireDirection()
+    local directionspear
+    player.FireDelay = player.MaxFireDelay
+    -- Handle laser cooldown
+    if spearCooldown > 0 then
+        spearCooldown = spearCooldown - 1
+    end
+
+    if fireDirectionspear == Direction.LEFT then
+        directionspear = Vector(-1, 0)
+    elseif fireDirectionspear == Direction.RIGHT then
+        directionspear = Vector(1, 0)
+    elseif fireDirectionspear == Direction.DOWN then
+        directionspear = Vector(0, 1)
+    elseif fireDirectionspear == Direction.UP then
+        directionspear = Vector(0, -1)
+    end
+
+    if directionspear ~= nil and spearCooldown == 0 then
+        local spear = Isaac.Spawn(
+            EntityType.ENTITY_LASER,
+            LaserVariant.LIGHT_BEAM,
+            0,
+            player.Position,
+            Vector.Zero,
+            player
+        ):ToLaser()
+        spear.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
+        spear.AngleDegrees = directionspear:GetAngleDegrees() -- Rotate laser to match direction
+        spear.Parent = player -- Attach the laser to the player
+        spear.Timeout = 1 -- Set duration (adjust as needed)
+        spear.CollisionDamage = playerDamage * 10
+        spearCooldown = spearFireRate -- Reset cooldown
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdatePontius)
 
 
 ----------------------------------------------------------------------------------------
