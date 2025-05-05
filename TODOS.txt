@@ -6,7 +6,6 @@
 - Need to add soul stone for new character.
 - Need to remove passive q4s from tainted birthright or make it not delete the current active.
 - Fix d4 effects on tainted character maybe?
-- Creep spawned from eternal bond needs to be not red, item dashes should also do some kind of visual to isaac, maybe slightly transparent + purple.
 
 Item Ideas to Add:
 

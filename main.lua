@@ -3,6 +3,8 @@ local Mod = RegisterMod("Mod", 1)
 local itemConfig = Isaac.GetItemConfig()
 
 local templateType = Isaac.GetPlayerTypeByName("Template", false)
+local pontiusType = Isaac.GetPlayerTypeByName("Pontius", false)
+local TAINTED_PONTIUS_TYPE = Isaac.GetPlayerTypeByName("Pontius", true)
 local characterCostume = Isaac.GetCostumeIdByPath("gfx/characters/costume_template.anm2")
 local LUCKY_DICE_ID = Isaac.GetItemIdByName("Lucky Coin")
 local DULL_COIN_ID = Isaac.GetItemIdByName("Dull Coin")
@@ -69,7 +71,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Mod.GiveCostumesOnInit)
 local game = Game()
 
 ----------------------------------------------------------------------------------------
--- Character code below.
+-- Character code for Matt below.
 
 local Template = { -- shown below are default values, as shown on Isaac, for you to change around
     SPEED = 1.00,
@@ -133,7 +135,7 @@ end
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Template.onCache)
 
 ----------------------------------------------------------------------------------------
--- Code for the tainted version below
+-- Code for the tainted version of Matt below
 
 local TAINTED_TEMPLATE_TYPE = Isaac.GetPlayerTypeByName("Template", true)
 
@@ -314,17 +316,166 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_RENDER, Mod.RemoveEmptyPedestals)
 
+----------------------------------------------------------------------------------------
+-- Character code for Pontius below.
 
-if StageAPI and StageAPI.Loaded then
-    StageAPI.AddPlayerGraphicsInfo("Template", {
-        Name = "gfx/ui/boss/playername_template.png",
-		Portrait = "gfx/ui/stage/playerportrait_template.png",
-		NoShake = false,
-        Controls = "gfx/ui/matt_controls.png"
-    })
---[[     Mod.luarooms = {}
-	Mod.luarooms.TT = StageAPI.RoomsList("TaintedTreasureRooms", require("resources.luarooms.reliquaryluarooms")) ]]
+local Pontius = { -- shown below are default values, as shown on Isaac, for you to change around
+    SPEED = 1.00,
+    FIREDELAY = 10, -- your tears stat is "30/(FIREDELAY+1)"
+    DAMAGE = 3.5, -- is only the damage stat, not damage multiplier
+    RANGE = 260, -- your range stat is "40*RANGE"
+    SHOTSPEED = 1.00,
+    LUCK = 0.00,
+    TEARHEIGHT = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
+    TEARFALLINGSPEED = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
+    TEARFLAG = 0, -- Determines some behaviors of your tears, https://wofsauge.github.io/IsaacDocs/rep/enums/TearFlags.html
+    TEARCOLOR = Color(1.0, 1.0, 1.0, 1.0, 0, 0, 0), -- r1.0 g1.0 b1.0 a1.0 0r 0g 0b (the last three are offsets)
+    FLYING = false
+}
+
+function Pontius:onPlayerInitPontius(player)
+    if player:GetPlayerType() == pontiusType then
+        player:SetPocketActiveItem(LUCKY_DICE_ID, ActiveSlot.SLOT_POCKET, true)
+        local pool = game:GetItemPool()
+        pool:RemoveCollectible(LUCKY_DICE_ID)
+    end
 end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Pontius.onPlayerInitPontius)
+
+function Pontius:onCachePontius(player, cacheFlag)
+    if player:GetPlayerType() == pontiusType then
+        if cacheFlag == CacheFlag.CACHE_SPEED then
+            player.MoveSpeed = player.MoveSpeed - 1 + Pontius.SPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+            player.MaxFireDelay = player.MaxFireDelay - 10 + Pontius.FIREDELAY
+        end
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = player.Damage - 3.5 + Pontius.DAMAGE
+        end
+        if cacheFlag == CacheFlag.CACHE_RANGE then
+            player.TearRange = player.TearRange - 260 + Pontius.RANGE
+            player.TearHeight = player.TearHeight + Pontius.TEARHEIGHT
+            player.TearFallingSpeed = player.TearFallingSpeed + Pontius.TEARFALLINGSPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
+            player.ShotSpeed = player.ShotSpeed - 1 + Pontius.SHOTSPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_LUCK then
+            player.Luck = player.Luck + Pontius.LUCK
+        end
+        if cacheFlag == CacheFlag.CACHE_TEARFLAG then
+            player.TearFlags = player.TearFlags | Pontius.TEARFLAG -- The OR here makes sure that if you have an item that changes tear flags, the values you set takes priority
+        end
+        if cacheFlag == CacheFlag.CACHE_TEARCOLOR then
+            player.TearColor = Pontius.TEARCOLOR
+        end
+        if cacheFlag == CacheFlag.CACHE_FLYING and Pontius.FLYING then
+            player.CanFly = true
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Pontius.onCachePontius)
+
+local chargeData = {}
+
+function Mod:OnPlayerUpdatePontius(player)
+    if player:GetPlayerType() ~= pontiusType then return end -- Only apply to th
+    local playerIndex = player.Index
+    if not chargeData[playerIndex] then
+        chargeData[playerIndex] = { charge = 0, charging = false }
+    end
+
+    -- Check if fire button is held
+    if Input.IsActionPressed(ButtonAction.ACTION_SHOOTLEFT, player.ControllerIndex) or 
+       Input.IsActionPressed(ButtonAction.ACTION_SHOOTRIGHT, player.ControllerIndex) or 
+       Input.IsActionPressed(ButtonAction.ACTION_SHOOTUP, player.ControllerIndex) or 
+       Input.IsActionPressed(ButtonAction.ACTION_SHOOTDOWN, player.ControllerIndex) then
+        
+        chargeData[playerIndex].charging = true
+        chargeData[playerIndex].charge = math.min(chargeData[playerIndex].charge + 1, 100) -- Max charge = 100
+    else
+        -- If fully charged, fire a shot
+        if chargeData[playerIndex].charge >= 100 then
+            local tear = player:FireTear(player.Position, player:GetAimDirection() * 10, false, true, false, player, 2)
+            tear.CollisionDamage = 10 -- High damage shot
+        end
+        
+        chargeData[playerIndex].charging = false
+        chargeData[playerIndex].charge = 0 -- Reset charge after firing
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPlayerUpdatePontius)
+
+
+----------------------------------------------------------------------------------------
+-- Code for the tainted version of Pontius below
+
+local Pontiusb = { -- shown below are default values, as shown on Isaac, for you to change around
+    SPEED = 1.10,
+    FIREDELAY = 9, -- your tears stat is "30/(FIREDELAY+1)"
+    DAMAGE = 3.5, -- is only the damage stat, not damage multiplier
+    RANGE = 260, -- your range stat is "40*RANGE"
+    SHOTSPEED = 1.00,
+    LUCK = 0.00,
+    TEARHEIGHT = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
+    TEARFALLINGSPEED = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
+    TEARFLAG = 0, -- Determines some behaviors of your tears, https://wofsauge.github.io/IsaacDocs/rep/enums/TearFlags.html
+    TEARCOLOR = Color(1.0, 1.0, 1.0, 1.0, 0, 0, 0), -- r1.0 g1.0 b1.0 a1.0 0r 0g 0b (the last three are offsets)
+    FLYING = false
+}
+
+function Pontiusb:onPlayerInitPontiusb(player)
+    if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+        player:SetPocketActiveItem(DULL_COIN_ID, ActiveSlot.SLOT_POCKET, true)
+        local pool = game:GetItemPool()
+        pool:RemoveCollectible(DULL_COIN_ID)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Pontiusb.onPlayerInitPontiusb)
+
+
+function Pontiusb:onCachePontiusb(player, cacheFlag)
+    if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+        if cacheFlag == CacheFlag.CACHE_SPEED then
+            player.MoveSpeed = player.MoveSpeed - 1 + Pontiusb.SPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+            player.MaxFireDelay = player.MaxFireDelay - 10 + Pontiusb.FIREDELAY
+        end
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = player.Damage - 3.5 + Pontiusb.DAMAGE * 1.25
+        end
+        if cacheFlag == CacheFlag.CACHE_RANGE then
+            player.TearRange = player.TearRange - 260 + Pontiusb.RANGE
+            player.TearHeight = player.TearHeight + Pontiusb.TEARHEIGHT
+            player.TearFallingSpeed = player.TearFallingSpeed + Pontiusb.TEARFALLINGSPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
+            player.ShotSpeed = player.ShotSpeed - 1 + Pontiusb.SHOTSPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_LUCK then
+            player.Luck = player.Luck + Pontiusb.LUCK
+        end
+        if cacheFlag == CacheFlag.CACHE_TEARFLAG then
+            player.TearFlags = player.TearFlags | Pontiusb.TEARFLAG -- The OR here makes sure that if you have an item that changes tear flags, the values you set takes priority
+        end
+        if cacheFlag == CacheFlag.CACHE_TEARCOLOR then
+            player.TearColor = Pontiusb.TEARCOLOR
+        end
+        if cacheFlag == CacheFlag.CACHE_FLYING and Pontiusb.FLYING then
+            player.CanFly = true
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Pontiusb.onCachePontiusb)
 
 ----------------------------------------------------------------------------------------
 -- Birthright code below.

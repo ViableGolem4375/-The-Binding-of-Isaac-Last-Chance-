@@ -32,4 +32,34 @@
         costumeSuffix="b"
         costume="104"
     />
+    <player 
+        name="Pontius" 
+        skin="character_template.png" 
+        nameimage="playername_template.png" 
+        portrait="playerportrait_pontius.png"
+        birthright="placeholder" 
+        hp="6" 
+        coins="1" 
+        keys="1" 
+        bombs="1" 
+        skinColor="-1"
+        canShoot="True" 
+    />
+    <player 
+        name="Pontius"
+        skin="character_template_b.png" 
+        bSkinParent="Pontius"
+        nameimage="playername_template_b.png" 
+        portrait="playerportrait_pontius_b.png"
+        birthright="placeholder"
+        hp="6"
+        armor="2"
+        coins="1" 
+        keys="1" 
+        bombs="1"
+        skinColor="-1"
+        canShoot="True"
+        costumeSuffix="b"
+        costume="104"
+    />
 </players>
