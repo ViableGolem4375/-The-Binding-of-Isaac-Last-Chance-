@@ -34,8 +34,8 @@
     />
     <player 
         name="Pontius" 
-        skin="character_template.png" 
-        nameimage="playername_template.png" 
+        skin="character_pontius.png" 
+        nameimage="playername_pontius.png" 
         portrait="playerportrait_pontius.png"
         birthright="placeholder" 
         hp="6" 
@@ -49,7 +49,7 @@
         name="Pontius"
         skin="character_template_b.png" 
         bSkinParent="Pontius"
-        nameimage="playername_template_b.png" 
+        nameimage="playername_pontius_b.png" 
         portrait="playerportrait_pontius_b.png"
         birthright="placeholder"
         hp="6"
