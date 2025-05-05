@@ -320,7 +320,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_RENDER, Mod.RemoveEmptyPedestals)
 -- Character code for Pontius below.
 
 local Pontius = { -- shown below are default values, as shown on Isaac, for you to change around
-    SPEED = 1.00,
+    SPEED = 1.20,
     FIREDELAY = 10, -- your tears stat is "30/(FIREDELAY+1)"
     DAMAGE = 3.5, -- is only the damage stat, not damage multiplier
     RANGE = 260, -- your range stat is "40*RANGE"
@@ -333,13 +333,14 @@ local Pontius = { -- shown below are default values, as shown on Isaac, for you 
     FLYING = false
 }
 
-function Pontius:onPlayerInitPontius(player)
+-- Use this to give pontius modded staring items if need be.
+--[[ function Pontius:onPlayerInitPontius(player)
     if player:GetPlayerType() == pontiusType then
         player:SetPocketActiveItem(LUCKY_DICE_ID, ActiveSlot.SLOT_POCKET, true)
         local pool = game:GetItemPool()
         pool:RemoveCollectible(LUCKY_DICE_ID)
     end
-end
+end ]]
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Pontius.onPlayerInitPontius)
 
@@ -380,75 +381,6 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Pontius.onCachePontius)
 
---[[ local chargeData = {}
-
-function Mod:OnPlayerUpdatePontius(player)
-    if player:GetPlayerType() ~= pontiusType then return end -- Only apply to th
-    local playerIndex = player.Index
-    if not chargeData[playerIndex] then
-        chargeData[playerIndex] = { charge = 0, charging = false }
-    end
-
-    -- Check if fire button is held
-    if Input.IsActionPressed(ButtonAction.ACTION_SHOOTLEFT, player.ControllerIndex) or 
-       Input.IsActionPressed(ButtonAction.ACTION_SHOOTRIGHT, player.ControllerIndex) or 
-       Input.IsActionPressed(ButtonAction.ACTION_SHOOTUP, player.ControllerIndex) or 
-       Input.IsActionPressed(ButtonAction.ACTION_SHOOTDOWN, player.ControllerIndex) then
-        
-        chargeData[playerIndex].charging = true
-        chargeData[playerIndex].charge = math.min(chargeData[playerIndex].charge + 1, 100) -- Max charge = 100
-    else
-        -- If fully charged, fire a shot
-        if chargeData[playerIndex].charge >= 100 then
-            local tear = player:FireTear(player.Position, player:GetAimDirection() * 10, false, true, false, player, 2)
-            tear.CollisionDamage = 10 -- High damage shot
-        end
-        
-        chargeData[playerIndex].charging = false
-        chargeData[playerIndex].charge = 0 -- Reset charge after firing
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPlayerUpdatePontius) ]]
-
---[[ function Mod:OnPlayerUpdatePontius(player)
-    if player:GetPlayerType() ~= pontiusType then return end -- Only apply to Pontius
-
-    local PlayerData = player:GetData()
-    if PlayerData.spearframe == nil then PlayerData.spearframe = 0 end
-    if PlayerData.spearcooldown == nil then PlayerData.spearcooldown = 0 end
-    if PlayerData.lastAimDirection == nil then PlayerData.lastAimDirection = Vector(1, 0) end -- Default right
-
-
-    player.FireDelay = player.MaxFireDelay
-    if player:GetFireDirection() ~= Direction.NO_DIRECTION and PlayerData.spearcooldown == 0 then
-        PlayerData.spearframe = math.min(player.MaxFireDelay * 2, PlayerData.spearframe + 10)
-        BOff = math.ceil(255 * PlayerData.spearframe / player.MaxFireDelay / 2)
-        --local fireDirectionSpear = player:GetAimDirection()
-    elseif game:GetRoom():GetFrameCount() > 1 then
-        if PlayerData.spearframe == player.MaxFireDelay * 2 then
-            local fireDirectionSpear = player:GetAimDirection()
-            if fireDirectionSpear == Direction.LEFT then
-                Angle = 180
-            elseif fireDirectionSpear == Direction.RIGHT then
-                Angle = 0
-            elseif fireDirectionSpear == Direction.DOWN then
-                Angle = 90
-            elseif fireDirectionSpear == Direction.UP then
-                Angle = 270
-            end
-                local SpearThrow = EntityLaser.ShootAngle(LaserVariant.LIGHT_BEAM, player.Position, Angle, 1, Vector(0,0), player)
-                SpearThrow.TearFlags = player.TearFlags
-                SpearThrow.CollisionDamage = player.Damage
-            end
-        PlayerData.spearframe = 0
-    end
-    PlayerData.spearcooldown = math.max(0, PlayerData.spearcooldown - 1)
-end
-
-
-Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdatePontius) ]]
-
 local spearCooldown = 0 -- Tracks time between laser shots
 local spearFireRate = 30 -- Adjust this value for desired laser speed
 
@@ -477,12 +409,30 @@ function Mod:OnPlayerUpdatePontius(player)
     if directionspear ~= nil and spearCooldown == 0 then
         local spear = Isaac.Spawn(
             EntityType.ENTITY_LASER,
-            LaserVariant.LIGHT_BEAM,
+            LaserVariant.ELECTRIC,
             0,
             player.Position,
             Vector.Zero,
             player
         ):ToLaser()
+
+        -- Apply custom visual effect
+        if spear then
+            local sprite = spear:GetSprite()
+            sprite:Load("gfx/pontius_spear_throw.anm2", true) -- Load your custom animation
+            sprite:Play("LargeRedLaser", true) -- Ensure correct animation plays
+        end
+
+        -- Stop the default Holy Light sound (ID: 153)
+        local sfx = SFXManager()
+        sfx:Stop(SoundEffect.SOUND_ANGEL_BEAM) -- Prevent default sound from playing
+
+
+        -- Play custom sound effect
+        local sfx = SFXManager()
+        sfx:Play(SoundEffect.SOUND_SWORD_SPIN) -- Replace with your custom sound ID
+
+
         spear.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
         spear.AngleDegrees = directionspear:GetAngleDegrees() -- Rotate laser to match direction
         spear.Parent = player -- Attach the laser to the player
@@ -499,26 +449,26 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdatePontius)
 -- Code for the tainted version of Pontius below
 
 local Pontiusb = { -- shown below are default values, as shown on Isaac, for you to change around
-    SPEED = 1.10,
-    FIREDELAY = 9, -- your tears stat is "30/(FIREDELAY+1)"
-    DAMAGE = 3.5, -- is only the damage stat, not damage multiplier
-    RANGE = 260, -- your range stat is "40*RANGE"
+    SPEED = 2.0,
+    FIREDELAY = 5, -- your tears stat is "30/(FIREDELAY+1)"
+    DAMAGE = 10.0, -- is only the damage stat, not damage multiplier
+    RANGE = 300, -- your range stat is "40*RANGE"
     SHOTSPEED = 1.00,
     LUCK = 0.00,
     TEARHEIGHT = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
     TEARFALLINGSPEED = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
     TEARFLAG = 0, -- Determines some behaviors of your tears, https://wofsauge.github.io/IsaacDocs/rep/enums/TearFlags.html
     TEARCOLOR = Color(1.0, 1.0, 1.0, 1.0, 0, 0, 0), -- r1.0 g1.0 b1.0 a1.0 0r 0g 0b (the last three are offsets)
-    FLYING = false
+    FLYING = true
 }
 
-function Pontiusb:onPlayerInitPontiusb(player)
+--[[ function Pontiusb:onPlayerInitPontiusb(player)
     if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
         player:SetPocketActiveItem(DULL_COIN_ID, ActiveSlot.SLOT_POCKET, true)
         local pool = game:GetItemPool()
         pool:RemoveCollectible(DULL_COIN_ID)
     end
-end
+end ]]
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Pontiusb.onPlayerInitPontiusb)
 
@@ -559,6 +509,48 @@ end
 
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Pontiusb.onCachePontiusb)
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, function(_, player)
+    if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+        -- If the player has lost Spirit Sword, restore it
+        if not player:HasCollectible(CollectibleType.COLLECTIBLE_SPIRIT_SWORD) then
+            player:AddCollectible(CollectibleType.COLLECTIBLE_SPIRIT_SWORD)
+
+            -- Find all passive collectibles (excluding Spirit Sword and active items)
+            local inventory = {}
+            for i = 1, CollectibleType.NUM_COLLECTIBLES do
+                local itemConfig = Isaac.GetItemConfig():GetCollectible(i)
+                if player:HasCollectible(i) and i ~= CollectibleType.COLLECTIBLE_SPIRIT_SWORD and itemConfig and itemConfig.Type ~= ItemType.ITEM_ACTIVE then
+                    table.insert(inventory, i)
+                end
+            end
+
+            -- Remove a random passive item
+            if #inventory > 0 then
+                local itemToRemove = inventory[math.random(#inventory)]
+                player:RemoveCollectible(itemToRemove)
+            end
+        end
+    end
+end)
+
+Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, function(_, entity, amount, damageFlags, source, countdown)
+    local player = entity:ToPlayer()
+    if player and player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+        -- Force player death instantly
+        player:Die()
+    end
+end, EntityType.ENTITY_PLAYER)
+
+function Mod:GrantInvulnerabilityOnHitPontius(entity, amount, flags, source, countdown)
+    local player = Isaac.GetPlayer(0)
+
+    if player:GetPlayerType() == TAINTED_PONTIUS_TYPE and source and source.Entity then
+        player:SetMinDamageCooldown(60) -- 1 second (30 frames)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.GrantInvulnerabilityOnHitPontius)
 
 ----------------------------------------------------------------------------------------
 -- Birthright code below.
