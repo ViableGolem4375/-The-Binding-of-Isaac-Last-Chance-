@@ -5,4 +5,6 @@
     <entity name="Amplifier" id="3" anm2path="amp.anm2" shadowSize="11" friction="1" />
     <entity name="Amplifier Beam" id="1000" variant="2096" anm2path="amp_beam.anm2"/>
     <entity name="Amplifier Area" id="1000" variant="2097" anm2path="amp_area.anm2"/>
+    <entity name="Bond Orb" id="3" anm2path="bond_orb.anm2" shadowSize="11" friction="1" />
+
 </entities>

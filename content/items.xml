@@ -18,6 +18,6 @@
     <trinket id="14" name="Orb Shard" gfx="orb.png" description="Destined for greatness?"/>
     <trinket id="15" name="Stitched Photo" gfx="photo.png" description="Fate chosen?"/>
     <trinket id="16" name="Black Candle Wick" gfx="candlewick.png" description="Curse resistance"/>
-    <active id="17" name="Eternal Bond" gfx="dice.png" description="Us against the world!" quality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
+    <active id="17" name="Eternal Bond" gfx="bond.png" description="Us against the world!" quality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
 
 </items>

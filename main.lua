@@ -52,6 +52,8 @@ local ORB_TRINKET = Isaac.GetTrinketIdByName("Orb Shard")
 local PHOTO_TRINKET = Isaac.GetTrinketIdByName("Stitched Photo")
 local CANDLE_TRINKET = Isaac.GetTrinketIdByName("Black Candle Wick")
 local BOND_ITEM = Isaac.GetItemIdByName("Eternal Bond")
+local FAMILIAR_VARIANT_BOND = Isaac.GetEntityVariantByName("Bond Orb")
+
 
 
 function Mod:GiveCostumesOnInit(player)
@@ -445,6 +447,7 @@ if EID then
     EID:addTrinket(ORB_TRINKET, "Grants a 25% chance for quality 0 items to be automatically rerolled once.", "Orb Shard")
     EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.", "Stitched Photo")
     EID:addTrinket(CANDLE_TRINKET, "Prevents seeing the same curse twice while held.", "Black Candle Wick")
+    EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind cree which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts. This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond")
 
 end
 
@@ -1357,7 +1360,7 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateComp)
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnItemPickupComp)
 
 local DASH_SPEED = 10 -- Adjust dash speed
-local DASH_DURATION = 7 -- Frames per dash
+local DASH_DURATION = 10 -- Frames per dash
 local NUM_DASHES = 1 -- Total dashes
 local CREEP_DURATION = 300 -- 10 seconds (Game runs at 30fps)
 local DASH_COOLDOWN = 60 -- Cooldown between dashes
@@ -1382,6 +1385,23 @@ function Mod:OnUseBond(_, _, player)
     --return true
 end
 
+local orbSprite = Sprite()
+orbSprite:Load("gfx/bond_orb.anm2", true)
+--orbSprite:Play("Idle", true)
+local activeWisps = {} -- Track spawned wisps per player
+local activeFamiliars = {} -- Track spawned familiars per player
+
+local function SpawnOrbEffect(player)
+    local orb = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.WISP, 0, player.Position, Vector(0, 0), player)
+    orb.Color = Color(0.7, 0.0, 1.0, 1.0, -0.5, -0.5, -0.5) -- Dark purple
+    orb.SpriteScale = Vector(2, 2) -- Adjust size for visibility
+    orb:ToEffect():SetTimeout(7) -- Lasts for the duration of the dash
+    activeWisps[player.Index] = orb -- Store reference
+    
+    
+    return orb
+end
+
 function Mod:OnUpdateBond()
     local game = Game()
     for i = 0, game:GetNumPlayers() - 1 do
@@ -1390,6 +1410,25 @@ function Mod:OnUpdateBond()
 
         if dashData then
             if dashData.dashTimer > 0 then
+                -- Hide player's default sprite
+                player:GetSprite():SetFrame(1000) -- Forces an empty animation frame
+                player.SpriteScale = Vector(0, 0) -- Shrinks player to "invisible"
+
+                -- Spawn an orb effect
+                local orb = SpawnOrbEffect(player)
+
+                -- Spawn the Bond Orb if it hasn't been spawned yet
+                if not activeFamiliars[player.Index] then
+                    local orb = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FAMILIAR_VARIANT_BOND, 0, player.Position, Vector(0, 0), player)
+                    
+                    activeFamiliars[player.Index] = orb
+                end
+
+                -- Keep orb centered on the player
+                if activeFamiliars[player.Index] then
+                    activeFamiliars[player.Index].Position = player.Position
+                end
+
                 -- Detect player's held direction
                 local moveVec = Vector(0, 0)
 
@@ -1423,10 +1462,26 @@ function Mod:OnUpdateBond()
                 -- Spawn creep at player's position
                 local creep = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_RED, 0, player.Position, Vector(0, 0), player)
                 creep:ToEffect():SetTimeout(CREEP_DURATION)
+                creep.Color = Color(1.0, 1.0, 1.0, 0.5, -0.2, -0,5, -0.6) -- RGB: (Red=1, Green=0, Blue=1), Al
                 -- Adjust creep size
                 creep.SpriteScale = Vector(2.5, 2.5) -- Increase size (1.0 is default)
-
+                -- Change creep color to purple
             else
+                -- Restore player's normal sprite when dash ends
+                player:GetSprite():SetFrame(0)
+                player.SpriteScale = Vector(1, 1)
+                -- Remove the Bond Orb when the dash ends
+                if activeFamiliars[player.Index] then
+                    activeFamiliars[player.Index]:Remove()
+                    activeFamiliars[player.Index] = nil
+                end
+                if activeWisps[player.Index] then
+                    activeWisps[player.Index]:Remove()
+                    activeWisps[player.Index] = nil
+                end
+
+
+
                 if MAX_CHAIN_DASHES > 0 and DASH_COOLDOWN >= 0 and MAX_CHAIN_DASHES > 0 then
                     player:SetActiveCharge(12)
                     MAX_CHAIN_DASHES = MAX_CHAIN_DASHES - 1
