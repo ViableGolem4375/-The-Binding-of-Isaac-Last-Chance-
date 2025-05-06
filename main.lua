@@ -1873,15 +1873,22 @@ end
 
 function Mod:FilterItemPoolOnRoomEntry()
     local room = Game():GetRoom()
-    local level = Game():GetLevel()
-    local roomDesc = level:GetRoomByIdx(level:GetCurrentRoomIndex())
-    local roomID = roomDesc.GridIndex -- This gives you the unique room ID
+    local level = Game():GetLevel():GetCurrentRoomIndex()
+    local roomType = room:GetType()
+    local roomSize = room:GetGridSize()
+    print(level)
+    print(roomSize)
+    --local roomDesc = level:GetRoomByIdx(level:GetCurrentRoomIndex())
+    --local roomID = roomDesc.GridIndex -- This gives you the unique room ID
+    --local roomID2 = roomDesc.Data
 
     -- Define Room IDs that should use the custom pool
     local customVaultRooms = {6969} -- Replace with your actual Room IDs
 
     -- Check if the current room matches your custom rooms
-    if roomID == -3 then
+    if level == -3 and roomType == RoomType.ROOM_LIBRARY and roomSize == 135 then
+        print(level)
+        print(roomType)
         local itemPool = Game():GetItemPool()
 
         -- Find all collectible pedestals and reroll them
