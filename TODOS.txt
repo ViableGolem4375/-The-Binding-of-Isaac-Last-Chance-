@@ -20,5 +20,21 @@ Trinket Ideas:
 
 
 Essence Items:
-- Eden: Item that rerolls into 3 Q4 items.
+- Isaac: Spawns 3 Q4 item pedestals on pickup, player can take 1.
+- Magdalene: Active that heals to full HP
+- Cain: +20 of all consumables, +1 luck, 1 of each gold consumable spawn at the beginning of each floor.
+- Judas: Damage up dependent on amount of HP. (less = more damage).
+- ???: Destroying poop spawns a lot of blue flies.
+- Eve: Massive damage up for a short time when reaching low hp.
+- Samson: Taking or dealing damage gives a short lived, stackable damage up.
+- Azazel: Active that gives the large brimstone variant + flight for X seconds.
+- Lazarus: Dying grants a large all stats up.
+- Eden: Item that rerolls into 3 Q4 items./D4 with tendency to give good items.
+- The Lost: Active item that causes you to die on one hit while the button is held, but also grants permanent stat ups when held in a hostile room.
 - Lilith: Make all enemies in the room friendly. - Done
+- Keeper: Infinite money for 5 minutes.
+- Apollyon: Throwable black hole that eats non boss enemies and gives stat ups for the room.
+- Bethany: Gives a wisp upon entering a new room.
+- J+E: Active item that summons an orbital familiar which blocks shots and copies player's tear effects.
+- Matt: Active that gives 5 random proc items for 60 seconds.
+- Pontius: Spear throw active, timed recharge.
