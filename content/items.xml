@@ -19,5 +19,11 @@
     <trinket id="15" name="Stitched Photo" gfx="photo.png" description="Fate chosen?"/>
     <trinket id="16" name="Black Candle Wick" gfx="candlewick.png" description="Curse resistance"/>
     <active id="17" name="Eternal Bond" gfx="bond.png" description="Us against the world!" quality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
+    <active id="18" name="Anatomy Textbook" gfx="anatomy_textbook.png" description="Reusable bone protection." quality="3" maxcharges="6" chargetype="normal" tags="offensive nocantrip book"/>
+    <passive id="19" name="Blank Slate" gfx="blank_slate.png" description="Transform yourself" quality="1" tags="offensive nocantrip angel baby battery bob book devil fly guppy mom mushroom poop spider syringe"/>
+    <passive id="20" name="Essence of Isaac" gfx="essence_of_isaac.png" description="Options!" quality="4" tags="offensive nocantrip"/>
+    <active id="21" name="Essence of Magdalene" gfx="magdalene_essence.png" description="Full health!" quality="3" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
+    <passive id="22" name="Essence of Cain" gfx="essence_of_cain.png" description="Abundance" quality="4" tags="offensive nocantrip"/>
+
 
 </items>

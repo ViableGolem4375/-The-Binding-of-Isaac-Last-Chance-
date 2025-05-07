@@ -18,15 +18,13 @@ Item Ideas to Add:
 - First enemy killed respawns as a friendly variant.
 - Ban hammer: one use active that erases all enemies in the room.
 - Gun: Fire an inaccurate projectile that deals high damage.
-- Blank Slate: Counts as an item for all transformations at once.
-- Anatomy Book: Give yourself a bone heart.
 
 Trinket Ideas:
 
 
 Essence Items:
-- Isaac: Spawns 3 Q4 item pedestals on pickup, player can take 1.
-- Magdalene: Active that heals to full HP
+- Isaac: Spawns 3 Q4 item pedestals on pickup, player can take 1. - Done.
+- Magdalene: Active that heals to full HP - Done.
 - Cain: +20 of all consumables, +1 luck, 1 of each gold consumable spawn at the beginning of each floor.
 - Judas: Damage up dependent on amount of HP. (less = more damage).
 - ???: Destroying poop spawns a lot of blue flies.

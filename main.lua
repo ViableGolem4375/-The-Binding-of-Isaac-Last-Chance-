@@ -56,6 +56,13 @@ local CANDLE_TRINKET = Isaac.GetTrinketIdByName("Black Candle Wick")
 local BOND_ITEM = Isaac.GetItemIdByName("Eternal Bond")
 local FAMILIAR_VARIANT_BOND = Isaac.GetEntityVariantByName("Bond Orb")
 
+local ANATOMY_ITEM = Isaac.GetItemIdByName("Anatomy Textbook")
+local BLANK_SLATE_ITEM = Isaac.GetItemIdByName("Blank Slate")
+
+local ISAAC_ESSENCE = Isaac.GetItemIdByName("Essence of Isaac")
+local MAGDALENE_ESSENCE = Isaac.GetItemIdByName("Essence of Magdalene")
+local CAIN_ESSENCE = Isaac.GetItemIdByName("Essence of Cain")
+
 
 
 function Mod:GiveCostumesOnInit(player)
@@ -683,26 +690,33 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.EvaluateBirthrightCache)
 local luckyDice = Isaac.GetItemIdByName("Lucky Dice")
 
 if EID then
-    EID:addCollectible(LUCKY_DICE_ID, "Reroll all item pedestals in the current room. Items rerolled will be chosen from a special item pool consisting of luck/chance based items.", "Lucky Coin")
-    EID:addCollectible(DULL_COIN_ID, "Rerolls all item pedestals in the room. Items will always be rerolled into an item of 1 lower quality than the original item. Using Dull Coin with no item pedestals in the room containing items with a quality above 1 will remove a random quality 0 item from Isaac's inventory and trigger the Berserk! state. Triggering the Berserk! state in this way charges Isaac's active item by 12 bars.", "Dull Coin")
-    EID:addCollectible(HATRED_ITEM, "Gives the player 11 broken hearts, in exchange Isaac gains +1 damage, a +50% damage multiplier and will be made invulnerable briefly upon damaging an enemy.", "Unholy Mantle")
-    EID:addCollectible(URIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires a holy light beam forward. Scales with Isaac's damage.", "Lil' Uriel")
-    EID:addCollectible(GABRIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires 4 holy light beams in an 'X' pattern. Scales with Isaac's damage.", "Lil' Gabriel")
+    EID:addCollectible(LUCKY_DICE_ID, "Reroll all item pedestals in the current room.#{{Warning}} Items rerolled will be chosen from a special item pool consisting of luck/chance based items.", "Lucky Coin")
+    EID:addCollectible(DULL_COIN_ID, "Rerolls all item pedestals in the room.#{{Warning}} Items will always be rerolled into an item of 1 lower quality than the original item.#Using Dull Coin with no item pedestals in the room containing items with a quality above 1 will remove a random quality 0 item from Isaac's inventory and trigger the Berserk! state.#Triggering the Berserk! state in this way charges Isaac's active item by 12 bars.", "Dull Coin")
+    EID:addCollectible(HATRED_ITEM, "{{ArrowDown}} Gives the player 11 broken hearts.#{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} Become invulnerable briefly upon damaging an enemy.", "Unholy Mantle")
+    EID:addCollectible(URIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires a holy light beam forward.#Scales with Isaac's damage.", "Lil' Uriel")
+    EID:addCollectible(GABRIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires 4 holy light beams in an 'X' pattern.#Scales with Isaac's damage.", "Lil' Gabriel")
     EID:addCollectible(CATALYST_SHEET_ITEM, "No no no NO NO NO nO no AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "Catalyst Character Sheet")
-    EID:addCollectible(FAIL_ITEM, "Familiar that fires Haemolaceria tears. Tears deal 10 damage and split into multiple smaller tears upon contact with a surface or enemy.", "Failed Abortion")
-    EID:addCollectible(FINAL_JUDGMENT_ITEM, "One time use active item that spawns a circle of light beams around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire holy light beams, and random light beams from the sky targetting enemies for 30 seconds. Upon expiration, this effect causes a large explosion in the current room and immediately kills Isaac.", "Final Judgement")
+    EID:addCollectible(FAIL_ITEM, "Familiar that fires Haemolaceria tears.#Tears deal 10 damage and split into multiple smaller tears upon contact with a surface or enemy.", "Failed Abortion")
+    EID:addCollectible(FINAL_JUDGMENT_ITEM, "One time use active item that spawns a circle of light beams around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire holy light beams, and random light beams from the sky targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room and immediately kills Isaac.", "Final Judgement")
     EID:addCollectible(FINAL_JUDGMENT_ITEM_VFX, "I exist to make the visuals work!", "Final Judgement VFX")
     EID:addCollectible(LILITH_ESSENCE, "Makes all enemies in the current room friendly upon use.", "Essence of Lilith")
-    EID:addBirthright(templateType, "+10 luck, also gives a scaling damage up equal to 50% of Isaac's luck stat.")
-    EID:addBirthright(TAINTED_TEMPLATE_TYPE, "Grants a random quality 4 item.")
-    EID:addTrinket(RELIQUARY_TRINKET, "Picking up this trinket will immediately teleport Isaac to a special Essence Reliquary room. This room will contain an item from a unique item pool containing various items relating to character's gimmicks.", "Reliquary Access Card")
-    EID:addCollectible(AMP_ITEM, "Spawn a familiar which projects a damage amplification area onto the ground. Standing within this area will multiply Isaac's damage by 5. Familiar expires after 20 seconds.", "Amplifier")
+    EID:addBirthright(templateType, "{{ArrowUp}} +10 luck#{{ArrowUp}} Gives a scaling damage up equal to 50% of Isaac's luck stat.")
+    EID:addBirthright(TAINTED_TEMPLATE_TYPE, "Grants a random passive quality 4 item.")
+    EID:addTrinket(RELIQUARY_TRINKET, "{{Warning}} Picking up this trinket will immediately teleport Isaac to a special Essence Reliquary room.#This room will contain an item from a unique item pool containing various items relating to character's gimmicks.", "Reliquary Access Card")
+    EID:addCollectible(AMP_ITEM, "Spawn a familiar which projects a damage amplification area onto the ground.#{{ArrowUp}} Standing within this area will multiply Isaac's damage by 5.#{{Warning}} Familiar expires after 20 seconds.", "Amplifier")
     EID:addCollectible(HUH_ITEM, "Rerolls all item pedestals in the room into The Poop.", "Huh?")
-    EID:addTrinket(CLOVER_TRINKET, "Grants +1 luck.", "4 Leaf Clover")
+    EID:addTrinket(CLOVER_TRINKET, "{{ArrowUp}} +1 luck.", "4 Leaf Clover")
     EID:addTrinket(ORB_TRINKET, "Grants a 25% chance for quality 0 items to be automatically rerolled once.", "Orb Shard")
     EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.", "Stitched Photo")
     EID:addTrinket(CANDLE_TRINKET, "Prevents seeing the same curse twice while held.", "Black Candle Wick")
-    EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind cree which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts. This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond")
+    EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond")
+    EID:addCollectible(COMP_ITEM, "{{ArrowUp}} Grants +1 damage for every quality 0 item Isaac holds.")
+    EID:addCollectible(ANATOMY_ITEM, "Grants 1 bone heart on use.")
+    EID:addCollectible(BLANK_SLATE_ITEM, "Counts as an item for every transformation in the game.#Doesn't have any effect on its own.", "Blank Slate")
+    EID:addCollectible(ISAAC_ESSENCE, "Spawns 3 item pedestals containing quality 4 items.#{{Warning}} Taking one of the items will cause Isaac to lose this item and cause the other two item pedestals to dissapear.", "Essence of Isaac")
+    EID:addCollectible(MAGDALENE_ESSENCE, "Heals Isaac to full health on use.", "Essence of Magdalene")
+    EID:addCollectible(CAIN_ESSENCE, "Gives 20 coins, keys, and bombs upon pickup.#At the start of every new floor, spawns a golden penny, golden key, and golden bomb.", "Essence of Cain")
+
 
 end
 
@@ -1767,6 +1781,138 @@ Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Mod.OnCreepUpdate, EffectVar
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseBond, BOND_ITEM)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.OnUpdateBond)
 
+function Mod:AnatomyBookUse(item, rng, player, flags)
+    player:AnimateCollectible(ANATOMY_ITEM, "UseItem", "PlayerPickupSparkle")
+    -- Grant the player a Bone Heart
+    player:AddBoneHearts(1)
+    return true -- Prevents extra effects from triggering                  
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.AnatomyBookUse, ANATOMY_ITEM) 
+
+local function GetQuality4Item()
+    local quality4Items = {} -- Store all Quality 4 items
+    for i = 1, CollectibleType.NUM_COLLECTIBLES do
+        local itemConfig = Isaac.GetItemConfig():GetCollectible(i)
+        if itemConfig and itemConfig.Quality == 4 then
+            table.insert(quality4Items, i)
+        end
+    end
+    return quality4Items[math.random(#quality4Items)] -- Return a random Quality 4 item
+end
+
+local pedestalPositions = {
+    Vector(320, 260), -- Left pedestal
+    Vector(400, 260), -- Middle pedestal
+    Vector(480, 260)  -- Right pedestal
+}
+local pedestals = {} -- Store spawned pedestals
+local pedestalsSpawned = false -- Tracks whether pedestals have been spawned
+
+-- Reset the flag when starting a new run
+function Mod:OnNewGameIsaacEssence(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        pedestalsSpawned = false
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameIsaacEssence) -- Reset flag between runs
+
+
+function Mod:OnPickupIsaacEssence(_, player)
+    local player = Isaac.GetPlayer(0) -- Gets the player
+    -- Spawn 3 item pedestals with Quality 4 items upon pickup
+    if player:HasCollectible(ISAAC_ESSENCE) and not pedestalsSpawned then
+        pedestalsSpawned = true -- Mark the effect as triggered
+        for _, pos in ipairs(pedestalPositions) do
+            local itemID = GetQuality4Item() -- Get a Quality 4 item
+            local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
+            pedestal:GetData().elitePedestal = true -- Mark as part of selection
+            table.insert(pedestals, pedestal)
+        end
+    end
+end
+
+
+function Mod:OnItemTaken(pickup, collider)
+    local player = collider:ToPlayer() -- Ensure collider is a player
+    if player then
+        if pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE and pickup:GetData().elitePedestal then
+            -- Remove all other pedestals once player picks one
+            for _, otherPedestal in ipairs(pedestals) do
+                if otherPedestal ~= pickup then
+                    otherPedestal:Remove()
+                end
+            end
+            pedestals = {} -- Clear stored pedestals
+            player:RemoveCollectible(ISAAC_ESSENCE)
+            pedestalsSpawned = false
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupIsaacEssence) -- Detect item pickup
+Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.OnItemTaken, PickupVariant.PICKUP_COLLECTIBLE) -- Detect item selection
+
+function Mod:MagEssenceUse(item, rng, player, flags)
+    local player = Isaac.GetPlayer(0) -- Gets the player
+    player:AnimateCollectible(MAGDALENE_ESSENCE, "UseItem", "PlayerPickupSparkle")
+    local healsfx = SFXManager()
+    healsfx:Play(SoundEffect.SOUND_VAMP_DOUBLE) -- Play sound effect
+    -- Grant the player Full HP.
+    player:SetFullHearts()
+
+    return true -- Prevents extra effects from triggering                  
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.MagEssenceUse, MAGDALENE_ESSENCE) 
+
+local cain_essence_triggered = false
+
+-- Reset the flag when starting a new run
+function Mod:OnNewGame(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        cain_essence_triggered = false
+    end
+end
+
+
+-- Function to grant resources upon pickup
+function Mod:OnPickupCainEssence(_, player)
+    local player = Isaac.GetPlayer(0)
+    if player:HasCollectible(CAIN_ESSENCE) and cain_essence_triggered == false then
+        cain_essence_triggered = true
+        player:AddCoins(20)
+        player:AddKeys(20)
+        player:AddBombs(20)
+    end
+end
+
+-- Function to spawn golden items at the start of each floor
+function Mod:OnNewFloor()
+    local game = Game()
+    local level = game:GetLevel()
+    local room = game:GetRoom()
+    local player = Isaac.GetPlayer(0)
+
+    -- Ensure player has the item before spawning golden rewards
+    if player:HasCollectible(CAIN_ESSENCE) then
+        local spawnPositions = {
+            room:GetCenterPos(), -- Golden Key
+            room:GetCenterPos() + Vector(-40, 0), -- Golden Penny
+            room:GetCenterPos() + Vector(40, 0) -- Golden Bomb
+        }
+
+        -- Spawn golden rewards
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_KEY, KeySubType.KEY_GOLDEN, spawnPositions[1], Vector.Zero, player)
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_GOLDEN, spawnPositions[2], Vector.Zero, player)
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_BOMB, BombSubType.BOMB_GOLDEN, spawnPositions[3], Vector.Zero, player)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGame) -- Reset flag between runs
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupCainEssence) -- Detect item pickup
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloor) -- Spawn golden items at the start of each floor
 
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below
@@ -1880,7 +2026,10 @@ Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewLevel)
 --- Room Code For Essence Reliquary Below.
 
 local RELIQUARY_POOL = {
-    LILITH_ESSENCE
+    LILITH_ESSENCE,
+    ISAAC_ESSENCE,
+    MAGDALENE_ESSENCE,
+    CAIN_ESSENCE
     -- Add more items as needed
 }
 
