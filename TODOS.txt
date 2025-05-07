@@ -6,6 +6,8 @@
 - Need to add soul stone for new character.
 - Need to remove passive q4s from tainted birthright or make it not delete the current active.
 - Fix d4 effects on tainted character maybe?
+- Clover needs another effect, forgot lucky toe exists.
+- Awoken needs free devil deals, hp to be invisible, and free mausoleum door.
 
 Item Ideas to Add:
 
@@ -15,6 +17,9 @@ Item Ideas to Add:
 - Defense tech: tech laser ring around isaac, maybe triggers when going near an enemy.
 - First enemy killed respawns as a friendly variant.
 - Ban hammer: one use active that erases all enemies in the room.
+- Gun: Fire an inaccurate projectile that deals high damage.
+- Blank Slate: Counts as an item for all transformations at once.
+- Anatomy Book: Give yourself a bone heart.
 
 Trinket Ideas:
 

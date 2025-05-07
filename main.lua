@@ -552,6 +552,35 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.GrantInvulnerabilityOnHitPontius)
 
+local bossRoomSoulSpawned = false -- Tracks if the card has already been spawned
+
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, function()
+    local game = Game()
+    local room = game:GetRoom()
+    local player = Isaac.GetPlayer(0)
+
+    -- Ensure the player is the tainted character
+    if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+        -- Check if the current room is a boss room and the boss is defeated
+        if room:GetType() == RoomType.ROOM_BOSS and room:GetAliveEnemiesCount() == 0 and bossRoomSoulSpawned == false then
+            -- Spawn Soul of the Lost at the center of the room
+            Isaac.Spawn(
+                EntityType.ENTITY_PICKUP,
+                PickupVariant.PICKUP_TAROTCARD,
+                Card.CARD_SOUL_LOST,
+                room:GetCenterPos(),
+                Vector.Zero,
+                player
+            )
+            bossRoomSoulSpawned = true -- Mark that Soul of the Lost has been spawned
+        end
+    end
+    -- Reset flag when leaving the boss room
+    if bossRoomSoulSpawned and room:GetType() ~= RoomType.ROOM_BOSS then
+        bossRoomSoulSpawned = false -- Allow spawning again in the next boss fight
+    end
+end)
+
 ----------------------------------------------------------------------------------------
 -- Birthright code below.
 
@@ -1876,8 +1905,8 @@ function Mod:FilterItemPoolOnRoomEntry()
     local level = Game():GetLevel():GetCurrentRoomIndex()
     local roomType = room:GetType()
     local roomSize = room:GetGridSize()
-    print(level)
-    print(roomSize)
+    --print(level)
+    --print(roomSize)
     --local roomDesc = level:GetRoomByIdx(level:GetCurrentRoomIndex())
     --local roomID = roomDesc.GridIndex -- This gives you the unique room ID
     --local roomID2 = roomDesc.Data
@@ -1886,9 +1915,9 @@ function Mod:FilterItemPoolOnRoomEntry()
     local customVaultRooms = {6969} -- Replace with your actual Room IDs
 
     -- Check if the current room matches your custom rooms
-    if level == -3 and roomType == RoomType.ROOM_LIBRARY and roomSize == 135 then
-        print(level)
-        print(roomType)
+    if level == -3 and roomType == RoomType.ROOM_LIBRARY and roomSize == 448 then
+        --print(level)
+        --print(roomSize)
         local itemPool = Game():GetItemPool()
 
         -- Find all collectible pedestals and reroll them
