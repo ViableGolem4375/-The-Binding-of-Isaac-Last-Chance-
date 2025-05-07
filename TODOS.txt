@@ -8,6 +8,8 @@
 - Fix d4 effects on tainted character maybe?
 - Clover needs another effect, forgot lucky toe exists.
 - Awoken needs free devil deals, hp to be invisible, and free mausoleum door.
+- Essence Items That Need Visuals: Cain, Judas, ???, 
+- Eve essence isn't working right, damage doesn't go away.
 
 Item Ideas to Add:
 
@@ -18,6 +20,7 @@ Item Ideas to Add:
 - First enemy killed respawns as a friendly variant.
 - Ban hammer: one use active that erases all enemies in the room.
 - Gun: Fire an inaccurate projectile that deals high damage.
+- Chance to fire star of david tears that do something.
 
 Trinket Ideas:
 
@@ -25,9 +28,9 @@ Trinket Ideas:
 Essence Items:
 - Isaac: Spawns 3 Q4 item pedestals on pickup, player can take 1. - Done.
 - Magdalene: Active that heals to full HP - Done.
-- Cain: +20 of all consumables, +1 luck, 1 of each gold consumable spawn at the beginning of each floor.
-- Judas: Damage up dependent on amount of HP. (less = more damage).
-- ???: Destroying poop spawns a lot of blue flies.
+- Cain: +20 of all consumables, +1 luck, 1 of each gold consumable spawn at the beginning of each floor. - Done.
+- Judas: Damage up dependent on amount of HP. (less = more damage). - Done.
+- ???: Destroying poop spawns a lot of blue flies. - Done but effect changed.
 - Eve: Massive damage up for a short time when reaching low hp.
 - Samson: Taking or dealing damage gives a short lived, stackable damage up.
 - Azazel: Active that gives the large brimstone variant + flight for X seconds.

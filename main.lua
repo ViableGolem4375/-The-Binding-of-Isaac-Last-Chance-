@@ -62,7 +62,9 @@ local BLANK_SLATE_ITEM = Isaac.GetItemIdByName("Blank Slate")
 local ISAAC_ESSENCE = Isaac.GetItemIdByName("Essence of Isaac")
 local MAGDALENE_ESSENCE = Isaac.GetItemIdByName("Essence of Magdalene")
 local CAIN_ESSENCE = Isaac.GetItemIdByName("Essence of Cain")
-
+local JUDAS_ESSENCE = Isaac.GetItemIdByName("Essence of Judas")
+local BLUE_BABY_ESSENCE = Isaac.GetItemIdByName("Essence of ???")
+local EVE_ESSENCE = Isaac.GetItemIdByName("Essence of Eve")
 
 
 function Mod:GiveCostumesOnInit(player)
@@ -716,6 +718,9 @@ if EID then
     EID:addCollectible(ISAAC_ESSENCE, "Spawns 3 item pedestals containing quality 4 items.#{{Warning}} Taking one of the items will cause Isaac to lose this item and cause the other two item pedestals to dissapear.", "Essence of Isaac")
     EID:addCollectible(MAGDALENE_ESSENCE, "Heals Isaac to full health on use.", "Essence of Magdalene")
     EID:addCollectible(CAIN_ESSENCE, "Gives 20 coins, keys, and bombs upon pickup.#At the start of every new floor, spawns a golden penny, golden key, and golden bomb.", "Essence of Cain")
+    EID:addCollectible(JUDAS_ESSENCE, "{{ArrowUp}} Gives +1 damage.#{{ArrowUp}} Grants a 2.5x damage multiplier when Isaac has 3 total hearts (of any type) or less.", "Essence of Judas")
+    EID:addCollectible(BLUE_BABY_ESSENCE, "Entering a new room spawns 10 blue flies.", "Essence of ???")
+    EID:addCollectible(EVE_ESSENCE, "{{ArrowUp}} Grants +30 damage for 10 seconds upon reaching 1 heart or less.", "Essence of Eve")
 
 
 end
@@ -1913,6 +1918,110 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGame) -- Reset flag between runs
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupCainEssence) -- Detect item pickup
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloor) -- Spawn golden items at the start of each floor
+
+function Mod:OnCacheUpdateJudasEssence(player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_DAMAGE then
+        if player:HasCollectible(JUDAS_ESSENCE) then
+            -- Base bonus: +1 damage
+            local damageBonus = 1
+            
+            -- Calculate total hearts (Red, Soul, Bone converted to half-hearts)
+            local totalHearts = player:GetHearts() + player:GetSoulHearts() + player:GetBlackHearts() + player:GetRottenHearts() + (player:GetBoneHearts() * 2)
+
+            -- Apply 2.5x multiplier if total health is 3 hearts (6 half-hearts) or less
+            if totalHearts <= 6 then
+                player.Damage = player.Damage * 2.5
+            end
+            
+            -- Apply the base damage bonus
+            player.Damage = player.Damage + damageBonus
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateJudasEssence)
+
+
+function Mod:OnNewRoomBlueBabyEssence()
+    local player = Isaac.GetPlayer(0)
+    print("working")
+    -- Ensure the player has the item before triggering effect
+    if player:HasCollectible(BLUE_BABY_ESSENCE) then
+        print("working2")
+        -- Spawn 6 Blue Flies around the player
+        player:AddBlueFlies(10, player.Position, player)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoomBlueBabyEssence) -- Trigger flies on room entry
+
+--[[ local lastStandTimer = {} -- Stores active timers per player
+
+function Mod:CheckLowHealth(player)
+    local player = Isaac.GetPlayer(0)
+
+    if player:HasCollectible(EVE_ESSENCE) then
+        local totalHealth = player:GetHearts() + player:GetSoulHearts() + player:GetBlackHearts() + player:GetRottenHearts() + (player:GetBoneHearts() * 2)
+
+        -- If health is 1 heart or less and effect isn't active yet
+        if totalHealth <= 2 and not lastStandTimer[player:GetCollectibleRNG(EVE_ESSENCE)] then
+            lastStandTimer[player:GetCollectibleRNG(EVE_ESSENCE)] = game:GetFrameCount() + 600 -- 600 frames = 10 seconds
+
+            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE) -- Force damage recalculation
+            player:EvaluateItems()
+        end
+    end
+end
+
+function Mod:ApplyLastStandEffect(_, player, cacheFlag)
+    local player = Isaac.GetPlayer(0)
+
+    if cacheFlag == CacheFlag.CACHE_DAMAGE and lastStandTimer[player:GetCollectibleRNG(EVE_ESSENCE)] then
+        local currentFrame = Game():GetFrameCount()
+        
+        if currentFrame < lastStandTimer[player:GetCollectibleRNG(EVE_ESSENCE)] then
+            player.Damage = player.Damage + 30 -- Apply boost
+        else
+            lastStandTimer[player:GetCollectibleRNG(EVE_ESSENCE)] = nil -- Reset effect after 10 seconds
+            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+            player:EvaluateItems()
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.CheckLowHealth) -- Continuously monitor health
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyLastStandEffect, CacheFlag.CACHE_DAMAGE) -- Apply and remove boost ]]
+
+function Mod:OnCacheUpdateEveEssence(player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_DAMAGE then
+        if player:HasCollectible(EVE_ESSENCE) then
+            
+            -- Calculate total hearts (Red, Soul, Bone converted to half-hearts)
+            local totalHearts = player:GetHearts() + player:GetSoulHearts() + player:GetBlackHearts() + player:GetRottenHearts() + (player:GetBoneHearts() * 2)
+
+            -- Apply 2.5x multiplier if total health is 3 hearts (6 half-hearts) or less
+            if totalHearts <= 2 then
+                player.Damage = player.Damage + 30
+            end
+            
+        end
+    end
+end
+
+-- Reset the effect when entering a new room
+function Mod:OnNewRoom()
+    for i = 1, Game():GetNumPlayers() do
+        local player = Isaac.GetPlayer(i - 1)
+        if player:HasCollectible(EVE_ESSENCE) then
+            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+            player:EvaluateItems()
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateEveEssence)
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoom) -- Reset damage boost when the player leaves the room.
 
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below
