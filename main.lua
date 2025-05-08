@@ -66,6 +66,9 @@ local JUDAS_ESSENCE = Isaac.GetItemIdByName("Essence of Judas")
 local BLUE_BABY_ESSENCE = Isaac.GetItemIdByName("Essence of ???")
 local EVE_ESSENCE = Isaac.GetItemIdByName("Essence of Eve")
 local SAMSON_ESSENCE = Isaac.GetItemIdByName("Essence of Samson")
+local AZAZEL_ESSENCE = Isaac.GetItemIdByName("Essence of Azazel")
+local LAZARUS_ESSENCE = Isaac.GetItemIdByName("Essence of Lazarus")
+
 
 
 function Mod:GiveCostumesOnInit(player)
@@ -723,6 +726,7 @@ if EID then
     EID:addCollectible(BLUE_BABY_ESSENCE, "Entering a new room spawns 10 blue flies.", "Essence of ???")
     EID:addCollectible(EVE_ESSENCE, "{{ArrowUp}} Grants +30 damage for the current room upon reaching 1 total heart or less.#This effect can trigger once per floor.", "Essence of Eve")
     EID:addCollectible(SAMSON_ESSENCE, "Dash forward becoming invulnerable.#The dash deals 10 damage to enemies.#{{ArrowUp}} The dash gains +0.4 damage for every enemy it kills.", "Essence of Samson")
+    EID:addCollectible(AZAZEL_ESSENCE, "5% chance to fire a tear that causes Isaac to fire a large brimstone beam on contact with something.#{{Luck}} 100% chance at 19 luck.", "Essence of Azazel")
 
 
 end
@@ -2118,13 +2122,125 @@ function Mod:ApplySamsonEssenceEffect(_, player, cacheFlag)
     end
 end
 
-
-
-
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseSamsonEssence, SAMSON_ESSENCE)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.OnUpdateSamsonEssence)
 Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.OnEnemyKilled)
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplySamsonEssenceEffect, CacheFlag.CACHE_DAMAGE)
+
+local HasLaserEffect = false
+local LASER_RING_CHANCE = 100 -- 25% chance to trigger
+
+--local HasHomingShot = false
+
+function Mod:onUpdateAzazel(player)
+	if game:GetFrameCount() == 1 then
+		HasLaserEffect = false
+	end
+	if not HasLaserEffect and player:HasCollectible(AZAZEL_ESSENCE) then
+		HasLaserEffect = true
+	end
+end
+
+local function getRandomLaserEffect(player)
+    local baseChance = 0.05 -- Default chance (10%)
+    local luckScaling = 0.05 -- Each Luck point increases chance by 5%
+
+    local luckBonus = math.max(0, player.Luck * luckScaling) -- Ensure non-negative
+    local finalChance = math.min(0.90, baseChance + luckBonus) -- Cap at 90% chance
+
+    local rand = math.random()
+    return rand < finalChance -- Effect triggers if random number falls within chance
+end
+
+function Mod:onTearInitAzazel(tear)
+    if HasLaserEffect then
+        local parent = tear.SpawnerEntity
+        if parent and parent:ToPlayer() then
+            local player = parent:ToPlayer()
+            if player:HasCollectible(AZAZEL_ESSENCE) and getRandomLaserEffect(player) then
+                tear:GetData().laserRingTrigger = true -- Mark tear for laser effect
+                -- ✅ Change tear color (Example: Red Glow)
+                tear.Color = Color(1, 0, 0, 0.5, 0, 0, 0) -- RGB: Red, Alpha: 1 (opaque)
+
+            end
+        end
+    end
+end
+
+
+function Mod:onTearImpact(entity)
+    if entity.Type == EntityType.ENTITY_TEAR and entity:GetData().laserRingTrigger then
+        local position = entity.Position
+        local player = Isaac.GetPlayer(0)
+        local fireDirectionAzazel = player:GetFireDirection()
+        local directionazazel
+
+        if fireDirectionAzazel == Direction.LEFT then
+            directionazazel = Vector(-1, 0)
+        elseif fireDirectionAzazel == Direction.RIGHT then
+            directionazazel = Vector(1, 0)
+        elseif fireDirectionAzazel == Direction.DOWN then
+            directionazazel = Vector(0, 1)
+        elseif fireDirectionAzazel == Direction.UP then
+            directionazazel = Vector(0, -1)
+        elseif fireDirectionAzazel == Direction.NO_DIRECTION then
+            directionazazel = Vector(0, 1)
+        end
+
+        -- Spawn a visible laser ring at the impact location
+        local laserRing = Isaac.Spawn(
+            EntityType.ENTITY_LASER,
+                LaserVariant.THICKER_RED,
+                0,
+                player.Position,
+                Vector.Zero,
+                player
+        ):ToLaser()
+
+        if laserRing then -- Ensure the laser was spawned successfully
+            laserRing.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
+
+            laserRing.AngleDegrees = directionazazel:GetAngleDegrees() -- Rotate laser to match direction
+            laserRing.CollisionDamage = 3 + player.Damage -- Set laser damage
+            laserRing.Timeout = 15 -- Laser duration
+            laserRing:AddTearFlags(TearFlags.TEAR_HOMING) -- Apply homing effect
+            laserRing.Parent = player -- Prevent self-damage
+ 
+            
+        else
+            print("Laser failed to spawn!") -- Debug statement
+        end
+
+
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateAzazel)
+Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitAzazel)
+Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_REMOVE, Mod.onTearImpact)
+
+local STAT_BOOST = { Damage = 3, Speed = 0.5, Tears = -0.3, Range = 150, Luck = 2, ShotSpeed = 0.2 }
+
+function Mod:OnPlayerRespawn(player)
+    if player:HasCollectible(LAZARUS_ESSENCE) then
+        print("Player revived - Applying stat boost!")
+
+        -- Apply all-stat boosts
+        player.Damage = player.Damage + STAT_BOOST.Damage
+        player.MoveSpeed = player.MoveSpeed + STAT_BOOST.Speed
+        player.Tears = player.Tears + STAT_BOOST.Tears
+        player.Range = player.Range + STAT_BOOST.Range
+        player.Luck = player.Luck + STAT_BOOST.Luck
+        player.ShotSpeed = player.ShotSpeed + STAT_BOOST.ShotSpeed
+
+        -- Force game to recognize stat changes
+        player:AddCacheFlags(CacheFlag.CACHE_ALL)
+        player:EvaluateItems()
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Mod.OnPlayerRespawn)
 
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below
