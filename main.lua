@@ -720,7 +720,7 @@ if EID then
     EID:addCollectible(CAIN_ESSENCE, "Gives 20 coins, keys, and bombs upon pickup.#At the start of every new floor, spawns a golden penny, golden key, and golden bomb.", "Essence of Cain")
     EID:addCollectible(JUDAS_ESSENCE, "{{ArrowUp}} Gives +1 damage.#{{ArrowUp}} Grants a 2.5x damage multiplier when Isaac has 3 total hearts (of any type) or less.", "Essence of Judas")
     EID:addCollectible(BLUE_BABY_ESSENCE, "Entering a new room spawns 10 blue flies.", "Essence of ???")
-    EID:addCollectible(EVE_ESSENCE, "{{ArrowUp}} Grants +30 damage for 10 seconds upon reaching 1 heart or less.", "Essence of Eve")
+    EID:addCollectible(EVE_ESSENCE, "{{ArrowUp}} Grants +30 damage for the current room upon reaching 1 total heart or less.#This effect can trigger once per floor.", "Essence of Eve")
 
 
 end
@@ -1944,10 +1944,8 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateJudasEssence)
 
 function Mod:OnNewRoomBlueBabyEssence()
     local player = Isaac.GetPlayer(0)
-    print("working")
     -- Ensure the player has the item before triggering effect
     if player:HasCollectible(BLUE_BABY_ESSENCE) then
-        print("working2")
         -- Spawn 6 Blue Flies around the player
         player:AddBlueFlies(10, player.Position, player)
     end
@@ -1955,42 +1953,22 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoomBlueBabyEssence) -- Trigger flies on room entry
 
---[[ local lastStandTimer = {} -- Stores active timers per player
+local eveEssencetriggered = false
+local eveEssencetriggered2 = false
 
-function Mod:CheckLowHealth(player)
-    local player = Isaac.GetPlayer(0)
-
-    if player:HasCollectible(EVE_ESSENCE) then
-        local totalHealth = player:GetHearts() + player:GetSoulHearts() + player:GetBlackHearts() + player:GetRottenHearts() + (player:GetBoneHearts() * 2)
-
-        -- If health is 1 heart or less and effect isn't active yet
-        if totalHealth <= 2 and not lastStandTimer[player:GetCollectibleRNG(EVE_ESSENCE)] then
-            lastStandTimer[player:GetCollectibleRNG(EVE_ESSENCE)] = game:GetFrameCount() + 600 -- 600 frames = 10 seconds
-
-            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE) -- Force damage recalculation
-            player:EvaluateItems()
-        end
+-- Reset the flag when starting a new run
+function Mod:OnNewGameEve(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        eveEssencetriggered = false
+        eveEssencetriggered2 = false
     end
 end
 
-function Mod:ApplyLastStandEffect(_, player, cacheFlag)
-    local player = Isaac.GetPlayer(0)
-
-    if cacheFlag == CacheFlag.CACHE_DAMAGE and lastStandTimer[player:GetCollectibleRNG(EVE_ESSENCE)] then
-        local currentFrame = Game():GetFrameCount()
-        
-        if currentFrame < lastStandTimer[player:GetCollectibleRNG(EVE_ESSENCE)] then
-            player.Damage = player.Damage + 30 -- Apply boost
-        else
-            lastStandTimer[player:GetCollectibleRNG(EVE_ESSENCE)] = nil -- Reset effect after 10 seconds
-            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
-            player:EvaluateItems()
-        end
-    end
+-- Function to reset the flag at the start of a new floor
+function Mod:OnNewFloorEve()
+    eveEssencetriggered = false -- Allows effect to reactivate
+    eveEssencetriggered2 = false
 end
-
-Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.CheckLowHealth) -- Continuously monitor health
-Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyLastStandEffect, CacheFlag.CACHE_DAMAGE) -- Apply and remove boost ]]
 
 function Mod:OnCacheUpdateEveEssence(player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_DAMAGE then
@@ -1999,8 +1977,9 @@ function Mod:OnCacheUpdateEveEssence(player, cacheFlag)
             -- Calculate total hearts (Red, Soul, Bone converted to half-hearts)
             local totalHearts = player:GetHearts() + player:GetSoulHearts() + player:GetBlackHearts() + player:GetRottenHearts() + (player:GetBoneHearts() * 2)
 
-            -- Apply 2.5x multiplier if total health is 3 hearts (6 half-hearts) or less
-            if totalHearts <= 2 then
+            -- Add 30 damage when health is at 1 heart or less.
+            if totalHearts <= 2 and eveEssencetriggered == false then
+                eveEssencetriggered2 = true
                 player.Damage = player.Damage + 30
             end
             
@@ -2010,6 +1989,9 @@ end
 
 -- Reset the effect when entering a new room
 function Mod:OnNewRoom()
+    if eveEssencetriggered2 == true then
+        eveEssencetriggered = true
+    end
     for i = 1, Game():GetNumPlayers() do
         local player = Isaac.GetPlayer(i - 1)
         if player:HasCollectible(EVE_ESSENCE) then
@@ -2019,7 +2001,8 @@ function Mod:OnNewRoom()
     end
 end
 
-
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameEve) -- Reset flag between runs
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloorEve) -- Reactivate effect at the start of 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateEveEssence)
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoom) -- Reset damage boost when the player leaves the room.
 

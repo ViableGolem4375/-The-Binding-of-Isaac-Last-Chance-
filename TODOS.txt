@@ -31,9 +31,9 @@ Essence Items:
 - Cain: +20 of all consumables, +1 luck, 1 of each gold consumable spawn at the beginning of each floor. - Done.
 - Judas: Damage up dependent on amount of HP. (less = more damage). - Done.
 - ???: Destroying poop spawns a lot of blue flies. - Done but effect changed.
-- Eve: Massive damage up for a short time when reaching low hp.
-- Samson: Taking or dealing damage gives a short lived, stackable damage up.
-- Azazel: Active that gives the large brimstone variant + flight for X seconds.
+- Eve: Massive damage up for a short time when reaching low hp. - Done.
+- Samson: Active item that makes it so you gain huge damage when dealing damage for the room.
+- Azazel: Shots that summon lasers somehow.
 - Lazarus: Dying grants a large all stats up.
 - Eden: Item that rerolls into 3 Q4 items./D4 with tendency to give good items.
 - The Lost: Active item that causes you to die on one hit while the button is held, but also grants permanent stat ups when held in a hostile room.
