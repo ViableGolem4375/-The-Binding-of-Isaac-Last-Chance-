@@ -7,9 +7,10 @@
 - Need to remove passive q4s from tainted birthright or make it not delete the current active.
 - Fix d4 effects on tainted character maybe?
 - Clover needs another effect, forgot lucky toe exists.
-- Awoken needs free devil deals, hp to be invisible, and free mausoleum door.
 - Essence Items That Need Visuals: Cain, Judas, ???, Azazel, 
 - Eve essence isn't working right, damage doesn't go away.
+- Need to add azazel essence to lucky coin.
+- Laz essence is only buffing speed.
 
 Item Ideas to Add:
 

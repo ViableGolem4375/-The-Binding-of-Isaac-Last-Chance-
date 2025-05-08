@@ -2222,25 +2222,43 @@ Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_REMOVE, Mod.onTearImpact)
 
 local STAT_BOOST = { Damage = 3, Speed = 0.5, Tears = -0.3, Range = 150, Luck = 2, ShotSpeed = 0.2 }
 
-function Mod:OnPlayerRespawn(player)
+local wasDead = {} -- Tracks death state per player
+
+function Mod:OnPlayerUpdate(player)
+    local playerID = player.Index
+
     if player:HasCollectible(LAZARUS_ESSENCE) then
-        print("Player revived - Applying stat boost!")
+        if player:IsDead() then
+            wasDead[playerID] = true -- Mark the player as dead
+        elseif wasDead[playerID] then
+            -- ✅ Player has revived
+            wasDead[playerID] = false -- Reset death tracking
+            print("Player revived - Applying stat boost!")
 
-        -- Apply all-stat boosts
-        player.Damage = player.Damage + STAT_BOOST.Damage
-        player.MoveSpeed = player.MoveSpeed + STAT_BOOST.Speed
-        player.Tears = player.Tears + STAT_BOOST.Tears
-        player.Range = player.Range + STAT_BOOST.Range
-        player.Luck = player.Luck + STAT_BOOST.Luck
-        player.ShotSpeed = player.ShotSpeed + STAT_BOOST.ShotSpeed
+            -- Apply all-stat boosts
+            player.Damage = player.Damage + STAT_BOOST.Damage
+            player.MoveSpeed = player.MoveSpeed + STAT_BOOST.Speed
+            player.Tears = player.Tears + STAT_BOOST.Tears
+            player.Range = player.Range + STAT_BOOST.Range
+            player.Luck = player.Luck + STAT_BOOST.Luck
+            player.ShotSpeed = player.ShotSpeed + STAT_BOOST.ShotSpeed
 
-        -- Force game to recognize stat changes
-        player:AddCacheFlags(CacheFlag.CACHE_ALL)
-        player:EvaluateItems()
+             player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+             player:AddCacheFlags(CacheFlag.CACHE_FIREDELAY)
+             player:AddCacheFlags(CacheFlag.CACHE_RANGE)
+             player:AddCacheFlags(CacheFlag.CACHE_LUCK)
+             player:AddCacheFlags(CacheFlag.CACHE_SHOTSPEED)
+ 
+
+            -- Force game to recognize stat changes
+            --player:AddCacheFlags(CacheFlag.CACHE_ALL)
+            player:EvaluateItems()
+        end
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Mod.OnPlayerRespawn)
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPlayerUpdate)
+
 
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below
