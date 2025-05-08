@@ -65,6 +65,7 @@ local CAIN_ESSENCE = Isaac.GetItemIdByName("Essence of Cain")
 local JUDAS_ESSENCE = Isaac.GetItemIdByName("Essence of Judas")
 local BLUE_BABY_ESSENCE = Isaac.GetItemIdByName("Essence of ???")
 local EVE_ESSENCE = Isaac.GetItemIdByName("Essence of Eve")
+local SAMSON_ESSENCE = Isaac.GetItemIdByName("Essence of Samson")
 
 
 function Mod:GiveCostumesOnInit(player)
@@ -721,6 +722,7 @@ if EID then
     EID:addCollectible(JUDAS_ESSENCE, "{{ArrowUp}} Gives +1 damage.#{{ArrowUp}} Grants a 2.5x damage multiplier when Isaac has 3 total hearts (of any type) or less.", "Essence of Judas")
     EID:addCollectible(BLUE_BABY_ESSENCE, "Entering a new room spawns 10 blue flies.", "Essence of ???")
     EID:addCollectible(EVE_ESSENCE, "{{ArrowUp}} Grants +30 damage for the current room upon reaching 1 total heart or less.#This effect can trigger once per floor.", "Essence of Eve")
+    EID:addCollectible(SAMSON_ESSENCE, "Dash forward becoming invulnerable.#The dash deals 10 damage to enemies.#{{ArrowUp}} The dash gains +0.4 damage for every enemy it kills.", "Essence of Samson")
 
 
 end
@@ -2005,6 +2007,124 @@ Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameEve) -- Reset fl
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloorEve) -- Reactivate effect at the start of 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateEveEssence)
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoom) -- Reset damage boost when the player leaves the room.
+
+local DASH_SPEED_2 = 10 -- Adjust dash speed
+local DASH_DURATION_2 = 10 -- Frames per dash
+local DASH_DAMAGE = 10 -- Damage dealt by dash
+local DAMAGE_GAIN_ON_KILL = 0.4 -- Small permanent damage boost per kill
+
+
+local lastMoveVec = {} -- Store last movement direction for each player
+local dashingPlayers = {} -- Tracks players who are dashing
+local killTracker = {} -- Track kills reliably
+local samsonEssenceBonus = {} -- Store permanent damage boosts per player
+
+
+function Mod:OnUseSamsonEssence(_, _, player)
+    local samsonsfx = SFXManager()
+    if not dashingPlayers[player.Index] then
+        dashingPlayers[player.Index] = {dashTimer = DASH_DURATION_2, cooldown = DASH_COOLDOWN, chargeRefreshCount = 0, chargeTimer = 0, chargeExpireTimer = 0, enemiesHit = {} }
+        player:SetMinDamageCooldown(25) -- Proper invulnerability effect
+        samsonsfx:Play(SoundEffect.SOUND_ISAAC_ROAR, 1.5, 0, false, 1.2)
+        samsonsfx:Play(SoundEffect.SOUND_SWORD_SPIN, 1.5, 0, false, 0.75)
+        -- Immediately trigger first dash update to bypass animation delay
+        Mod:OnUpdateSamsonEssence()
+    end
+    --return true
+end
+
+function Mod:OnUpdateSamsonEssence()
+    local game = Game()
+    for i = 0, game:GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(i)
+        local dashData = dashingPlayers[player.Index]
+
+        if dashData then
+            if dashData.dashTimer > 0 then
+
+                -- Detect player's held direction
+                local moveVec = Vector(0, 0)
+
+                if Input.IsActionPressed(ButtonAction.ACTION_LEFT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_RIGHT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X + 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_UP, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_DOWN, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y + 1
+                end
+
+                -- If the player is actively moving, update lastMoveVec
+                if moveVec:Length() > 0 then
+                    lastMoveVec[player.Index] = moveVec:Normalized() * DASH_SPEED_2
+                end
+
+                -- Use last movement direction if no input is given
+                local finalMoveVec = lastMoveVec[player.Index] or Vector(DASH_SPEED_2, 0)
+                
+                -- Apply movement
+                player.Velocity = finalMoveVec
+
+                -- Store enemies hit during the dash
+                for _, entity in ipairs(Isaac.FindInRadius(player.Position, 50, EntityPartition.ENEMY)) do
+                    if entity:IsVulnerableEnemy() and not dashData.enemiesHit[entity.InitSeed] then
+                        entity:TakeDamage(DASH_DAMAGE, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(player), 0)
+                        dashData.enemiesHit[entity.InitSeed] = true -- Track enemy hit
+                    end
+                end
+
+
+                dashData.dashTimer = dashData.dashTimer - 1
+            else
+                dashingPlayers[player.Index] = nil
+                player:SetMinDamageCooldown(0)
+            end
+        end
+    end
+end
+
+function Mod:OnEnemyKilled(entity)
+    local player = Isaac.GetPlayer(0)
+
+    if player:HasCollectible(SAMSON_ESSENCE) and dashingPlayers[player.Index] and dashingPlayers[player.Index].enemiesHit[entity.InitSeed] then
+        print("Enemy killed during dash!")
+
+        -- Ensure the bonus is stored correctly
+        samsonEssenceBonus[player.Index] = (samsonEssenceBonus[player.Index] or 0) + DAMAGE_GAIN_ON_KILL
+
+        Mod:ApplySamsonEssenceEffect(nil, player, CacheFlag.CACHE_DAMAGE)
+
+
+        print("Cache flags triggered! Damage bonus stored:", samsonEssenceBonus[player.Index])
+    end
+end
+
+-- Apply stored damage bonus through CACHE_DAMAGE
+function Mod:ApplySamsonEssenceEffect(_, player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_DAMAGE then
+        print("samson essence3")
+        if player:HasCollectible(SAMSON_ESSENCE) then
+            print("samson essence4")
+            local playerID = player:GetCollectibleRNG(SAMSON_ESSENCE)
+            --if samsonEssenceBonus[player.Index] then
+            print("samson essence5") -- Now this should print
+            player.Damage = player.Damage + samsonEssenceBonus[player.Index]
+            --end            
+        end
+    end
+end
+
+
+
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseSamsonEssence, SAMSON_ESSENCE)
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.OnUpdateSamsonEssence)
+Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.OnEnemyKilled)
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplySamsonEssenceEffect, CacheFlag.CACHE_DAMAGE)
 
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below
