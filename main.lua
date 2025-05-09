@@ -77,6 +77,8 @@ local BETHANY_ESSENCE = Isaac.GetItemIdByName("Essence of Bethany")
 local MATT_ESSENCE = Isaac.GetItemIdByName("Essence of Matt")
 local PONTIUS_ESSENCE = Isaac.GetItemIdByName("Essence of Pontius")
 local LOST_ESSENCE = Isaac.GetItemIdByName("Essence of The Lost")
+local JACOB_AND_ESAU_ESSENCE = Isaac.GetItemIdByName("Essence of Jacob and Esau")
+
 
 
 
@@ -747,6 +749,7 @@ if EID then
     EID:addCollectible(MATT_ESSENCE, "{{ArrowUp}} +3 luck.#Grants 2 items from the Lucky Coin item pool.", "Essence of Matt")
     EID:addCollectible(PONTIUS_ESSENCE, "Throw one of Pontius' spears in the current attack direction.#Spears deal 10x Isaac's damage.", "Essence of Pontius")
     EID:addCollectible(LOST_ESSENCE, "For the current room:#{{Warning}} Become the lost.#{{ArrowUp}} +20 damage.", "Essence of The Lost")
+    EID:addCollectible(JACOB_AND_ESAU_ESSENCE, "Summon Esau as a helper for the current room.", "Essence of Jacob and Esau")
 
 end
 
@@ -2740,6 +2743,22 @@ function Mod:ApplySoulDamageBoost(_, player, cacheFlag)
 end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplySoulDamageBoost)
+
+local SOUL_OF_JE = Card.CARD_SOUL_JACOB -- Replace with actual Soul of the Lost ID
+
+
+function Mod:UseSoulItemJE(_, item, rng, player)
+    local player = Isaac.GetPlayer(0)
+    player:AnimateCollectible(JACOB_AND_ESAU_ESSENCE, "UseItem", "PlayerPickupSparkle")
+    if player:HasCollectible(JACOB_AND_ESAU_ESSENCE) then
+
+        -- ✅ Force immediate use
+        player:UseCard(SOUL_OF_JE)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItemJE, JACOB_AND_ESAU_ESSENCE)
 
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below
