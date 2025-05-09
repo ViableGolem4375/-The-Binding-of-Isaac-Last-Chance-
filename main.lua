@@ -73,9 +73,10 @@ local EDEN_ESSENCE = Isaac.GetItemIdByName("Essence of Eden")
 local KEEPER_ESSENCE = Isaac.GetItemIdByName("Essence of Keeper")
 local APOLLYON_ESSENCE = Isaac.GetItemIdByName("Essence of Apollyon")
 local APOLLYON_ESSENCE_VFX = Isaac.GetItemIdByName("Essence of Apollyon VFX")
-
-
-
+local BETHANY_ESSENCE = Isaac.GetItemIdByName("Essence of Bethany")
+local MATT_ESSENCE = Isaac.GetItemIdByName("Essence of Matt")
+local PONTIUS_ESSENCE = Isaac.GetItemIdByName("Essence of Pontius")
+local LOST_ESSENCE = Isaac.GetItemIdByName("Essence of The Lost")
 
 
 
@@ -742,6 +743,10 @@ if EID then
     EID:addCollectible(EDEN_ESSENCE, "One time use active that rerolls all held passive items.#Rerolls have an extreme tendency to give high quality items.", "Essence of Eden")
     EID:addCollectible(KEEPER_ESSENCE, "Grants 99 cents on pickup.#Infinite money for the current floor.", "Essence of Keeper")
     EID:addCollectible(APOLLYON_ESSENCE, "For 8 seconds gain:#{{ArrowUp}} Invincibility#{{ArrowUp}} 40 contact damage to enemies.#For every enemy killed during Essence of Apollyon's effect, permanently gain +0.05 damage.", "Essence of Apollyon")
+    EID:addCollectible(BETHANY_ESSENCE, "Grants a random Book of Virtues wisp when entering a new room.", "Essence of Bethany")
+    EID:addCollectible(MATT_ESSENCE, "{{ArrowUp}} +3 luck.#Grants 2 items from the Lucky Coin item pool.", "Essence of Matt")
+    EID:addCollectible(PONTIUS_ESSENCE, "Throw one of Pontius' spears in the current attack direction.#Spears deal 10x Isaac's damage.", "Essence of Pontius")
+    EID:addCollectible(LOST_ESSENCE, "For the current room:#{{Warning}} Become the lost.#{{ArrowUp}} +20 damage.", "Essence of The Lost")
 
 end
 
@@ -2471,9 +2476,270 @@ function Mod:onCacheApollyonEssence(player, cacheFlag)
     end ]]
 end
 
-
-
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCacheApollyonEssence)
+
+local visitedRoomsBethEssence = {}
+
+
+function Mod:GetRandomWisppableItem()
+    local possibleWisps = {}
+
+    for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
+        local itemConfig = Isaac.GetItemConfig():GetCollectible(i)
+
+        -- ✅ Ensure item exists and can create wisps
+        if itemConfig and not (itemConfig.Tags & ItemConfig.TAG_QUEST == ItemConfig.TAG_QUEST) then
+            table.insert(possibleWisps, i)
+        end
+    end
+
+    -- ✅ Select a random item or return nil if none found
+    if #possibleWisps > 0 then
+        local selectedItem = possibleWisps[math.random(#possibleWisps)]
+        return selectedItem
+    end
+
+    return nil
+end
+
+
+-- ✅ Spawn a wisp when entering a new room
+function Mod:OnNewRoomBethEssence()
+    local player = Isaac.GetPlayer(0)
+    local room = Game():GetLevel():GetCurrentRoomIndex()
+
+    if player:HasCollectible(BETHANY_ESSENCE) then
+
+        -- ✅ Check if the room has already been visited
+        if not visitedRoomsBethEssence[room] then
+
+            local randomCollectible = Mod:GetRandomWisppableItem()
+            if randomCollectible then
+                player:AddWisp(randomCollectible, player.Position, true)
+            end
+
+            -- ✅ Mark the room as visited
+            visitedRoomsBethEssence[room] = true
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoomBethEssence)
+
+
+-- ✅ Define a list of possible items to grant
+local predefinedItemList = {
+    AZAZEL_ESSENCE,
+    87, --Loki's Horns
+    89, --Spider Bite
+    103, --The Common Cold
+    110, --Mom's Contacts
+    150, --Tough Love
+    151, --The Mulligan
+    200, --Mom's Eyeshadow
+    201, --Iron Bar
+    217, --Mom's Wig
+    219, --Old Bandage
+    225, --Gimpy
+    228, --Mom's Perfume
+    230, --Abaddon
+    231, --Ball of Tar
+    46, --Lucky Foot
+    173, --Mitre
+    204, --Fanny Pack
+    242, --Infamy
+    259, --Dark Matter
+    303, --Virgo
+    337, --Broken Watch
+    374, --Holy Light
+    375, --Host Hat
+    393, --Serpent's Kiss
+    398, --God's Flesh
+    401, --Explosivo
+    410, --Evil Eye
+    418, --Fruit Cake
+    424, --Sack Head
+    429, --Head of the Keeper
+    443, --Apple!
+    449, --Metal Plate
+    457, --Cone Head
+    459, --Sinus Infection
+    460, --Glaucoma
+    461, --Parasitoid
+    463, --Sulfuric Acid
+    495, --Ghost Pepper
+    496, --Euthanasia
+    502, --Large Zit
+    503, --Little Horn
+    505, --Poke Go
+    513, --Bozo
+    514, --Broken Modem
+    538, --Marbles
+    553, --Mucormycosis
+    558, --Eye Sore
+    606, --Ocular Rift
+    616, --Bird's eye
+    617, --Lodestone
+    618, --Rotten Tomato
+    637, --Knockout Drops
+    684, --Hungry Soul
+    690, --Belly Jelly
+    691, --Sacred Orb
+}
+
+-- ✅ Grant items and a luck upgrade on pickup
+function Mod:OnPickupRewardItem(_, player)
+    local player = Isaac.GetPlayer(0)
+    if player:HasCollectible(MATT_ESSENCE) then
+
+        -- Select two random items from the list
+        local chosenItems = {}
+        
+        while #chosenItems < 2 do
+            local selectedItem = predefinedItemList[math.random(#predefinedItemList)]
+            if not chosenItems[selectedItem] then
+                table.insert(chosenItems, selectedItem)
+            end
+        end
+
+        -- ✅ Give the selected items to the player
+        for _, itemID in ipairs(chosenItems) do
+            player:AddCollectible(itemID)
+        end
+
+        -- ✅ Grant a luck upgrade
+        player:AddCacheFlags(CacheFlag.CACHE_LUCK)
+        player:GetData().luckBoost = 3 -- Adjust as needed
+        player:EvaluateItems()
+
+        -- ✅ Remove itself after activation (if desired)
+        player:RemoveCollectible(MATT_ESSENCE)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupRewardItem)
+
+-- ✅ Ensure luck boost applies properly
+function Mod:onCacheMattEssence(player, cacheFlag)
+    --local player = Isaac.GetPlayer(0)
+    if cacheFlag == CacheFlag.CACHE_LUCK and player:GetData().luckBoost then
+        player.Luck = player.Luck + player:GetData().luckBoost
+
+    end
+
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCacheMattEssence)
+
+local spearCooldown = 0 -- Shared cooldown for all characters
+
+function Mod:UseSpearAttack(_, item, rng, player)
+    local player = Isaac.GetPlayer(0)
+    if player:HasCollectible(PONTIUS_ESSENCE) then
+        print("Spear attack activated!")
+
+        local data = player:GetData()
+        local playerDamage = player.Damage
+        local fireDirectionspear = player:GetFireDirection()
+        local directionspear
+
+        player.FireDelay = player.MaxFireDelay
+
+        -- Handle laser cooldown
+        --if spearCooldown > 0 then return end
+
+        -- Set correct spear direction
+        if fireDirectionspear == Direction.LEFT then
+            directionspear = Vector(-1, 0)
+        elseif fireDirectionspear == Direction.RIGHT then
+            directionspear = Vector(1, 0)
+        elseif fireDirectionspear == Direction.DOWN then
+            directionspear = Vector(0, 1)
+        elseif fireDirectionspear == Direction.UP then
+            directionspear = Vector(0, -1)
+        elseif fireDirectionspear == Direction.NO_DIRECTION then
+            directionspear = Vector(0, 1)
+        end
+
+        if directionspear then
+            local spear = Isaac.Spawn(
+                EntityType.ENTITY_LASER,
+                LaserVariant.ELECTRIC,
+                0,
+                player.Position,
+                Vector.Zero,
+                player
+            ):ToLaser()
+
+            -- Apply custom animation
+            if spear then
+                local sprite = spear:GetSprite()
+                sprite:Load("gfx/pontius_spear_throw.anm2", true)
+                sprite:Play("LargeRedLaser", true)
+            end
+
+            -- Stop default sound and play custom effect
+            local sfx = SFXManager()
+            sfx:Stop(SoundEffect.SOUND_ANGEL_BEAM)
+            sfx:Play(SoundEffect.SOUND_SWORD_SPIN) -- Replace with your custom sound ID
+
+            spear.PositionOffset = Vector(0, -10)
+            spear.AngleDegrees = directionspear:GetAngleDegrees()
+            spear.Parent = player
+            spear.Timeout = 1
+            spear.CollisionDamage = playerDamage * 10
+
+            spearCooldown = 30 -- Set a cooldown (adjust as needed)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSpearAttack, PONTIUS_ESSENCE)
+
+local SOUL_OF_THE_LOST = Card.CARD_SOUL_LOST -- Replace with actual Soul of the Lost ID
+
+
+function Mod:UseSoulItem(_, item, rng, player)
+    local player = Isaac.GetPlayer(0)
+    player:AnimateCollectible(LOST_ESSENCE, "UseItem", "PlayerPickupSparkle")
+    if player:HasCollectible(LOST_ESSENCE) then
+
+        -- ✅ Force immediate use
+        player:UseCard(SOUL_OF_THE_LOST)
+
+         -- ✅ Apply temporary damage boost
+         player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+         player:GetData().temporaryDamageBoost = 20 -- Adjust as needed
+         player:EvaluateItems()
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItem, LOST_ESSENCE)
+
+-- ✅ Remove effect upon leaving the room
+function Mod:OnNewRoomLostEssence()
+    local player = Isaac.GetPlayer(0)
+
+    -- Reset player state after leaving the room
+    if player:GetData().temporaryDamageBoost then
+        player:GetData().temporaryDamageBoost = nil
+        player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+        player:EvaluateItems()
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoomLostEssence)
+
+-- ✅ Ensure damage boost applies correctly
+function Mod:ApplySoulDamageBoost(_, player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_DAMAGE and player:GetData().temporaryDamageBoost then
+        player.Damage = player.Damage + player:GetData().temporaryDamageBoost
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplySoulDamageBoost)
 
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below
@@ -2597,7 +2863,12 @@ local RELIQUARY_POOL = {
     SAMSON_ESSENCE,
     AZAZEL_ESSENCE,
     LAZARUS_ESSENCE,
-    EDEN_ESSENCE
+    EDEN_ESSENCE,
+    KEEPER_ESSENCE,
+    APOLLYON_ESSENCE,
+    BETHANY_ESSENCE,
+    MATT_ESSENCE,
+    PONTIUS_ESSENCE
     -- Add more items as needed
 }
 

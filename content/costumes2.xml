@@ -17,5 +17,7 @@
     <costume id="31" anm2path="keeper_essence.anm2" type="passive" priority="0" />
     <costume id="32" anm2path="apollyon_essence.anm2" type="active" priority="10" />
     <costume id="33" anm2path="apollyon_essence.anm2" type="passive" priority="10" />
+    <costume id="34" anm2path="beth_essence.anm2" type="passive" priority="0" />
+    <costume id="35" anm2path="matt_essence.anm2" type="passive" priority="0" />
 
 </costumes>
