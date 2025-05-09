@@ -2943,7 +2943,7 @@ function Mod:FilterItemPoolOnRoomEntry()
     local customVaultRooms = {6969} -- Replace with your actual Room IDs
 
     -- Check if the current room matches your custom rooms
-    if level == -3 and roomType == RoomType.ROOM_LIBRARY and roomSize == 448 then
+    if roomType == RoomType.ROOM_LIBRARY and roomSize == 448 then
         --print(level)
         --print(roomSize)
         local itemPool = Game():GetItemPool()
