@@ -733,6 +733,7 @@ if EID then
     EID:addCollectible(AZAZEL_ESSENCE, "5% chance to fire a tear that causes Isaac to fire a large brimstone beam on contact with something.#{{Luck}} 100% chance at 19 luck.", "Essence of Azazel")
     EID:addCollectible(LAZARUS_ESSENCE, "{{ArrowUp}} Grants +1 damage, a +50% damage multiplier, -1 tear delay, +0.5 speed, +3.75 range, +1 shot speed, and +2 luck upon dying and being revived.#{{Warning}} Essence of Lazarus can only trigger once.#{{Warning}} This item will NOT revive you, it is not an extra life.", "Essence of Lazarus")
     EID:addCollectible(LAZARUS_ESSENCE_UNLOCKED, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} -1 tear delay.#{{ArrowUp}} +0.5 speed.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +1 shot speed.#{{ArrowUp}} +2 luck.", "Unlocked Essence of Lazarus")
+    EID:addCollectible(EDEN_ESSENCE, "One time use active that rerolls all held passive items.#Rerolls have an extreme tendency to give high quality items.", "Essence of Eden")
 
 end
 
@@ -2283,7 +2284,134 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPlayerUpdateLaz)
 
+--[[ function Mod:GetRandomItemOfQuality(targetQuality)
+    local possibleItems = {}
+    local collectibles = {} -- Store all valid items for rerolling
 
+    -- Search for collectibles that match the desired quality
+    for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
+        local itemConfig = Isaac.GetItemConfig():GetCollectible(i)
+        if itemConfig and itemConfig.Quality == targetQuality then
+            table.insert(possibleItems, i)
+        end
+    end
+
+    -- Return a random matching item or nil if none found
+    if #possibleItems > 0 then
+        return possibleItems[math.random(#possibleItems)]
+    end
+    return nil
+end
+
+function Mod:UpgradeItemsOnUse(_, item, rng, player)
+    local player = Isaac.GetPlayer(0)
+    player:AnimateCollectible(EDEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
+
+    if player:HasCollectible(EDEN_ESSENCE) then
+        print("Activated - Upgrading item quality!")
+
+        -- Loop through all items and reroll them into +1 quality versions
+        for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
+            if player:HasCollectible(i) then
+                local itemConfig = Isaac.GetItemConfig():GetCollectible(i)
+        
+                if itemConfig and itemConfig.Quality < 4 then -- Max quality is 4
+                    local newQuality = itemConfig.Quality + 1
+                    local rerolledItem = Mod:GetRandomItemOfQuality(newQuality)
+                    
+                    if rerolledItem then
+                        player:RemoveCollectible(i)
+                        player:AddCollectible(rerolledItem)
+                    end
+                end
+            end
+        end
+        
+        
+        -- Consume the active item
+        player:RemoveCollectible(EDEN_ESSENCE)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UpgradeItemsOnUse, EDEN_ESSENCE) ]]
+
+local rerolledItems = {} -- Track rerolled items to prevent duplicates
+
+-- Function to upgrade all passive items by +1 quality
+function Mod:UpgradeItemsOnUse(_, item, rng, player)
+    local player = Isaac.GetPlayer(0)
+    player:AnimateCollectible(EDEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
+    if player:HasCollectible(EDEN_ESSENCE) then
+        print("Activated - Upgrading all item qualities!")
+
+        local collectiblesToReroll = {} -- Store all valid passive items for rerolling
+
+        -- ✅ Collect all valid passive items FIRST
+        for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
+            if player:HasCollectible(i) then
+                local itemConfig = Isaac.GetItemConfig():GetCollectible(i)
+                
+                -- Ensure item exists, is passive, and isn't a quest item
+                if itemConfig and itemConfig.Quality < 4 and itemConfig.Type == ItemType.ITEM_PASSIVE then
+                    if not (itemConfig.Tags & ItemConfig.TAG_QUEST == ItemConfig.TAG_QUEST) then
+                        table.insert(collectiblesToReroll, i) -- ✅ Store valid items for later processing
+                    end
+                end
+            end
+        end
+
+        -- ✅ Process all stored collectibles AFTER gathering them
+        for _, itemID in ipairs(collectiblesToReroll) do
+            local itemConfig = Isaac.GetItemConfig():GetCollectible(itemID)
+            if itemConfig then
+                local newQuality = itemConfig.Quality + 1
+                local rerolledItem = Mod:GetRandomValidItemOfQuality(newQuality)
+
+                if rerolledItem then
+                    player:RemoveCollectible(itemID) -- Remove current item
+                    player:AddCollectible(rerolledItem) -- Add upgraded item
+                    rerolledItems[rerolledItem] = true -- ✅ Track the rerolled item to prevent duplicates
+                end
+            end
+        end
+
+        -- ✅ Consume the active item after processing all upgrades
+        player:RemoveCollectible(EDEN_ESSENCE)
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UpgradeItemsOnUse, EDEN_ESSENCE)
+
+-- Function to find a valid passive item of the desired quality
+function Mod:GetRandomValidItemOfQuality(targetQuality)
+    local possibleItems = {}
+
+    for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
+        local itemConfig = Isaac.GetItemConfig():GetCollectible(i)
+
+        -- Ensure item exists and meets quality requirement
+        if itemConfig and itemConfig.Quality == targetQuality then
+            -- ✅ Exclude active items (Type == ITEM_ACTIVE)
+            if itemConfig.Type == ItemType.ITEM_PASSIVE then
+                -- ✅ Prevent quest items from being selected
+                if not (itemConfig.Tags & ItemConfig.TAG_QUEST == ItemConfig.TAG_QUEST) then
+                    -- ✅ Ensure we do not duplicate items
+                    if not rerolledItems[i] then
+                        table.insert(possibleItems, i)
+                    end
+
+                end
+            end
+        end
+    end
+
+    -- Return a random valid item or nil if none found
+    if #possibleItems > 0 then
+        return possibleItems[math.random(#possibleItems)]
+    end
+    return nil
+end
 
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below
@@ -2400,7 +2528,14 @@ local RELIQUARY_POOL = {
     LILITH_ESSENCE,
     ISAAC_ESSENCE,
     MAGDALENE_ESSENCE,
-    CAIN_ESSENCE
+    CAIN_ESSENCE,
+    JUDAS_ESSENCE,
+    BLUE_BABY_ESSENCE,
+    EVE_ESSENCE,
+    SAMSON_ESSENCE,
+    AZAZEL_ESSENCE,
+    LAZARUS_ESSENCE,
+    EDEN_ESSENCE
     -- Add more items as needed
 }
 
