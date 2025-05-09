@@ -7,5 +7,6 @@
     <entity name="Amplifier Area" id="1000" variant="2097" anm2path="amp_area.anm2"/>
     <entity name="Bond Orb" id="3" anm2path="bond_orb.anm2" shadowSize="11" friction="1" />
     <entity name="Awoken Weapon" id="3" anm2path="awoken_weapon.anm2" shadowSize="11" friction="1" />
+    <entity name="Apollyon Essence Black Hole" id="3" anm2path="apollyon_blackhole.anm2" shadowSize="11" friction="1" />
 
 </entities>

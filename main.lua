@@ -71,6 +71,9 @@ local LAZARUS_ESSENCE = Isaac.GetItemIdByName("Essence of Lazarus")
 local LAZARUS_ESSENCE_UNLOCKED = Isaac.GetItemIdByName("Unlocked Essence of Lazarus")
 local EDEN_ESSENCE = Isaac.GetItemIdByName("Essence of Eden")
 local KEEPER_ESSENCE = Isaac.GetItemIdByName("Essence of Keeper")
+local APOLLYON_ESSENCE = Isaac.GetItemIdByName("Essence of Apollyon")
+local APOLLYON_ESSENCE_VFX = Isaac.GetItemIdByName("Essence of Apollyon VFX")
+
 
 
 
@@ -738,6 +741,7 @@ if EID then
     EID:addCollectible(LAZARUS_ESSENCE_UNLOCKED, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} -1 tear delay.#{{ArrowUp}} +0.5 speed.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +1 shot speed.#{{ArrowUp}} +2 luck.", "Unlocked Essence of Lazarus")
     EID:addCollectible(EDEN_ESSENCE, "One time use active that rerolls all held passive items.#Rerolls have an extreme tendency to give high quality items.", "Essence of Eden")
     EID:addCollectible(KEEPER_ESSENCE, "Grants 99 cents on pickup.#Infinite money for the current floor.", "Essence of Keeper")
+    EID:addCollectible(APOLLYON_ESSENCE, "For 8 seconds gain:#{{ArrowUp}} Invincibility#{{ArrowUp}} 40 contact damage to enemies.#For every enemy killed during Essence of Apollyon's effect, permanently gain +0.05 damage.", "Essence of Apollyon")
 
 end
 
@@ -2397,7 +2401,79 @@ Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameKeeperEssence) -
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupKeeperEssence) -- Detect item pickup
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloorKeeperEssence) -- Spawn golden items at the start of each floor
 
+local rampageActive = false
+local rampageEndTime = 0
+local killCount = 0
 
+-- ✅ Activate invulnerability and contact damage on use
+function Mod:ActivateRampage(_, item, rng, player)
+    local player = Isaac.GetPlayer(0)
+    player:AnimateCollectible(EDEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
+    player:AddCollectible(APOLLYON_ESSENCE_VFX)
+    local apollyonsfx = SFXManager()
+    apollyonsfx:Play(SoundEffect.SOUND_BEAST_SUCTION_LOOP) -- Play sound effect
+
+
+    if player:HasCollectible(APOLLYON_ESSENCE) then
+
+        rampageActive = true
+        rampageEndTime = Isaac.GetFrameCount() + (8 * 60) -- 10 seconds in frames
+        killCount = 0
+
+        -- Make player invulnerable
+        player:SetMinDamageCooldown(480)
+        player:GetData().contactDamageBoost = true
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.ActivateRampage, APOLLYON_ESSENCE)
+
+-- ✅ Apply contact damage effect
+function Mod:OnPlayerUpdateApollyon(player)
+    local player = Isaac.GetPlayer(0)
+    if rampageActive then
+        -- ✅ Damage enemies on contact
+        for _, enemy in ipairs(Isaac.GetRoomEntities()) do
+            if enemy:IsEnemy() and enemy.Position:Distance(player.Position) < enemy.Size + player.Size then
+                enemy:TakeDamage(40, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(player), 0)
+
+                -- ✅ Count kills for damage scaling
+                if enemy:IsDead() then
+                    killCount = killCount + 1
+                end
+            end
+        end
+
+        -- ✅ End effect after 10 seconds
+        if Isaac.GetFrameCount() >= rampageEndTime then
+            player:SetMinDamageCooldown(30)
+            player:RemoveCollectible(APOLLYON_ESSENCE_VFX)
+            rampageActive = false
+            player:GetData().contactDamageBoost = nil
+            
+            -- ✅ Apply damage boost based on kills
+            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+            player:GetData().temporaryDamageBoost = killCount * 0.05
+            player:EvaluateItems()
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdateApollyon)
+
+function Mod:onCacheApollyonEssence(player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_DAMAGE and player:GetData().temporaryDamageBoost then
+        player.Damage = player.Damage + player:GetData().temporaryDamageBoost
+    end
+
+    --[[ f cacheFlag == CacheFlag.CACHE_DAMAGE then
+        player.Damage = player.Damage - 3.5 + Template.DAMAGE
+    end ]]
+end
+
+
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCacheApollyonEssence)
 
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below

@@ -6,6 +6,16 @@
     <costume id="6" anm2path="judgement.anm2" type="active" priority="0" />
     <costume id="12" anm2path="compensator.anm2" type="passive" priority="0" />
     <costume id="17" anm2path="bond_orb.anm2" type="active" priority="0" />
-
+    <costume id="22" anm2path="bond_orb.anm2" type="passive" priority="0" />
+    <costume id="22" anm2path="cain_essence.anm2" type="passive" priority="0" />
+    <costume id="23" anm2path="judas_essence.anm2" type="passive" priority="0" />
+    <costume id="24" anm2path="blue_baby_essence.anm2" type="passive" priority="0" />
+    <costume id="25" anm2path="eve_essence.anm2" type="passive" priority="0" />
+    <costume id="27" anm2path="azazel_essence.anm2" type="passive" priority="0" />
+    <costume id="28" anm2path="laz_essence.anm2" type="passive" priority="0" />
+    <costume id="29" anm2path="laz_essence.anm2" type="passive" priority="0" />
+    <costume id="31" anm2path="keeper_essence.anm2" type="passive" priority="0" />
+    <costume id="32" anm2path="apollyon_essence.anm2" type="active" priority="10" />
+    <costume id="33" anm2path="apollyon_essence.anm2" type="passive" priority="10" />
 
 </costumes>
