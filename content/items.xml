@@ -7,11 +7,11 @@
     <active id="4" name="Catalyst Character Sheet" gfx="catalyst_character_sheet.png" description="It's in my head IT'S IN MY HEAD AAAAAAAAAAA" quality="2" maxcharges="3" chargetype="normal" tags="offensive nocantrip"/>
     <familiar name="Failed Abortion" gfx="failed_abortion.png" description="It's still breathing!" quality="2" cache="familiars" tags="baby offensive summonable monstermanual" />
     <active id="5" name="Final Judgement" gfx="finaljudgement.png" description="Be Afraid" quality="4" charge="0" tags="offensive nocantrip"/>
-    <passive id="6" name="Final Judgement VFX" gfx="finaljudgement.png" description="I exist to make the Final Judgement VFX work!" quality="4" tags="nocantrip quest"/>
+    <passive id="6" name="Final Judgement VFX" gfx="finaljudgement.png" description="I exist to make the Final Judgement VFX work!" quality="4" tags="nocantrip quest noeden"/>
     <active id="7" name="Essence of Lilith" gfx="essence_of_lilith.png" description="To me my children" quality="2" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
     <trinket id="8" name="Reliquary Access Card" gfx="reliquary_card.png" description="Access granted" />
     <active id="9" name="Amplifier" gfx="amp.png" description="Enjoy the amplifier!" quality="2" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
-    <passive id="10" name="Amp Damage" gfx="amp.png" description="I exist to give amplifier's damage!" quality="4" tags="nocantrip quest" cache="damage"/>
+    <passive id="10" name="Amp Damage" gfx="amp.png" description="I exist to give amplifier's damage!" quality="4" tags="nocantrip quest noeden" cache="damage"/>
     <active id="11" name="Huh?" gfx="huh.png" description="What happened to my D6?" quality="0" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="12" name="The Compensator" gfx="compensator.png" description="Garbage = Power!" quality="3" tags="offensive nocantrip" cache="damage"/>
     <trinket id="13" name="4 Leaf Clover" gfx="clover.png" description="Luck up!" cache="luck"/>
@@ -29,7 +29,9 @@
     <passive id="25" name="Essence of Eve" gfx="eve_essence.png" description="Power through desperation" quality="2" tags="offensive nocantrip nolostbr" cache="damage"/>
     <active id="26" name="Essence of Samson" gfx="samson_essence.png" description="Rage incarnate" quality="3" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage"/>
     <passive id="27" name="Essence of Azazel" gfx="azazel_essence.png" description="Brimstone unleashed" quality="4" tags="offensive nocantrip" cache="damage luck"/>
-    <passive id="28" name="Essence of Lazarus" gfx="azazel_essence.png" description="Strength through rebirth" quality="2" tags="offensive nocantrip" cache="all"/>
+    <passive id="28" name="Essence of Lazarus" gfx="laz_essence.png" description="Strength through rebirth" quality="2" tags="offensive nocantrip" cache="all"/>
+    <passive id="29" name="Unlocked Essence of Lazarus" gfx="laz_essence.png" description="Strength through rebirth" quality="4" tags="offensive nocantrip noeden quest" cache="all"/>
+    <active id="22" name="Essence of Eden" gfx="magdalene_essence.png" description="Change into something better" quality="2" charge="0" tags="offensive nocantrip"/>
 
 
 </items>

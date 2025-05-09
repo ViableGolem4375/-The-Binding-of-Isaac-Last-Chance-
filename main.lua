@@ -68,6 +68,10 @@ local EVE_ESSENCE = Isaac.GetItemIdByName("Essence of Eve")
 local SAMSON_ESSENCE = Isaac.GetItemIdByName("Essence of Samson")
 local AZAZEL_ESSENCE = Isaac.GetItemIdByName("Essence of Azazel")
 local LAZARUS_ESSENCE = Isaac.GetItemIdByName("Essence of Lazarus")
+local LAZARUS_ESSENCE_UNLOCKED = Isaac.GetItemIdByName("Unlocked Essence of Lazarus")
+local EDEN_ESSENCE = Isaac.GetItemIdByName("Essence of Eden")
+
+
 
 
 
@@ -727,7 +731,8 @@ if EID then
     EID:addCollectible(EVE_ESSENCE, "{{ArrowUp}} Grants +30 damage for the current room upon reaching 1 total heart or less.#This effect can trigger once per floor.", "Essence of Eve")
     EID:addCollectible(SAMSON_ESSENCE, "Dash forward becoming invulnerable.#The dash deals 10 damage to enemies.#{{ArrowUp}} The dash gains +0.4 damage for every enemy it kills.", "Essence of Samson")
     EID:addCollectible(AZAZEL_ESSENCE, "5% chance to fire a tear that causes Isaac to fire a large brimstone beam on contact with something.#{{Luck}} 100% chance at 19 luck.", "Essence of Azazel")
-
+    EID:addCollectible(LAZARUS_ESSENCE, "{{ArrowUp}} Grants +1 damage, a +50% damage multiplier, -1 tear delay, +0.5 speed, +3.75 range, +1 shot speed, and +2 luck upon dying and being revived.#{{Warning}} Essence of Lazarus can only trigger once.#{{Warning}} This item will NOT revive you, it is not an extra life.", "Essence of Lazarus")
+    EID:addCollectible(LAZARUS_ESSENCE_UNLOCKED, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} -1 tear delay.#{{ArrowUp}} +0.5 speed.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +1 shot speed.#{{ArrowUp}} +2 luck.", "Unlocked Essence of Lazarus")
 
 end
 
@@ -2220,44 +2225,64 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateAzazel)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitAzazel)
 Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_REMOVE, Mod.onTearImpact)
 
-local STAT_BOOST = { Damage = 3, Speed = 0.5, Tears = -0.3, Range = 150, Luck = 2, ShotSpeed = 0.2 }
+local STAT_BOOST = {
+    SPEED = 1.00,
+    FIREDELAY = -1, 
+    DAMAGE = 1, 
+    RANGE = 150, 
+    SHOTSPEED = 1.00,
+    LUCK = 2.00,
+}
 
-local wasDead = {} -- Tracks death state per player
-
-function Mod:OnPlayerUpdate(player)
-    local playerID = player.Index
-
-    if player:HasCollectible(LAZARUS_ESSENCE) then
-        if player:IsDead() then
-            wasDead[playerID] = true -- Mark the player as dead
-        elseif wasDead[playerID] then
-            -- ✅ Player has revived
-            wasDead[playerID] = false -- Reset death tracking
-            print("Player revived - Applying stat boost!")
-
-            -- Apply all-stat boosts
-            player.Damage = player.Damage + STAT_BOOST.Damage
-            player.MoveSpeed = player.MoveSpeed + STAT_BOOST.Speed
-            player.Tears = player.Tears + STAT_BOOST.Tears
-            player.Range = player.Range + STAT_BOOST.Range
-            player.Luck = player.Luck + STAT_BOOST.Luck
-            player.ShotSpeed = player.ShotSpeed + STAT_BOOST.ShotSpeed
-
-             player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
-             player:AddCacheFlags(CacheFlag.CACHE_FIREDELAY)
-             player:AddCacheFlags(CacheFlag.CACHE_RANGE)
-             player:AddCacheFlags(CacheFlag.CACHE_LUCK)
-             player:AddCacheFlags(CacheFlag.CACHE_SHOTSPEED)
- 
-
-            -- Force game to recognize stat changes
-            --player:AddCacheFlags(CacheFlag.CACHE_ALL)
-            player:EvaluateItems()
+function Mod:lazEssencePickup(player, cacheFlag)
+    if player:HasCollectible(LAZARUS_ESSENCE_UNLOCKED) then
+        if cacheFlag == CacheFlag.CACHE_SPEED then
+            player.MoveSpeed = player.MoveSpeed + STAT_BOOST.SPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+            player.MaxFireDelay = player.MaxFireDelay + STAT_BOOST.FIREDELAY
+        end
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = (player.Damage + STAT_BOOST.DAMAGE) * 1.5
+        end
+        if cacheFlag == CacheFlag.CACHE_RANGE then
+            player.TearRange = player.TearRange + STAT_BOOST.RANGE
+        end
+        if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
+            player.ShotSpeed = player.ShotSpeed+ STAT_BOOST.SHOTSPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_LUCK then
+            player.Luck = player.Luck + STAT_BOOST.LUCK
         end
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPlayerUpdate)
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.lazEssencePickup)
+
+local wasDead = {} -- Tracks death state per player
+
+function Mod:OnPlayerUpdateLaz(player)
+    local playerID = player.Index
+
+    if player:HasCollectible(LAZARUS_ESSENCE) then
+        if player:IsDead() then
+            wasDead[playerID] = true -- Track death
+        elseif wasDead[playerID] then
+            wasDead[playerID] = false -- Reset death tracking
+            print("Player revived - Granting stats item and removing revival item!")
+
+            -- ✅ Give the player the all-stats-up item
+            player:AddCollectible(LAZARUS_ESSENCE_UNLOCKED)
+
+            -- ✅ Remove the revival item from inventory
+            player:RemoveCollectible(LAZARUS_ESSENCE)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPlayerUpdateLaz)
+
 
 
 ----------------------------------------------------------------------------------------
