@@ -31,7 +31,9 @@
     <passive id="27" name="Essence of Azazel" gfx="azazel_essence.png" description="Brimstone unleashed" quality="4" tags="offensive nocantrip" cache="damage luck"/>
     <passive id="28" name="Essence of Lazarus" gfx="laz_essence.png" description="Strength through rebirth" quality="2" tags="offensive nocantrip" cache="all"/>
     <passive id="29" name="Unlocked Essence of Lazarus" gfx="laz_essence.png" description="Strength through rebirth" quality="4" tags="offensive nocantrip noeden quest" cache="all"/>
-    <active id="22" name="Essence of Eden" gfx="eden_essence.png" description="Change into something better" quality="4" charge="0" tags="offensive nocantrip"/>
+    <active id="30" name="Essence of Eden" gfx="eden_essence.png" description="Change into something better" quality="4" charge="0" tags="offensive nocantrip"/>
+    <passive id="31" name="Essence of Keeper" gfx="keeper_essence.png" description="Infinite wealth" quality="3" tags="offensive nocantrip"/>
+    <active id="32" name="Essence of Apollyon" gfx="eden_essence.png" description="Void" quality="2" charge="6" tags="offensive nocantrip"/>
 
 
 </items>

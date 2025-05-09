@@ -70,6 +70,7 @@ local AZAZEL_ESSENCE = Isaac.GetItemIdByName("Essence of Azazel")
 local LAZARUS_ESSENCE = Isaac.GetItemIdByName("Essence of Lazarus")
 local LAZARUS_ESSENCE_UNLOCKED = Isaac.GetItemIdByName("Unlocked Essence of Lazarus")
 local EDEN_ESSENCE = Isaac.GetItemIdByName("Essence of Eden")
+local KEEPER_ESSENCE = Isaac.GetItemIdByName("Essence of Keeper")
 
 
 
@@ -626,6 +627,8 @@ function Mod:ApplyBirthrightEffect(player)
                     URIEL_ITEM,
                     GABRIEL_ITEM,
                     FINAL_JUDGMENT_ITEM,
+                    AZAZEL_ESSENCE,
+                    CAIN_ESSENCE,
                     -- Vanilla items.
                     330,  -- Sacred Heart
                     169,  -- Polyphemus
@@ -734,6 +737,7 @@ if EID then
     EID:addCollectible(LAZARUS_ESSENCE, "{{ArrowUp}} Grants +1 damage, a +50% damage multiplier, -1 tear delay, +0.5 speed, +3.75 range, +1 shot speed, and +2 luck upon dying and being revived.#{{Warning}} Essence of Lazarus can only trigger once.#{{Warning}} This item will NOT revive you, it is not an extra life.", "Essence of Lazarus")
     EID:addCollectible(LAZARUS_ESSENCE_UNLOCKED, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} -1 tear delay.#{{ArrowUp}} +0.5 speed.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +1 shot speed.#{{ArrowUp}} +2 luck.", "Unlocked Essence of Lazarus")
     EID:addCollectible(EDEN_ESSENCE, "One time use active that rerolls all held passive items.#Rerolls have an extreme tendency to give high quality items.", "Essence of Eden")
+    EID:addCollectible(KEEPER_ESSENCE, "Grants 99 cents on pickup.#Infinite money for the current floor.", "Essence of Keeper")
 
 end
 
@@ -743,6 +747,7 @@ end
 function Mod:LuckyDiceUse(item, rng, player, flags)
     player:AnimateCollectible(LUCKY_DICE_ID, "UseItem", "PlayerPickupSparkle")
     local predefinedItems = {
+        AZAZEL_ESSENCE,
         87, --Loki's Horns
         89, --Spider Bite
         103, --The Common Cold
@@ -2284,57 +2289,6 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPlayerUpdateLaz)
 
---[[ function Mod:GetRandomItemOfQuality(targetQuality)
-    local possibleItems = {}
-    local collectibles = {} -- Store all valid items for rerolling
-
-    -- Search for collectibles that match the desired quality
-    for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
-        local itemConfig = Isaac.GetItemConfig():GetCollectible(i)
-        if itemConfig and itemConfig.Quality == targetQuality then
-            table.insert(possibleItems, i)
-        end
-    end
-
-    -- Return a random matching item or nil if none found
-    if #possibleItems > 0 then
-        return possibleItems[math.random(#possibleItems)]
-    end
-    return nil
-end
-
-function Mod:UpgradeItemsOnUse(_, item, rng, player)
-    local player = Isaac.GetPlayer(0)
-    player:AnimateCollectible(EDEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
-
-    if player:HasCollectible(EDEN_ESSENCE) then
-        print("Activated - Upgrading item quality!")
-
-        -- Loop through all items and reroll them into +1 quality versions
-        for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
-            if player:HasCollectible(i) then
-                local itemConfig = Isaac.GetItemConfig():GetCollectible(i)
-        
-                if itemConfig and itemConfig.Quality < 4 then -- Max quality is 4
-                    local newQuality = itemConfig.Quality + 1
-                    local rerolledItem = Mod:GetRandomItemOfQuality(newQuality)
-                    
-                    if rerolledItem then
-                        player:RemoveCollectible(i)
-                        player:AddCollectible(rerolledItem)
-                    end
-                end
-            end
-        end
-        
-        
-        -- Consume the active item
-        player:RemoveCollectible(EDEN_ESSENCE)
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UpgradeItemsOnUse, EDEN_ESSENCE) ]]
-
 local rerolledItems = {} -- Track rerolled items to prevent duplicates
 
 -- Function to upgrade all passive items by +1 quality
@@ -2412,6 +2366,38 @@ function Mod:GetRandomValidItemOfQuality(targetQuality)
     end
     return nil
 end
+
+local keeper_essence_active = false
+
+-- Reset the flag when starting a new run
+function Mod:OnNewGameKeeperEssence(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        keeper_essence_active = false
+    end
+end
+
+ -- Function to grant resources upon pickup
+function Mod:OnPickupKeeperEssence(_, player)
+    local player = Isaac.GetPlayer(0)
+    if player:HasCollectible(KEEPER_ESSENCE) and keeper_essence_active == false then
+        player:AddCoins(99)
+    end
+end
+
+function Mod:OnNewFloorKeeperEssence()
+    local player = Isaac.GetPlayer(0)
+
+    if player:HasCollectible(KEEPER_ESSENCE) then
+        keeper_essence_active = true
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameKeeperEssence) -- Reset flag between runs
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupKeeperEssence) -- Detect item pickup
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloorKeeperEssence) -- Spawn golden items at the start of each floor
+
+
 
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below
