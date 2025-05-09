@@ -78,6 +78,7 @@ local MATT_ESSENCE = Isaac.GetItemIdByName("Essence of Matt")
 local PONTIUS_ESSENCE = Isaac.GetItemIdByName("Essence of Pontius")
 local LOST_ESSENCE = Isaac.GetItemIdByName("Essence of The Lost")
 local JACOB_AND_ESAU_ESSENCE = Isaac.GetItemIdByName("Essence of Jacob and Esau")
+local FORGOTTEN_ESSENCE = Isaac.GetItemIdByName("Essence of The Forgotten")
 
 
 
@@ -750,6 +751,7 @@ if EID then
     EID:addCollectible(PONTIUS_ESSENCE, "Throw one of Pontius' spears in the current attack direction.#Spears deal 10x Isaac's damage.", "Essence of Pontius")
     EID:addCollectible(LOST_ESSENCE, "For the current room:#{{Warning}} Become the lost.#{{ArrowUp}} +20 damage.", "Essence of The Lost")
     EID:addCollectible(JACOB_AND_ESAU_ESSENCE, "Summon Esau as a helper for the current room.", "Essence of Jacob and Esau")
+    EID:addCollectible(FORGOTTEN_ESSENCE, "Summon The Forgotten as a helper for the current room.", "Essence of The Forgotten")
 
 end
 
@@ -2760,6 +2762,22 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItemJE, JACOB_AND_ESAU_ESSENCE)
 
+
+local SOUL_OF_FORGOTTEN = Card.CARD_SOUL_FORGOTTEN -- Replace with actual Soul of the Lost ID
+
+function Mod:UseSoulItemForgotten(_, item, rng, player)
+    local player = Isaac.GetPlayer(0)
+    player:AnimateCollectible(FORGOTTEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
+    if player:HasCollectible(FORGOTTEN_ESSENCE) then
+
+        -- ✅ Force immediate use
+        player:UseCard(SOUL_OF_FORGOTTEN)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItemForgotten, FORGOTTEN_ESSENCE)
+
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below
 
@@ -2887,7 +2905,10 @@ local RELIQUARY_POOL = {
     APOLLYON_ESSENCE,
     BETHANY_ESSENCE,
     MATT_ESSENCE,
-    PONTIUS_ESSENCE
+    PONTIUS_ESSENCE,
+    LOST_ESSENCE,
+    JACOB_AND_ESAU_ESSENCE,
+    FORGOTTEN_ESSENCE
     -- Add more items as needed
 }
 

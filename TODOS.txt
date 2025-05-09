@@ -7,10 +7,7 @@
 - Need to remove passive q4s from tainted birthright or make it not delete the current active.
 - Fix d4 effects on tainted character maybe?
 - Clover needs another effect, forgot lucky toe exists.
-- Essence Items That Need Visuals: Cain, Judas, ???, Azazel, Lazarus, Keeper
-- Eve essence isn't working right, damage doesn't go away.
-- Need to add azazel essence to lucky coin.
-- Laz essence is only buffing speed.
+- Forgotten essence effect is kind of a placeholder, need something more interesting.
 
 Item Ideas to Add:
 
@@ -27,5 +24,3 @@ Trinket Ideas:
 
 
 Essence Items:
-- The Lost: Active item that causes you to die on one hit while the button is held, but also grants permanent stat ups when held in a hostile room.
-- J+E: Active item that summons an orbital familiar which blocks shots and copies player's tear effects.
