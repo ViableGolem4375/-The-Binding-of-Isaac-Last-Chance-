@@ -17,7 +17,6 @@ Item Ideas to Add:
 - First enemy killed respawns as a friendly variant.
 - Ban hammer: one use active that erases all enemies in the room.
 - Gun: Fire an inaccurate projectile that deals high damage.
-- Chance to fire star of david tears that do something.
 
 Trinket Ideas:
 

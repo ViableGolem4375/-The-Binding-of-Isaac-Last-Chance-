@@ -764,6 +764,7 @@ function Mod:LuckyDiceUse(item, rng, player, flags)
     player:AnimateCollectible(LUCKY_DICE_ID, "UseItem", "PlayerPickupSparkle")
     local predefinedItems = {
         AZAZEL_ESSENCE,
+        STAR_OF_DAVID,
         87, --Loki's Horns
         89, --Spider Bite
         103, --The Common Cold
@@ -2538,6 +2539,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoomBethEssence)
 -- ✅ Define a list of possible items to grant
 local predefinedItemList = {
     AZAZEL_ESSENCE,
+    STAR_OF_DAVID,
     87, --Loki's Horns
     89, --Spider Bite
     103, --The Common Cold
