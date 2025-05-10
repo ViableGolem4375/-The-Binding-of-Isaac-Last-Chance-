@@ -19,5 +19,6 @@
     <costume id="33" anm2path="apollyon_essence.anm2" type="passive" priority="10" />
     <costume id="34" anm2path="beth_essence.anm2" type="passive" priority="0" />
     <costume id="35" anm2path="matt_essence.anm2" type="passive" priority="0" />
+    <costume id="40" anm2path="star_of_david_2.anm2" type="passive" priority="0" />
 
 </costumes>

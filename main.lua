@@ -79,6 +79,7 @@ local PONTIUS_ESSENCE = Isaac.GetItemIdByName("Essence of Pontius")
 local LOST_ESSENCE = Isaac.GetItemIdByName("Essence of The Lost")
 local JACOB_AND_ESAU_ESSENCE = Isaac.GetItemIdByName("Essence of Jacob and Esau")
 local FORGOTTEN_ESSENCE = Isaac.GetItemIdByName("Essence of The Forgotten")
+local STAR_OF_DAVID = Isaac.GetItemIdByName("Star of David")
 
 
 
@@ -752,6 +753,7 @@ if EID then
     EID:addCollectible(LOST_ESSENCE, "For the current room:#{{Warning}} Become the lost.#{{ArrowUp}} +20 damage.", "Essence of The Lost")
     EID:addCollectible(JACOB_AND_ESAU_ESSENCE, "Summon Esau as a helper for the current room.", "Essence of Jacob and Esau")
     EID:addCollectible(FORGOTTEN_ESSENCE, "Summon The Forgotten as a helper for the current room.", "Essence of The Forgotten")
+    EID:addCollectible(STAR_OF_DAVID, "{{ArrowUp}} 10% chance to fire star of david tears which deal 30% more damage.#{{Luck}} 100% chance at 9 luck.#{{ArrowUp}} 5% chance for enemies to drop a golden heart on death.#{{Luck}} 50% chance at 9 luck.", "Star of David")
 
 end
 
@@ -2174,7 +2176,7 @@ local function getRandomLaserEffect(player)
     local finalChance = math.min(0.90, baseChance + luckBonus) -- Cap at 90% chance
 
     local rand = math.random()
-    return rand < finalChance -- Effect triggers if random number falls within chance
+    return rand <= finalChance -- Effect triggers if random number falls within chance
 end
 
 function Mod:onTearInitAzazel(tear)
@@ -2777,6 +2779,104 @@ function Mod:UseSoulItemForgotten(_, item, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItemForgotten, FORGOTTEN_ESSENCE)
+
+
+local HasStarEffect = false
+
+function Mod:onUpdateStarDavid(player)
+	if game:GetFrameCount() == 1 then
+		HasStarEffect = false
+	end
+	if not HasStarEffect and player:HasCollectible(STAR_OF_DAVID) then
+		HasStarEffect = true
+	end
+end
+
+local function getRandomStarEffect(player)
+    local baseChance = 0.1 -- Default chance (10%)
+    local luckScaling = 0.1 -- Each Luck point increases chance by 5%
+
+    local luckBonus = math.max(0, player.Luck * luckScaling) -- Ensure non-negative
+    local finalChance = math.min(0.90, baseChance + luckBonus) -- Cap at 90% chance
+
+    local rand = math.random()
+    return rand <= finalChance -- Effect triggers if random number falls within chance
+end
+
+function Mod:onTearInitStar(tear)
+    if HasStarEffect then
+        local parent = tear.SpawnerEntity
+        if parent and parent:ToPlayer() then
+            local player = parent:ToPlayer()
+            if player:HasCollectible(STAR_OF_DAVID) and getRandomStarEffect(player) then
+                tear:GetData().starTrigger = true
+
+                local sprite = tear:GetSprite()
+                sprite:Load("gfx/star_of_david_tear.anm2", true)
+                sprite:Play("Stone4Move", true)
+
+                -- ✅ Increase damage by 30%
+                tear.CollisionDamage = tear.CollisionDamage * 1.3
+                --tear.AddTearFlags(TearFlags.TEAR_HP_DROP)
+
+                -- ✅ Apply bleed effect on hit
+                tear:GetData().applyBleed = true -- We’ll handle this on enemy hit
+                
+                -- ✅ Track kill-triggered Golden Heart drop
+                --tear:GetData().goldenHeartChance = 1 -- 10% chance (adjust as needed)
+            end
+        end
+    end
+end
+
+local goldenHeartChance = 0.05 -- Set the drop chance (10%)
+
+function Mod:onEnemyDeath(entity)
+    local player = Isaac.GetPlayer(0)
+
+    if player:HasCollectible(STAR_OF_DAVID) and entity:IsEnemy() then
+        -- ✅ Base chance (5%) + Luck scaling (5% per Luck point)
+        local luckFactor = math.max(0, player.Luck * 0.05) -- Prevent negative values
+        local finalChance = math.min(0.5, 0.1 + luckFactor) -- Cap at 50% drop rate
+
+        -- ✅ Random chance to spawn a Golden Heart upon enemy death
+        if math.random() <= finalChance then
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_GOLDEN, entity.Position, Vector.Zero, nil)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.onEnemyDeath)
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateStarDavid)
+Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitStar)
+
+----------------------------------------------------------------------------------------
+--- Consumable Code Below
+local SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
+
+--[[ 
+local CustomRunes = (Card.SOUL_MATT)
+local RuneChance = {0.5}
+
+function Mod:mattSoul(rng, iCurrentCard, bPlaying, bRunes, bOnlyRunes)
+    if bRunes then
+        local roll = rng:RandomFloat()
+        local index = 1
+        while index <= #RuneChance and roll > RuneChance[index] do
+            roll = roll - RuneChance[index]
+            index = index + 1
+        end
+        if index <= #RuneChance then
+            return CustomRunes[index]
+        end
+    elseif bPlaying then
+        local player = game:GetPlayer(0)
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, iCurrentCard, player.Position, Vector(0,0), player)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_GET_CARD, Mod.mattSoul) ]]
 
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below
