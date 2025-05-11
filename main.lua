@@ -761,6 +761,7 @@ if EID then
     EID:addCollectible(GUN_ITEM, "Fire a tear that deals 10x Isaac's damage plus 10 flat damage.#{{Warning}} The tear fired is wildly inaccurate.", "A Gun")
     EID:addCollectible(APPETIZER_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.", "Appetizer")
     EID:addCollectible(MORNING_SNACK_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.", "Early Morning Snack")
+    EID:addCollectible(KINGSLAYER_ITEM, "{{ArrowUp}} Gain +50% damage when in an uncleared boss room.", "Kingslayer")
 
 end
 
@@ -2962,7 +2963,7 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupMorningSnack)
 
-local BOSS_DAMAGE_MULTIPLIER = 1.5 -- Adjust as needed (e.g., 50% more damage)
+--[[ local BOSS_DAMAGE_MULTIPLIER = 1.5 -- Adjust as needed (e.g., 50% more damage)
 
 function Mod:OnBossDamage(entity, damageAmount, damageFlags, source, countdown)
     local player = Isaac.GetPlayer(0)
@@ -2976,7 +2977,43 @@ function Mod:OnBossDamage(entity, damageAmount, damageFlags, source, countdown)
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.OnBossDamage)
+Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.OnBossDamage) ]]
+
+local BOSS_ROOM_DAMAGE_BOOST = 1.5 -- 50% extra damage
+
+function Mod:UpdateBossRoomDamage(player)
+    local game = Game()
+    local level = game:GetLevel()
+    local room = game:GetRoom()
+
+    -- ✅ Check if player is in an uncleared boss room
+    if player:HasCollectible(KINGSLAYER_ITEM) and room:GetType() == RoomType.ROOM_BOSS and not room:IsClear() then
+        print("Inside an active boss room - Applying damage boost!")
+
+        -- ✅ Apply temporary damage boost
+        player:GetData().bossDamageBoost = BOSS_ROOM_DAMAGE_BOOST
+        player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+        player:EvaluateItems()
+    else
+        -- ✅ Remove damage boost when room is cleared or exited
+        if player:GetData().bossDamageBoost then
+            print("Leaving boss room - Removing damage boost.")
+            player:GetData().bossDamageBoost = nil
+            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+            player:EvaluateItems()
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.UpdateBossRoomDamage)
+
+function Mod:ApplyBossRoomDamage(player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_DAMAGE and player:GetData().bossDamageBoost then
+        player.Damage = player.Damage + player:GetData().bossDamageBoost
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyBossRoomDamage)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
