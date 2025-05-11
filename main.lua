@@ -80,6 +80,7 @@ local LOST_ESSENCE = Isaac.GetItemIdByName("Essence of The Lost")
 local JACOB_AND_ESAU_ESSENCE = Isaac.GetItemIdByName("Essence of Jacob and Esau")
 local FORGOTTEN_ESSENCE = Isaac.GetItemIdByName("Essence of The Forgotten")
 local STAR_OF_DAVID = Isaac.GetItemIdByName("Star of David")
+local GUN_ITEM = Isaac.GetItemIdByName("A Gun")
 
 
 
@@ -754,6 +755,7 @@ if EID then
     EID:addCollectible(JACOB_AND_ESAU_ESSENCE, "Summon Esau as a helper for the current room.", "Essence of Jacob and Esau")
     EID:addCollectible(FORGOTTEN_ESSENCE, "Summon The Forgotten as a helper for the current room.", "Essence of The Forgotten")
     EID:addCollectible(STAR_OF_DAVID, "{{ArrowUp}} 10% chance to fire star of david tears which deal 30% more damage.#{{Luck}} 100% chance at 9 luck.#{{ArrowUp}} 5% chance for enemies to drop a golden heart on death.#{{Luck}} 50% chance at 9 luck.", "Star of David")
+    EID:addCollectible(GUN_ITEM, "Fire a tear that deals 10x Isaac's damage plus 10 flat damage.#{{Warning}} The tear fired is wildly inaccurate.", "A Gun")
 
 end
 
@@ -2646,17 +2648,11 @@ local spearCooldown = 0 -- Shared cooldown for all characters
 function Mod:UseSpearAttack(_, item, rng, player)
     local player = Isaac.GetPlayer(0)
     if player:HasCollectible(PONTIUS_ESSENCE) then
-        print("Spear attack activated!")
 
         local data = player:GetData()
         local playerDamage = player.Damage
         local fireDirectionspear = player:GetFireDirection()
         local directionspear
-
-        player.FireDelay = player.MaxFireDelay
-
-        -- Handle laser cooldown
-        --if spearCooldown > 0 then return end
 
         -- Set correct spear direction
         if fireDirectionspear == Direction.LEFT then
@@ -2851,6 +2847,58 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.onEnemyDeath)
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateStarDavid)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitStar)
+
+function Mod:UseGun(_, item, rng, player)
+    local player = Isaac.GetPlayer(0)
+    if player:HasCollectible(GUN_ITEM) then
+
+        local data = player:GetData()
+        local playerDamage = player.Damage
+        local fireDirectiongun = player:GetFireDirection()
+        local directiongun
+
+        -- Set correct spear direction
+        if fireDirectiongun == Direction.LEFT then
+            directiongun = Vector(-1, 0)
+        elseif fireDirectiongun == Direction.RIGHT then
+            directiongun = Vector(1, 0)
+        elseif fireDirectiongun == Direction.DOWN then
+            directiongun = Vector(0, 1)
+        elseif fireDirectiongun == Direction.UP then
+            directiongun = Vector(0, -1)
+        elseif fireDirectiongun == Direction.NO_DIRECTION then
+            directiongun = Vector(0, 1)
+        end
+
+        -- ✅ Apply random angle variation within 75 degrees
+        local angleVariation = (math.random() * 150) - 75 -- Random value between -75 and +75 degrees
+        local randomDirection = directiongun:Rotated(angleVariation)
+
+        -- ✅ Spawn the high-damage tear
+        local tear = player:FireTear(player.Position, randomDirection * 12, false, false, false, player, 1)
+
+        if tear then
+            print("Tear fired with direction:", randomDirection)
+            
+            tear.CollisionDamage = (player.Damage * 10) + 10 -- ✅ Apply extreme damage boost
+
+            -- ✅ Load custom tear sprite (if desired)
+            local sprite = tear:GetSprite()
+            sprite:Load("gfx/bullet_tear.anm2", true)
+            sprite:Play("RegularTear3", true)
+            
+
+            -- ✅ Play sound effect
+            local sfx = SFXManager()
+            sfx:Play(SoundEffect.SOUND_BULLET_SHOT, 1, 2, false, 3, 0) -- Replace with desired sound effect
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseGun, GUN_ITEM)
+
+
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

@@ -42,5 +42,6 @@
     <active id="38" name="Essence of Jacob and Esau" gfx="JE_essence.png" description="Brotherly bond" quality="3" maxcharges="4" chargetype="normal" tags="offensive nocantrip"/>
     <active id="39" name="Essence of The Forgotten" gfx="forgotten_essence.png" description="A helping skeleton" quality="3" maxcharges="4" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="40" name="Star of David" gfx="star_of_david.png" description="Jewish!" quality="3" tags="offensive nocantrip" cache="damage luck"/>
+    <active id="41" name="A Gun" gfx="gun.png" description="You'll shoot your eye out!" quality="1" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage shotspeed"/>
 
 </items>
