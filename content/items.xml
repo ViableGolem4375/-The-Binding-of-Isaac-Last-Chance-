@@ -19,7 +19,7 @@
     <trinket id="15" name="Stitched Photo" gfx="photo.png" description="Fate chosen?"/>
     <trinket id="16" name="Black Candle Wick" gfx="candlewick.png" description="Curse resistance"/>
     <active id="17" name="Eternal Bond" gfx="bond.png" description="Us against the world!" quality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
-    <active id="18" name="Anatomy Textbook" gfx="anatomy_textbook.png" description="Reusable bone protection." quality="3" maxcharges="6" chargetype="normal" tags="offensive nocantrip book"/>
+    <active id="18" name="Anatomy Textbook" gfx="anatomy_textbook.png" description="Reusable bone protection." quality="3" maxcharges="6" chargetype="normal" tags="nolostbr nocantrip book"/>
     <passive id="19" name="Blank Slate" gfx="blank_slate.png" description="Transform yourself" quality="1" tags="offensive nocantrip angel baby battery bob book devil fly guppy mom mushroom poop spider syringe"/>
     <passive id="20" name="Essence of Isaac" gfx="essence_of_isaac.png" description="Options!" quality="4" tags="offensive nocantrip"/>
     <active id="21" name="Essence of Magdalene" gfx="magdalene_essence.png" description="Full health!" quality="3" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
@@ -38,10 +38,13 @@
     <passive id="34" name="Essence of Bethany" gfx="beth_essence.png" description="Army of eternal flame" quality="3" tags="offensive nocantrip"/>
     <passive id="35" name="Essence of Matt" gfx="matt_essence.png" description="Luck up + power through chance" quality="3" tags="offensive nocantrip" cache="luck"/>
     <active id="36" name="Essence of Pontius" gfx="pontius_essence.png" description="Spear thrower" quality="2" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage"/>
-    <active id="37" name="Essence of The Lost" gfx="lost_essence.png" description="Glass cannon" quality="2" maxcharges="1" chargetype="normal" tags="offensive nocantrip" cache="damage"/>
+    <active id="37" name="Essence of The Lost" gfx="lost_essence.png" description="Glass cannon" quality="2" maxcharges="1" chargetype="normal" tags="nocantrip" cache="damage"/>
     <active id="38" name="Essence of Jacob and Esau" gfx="JE_essence.png" description="Brotherly bond" quality="3" maxcharges="4" chargetype="normal" tags="offensive nocantrip"/>
     <active id="39" name="Essence of The Forgotten" gfx="forgotten_essence.png" description="A helping skeleton" quality="3" maxcharges="4" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="40" name="Star of David" gfx="star_of_david.png" description="Jewish!" quality="3" tags="offensive nocantrip" cache="damage luck"/>
     <active id="41" name="A Gun" gfx="gun.png" description="You'll shoot your eye out!" quality="1" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage shotspeed"/>
+    <passive id="42" name="Appetizer" gfx="brunch.png" description="Health up" quality="1" tags="nocantrip nolostbr" />
+    <passive id="43" name="Early Morning Snack" gfx="midnight_snack.png" description="Health up" quality="1" tags="nocantrip nolostbr" />
+    <passive id="44" name="Kingslayer" gfx="midnight_snack.png" description="Boss killer" quality="2" tags="nocantrip offensive" />
 
 </items>

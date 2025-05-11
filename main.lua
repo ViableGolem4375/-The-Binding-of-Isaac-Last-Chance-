@@ -81,6 +81,9 @@ local JACOB_AND_ESAU_ESSENCE = Isaac.GetItemIdByName("Essence of Jacob and Esau"
 local FORGOTTEN_ESSENCE = Isaac.GetItemIdByName("Essence of The Forgotten")
 local STAR_OF_DAVID = Isaac.GetItemIdByName("Star of David")
 local GUN_ITEM = Isaac.GetItemIdByName("A Gun")
+local APPETIZER_ITEM = Isaac.GetItemIdByName("Appetizer")
+local MORNING_SNACK_ITEM = Isaac.GetItemIdByName("Early Morning Snack")
+local KINGSLAYER_ITEM = Isaac.GetItemIdByName("Kingslayer")
 
 
 
@@ -756,6 +759,8 @@ if EID then
     EID:addCollectible(FORGOTTEN_ESSENCE, "Summon The Forgotten as a helper for the current room.", "Essence of The Forgotten")
     EID:addCollectible(STAR_OF_DAVID, "{{ArrowUp}} 10% chance to fire star of david tears which deal 30% more damage.#{{Luck}} 100% chance at 9 luck.#{{ArrowUp}} 5% chance for enemies to drop a golden heart on death.#{{Luck}} 50% chance at 9 luck.", "Star of David")
     EID:addCollectible(GUN_ITEM, "Fire a tear that deals 10x Isaac's damage plus 10 flat damage.#{{Warning}} The tear fired is wildly inaccurate.", "A Gun")
+    EID:addCollectible(APPETIZER_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.", "Appetizer")
+    EID:addCollectible(MORNING_SNACK_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.", "Early Morning Snack")
 
 end
 
@@ -2878,7 +2883,6 @@ function Mod:UseGun(_, item, rng, player)
         local tear = player:FireTear(player.Position, randomDirection * 12, false, false, false, player, 1)
 
         if tear then
-            print("Tear fired with direction:", randomDirection)
             
             tear.CollisionDamage = (player.Damage * 10) + 10 -- ✅ Apply extreme damage boost
 
@@ -2899,6 +2903,80 @@ end
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseGun, GUN_ITEM)
 
 
+local appetizerTaken = false
+
+-- Reset the flag when starting a new run
+function Mod:OnNewGameAppetizer(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        appetizerTaken = false
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameAppetizer) -- Reset flag between runs
+
+function Mod:OnPickupAppetizer(_, player)
+    local player = Isaac.GetPlayer(0)
+    if player:HasCollectible(APPETIZER_ITEM) and appetizerTaken == false then
+        
+        -- ✅ Grant a Red Heart container
+        player:AddMaxHearts(2)
+        player:AddHearts(2) -- Fill the new container
+
+        -- ✅ Mark that the effect has been used
+        appetizerTaken = true
+
+    elseif not player:HasCollectible(APPETIZER_ITEM) then
+        appetizerTaken = false
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupAppetizer)
+
+local morningSnack = false
+
+-- Reset the flag when starting a new run
+function Mod:OnNewGameMorningSnack(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        morningSnack = false
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameMorningSnack) -- Reset flag between runs
+
+function Mod:OnPickupMorningSnack(_, player)
+    local player = Isaac.GetPlayer(0)
+    if player:HasCollectible(MORNING_SNACK_ITEM) and morningSnack == false then
+        
+        -- ✅ Grant a Red Heart container
+        player:AddMaxHearts(2)
+        player:AddHearts(2) -- Fill the new container
+
+        -- ✅ Mark that the effect has been used
+        morningSnack = true
+
+    elseif not player:HasCollectible(MORNING_SNACK_ITEM) then
+        morningSnack = false
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupMorningSnack)
+
+local BOSS_DAMAGE_MULTIPLIER = 1.5 -- Adjust as needed (e.g., 50% more damage)
+
+function Mod:OnBossDamage(entity, damageAmount, damageFlags, source, countdown)
+    local player = Isaac.GetPlayer(0)
+
+    -- ✅ Check if target is a boss
+    if player:HasCollectible(KINGSLAYER_ITEM) and entity:IsBoss() then
+        local boostedDamage = damageAmount * BOSS_DAMAGE_MULTIPLIER
+        entity:TakeDamage(boostedDamage, damageFlags, source, countdown)
+        print("Boss hit with boosted damage: " .. boostedDamage)
+        return false -- Prevent default damage application
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.OnBossDamage)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
