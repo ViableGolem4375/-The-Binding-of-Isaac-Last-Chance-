@@ -18,6 +18,8 @@
         <Item Name="Unholy Mantle" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Failed Abortion" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="A Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Necromancy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
     </Pool>
     <Pool Name="angel">
         <Item Name="Lil' Uriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
@@ -35,6 +37,141 @@
         <Item Name="Appetizer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Early Morning Snack" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Kingslayer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
+    </Pool>
+    <Pool Name="shop">
+        
+
+    </Pool>
+    <Pool Name="curse">
+        <Item Name="Necromancy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
+
+    </Pool>
+    <Pool Name="greedTreasure">
+        <Item Name="Lucky Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Catalyst Character Sheet" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Failed Abortion" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Huh?" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Amplifier" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Anatomy Textbook" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Star of David" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="A Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Kingslayer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Appetizer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Early Morning Snack" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Defense Tech" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
+    </Pool>
+    <Pool Name="greedBoss">
+        <Item Name="The Compensator" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Appetizer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Early Morning Snack" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Kingslayer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
+    </Pool>
+    <Pool Name="greedShop">
+        
+
+    </Pool>
+    <Pool Name="greedCurse">
+        <Item Name="Necromancy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
+
+    </Pool>
+    <Pool Name="greedDevil">
+        <Item Name="Unholy Mantle" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Failed Abortion" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="A Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Necromancy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
+    </Pool>
+    <Pool Name="greedAngel">
+        <Item Name="Lil' Uriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Lil' Gabriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Final Judgement" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
+    </Pool>
+    <Pool Name="greedSecret">
+        <Item Name="Eternal Bond" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dull Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
+    </Pool>
+    <Pool Name="craneGame">
+        
+
+    </Pool>
+    <Pool Name="ultraSecret">
+        <Item Name="Catalyst Character Sheet" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Unholy Mantle" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="The Compensator" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Huh?" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Defense Tech" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
+
+    </Pool>
+    <Pool Name="library">
+        <Item Name="Anatomy Textbook" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
+
+    </Pool>
+    <Pool Name="babyShop">
+        <Item Name="Failed Abortion" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Lil' Uriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Lil' Gabriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+    </Pool>
+    <Pool Name="woodenChest">
+        
+
+    </Pool>
+    <Pool Name="rottenBeggar">
+        
+
+    </Pool>
+    <Pool Name="bombBum">
+        
+
+    </Pool>
+    <Pool Name="planetarium">
+        
+
+    </Pool>
+    <Pool Name="oldChest">
+        
+
+    </Pool>
+    <Pool Name="shellGame">
+        
+
+    </Pool>
+    <Pool Name="goldenChest">
+        
+
+    </Pool>
+    <Pool Name="redChest">
+        
+
+    </Pool>
+    <Pool Name="beggar">
+        
+
+    </Pool>
+    <Pool Name="demonBeggar">
+        
+
+    </Pool>
+    <Pool Name="keyMaster">
+        
+
+    </Pool>
+    <Pool Name="batteryBum">
+        
+
+    </Pool>
+    <Pool Name="momsChest">
+        
 
     </Pool>
 </ItemPools>

@@ -22,5 +22,6 @@
     <costume id="40" anm2path="star_of_david_2.anm2" type="passive" priority="0" />
     <costume id="44" anm2path="kingslayer.anm2" type="passive" priority="0" />
     <costume id="45" anm2path="defense_tech.anm2" type="passive" priority="0" />
+    <costume id="47" anm2path="necromancy.anm2" type="passive" priority="0" />
 
 </costumes>

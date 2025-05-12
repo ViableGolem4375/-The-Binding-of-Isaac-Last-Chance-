@@ -86,6 +86,7 @@ local MORNING_SNACK_ITEM = Isaac.GetItemIdByName("Early Morning Snack")
 local KINGSLAYER_ITEM = Isaac.GetItemIdByName("Kingslayer")
 local PHALANX_ITEM = Isaac.GetItemIdByName("Phalanx")
 local DEFENSE_TECH_ITEM = Isaac.GetItemIdByName("Defense Tech")
+local NECROMANCY_ITEM = Isaac.GetItemIdByName("Necromancy")
 
 
 
@@ -803,6 +804,7 @@ if EID then
     EID:addCollectible(PHALANX_ITEM, "Grants Isaac 1 second of invulnerability on use and has a 5 second cooldown.", "Phalanx")
     EID:addBirthright(TAINTED_PONTIUS_TYPE, "Extends the post-hit invulnerability effect to 2 seconds.")
     EID:addCollectible(DEFENSE_TECH_ITEM, "Spawns a laser ring around Isaac that deals 25% of his damage every tick.", "Defense Tech")
+    EID:addCollectible(NECROMANCY_ITEM, "Killed enemies have a 10% chance to be revived as friendlies.#{{Luck}} 75% chance at 18 luck.", "Necromancy")
 
 end
 
@@ -3101,6 +3103,31 @@ function Mod:UpdateLaserRing(player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.UpdateLaserRing)
+
+local BASE_CHANCE = 0.1 -- ✅ Base 10% chance
+local LUCK_SCALING = 0.05 -- ✅ +5% chance per Luck point
+
+function Mod:OnEnemyDeath(entity)
+    local player = Isaac.GetPlayer(0)
+
+    -- ✅ Check if player has the item and enemy is valid
+    if player:HasCollectible(NECROMANCY_ITEM) and entity:IsEnemy() then
+        -- ✅ Scale chance with Luck
+        local luckFactor = math.max(0, player.Luck * LUCK_SCALING)
+        local finalChance = math.min(0.75, BASE_CHANCE + luckFactor) -- Cap at 75% chance
+
+        if math.random() < finalChance then
+
+            -- ✅ Spawn friendly version of the enemy
+            local ally = Isaac.Spawn(entity.Type, entity.Variant, entity.SubType, entity.Position, Vector.Zero, player)
+            ally:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+            -- **Apply permanent charmed effect (adds the hearts visual)**
+            ally:AddEntityFlags(EntityFlag.FLAG_CHARM)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.OnEnemyDeath)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
