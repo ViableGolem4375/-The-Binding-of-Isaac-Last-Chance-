@@ -87,6 +87,7 @@ local KINGSLAYER_ITEM = Isaac.GetItemIdByName("Kingslayer")
 local PHALANX_ITEM = Isaac.GetItemIdByName("Phalanx")
 local DEFENSE_TECH_ITEM = Isaac.GetItemIdByName("Defense Tech")
 local NECROMANCY_ITEM = Isaac.GetItemIdByName("Necromancy")
+local MONEY_ITEM = Isaac.GetItemIdByName("Become Back My Money")
 
 
 
@@ -804,7 +805,7 @@ if EID then
     EID:addCollectible(PHALANX_ITEM, "Grants Isaac 1 second of invulnerability on use and has a 5 second cooldown.", "Phalanx")
     EID:addBirthright(TAINTED_PONTIUS_TYPE, "Extends the post-hit invulnerability effect to 2 seconds.")
     EID:addCollectible(DEFENSE_TECH_ITEM, "Spawns a laser ring around Isaac that deals 25% of his damage every tick.", "Defense Tech")
-    EID:addCollectible(NECROMANCY_ITEM, "Killed enemies have a 10% chance to be revived as friendlies.#{{Luck}} 75% chance at 18 luck.", "Necromancy")
+    EID:addCollectible(NECROMANCY_ITEM, "Killed enemies have a 10% chance to be revived as friendlies which last for the current room.#{{Luck}} 75% chance at 18 luck.", "Necromancy")
 
 end
 
@@ -3128,6 +3129,60 @@ function Mod:OnEnemyDeath(entity)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.OnEnemyDeath)
+
+
+function Mod:TrackMoneySpent(player)
+    if not player:GetData().moneySpent then
+        player:GetData().moneySpent = 0 -- ✅ Initialize tracking
+    end
+
+    -- ✅ Detect spending (subtracting money)
+    local prevCoins = player:GetData().lastCoins or player:GetNumCoins()
+    local currentCoins = player:GetNumCoins()
+
+    if currentCoins < prevCoins then
+        local spentAmount = prevCoins - currentCoins
+        player:GetData().moneySpent = player:GetData().moneySpent + spentAmount
+        print("Player spent money! Total spent: " .. player:GetData().moneySpent)
+    end
+
+    -- ✅ Store last known coin count for next check
+    player:GetData().lastCoins = currentCoins
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.TrackMoneySpent)
+
+local moneyTriggered = false
+
+function Mod:OnNewGameMoney(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        moneyTriggered = false
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameMoney) -- Reset flag between runs
+
+
+function Mod:UseRefundItem(_, item, rng, player)
+    if player:HasCollectible(MONEY_ITEM) then
+        local refundAmount = player:GetData().moneySpent or 0
+        print(refundAmount)
+
+        if refundAmount > 0 then
+            print("Refunding " .. refundAmount .. " coins to player!")
+
+            -- ✅ Give the stored money back to the player
+            player:AddCoins(refundAmount)
+
+            -- ✅ Reset spent money counter after refund
+            --player:GetData().moneySpent = 0
+            player:RemoveCollectible(MONEY_ITEM)
+
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseRefundItem, MONEY_ITEM)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
