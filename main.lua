@@ -806,6 +806,7 @@ if EID then
     EID:addBirthright(TAINTED_PONTIUS_TYPE, "Extends the post-hit invulnerability effect to 2 seconds.")
     EID:addCollectible(DEFENSE_TECH_ITEM, "Spawns a laser ring around Isaac that deals 25% of his damage every tick.", "Defense Tech")
     EID:addCollectible(NECROMANCY_ITEM, "Killed enemies have a 10% chance to be revived as friendlies which last for the current room.#{{Luck}} 75% chance at 18 luck.", "Necromancy")
+    EID:addCollectible(MONEY_ITEM, "One time use active item that gives Isaac coins equal to the amount of money spent throughout the run.", "Become Back My Money")
 
 end
 
@@ -3132,6 +3133,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.OnEnemyDeath)
 
 
 function Mod:TrackMoneySpent(player)
+    local player = Isaac.GetPlayer(0)
     if not player:GetData().moneySpent then
         player:GetData().moneySpent = 0 -- ✅ Initialize tracking
     end
@@ -3143,7 +3145,7 @@ function Mod:TrackMoneySpent(player)
     if currentCoins < prevCoins then
         local spentAmount = prevCoins - currentCoins
         player:GetData().moneySpent = player:GetData().moneySpent + spentAmount
-        print("Player spent money! Total spent: " .. player:GetData().moneySpent)
+        
     end
 
     -- ✅ Store last known coin count for next check
@@ -3164,12 +3166,14 @@ Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameMoney) -- Reset 
 
 
 function Mod:UseRefundItem(_, item, rng, player)
+    local player = Isaac.GetPlayer(0)
     if player:HasCollectible(MONEY_ITEM) then
+
+        player:AnimateCollectible(MONEY_ITEM, "UseItem", "PlayerPickupSparkle")
+
         local refundAmount = player:GetData().moneySpent or 0
-        print(refundAmount)
 
         if refundAmount > 0 then
-            print("Refunding " .. refundAmount .. " coins to player!")
 
             -- ✅ Give the stored money back to the player
             player:AddCoins(refundAmount)
