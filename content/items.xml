@@ -1,6 +1,6 @@
 <items gfxroot="gfx/items/" version="1">
     <active id="1" name="Lucky Coin" gfx="dice.png" description="Take control of your destiny" quality="4" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
-    <active id="2" name="Dull Coin" gfx="dice2.png" description="Reroll your destiny?" quality="4" charge="0" tags="offensive nocantrip"/>
+    <active id="2" name="Dull Coin" gfx="dice2.png" description="Reroll your destiny?" quality="2" charge="0" tags="offensive nocantrip"/>
     <passive id="3" name="Unholy Mantle" gfx="unholymantle.png" description="Revel in Their Pain" quality="2" tags="devil nocantrip"/>
     <familiar name="Lil' Uriel" gfx="uriel.png" description="Angelic friend" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel" />
     <familiar name="Lil' Gabriel" gfx="gabriel.png" description="Eternal friend" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel" />
@@ -46,7 +46,7 @@
     <passive id="42" name="Appetizer" gfx="brunch.png" description="Health up" quality="1" tags="nocantrip nolostbr" />
     <passive id="43" name="Early Morning Snack" gfx="midnight_snack.png" description="Health up" quality="1" tags="nocantrip nolostbr" />
     <passive id="44" name="Kingslayer" gfx="kingslayer.png" description="Boss killer" quality="2" tags="nocantrip offensive" cache="damage" />
-    <passive id="45" name="test" gfx="kingslayer.png" description="Boss killer" quality="2" tags="nocantrip offensive" cache="damage" />
+    <passive id="45" name="Defense Tech" gfx="defense_tech.png" description="Automated laser defense" quality="2" tags="nocantrip offensive" />
     <active id="46" name="Phalanx" gfx="phalanx.png" description="Unbreakable guard" quality="4" maxcharges="300" chargetype="timed" tags="quest noeden nolostbr nocantrip"/>
 
 </items>

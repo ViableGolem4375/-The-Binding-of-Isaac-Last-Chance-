@@ -85,6 +85,7 @@ local APPETIZER_ITEM = Isaac.GetItemIdByName("Appetizer")
 local MORNING_SNACK_ITEM = Isaac.GetItemIdByName("Early Morning Snack")
 local KINGSLAYER_ITEM = Isaac.GetItemIdByName("Kingslayer")
 local PHALANX_ITEM = Isaac.GetItemIdByName("Phalanx")
+local DEFENSE_TECH_ITEM = Isaac.GetItemIdByName("Defense Tech")
 
 
 
@@ -801,6 +802,7 @@ if EID then
     EID:addBirthright(pontiusType, "Grants Phalanx as a pocket active item.#Phalanx grants Isaac 1 second of invulnerability on use and has a 5 second cooldown.")
     EID:addCollectible(PHALANX_ITEM, "Grants Isaac 1 second of invulnerability on use and has a 5 second cooldown.", "Phalanx")
     EID:addBirthright(TAINTED_PONTIUS_TYPE, "Extends the post-hit invulnerability effect to 2 seconds.")
+    EID:addCollectible(DEFENSE_TECH_ITEM, "Spawns a laser ring around Isaac that deals 25% of his damage every tick.", "Defense Tech")
 
 end
 
@@ -3002,22 +3004,6 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupMorningSnack)
 
---[[ local BOSS_DAMAGE_MULTIPLIER = 1.5 -- Adjust as needed (e.g., 50% more damage)
-
-function Mod:OnBossDamage(entity, damageAmount, damageFlags, source, countdown)
-    local player = Isaac.GetPlayer(0)
-
-    -- ✅ Check if target is a boss
-    if player:HasCollectible(KINGSLAYER_ITEM) and entity:IsBoss() then
-        local boostedDamage = damageAmount * BOSS_DAMAGE_MULTIPLIER
-        entity:TakeDamage(boostedDamage, damageFlags, source, countdown)
-        print("Boss hit with boosted damage: " .. boostedDamage)
-        return false -- Prevent default damage application
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.OnBossDamage) ]]
-
 local BOSS_ROOM_DAMAGE_BOOST = 1.5 -- 50% extra damage
 
 function Mod:UpdateBossRoomDamage(player)
@@ -3027,7 +3013,6 @@ function Mod:UpdateBossRoomDamage(player)
 
     -- ✅ Check if player is in an uncleared boss room
     if player:HasCollectible(KINGSLAYER_ITEM) and room:GetType() == RoomType.ROOM_BOSS and not room:IsClear() then
-        print("Inside an active boss room - Applying damage boost!")
 
         -- ✅ Apply temporary damage boost
         player:GetData().bossDamageBoost = BOSS_ROOM_DAMAGE_BOOST
@@ -3036,7 +3021,6 @@ function Mod:UpdateBossRoomDamage(player)
     else
         -- ✅ Remove damage boost when room is cleared or exited
         if player:GetData().bossDamageBoost then
-            print("Leaving boss room - Removing damage boost.")
             player:GetData().bossDamageBoost = nil
             player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
             player:EvaluateItems()
@@ -3071,6 +3055,52 @@ function Mod:UseInvincibilityItem(_, item, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseInvincibilityItem, PHALANX_ITEM)
+
+local LASER_COUNT = 6 -- ✅ Number of lasers in the ring
+local LASER_RADIUS = 40 -- ✅ Distance from player
+
+function Mod:UpdateLaserRing(player)
+    local player = Isaac.GetPlayer(0)
+    if player:HasCollectible(DEFENSE_TECH_ITEM) then
+
+        local data = player:GetData()
+        local playerDamage = player.Damage
+        local fireDirectionspear = player:GetFireDirection()
+        local directionspear
+
+        -- Set correct spear direction
+        if fireDirectionspear == Direction.LEFT then
+            directionspear = Vector(-1, 0)
+        elseif fireDirectionspear == Direction.RIGHT then
+            directionspear = Vector(1, 0)
+        elseif fireDirectionspear == Direction.DOWN then
+            directionspear = Vector(0, 1)
+        elseif fireDirectionspear == Direction.UP then
+            directionspear = Vector(0, -1)
+        elseif fireDirectionspear == Direction.NO_DIRECTION then
+            directionspear = Vector(0, 1)
+        end
+
+        if directionspear then
+            local spear = Isaac.Spawn(
+                EntityType.ENTITY_LASER,
+                LaserVariant.THIN_RED,
+                3,
+                player.Position,
+                Vector.Zero,
+                player
+            ):ToLaser()
+
+            spear.PositionOffset = Vector(0, -10)
+            spear.AngleDegrees = directionspear:GetAngleDegrees()
+            spear.Parent = player
+            spear.Timeout = 9999999
+            spear.CollisionDamage = playerDamage * 0.25
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.UpdateLaserRing)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

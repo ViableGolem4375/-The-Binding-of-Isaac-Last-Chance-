@@ -1,7 +1,6 @@
 <ItemPools>
     <Pool Name="treasure">
         <Item Name="Lucky Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Dull Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Catalyst Character Sheet" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Failed Abortion" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Huh?" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
@@ -13,7 +12,7 @@
         <Item Name="Kingslayer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Appetizer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Early Morning Snack" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-
+        <Item Name="Defense Tech" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
     </Pool>
     <Pool Name="devil">
         <Item Name="Unholy Mantle" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
@@ -28,6 +27,7 @@
     <Pool Name="secret">
         <Item Name="Eternal Bond" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dull Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="boss">
