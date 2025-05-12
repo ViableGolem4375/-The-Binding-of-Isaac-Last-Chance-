@@ -50,5 +50,6 @@
     <active id="46" name="Phalanx" gfx="phalanx.png" description="Unbreakable guard" quality="4" maxcharges="300" chargetype="timed" tags="quest noeden nolostbr nocantrip"/>
     <passive id="47" name="Necromancy" gfx="necromancy.png" description="Raise the dead!" quality="3" tags="nocantrip offensive" />
     <active id="48" name="Become Back My Money" gfx="become_back_my_money.png" description="Trash Isaac" quality="2" charge="0" tags="nocantrip offensive" />
+    <active id="49" name="Gold Spray Paint" gfx="gold_paint.png" description="All that glitters is gold" quality="2" maxcharges="6" chargetype="normal" tags="nocantrip offensive" />
 
 </items>

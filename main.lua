@@ -88,6 +88,7 @@ local PHALANX_ITEM = Isaac.GetItemIdByName("Phalanx")
 local DEFENSE_TECH_ITEM = Isaac.GetItemIdByName("Defense Tech")
 local NECROMANCY_ITEM = Isaac.GetItemIdByName("Necromancy")
 local MONEY_ITEM = Isaac.GetItemIdByName("Become Back My Money")
+local PAINT_ITEM = Isaac.GetItemIdByName("Gold Spray Paint")
 
 
 
@@ -769,10 +770,10 @@ if EID then
     EID:addTrinket(RELIQUARY_TRINKET, "{{Warning}} Picking up this trinket will immediately teleport Isaac to a special Essence Reliquary room.#This room will contain an item from a unique item pool containing various items relating to character's gimmicks.", "Reliquary Access Card")
     EID:addCollectible(AMP_ITEM, "Spawn a familiar which projects a damage amplification area onto the ground.#{{ArrowUp}} Standing within this area will multiply Isaac's damage by 5.#{{Warning}} Familiar expires after 20 seconds.", "Amplifier")
     EID:addCollectible(HUH_ITEM, "Rerolls all item pedestals in the room into The Poop.", "Huh?")
-    EID:addTrinket(CLOVER_TRINKET, "{{ArrowUp}} +1 luck.", "4 Leaf Clover")
-    EID:addTrinket(ORB_TRINKET, "Grants a 25% chance for quality 0 items to be automatically rerolled once.", "Orb Shard")
-    EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.", "Stitched Photo")
-    EID:addTrinket(CANDLE_TRINKET, "Prevents seeing the same curse twice while held.", "Black Candle Wick")
+    EID:addTrinket(CLOVER_TRINKET, "{{ArrowUp}} +1 luck.#{{Collectible202}} +2 luck if golden.", "4 Leaf Clover")
+    EID:addTrinket(ORB_TRINKET, "Grants a 25% chance for quality 0 items to be automatically rerolled once.#{{Collectible202}} 50% chance to reroll if golden.", "Orb Shard")
+    EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.#{{Collectible202}} No effect if golden.", "Stitched Photo")
+    EID:addTrinket(CANDLE_TRINKET, "Prevents seeing the same curse twice while held.#{{Collectible202}} No effect if golden.", "Black Candle Wick")
     EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond")
     EID:addCollectible(COMP_ITEM, "{{ArrowUp}} Grants +1 damage for every quality 0 item Isaac holds.")
     EID:addCollectible(ANATOMY_ITEM, "Grants 1 bone heart on use.")
@@ -807,6 +808,7 @@ if EID then
     EID:addCollectible(DEFENSE_TECH_ITEM, "Spawns a laser ring around Isaac that deals 25% of his damage every tick.", "Defense Tech")
     EID:addCollectible(NECROMANCY_ITEM, "Killed enemies have a 10% chance to be revived as friendlies which last for the current room.#{{Luck}} 75% chance at 18 luck.", "Necromancy")
     EID:addCollectible(MONEY_ITEM, "One time use active item that gives Isaac coins equal to the amount of money spent throughout the run.", "Become Back My Money")
+    EID:addCollectible(PAINT_ITEM, "Turns Isaac's currently held trinket into its golden version.#{{Warning}} Will only affect one trinket at a time, always turns the trinket held in the first slot to gold.", "Gold Spray Paint")
 
 end
 
@@ -2366,7 +2368,6 @@ function Mod:UpgradeItemsOnUse(_, item, rng, player)
     local player = Isaac.GetPlayer(0)
     player:AnimateCollectible(EDEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
     if player:HasCollectible(EDEN_ESSENCE) then
-        print("Activated - Upgrading all item qualities!")
 
         local collectiblesToReroll = {} -- Store all valid passive items for rerolling
 
@@ -3188,6 +3189,34 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseRefundItem, MONEY_ITEM)
 
+
+function Mod:UseGoldSprayPaint(_, item, rng, player)
+    local player = Isaac.GetPlayer(0)
+
+    if player:HasCollectible(PAINT_ITEM) then
+        player:AnimateCollectible(PAINT_ITEM, "UseItem", "PlayerPickupSparkle")
+
+        -- ✅ Get the player's first held trinket
+        local heldTrinket = player:GetTrinket(0)
+        local goldTrinket
+        print(heldTrinket)
+
+        if heldTrinket ~= TrinketType.TRINKET_NULL then
+            goldTrinket = heldTrinket + 32768
+
+            -- ✅ Convert the trinket to its golden version
+            player:TryRemoveTrinket(heldTrinket) -- Remove normal version
+            player:AddTrinket(goldTrinket) -- Add golden version
+
+            -- ✅ Reapply trinket effects
+            player:AddCacheFlags(CacheFlag.CACHE_ALL)
+            player:EvaluateItems()
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseGoldSprayPaint, PAINT_ITEM)
+
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 local SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
@@ -3222,7 +3251,12 @@ Mod:AddCallback(ModCallbacks.MC_GET_CARD, Mod.mattSoul) ]]
 function Mod:OnCacheUpdateClover(player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_LUCK then
         if player:HasTrinket(CLOVER_TRINKET) then
-            player.Luck = player.Luck + 1
+            local luckBonus = 1
+            if player:GetTrinketMultiplier(CLOVER_TRINKET) > 1 then
+                luckBonus = 2 -- Double Luck bonus for golden version
+            end
+            player.Luck = player.Luck + luckBonus
+
         end
     end
 end
@@ -3236,6 +3270,7 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateClover)
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnTrinketPickupClover)
 
 local REROLL_CHANCE = 0.25
+local GOLDEN_MULT = 2
 local rerolledPedestals = {} -- Table to track rerolled pedestals
 
 function Mod:OnPickupInitOrb(pickup)
@@ -3248,6 +3283,8 @@ function Mod:OnPickupInitOrb(pickup)
             if player:HasTrinket(ORB_TRINKET) then
                 local itemConfig = Isaac.GetItemConfig():GetCollectible(pickup.SubType)
                 if itemConfig and itemConfig.Quality == 0 then
+                    local multiplier = player:GetTrinketMultiplier(ORB_TRINKET) > 1 and GOLDEN_MULTIPLIER or 1
+                    local finalChance = REROLL_CHANCE * multiplier
                     if math.random() < REROLL_CHANCE then
                         orbsfx:Play(SoundEffect.SOUND_EDEN_GLITCH) -- Play sound effect
                         --pickup:TryRemove() -- Removes the existing pedestal
