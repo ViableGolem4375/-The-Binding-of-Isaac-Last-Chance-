@@ -84,7 +84,7 @@ local GUN_ITEM = Isaac.GetItemIdByName("A Gun")
 local APPETIZER_ITEM = Isaac.GetItemIdByName("Appetizer")
 local MORNING_SNACK_ITEM = Isaac.GetItemIdByName("Early Morning Snack")
 local KINGSLAYER_ITEM = Isaac.GetItemIdByName("Kingslayer")
-
+local PHALANX_ITEM = Isaac.GetItemIdByName("Phalanx")
 
 
 
@@ -575,8 +575,10 @@ end, EntityType.ENTITY_PLAYER)
 function Mod:GrantInvulnerabilityOnHitPontius(entity, amount, flags, source, countdown)
     local player = Isaac.GetPlayer(0)
 
-    if player:GetPlayerType() == TAINTED_PONTIUS_TYPE and source and source.Entity then
-        player:SetMinDamageCooldown(60) -- 1 second (30 frames)
+    if player:GetPlayerType() == TAINTED_PONTIUS_TYPE and source and source.Entity and not player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
+        player:SetMinDamageCooldown(60) -- 1 second (60 frames)
+    elseif player:GetPlayerType() == TAINTED_PONTIUS_TYPE and source and source.Entity and player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
+        player:SetMinDamageCooldown(120) -- 1 second (120 frames)
     end
 end
 
@@ -701,7 +703,7 @@ function Mod:EvaluateBirthrightCache(player, cacheFlag)
 
             -- **Scale Damage based on Luck**
             if cacheFlag == CacheFlag.CACHE_DAMAGE then
-                local luckScaling = math.max(player.Luck * 0.5, 0) -- Adjust multiplier as needed
+                local luckScaling = math.max(player.Luck * 0.25, 0) -- Adjust multiplier as needed
                 player.Damage = player.Damage + luckScaling
             end
         end
@@ -709,6 +711,40 @@ function Mod:EvaluateBirthrightCache(player, cacheFlag)
 end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.EvaluateBirthrightCache)
+
+local pontiusHasShield = false
+
+-- Reset the flag when starting a new run
+function Mod:OnNewGamePontiusBirthright(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        pontiusHasShield = false
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGamePontiusBirthright) -- Reset flag between runs
+
+function Mod:ApplyBirthrightPontius(player)
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
+        -- **Check if player is the normal or tainted variant**
+        if player:GetPlayerType() == pontiusType then
+            if not player:GetData().hasPocketItem and pontiusHasShield == false then
+                player:SetPocketActiveItem(PHALANX_ITEM, ActiveSlot.SLOT_POCKET, true)
+                local pool = game:GetItemPool()
+                pool:RemoveCollectible(PHALANX_ITEM)
+                pontiusHasShield = true
+            end
+
+
+        elseif player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+
+        end
+
+    end
+
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.ApplyBirthrightPontius)
+
 
 ----------------------------------------------------------------------------------------
 -- Item code below.
@@ -762,6 +798,9 @@ if EID then
     EID:addCollectible(APPETIZER_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.", "Appetizer")
     EID:addCollectible(MORNING_SNACK_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.", "Early Morning Snack")
     EID:addCollectible(KINGSLAYER_ITEM, "{{ArrowUp}} Gain +50% damage when in an uncleared boss room.", "Kingslayer")
+    EID:addBirthright(pontiusType, "Grants Phalanx as a pocket active item.#Phalanx grants Isaac 1 second of invulnerability on use and has a 5 second cooldown.")
+    EID:addCollectible(PHALANX_ITEM, "Grants Isaac 1 second of invulnerability on use and has a 5 second cooldown.", "Phalanx")
+    EID:addBirthright(TAINTED_PONTIUS_TYPE, "Extends the post-hit invulnerability effect to 2 seconds.")
 
 end
 
@@ -3014,6 +3053,24 @@ function Mod:ApplyBossRoomDamage(player, cacheFlag)
 end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyBossRoomDamage)
+
+local INVINCIBILITY_DURATION = 30 -- 1 second (since Isaac runs at 30 FPS)
+
+function Mod:UseInvincibilityItem(_, item, rng, player)
+    local player = Isaac.GetPlayer(0)
+    if player:HasCollectible(PHALANX_ITEM) then
+
+        -- ✅ Apply invulnerability effect
+        player:SetMinDamageCooldown(60)
+
+
+        -- ✅ Play sound effect (optional)
+        local sfx = SFXManager()
+        sfx:Play(SoundEffect.SOUND_BALL_AND_CHAIN_HIT)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseInvincibilityItem, PHALANX_ITEM)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

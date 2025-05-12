@@ -47,5 +47,6 @@
     <passive id="43" name="Early Morning Snack" gfx="midnight_snack.png" description="Health up" quality="1" tags="nocantrip nolostbr" />
     <passive id="44" name="Kingslayer" gfx="kingslayer.png" description="Boss killer" quality="2" tags="nocantrip offensive" cache="damage" />
     <passive id="45" name="test" gfx="kingslayer.png" description="Boss killer" quality="2" tags="nocantrip offensive" cache="damage" />
+    <active id="46" name="Phalanx" gfx="phalanx.png" description="Unbreakable guard" quality="4" maxcharges="300" chargetype="timed" tags="quest noeden nolostbr nocantrip"/>
 
 </items>
