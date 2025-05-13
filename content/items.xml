@@ -52,5 +52,6 @@
     <active id="48" name="Become Back My Money" gfx="become_back_my_money.png" description="Trash Isaac" quality="2" charge="0" tags="nocantrip offensive" />
     <active id="49" name="Gold Spray Paint" gfx="gold_paint.png" description="All that glitters is gold" quality="2" maxcharges="6" chargetype="normal" tags="nocantrip offensive" />
     <passive id="50" name="'/<<L7" gfx="glitch.png" description="aAa)))))" quality="1" tags="nocantrip offensive" />
+    <passive id="51" name="Proto-Tech" gfx="prototech.png" description="Destruction" quality="4" tags="nocantrip offensive" />
 
 </items>

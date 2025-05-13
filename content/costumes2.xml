@@ -23,5 +23,6 @@
     <costume id="44" anm2path="kingslayer.anm2" type="passive" priority="0" />
     <costume id="45" anm2path="defense_tech.anm2" type="passive" priority="0" />
     <costume id="47" anm2path="necromancy.anm2" type="passive" priority="0" />
+    <costume id="51" anm2path="prototech.anm2" type="passive" priority="0" />
 
 </costumes>

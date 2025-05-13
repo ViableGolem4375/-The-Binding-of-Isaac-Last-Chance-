@@ -91,6 +91,8 @@ local NECROMANCY_ITEM = Isaac.GetItemIdByName("Necromancy")
 local MONEY_ITEM = Isaac.GetItemIdByName("Become Back My Money")
 local PAINT_ITEM = Isaac.GetItemIdByName("Gold Spray Paint")
 local GLITCH_ITEM = Isaac.GetItemIdByName("'/<<L7")
+local PROTO_ITEM = Isaac.GetItemIdByName("Proto-Tech")
+
 
 
 
@@ -937,6 +939,7 @@ if EID then
     EID:addCollectible(MONEY_ITEM, "One time use active item that gives Isaac coins equal to the amount of money spent throughout the run.", "Become Back My Money")
     EID:addCollectible(PAINT_ITEM, "Turns Isaac's currently held trinket into its golden version.#{{Warning}} Will only affect one trinket at a time, always turns the trinket held in the first slot to gold.", "Gold Spray Paint")
     EID:addCollectible(GLITCH_ITEM, "Grants a 1 in 100,000,000 chance to fire a tear that instantly kills any enemy it hits inclusing bosses.#{{Luck}} 100% chance at 99,999,999 luck.", "'/<<L7")
+    EID:addCollectible(PROTO_ITEM, "Isaac's tears are replaced by a chargeable 1 tick laser which deals 10x Isaac's damage.", "Proto-Tech")
 
 end
 
@@ -948,6 +951,7 @@ function Mod:LuckyDiceUse(item, rng, player, flags)
     local predefinedItems = {
         AZAZEL_ESSENCE,
         STAR_OF_DAVID,
+        GLITCH_ITEM,
         87, --Loki's Horns
         89, --Spider Bite
         103, --The Common Cold
@@ -2733,6 +2737,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoomBethEssence)
 local predefinedItemList = {
     AZAZEL_ESSENCE,
     STAR_OF_DAVID,
+    GLITCH_ITEM,
     87, --Loki's Horns
     89, --Spider Bite
     103, --The Common Cold
@@ -3402,6 +3407,78 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateGlitch)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitGlitch)
 
+ProtoTech = {}
+LaserType = { THICK_RED = 1}
+LASER_DURATION = 1
+
+function ProtoTech:onUpdateTech(player)
+    local PlayerData = player:GetData()
+    if PlayerData.TechFrame == nil then PlayerData.TechFrame = 0 end
+    if PlayerData.TechCool == nil then PlayerData.TechCool = 0 end
+    if PlayerData.LastFireDirection == nil then PlayerData.LastFireDirection = Direction.NO_DIRECTION end -- ✅ Track last fire direction
+
+    if player:HasCollectible(PROTO_ITEM) then
+        player.FireDelay = player.MaxFireDelay
+        
+        if player:GetFireDirection() > -1 and PlayerData.TechCool == 0 then
+            PlayerData.LastFireDirection = player:GetFireDirection()
+            PlayerData.TechFrame = math.min(player.MaxFireDelay * 2, PlayerData.TechFrame + 1)
+            if PlayerData.TechFrame == player.MaxFireDelay * 2 then
+                player:SetColor(Color(1,0,0,0.8,0, 0, 0), 1, 0, false, false)
+            end
+        elseif game:GetRoom():GetFrameCount() > 1 then
+            if PlayerData.TechFrame == player.MaxFireDelay * 2 then
+                if player:HasCollectible(PROTO_ITEM) then
+                    BaseAngle = 0
+                end
+
+                local fireDirectiontech = PlayerData.LastFireDirection
+                local directiontech
+                
+
+
+                -- Set correct spear direction
+                if fireDirectiontech == Direction.LEFT then
+                    directiontech = Vector(-1, 0)
+                elseif fireDirectiontech == Direction.RIGHT then
+                    directiontech = Vector(1, 0)
+                elseif fireDirectiontech == Direction.DOWN then
+                    directiontech = Vector(0, 1)
+                elseif fireDirectiontech == Direction.UP then
+                    directiontech = Vector(0, -1)
+                elseif fireDirectiontech == Direction.NO_DIRECTION then
+                    directiontech = Vector(0, 1)
+                end
+                --for Angle = BaseAngle do
+                --local ProtoTechLaser = EntityLaser.ShootAngle(LaserType.THICK_RED, player.Position, 0, LASER_DURATION, Vector(0,0), player)
+                local ProtoTechLaser = Isaac.Spawn(
+                    EntityType.ENTITY_LASER,
+                    LaserVariant.BRIM_TECH,
+                    0,
+                    player.Position,
+                    Vector.Zero,
+                    player
+                ):ToLaser()
+                local protosfx = SFXManager()
+                protosfx:Play(SoundEffect.SOUND_LASERRING_STRONG)
+                ProtoTechLaser.TearFlags = player.TearFlags
+                ProtoTechLaser.AngleDegrees = directiontech:GetAngleDegrees()
+                ProtoTechLaser.CollisionDamage = player.Damage * 10
+                ProtoTechLaser.PositionOffset = Vector(0, -10)
+                ProtoTechLaser.Timeout = 1
+                ProtoTechLaser.Parent = player
+                --end
+                PlayerData.TechCool = LASER_DURATION * 2
+            else
+                --Dud
+            end
+            PlayerData.TechFrame = 0
+        end
+        PlayerData.TechCool = math.max(0,PlayerData.TechCool - 1)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, ProtoTech.onUpdateTech)
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 local SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")

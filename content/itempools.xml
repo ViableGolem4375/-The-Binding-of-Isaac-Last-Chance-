@@ -15,6 +15,7 @@
         <Item Name="Defense Tech" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Become Back My Money" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Gold Spray Paint" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Proto-Tech" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="devil">
@@ -70,6 +71,7 @@
         <Item Name="Defense Tech" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Become Back My Money" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
         <Item Name="Gold Spray Paint" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Proto-Tech" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -82,7 +84,20 @@
     <Pool Name="greedShop">
         <Item Name="Become Back My Money" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
         <Item Name="Gold Spray Paint" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-
+        <Item Name="Proto-Tech" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Lucky Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Catalyst Character Sheet" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Failed Abortion" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Huh?" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Amplifier" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Anatomy Textbook" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Star of David" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="A Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Kingslayer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Appetizer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Early Morning Snack" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Defense Tech" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
