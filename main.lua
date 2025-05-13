@@ -602,7 +602,7 @@ function Mod:OnPlayerUpdatePontius(player)
         spear.AngleDegrees = directionspear:GetAngleDegrees() -- Rotate laser to match direction
         spear.Parent = player -- Attach the laser to the player
         spear.Timeout = 1 -- Set duration (adjust as needed)
-        spear.CollisionDamage = playerDamage * 10
+        spear.CollisionDamage = playerDamage * 3
         spearCooldown = spearFireRate -- Reset cooldown
     end
 end
