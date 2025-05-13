@@ -12,3 +12,4 @@ Item Ideas to Add:
 
 Trinket Ideas:
 
+- Bone penny: chance to drop bone hearts when picking up money.
