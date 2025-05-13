@@ -598,6 +598,7 @@ function Mod:OnPlayerUpdatePontius(player)
 
 
         spear.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
+        spear.TearFlags = player.TearFlags
         spear.AngleDegrees = directionspear:GetAngleDegrees() -- Rotate laser to match direction
         spear.Parent = player -- Attach the laser to the player
         spear.Timeout = 1 -- Set duration (adjust as needed)
@@ -2888,6 +2889,7 @@ function Mod:UseSpearAttack(_, item, rng, player)
             sfx:Play(SoundEffect.SOUND_SWORD_SPIN) -- Replace with your custom sound ID
 
             spear.PositionOffset = Vector(0, -10)
+            spear.TearFlags = player.TearFlags
             spear.AngleDegrees = directionspear:GetAngleDegrees()
             spear.Parent = player
             spear.Timeout = 1
