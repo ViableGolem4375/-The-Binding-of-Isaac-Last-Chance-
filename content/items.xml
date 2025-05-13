@@ -53,5 +53,6 @@
     <active id="49" name="Gold Spray Paint" gfx="gold_paint.png" description="All that glitters is gold" quality="2" maxcharges="6" chargetype="normal" tags="nocantrip offensive" />
     <passive id="50" name="'/<<L7" gfx="glitch.png" description="aAa)))))" quality="1" tags="nocantrip offensive" />
     <passive id="51" name="Proto-Tech" gfx="prototech.png" description="Destruction" quality="4" tags="nocantrip offensive" />
+    <passive id="52" name="Fred The Friendly Gaper" gfx="fred.png" description="A helping hand" quality="2" tags="nocantrip offensive" />
 
 </items>

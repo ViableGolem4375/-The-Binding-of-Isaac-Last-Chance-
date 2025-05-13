@@ -92,6 +92,7 @@ local MONEY_ITEM = Isaac.GetItemIdByName("Become Back My Money")
 local PAINT_ITEM = Isaac.GetItemIdByName("Gold Spray Paint")
 local GLITCH_ITEM = Isaac.GetItemIdByName("'/<<L7")
 local PROTO_ITEM = Isaac.GetItemIdByName("Proto-Tech")
+local FRED_ITEM = Isaac.GetItemIdByName("Fred The Friendly Gaper")
 
 
 
@@ -940,6 +941,7 @@ if EID then
     EID:addCollectible(PAINT_ITEM, "Turns Isaac's currently held trinket into its golden version.#{{Warning}} Will only affect one trinket at a time, always turns the trinket held in the first slot to gold.", "Gold Spray Paint")
     EID:addCollectible(GLITCH_ITEM, "Grants a 1 in 100,000,000 chance to fire a tear that instantly kills any enemy it hits inclusing bosses.#{{Luck}} 100% chance at 99,999,999 luck.", "'/<<L7")
     EID:addCollectible(PROTO_ITEM, "Isaac's tears are replaced by a chargeable 1 tick laser which deals 10x Isaac's damage.", "Proto-Tech")
+    EID:addCollectible(FRED_ITEM, "Spawns an immortal friendly Gaper on pickup.#The Gaper persists between floors.", "Fred The Friendly Gaper")
 
 end
 
@@ -3479,6 +3481,67 @@ function ProtoTech:onUpdateTech(player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, ProtoTech.onUpdateTech)
+
+local gaperSpawned = false
+
+-- Reset the flag when starting a new run
+function Mod:OnNewGameGaper(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        gaperSpawned = false
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameGaper) -- Reset flag between runs
+
+
+function Mod:SpawnFriendlyGaper(player)
+    local player = Isaac.GetPlayer(0)
+    if player:HasCollectible(FRED_ITEM) and gaperSpawned == false then
+        local gaper = Isaac.Spawn(EntityType.ENTITY_GAPER, 0, 0, player.Position, Vector(0,0), player)
+        gaper:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- ✅ Makes it friendly
+        gaper:AddEntityFlags(EntityFlag.FLAG_PERSISTENT) -- ✅ Makes it friendly
+
+        -- **Apply permanent charmed effect (adds the hearts visual)**
+        gaper:AddEntityFlags(EntityFlag.FLAG_CHARM)
+        gaper:GetData().IsImmortalGaper = true
+
+        
+        gaperSpawned = true
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.SpawnFriendlyGaper)
+
+function Mod:PreventGaperDamage(entity, amount, flags, source, countdown)
+    if entity.Type == EntityType.ENTITY_GAPER and entity:GetData().IsImmortalGaper then
+        return false -- ✅ Blocks all damage
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.PreventGaperDamage)
+
+
+--[[ function Mod:UpdateFriendlyGaper()
+    local entities = Isaac.GetRoomEntities()
+    for _, entity in ipairs(entities) do
+        if entity.Type == EntityType.ENTITY_GAPER and entity:GetData().IsImmortalGaper then
+            local player = Isaac.GetPlayer(0)
+            entity.Velocity = (player.Position - entity.Position):Normalized() * 2 -- ✅ Follows player
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.UpdateFriendlyGaper) ]]
+
+--[[ function Mod:PreventGaperDeath(entity)
+    if entity.Type == EntityType.ENTITY_GAPER and entity:GetData().IsImmortalGaper then
+        local player = Isaac.GetPlayer(0)
+        Isaac.Spawn(EntityType.ENTITY_GAPER, 0, 0, player.Position, Vector(0,0), player):AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+        entity:Remove() -- ✅ Respawn a new Gaper instead of dying
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_REMOVE, Mod.PreventGaperDeath) ]]
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 local SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
