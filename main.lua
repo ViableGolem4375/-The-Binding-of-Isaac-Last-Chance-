@@ -1,4 +1,5 @@
 local Mod = RegisterMod("Mod", 1)
+local game = Game()
 
 local itemConfig = Isaac.GetItemConfig()
 
@@ -92,7 +93,7 @@ local PAINT_ITEM = Isaac.GetItemIdByName("Gold Spray Paint")
 
 
 
-function Mod:GiveCostumesOnInit(player)
+--[[ function Mod:GiveCostumesOnInit(player)
     if player:GetPlayerType() ~= templateType then
         return -- End the function early. The below code doesn't run, as long as the player isn't Gabriel.
     end
@@ -100,9 +101,9 @@ function Mod:GiveCostumesOnInit(player)
     player:AddNullCostume(characterCostume)
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Mod.GiveCostumesOnInit)
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Mod.GiveCostumesOnInit) ]]
 
-local game = Game()
+
 
 ----------------------------------------------------------------------------------------
 -- Character code for Matt below.
@@ -280,7 +281,90 @@ Mod:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, Mod.FilterHighQualityItems)
 local previousItems = {}
 local recentPickups = {}
 
-function Mod:onPlayerUpdate(player)
+local QUALITY_ZERO_ITEMS = {
+    HUH_ITEM,
+    65,
+    136,
+    186,
+    287,
+    294,
+    40,
+    56,
+    295,
+    39,
+    41,
+    86,
+    177,
+    126,
+    137,
+    325,
+    44,
+    111,
+    66,
+    290,
+    35,
+    36,
+    421,
+    504,
+    482,
+    480,
+    481,
+    486,
+    478,
+    475,
+    578,
+    555,
+    631,
+    655,
+    605,
+    582,
+    9,
+    19,
+    74,
+    117,
+    141,
+    148,
+    161,
+    180,
+    188,
+    195,
+    198,
+    206,
+    211,
+    233,
+    236,
+    252,
+    258,
+    262,
+    272,
+    273,
+    274,
+    276,
+    315,
+    316,
+    358,
+    371,
+    388,
+    394,
+    420,
+    426,
+    447,
+    452,
+    468,
+    470,
+    525,
+    539,
+    593,
+    603,
+    610,
+    672,
+    681,
+    721,
+    725
+}
+
+
+--[[ function Mod:onPlayerUpdate(player)
     if player:GetPlayerType() == TAINTED_TEMPLATE_TYPE then
         local currentItems = {}
 
@@ -301,6 +385,7 @@ function Mod:onPlayerUpdate(player)
                     local rng = player:GetCollectibleRNG(itemID)
                     if rng:RandomFloat() < 0.5 then -- 50% chance
                         local qualityZeroItems = {}
+
 
                         -- Find all items with quality 0
                         for i = 1, Isaac.GetItemConfig():GetCollectibles().Size - 1 do
@@ -328,6 +413,47 @@ function Mod:onPlayerUpdate(player)
     end
 end
 
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.onPlayerUpdate) ]]
+
+function Mod:onPlayerUpdate(player)
+    if player:GetPlayerType() == TAINTED_TEMPLATE_TYPE then
+        local currentItems = {}
+
+        -- ✅ Store player's current items
+        for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
+            if player:HasCollectible(i) then
+                currentItems[i] = true
+            end
+        end
+
+        -- ✅ Compare with previous items to detect **new** pickups
+        for itemID, _ in pairs(currentItems) do
+            if not previousItems[itemID] then
+                local itemQuality = Isaac.GetItemConfig():GetCollectible(itemID).Quality
+
+                -- ✅ Ensure this item hasn't been repeatedly picked up/dropped
+                if itemQuality == 0 and not recentPickups[itemID] then
+                    local rng = player:GetCollectibleRNG(itemID)
+                    if rng:RandomFloat() < 0.5 then -- ✅ 50% chance
+
+                        -- ✅ Spawn a pedestal with a random item from our predefined list
+                        if #QUALITY_ZERO_ITEMS > 0 then
+                            local newItem = QUALITY_ZERO_ITEMS[rng:RandomInt(#QUALITY_ZERO_ITEMS) + 1]
+                            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, player.Position, Vector(0,0), nil)
+                        end
+                    end
+
+                    -- ✅ Mark item as recently picked up to prevent repeat triggers
+                    recentPickups[itemID] = true
+                end
+            end
+        end
+
+        -- ✅ Update previous items for next check
+        previousItems = currentItems
+    end
+end
+
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.onPlayerUpdate)
 
 
@@ -340,7 +466,7 @@ function Mod:RemoveEmptyPedestals(player)
         for _, entity in ipairs(entities) do
             if entity.Type == EntityType.ENTITY_PICKUP and entity.Variant == PickupVariant.PICKUP_COLLECTIBLE then
                 local pedestal = entity:ToPickup()
-                if pedestal.SubType == 0 then -- Empty pedestal check
+                if pedestal and pedestal.SubType == 0 then -- Empty pedestal check
                     pedestal:Remove()
                 end
             end
@@ -348,7 +474,7 @@ function Mod:RemoveEmptyPedestals(player)
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_RENDER, Mod.RemoveEmptyPedestals)
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.RemoveEmptyPedestals)
 
 ----------------------------------------------------------------------------------------
 -- Character code for Pontius below.
@@ -376,7 +502,7 @@ local Pontius = { -- shown below are default values, as shown on Isaac, for you 
     end
 end ]]
 
-Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Pontius.onPlayerInitPontius)
+--Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Pontius.onPlayerInitPontius)
 
 function Pontius:onCachePontius(player, cacheFlag)
     if player:GetPlayerType() == pontiusType then
@@ -504,7 +630,7 @@ local Pontiusb = { -- shown below are default values, as shown on Isaac, for you
     end
 end ]]
 
-Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Pontiusb.onPlayerInitPontiusb)
+--Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Pontiusb.onPlayerInitPontiusb)
 
 
 function Pontiusb:onCachePontiusb(player, cacheFlag)
@@ -591,7 +717,7 @@ Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.GrantInvulnerabilityOnHitPo
 local bossRoomSoulSpawned = false -- Tracks if the card has already been spawned
 
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, function()
-    local game = Game()
+    --local game = Game()
     local room = game:GetRoom()
     local player = Isaac.GetPlayer(0)
 
@@ -877,14 +1003,14 @@ function Mod:LuckyDiceUse(item, rng, player, flags)
         691, --Sacred Orb
     } -- Custom item pool for lucky dice, consists of chance based/related items.
 
-    local room = Game():GetRoom()
+    --local room = Game():GetRoom()
     local entities = Isaac.GetRoomEntities()
 
     for _, entity in ipairs(entities) do
         if entity.Type == EntityType.ENTITY_PICKUP and entity.Variant == PickupVariant.PICKUP_COLLECTIBLE then
             local pedestal = entity:ToPickup()
             -- Ensure the pedestal already holds an item before rerolling
-            if pedestal.SubType ~= 0 then
+            if pedestal and pedestal.SubType ~= 0 then
                 local newItem = predefinedItems[rng:RandomInt(#predefinedItems) + 1] -- Pick a random item
                 pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
             end
@@ -909,7 +1035,12 @@ function Mod:DullCoinUse(item, rng, player, flags)
     for _, entity in ipairs(entities) do
         if entity.Type == EntityType.ENTITY_PICKUP and entity.Variant == PickupVariant.PICKUP_COLLECTIBLE then
             local pedestal = entity:ToPickup()
-            local currentItem = pedestal.SubType
+            --local currentItem = pedestal.SubType
+            local currentItem = 1
+            if pedestal then -- ✅ Ensure pedestal isn't nil before using it
+                currentItem = pedestal.SubType
+            end
+
             local itemConfig = Isaac.GetItemConfig():GetCollectible(currentItem)
 
             if itemConfig then
@@ -930,7 +1061,13 @@ function Mod:DullCoinUse(item, rng, player, flags)
                     -- If we found lower-quality items, pick one and reroll the pedestal
                     if #lowerQualityItems > 0 then
                         local newItem = lowerQualityItems[rng:RandomInt(#lowerQualityItems) + 1]
-                        pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
+                        --pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
+                        if pedestal and pedestal.SubType ~= 0 then -- ✅ Ensure pedestal isn't nil
+                            pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
+                        else
+                            print("Warning: Attempted to morph a nil pedestal!")
+                        end
+
                         table.insert(validRerolls, newItem) -- Track successful rerolls
                     end
                 end
@@ -1625,9 +1762,9 @@ function Mod:OnFamiliarUpdate(familiar)
                 player:RemoveCollectible(AMP_DMG_ITEM)
             end
 
-             -- Spawn explosion effect, but ensure it doesn't damage the player
-             local explosion = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_EXPLOSION, 0, familiar.Position, Vector(0, 0), familiar)
-             explosion:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- Prevents explos
+            -- Spawn explosion effect, but ensure it doesn't damage the player
+            local explosion = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_EXPLOSION, 0, familiar.Position, Vector(0, 0), familiar)
+            explosion:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- Prevents explos
             familiar:Remove()
             return -- Exit the function to prevent further updates
         end
@@ -1679,7 +1816,7 @@ function Mod:HuhUse(item, rng, player, flags)
         if entity.Type == EntityType.ENTITY_PICKUP and entity.Variant == PickupVariant.PICKUP_COLLECTIBLE then
             local pedestal = entity:ToPickup()
             -- Ensure the pedestal already holds an item before rerolling
-            if pedestal.SubType ~= 0 then
+            if pedestal and pedestal.SubType ~= 0 then
                 local newItem = CollectibleType.COLLECTIBLE_POOP
                 pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
             end
@@ -1766,7 +1903,7 @@ local function SpawnOrbEffect(player)
 end
 
 function Mod:OnUpdateBond()
-    local game = Game()
+    --local game = Game()
     for i = 0, game:GetNumPlayers() - 1 do
         local player = Isaac.GetPlayer(i)
         local dashData = dashingPlayers[player.Index]
@@ -1984,7 +2121,7 @@ end
 
 -- Function to spawn golden items at the start of each floor
 function Mod:OnNewFloor()
-    local game = Game()
+    --local game = Game()
     local level = game:GetLevel()
     local room = game:GetRoom()
     local player = Isaac.GetPlayer(0)
@@ -2121,7 +2258,7 @@ function Mod:OnUseSamsonEssence(_, _, player)
 end
 
 function Mod:OnUpdateSamsonEssence()
-    local game = Game()
+    --local game = Game()
     for i = 0, game:GetNumPlayers() - 1 do
         local player = Isaac.GetPlayer(i)
         local dashData = dashingPlayers[player.Index]
@@ -3012,7 +3149,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupMorningSnack)
 local BOSS_ROOM_DAMAGE_BOOST = 1.5 -- 50% extra damage
 
 function Mod:UpdateBossRoomDamage(player)
-    local game = Game()
+    --local game = Game()
     local level = game:GetLevel()
     local room = game:GetRoom()
 
@@ -3283,7 +3420,7 @@ function Mod:OnPickupInitOrb(pickup)
             if player:HasTrinket(ORB_TRINKET) then
                 local itemConfig = Isaac.GetItemConfig():GetCollectible(pickup.SubType)
                 if itemConfig and itemConfig.Quality == 0 then
-                    local multiplier = player:GetTrinketMultiplier(ORB_TRINKET) > 1 and GOLDEN_MULTIPLIER or 1
+                    local multiplier = player:GetTrinketMultiplier(ORB_TRINKET) > 1 and GOLDEN_MULT or 1
                     local finalChance = REROLL_CHANCE * multiplier
                     if math.random() < REROLL_CHANCE then
                         orbsfx:Play(SoundEffect.SOUND_EDEN_GLITCH) -- Play sound effect
@@ -3317,7 +3454,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnItemPickupPhoto)
 local seenCurses = {} -- Stores curses that have already appeared
 
 function Mod:OnNewLevel()
-    local game = Game()
+    --local game = Game()
     local level = game:GetLevel()
     local player = Isaac.GetPlayer(0) -- Gets the main player
 
@@ -3441,7 +3578,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.FilterItemPoolOnRoomEntry)
 function OnTrinketPickup(player)
     local player = Game():GetPlayer(1) -- Try different indices if needed
     if player:HasTrinket(RELIQUARY_TRINKET) then
-        local game = Game()
+        --local game = Game()
         local level = game:GetLevel()
         local TELEPORT_ROOM_ID = -3 -- Replace with your special room ID
         Isaac.ExecuteCommand("goto s.library.6969")
