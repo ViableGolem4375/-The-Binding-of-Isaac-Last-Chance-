@@ -93,6 +93,7 @@ local PAINT_ITEM = Isaac.GetItemIdByName("Gold Spray Paint")
 local GLITCH_ITEM = Isaac.GetItemIdByName("'/<<L7")
 local PROTO_ITEM = Isaac.GetItemIdByName("Proto-Tech")
 local FRED_ITEM = Isaac.GetItemIdByName("Fred The Friendly Gaper")
+local SIN_PENNY_TRINKET = Isaac.GetTrinketIdByName("Sinful Penny")
 
 
 
@@ -943,6 +944,7 @@ if EID then
     EID:addCollectible(GLITCH_ITEM, "Grants a 1 in 100,000,000 chance to fire a tear that instantly kills any enemy it hits inclusing bosses.#{{Luck}} 100% chance at 99,999,999 luck.", "'/<<L7")
     EID:addCollectible(PROTO_ITEM, "Isaac's tears are replaced by a chargeable 1 tick laser which deals 10x Isaac's damage.", "Proto-Tech")
     EID:addCollectible(FRED_ITEM, "Spawns an immortal friendly Gaper on pickup.#The Gaper persists between floors.", "Fred The Friendly Gaper")
+    EID:addTrinket(SIN_PENNY_TRINKET, "Chance for a black heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Sinful Penny")
 
 end
 
@@ -3713,7 +3715,40 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewLevel)
 
+function Mod:OnCoinPickup(pickup, player)
+    local player = Isaac.GetPlayer(0) -- Gets the player
+    if player:HasTrinket(SIN_PENNY_TRINKET) then
+        local rng = player:GetCollectibleRNG(SIN_PENNY_TRINKET) -- ✅ Use RNG tied to the player
+        local chance = 0
 
+        -- ✅ Set chance based on coin type
+        if pickup.SubType == CoinSubType.COIN_PENNY or pickup.SubType == CoinSubType.COIN_LUCKYPENNY or pickup.SubType == CoinSubType.COIN_GOLDEN then
+            chance = 0.05
+        elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
+            chance = 0.10
+        elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
+            chance = 0.25
+        elseif pickup.SubType == CoinSubType.COIN_DIME then
+            chance = 0.37
+        end
+
+        -- ✅ If holding the **golden version**, always spawn full black hearts
+        if player:HasTrinket(SIN_PENNY_TRINKET + 32768) then -- Golden trinkets have a +32768 offset
+            chance = chance * 2 -- Increase chance slightly
+        end
+
+        -- ✅ Roll RNG for black heart drop
+        if rng:RandomFloat() < chance then
+            local heartType = HeartSubType.HEART_BLACK
+            if player:HasTrinket(SIN_PENNY_TRINKET + 32768) then
+                chance = math.min(1, chance * 2) -- ✅ Doubles chance, caps at 100%
+            end
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, heartType, pickup.Position, Vector(0,0), nil)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.OnCoinPickup, PickupVariant.PICKUP_COIN)
 ----------------------------------------------------------------------------------------
 --- Room Code For Essence Reliquary Below.
 

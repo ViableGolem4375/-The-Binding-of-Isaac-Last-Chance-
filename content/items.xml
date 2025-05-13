@@ -54,5 +54,6 @@
     <passive id="50" name="'/<<L7" gfx="glitch.png" description="aAa)))))" quality="1" tags="nocantrip offensive" />
     <passive id="51" name="Proto-Tech" gfx="prototech.png" description="Destruction" quality="4" tags="nocantrip offensive" />
     <passive id="52" name="Fred The Friendly Gaper" gfx="fred.png" description="A helping hand" quality="2" tags="nocantrip offensive" />
+    <trinket id="53" name="Sinful Penny" gfx="sin_penny.png" description="Wealth of sin" />
 
 </items>
