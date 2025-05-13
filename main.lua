@@ -90,6 +90,7 @@ local DEFENSE_TECH_ITEM = Isaac.GetItemIdByName("Defense Tech")
 local NECROMANCY_ITEM = Isaac.GetItemIdByName("Necromancy")
 local MONEY_ITEM = Isaac.GetItemIdByName("Become Back My Money")
 local PAINT_ITEM = Isaac.GetItemIdByName("Gold Spray Paint")
+local GLITCH_ITEM = Isaac.GetItemIdByName("'/<<L7")
 
 
 
@@ -935,6 +936,7 @@ if EID then
     EID:addCollectible(NECROMANCY_ITEM, "Killed enemies have a 10% chance to be revived as friendlies which last for the current room.#{{Luck}} 75% chance at 18 luck.", "Necromancy")
     EID:addCollectible(MONEY_ITEM, "One time use active item that gives Isaac coins equal to the amount of money spent throughout the run.", "Become Back My Money")
     EID:addCollectible(PAINT_ITEM, "Turns Isaac's currently held trinket into its golden version.#{{Warning}} Will only affect one trinket at a time, always turns the trinket held in the first slot to gold.", "Gold Spray Paint")
+    EID:addCollectible(GLITCH_ITEM, "Grants a 1 in 100,000,000 chance to fire a tear that instantly kills any enemy it hits inclusing bosses.#{{Luck}} 100% chance at 99,999,999 luck.", "'/<<L7")
 
 end
 
@@ -3353,6 +3355,69 @@ function Mod:UseGoldSprayPaint(_, item, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseGoldSprayPaint, PAINT_ITEM)
+
+local HasGlitchEffect = false
+
+local GLITCH_COLORS = {
+    Color(1, 0, 0, 0.5, 0, 0, 0), -- Red
+    Color(0, 1, 0, 0.5, 0, 0, 0), -- Green
+    Color(0, 0, 1, 0.5, 0, 0, 0), -- Blue
+    Color(1, 1, 0, 0.5, 0, 0, 0), -- Yellow
+    Color(1, 0, 1, 0.5, 0, 0, 0), -- Magenta
+}
+
+local function getCycledGlitchColor()
+    local frameCount = Game():GetFrameCount()
+    local colorIndex = (frameCount % #GLITCH_COLORS) + 1
+    return GLITCH_COLORS[colorIndex]
+end
+
+
+function Mod:onUpdateGlitch(player)
+	if game:GetFrameCount() == 1 then
+		HasGlitchEffect = false
+	end
+	if not HasGlitchEffect and player:HasCollectible(GLITCH_ITEM) then
+		HasGlitchEffect = true
+	end
+end
+
+local function getRandomGlitchEffect(player)
+    local baseChance = 0.00000001
+    local luckScaling = 0.00000001
+
+    local luckBonus = math.max(0, player.Luck * luckScaling) -- Ensure non-negative
+    local finalChance = math.min(0.90, baseChance + luckBonus) -- Cap at 90% chance
+
+    local rand = math.random()
+    return rand <= finalChance -- Effect triggers if random number falls within chance
+end
+
+function Mod:onTearInitGlitch(tear)
+    if HasGlitchEffect then
+        local parent = tear.SpawnerEntity
+        if parent and parent:ToPlayer() then
+            local player = parent:ToPlayer()
+            if player:HasCollectible(GLITCH_ITEM) and getRandomGlitchEffect(player) then
+                tear:GetData().starTrigger = true
+                --tear.Color = Color(1, 0, 0, 0.5, 0, 0, 0) -- RGB: Red, Alpha: 1 (opaque)
+                --tear.Color = getCycledGlitchColor() -- ✅ Cycle through colors dynamically
+
+                local sprite = tear:GetSprite()
+                sprite:Load("gfx/glitch_tear.anm2", true)
+                sprite:Play("Stone4Move", true)
+
+
+                tear.CollisionDamage = tear.CollisionDamage * 999999999
+
+            end
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateGlitch)
+Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitGlitch)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
