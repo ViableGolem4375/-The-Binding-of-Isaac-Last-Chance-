@@ -2368,7 +2368,7 @@ local function getRandomLaserEffect(player)
     local luckScaling = 0.05 -- Each Luck point increases chance by 5%
 
     local luckBonus = math.max(0, player.Luck * luckScaling) -- Ensure non-negative
-    local finalChance = math.min(0.90, baseChance + luckBonus) -- Cap at 90% chance
+    local finalChance = math.min(1, baseChance + luckBonus) -- Cap at 90% chance
 
     local rand = math.random()
     return rand <= finalChance -- Effect triggers if random number falls within chance
@@ -3358,20 +3358,6 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseGoldSprayPaint, PAINT_ITEM)
 
 local HasGlitchEffect = false
 
-local GLITCH_COLORS = {
-    Color(1, 0, 0, 0.5, 0, 0, 0), -- Red
-    Color(0, 1, 0, 0.5, 0, 0, 0), -- Green
-    Color(0, 0, 1, 0.5, 0, 0, 0), -- Blue
-    Color(1, 1, 0, 0.5, 0, 0, 0), -- Yellow
-    Color(1, 0, 1, 0.5, 0, 0, 0), -- Magenta
-}
-
-local function getCycledGlitchColor()
-    local frameCount = Game():GetFrameCount()
-    local colorIndex = (frameCount % #GLITCH_COLORS) + 1
-    return GLITCH_COLORS[colorIndex]
-end
-
 
 function Mod:onUpdateGlitch(player)
 	if game:GetFrameCount() == 1 then
@@ -3387,7 +3373,7 @@ local function getRandomGlitchEffect(player)
     local luckScaling = 0.00000001
 
     local luckBonus = math.max(0, player.Luck * luckScaling) -- Ensure non-negative
-    local finalChance = math.min(0.90, baseChance + luckBonus) -- Cap at 90% chance
+    local finalChance = math.min(1, baseChance + luckBonus) -- Cap at 90% chance
 
     local rand = math.random()
     return rand <= finalChance -- Effect triggers if random number falls within chance
@@ -3400,9 +3386,6 @@ function Mod:onTearInitGlitch(tear)
             local player = parent:ToPlayer()
             if player:HasCollectible(GLITCH_ITEM) and getRandomGlitchEffect(player) then
                 tear:GetData().starTrigger = true
-                --tear.Color = Color(1, 0, 0, 0.5, 0, 0, 0) -- RGB: Red, Alpha: 1 (opaque)
-                --tear.Color = getCycledGlitchColor() -- ✅ Cycle through colors dynamically
-
                 local sprite = tear:GetSprite()
                 sprite:Load("gfx/glitch_tear.anm2", true)
                 sprite:Play("Stone4Move", true)
