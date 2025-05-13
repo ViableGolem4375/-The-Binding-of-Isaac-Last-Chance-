@@ -1727,6 +1727,8 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateAmp)
 
+local activeAmpFamiliars = {} -- ✅ Keeps track of spawned familiars
+
 function Mod:OnAmpItemUse(item, rng, player, flags)
     player:AnimateCollectible(AMP_ITEM, "UseItem", "PlayerPickupSparkle")
     SFX:Play(SoundEffect.SOUND_BATTERYCHARGE, 1.5, 0, false, 0.75)
@@ -1741,6 +1743,9 @@ function Mod:OnAmpItemUse(item, rng, player, flags)
 
         -- Set data so it applies the aura effect
         familiar:GetData().IsAmpFamiliar = true
+        -- ✅ Add familiar to tracking table
+        table.insert(activeAmpFamiliars, familiar)
+
     end
 end
 
@@ -1815,6 +1820,27 @@ function Mod:OnFamiliarUpdate(familiar)
 end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.OnFamiliarUpdate)
+
+function Mod:RemoveAmpFamiliarsOnNewRoom()
+    for _, familiar in ipairs(activeAmpFamiliars) do
+        if familiar and familiar:Exists() then
+            -- ✅ Remove area indicator before familiar disappears
+            local data = familiar:GetData()
+            if data.AreaIndicator and data.AreaIndicator:Exists() then
+                data.AreaIndicator:Remove()
+                data.AreaIndicator = nil
+            end
+            
+            -- ✅ Remove familiar on room change
+            familiar:Remove()
+        end
+    end
+
+    -- ✅ Clear tracking table after removal
+    activeAmpFamiliars = {}
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.RemoveAmpFamiliarsOnNewRoom)
 
 function Mod:HuhUse(item, rng, player, flags)
     player:AnimateCollectible(HUH_ITEM, "UseItem", "PlayerPickupSparkle")
