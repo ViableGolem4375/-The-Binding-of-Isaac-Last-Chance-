@@ -96,6 +96,7 @@ local FRED_ITEM = Isaac.GetItemIdByName("Fred The Friendly Gaper")
 local SIN_PENNY_TRINKET = Isaac.GetTrinketIdByName("Sinful Penny")
 local BONE_PENNY_TRINKET = Isaac.GetTrinketIdByName("Skele-Penny")
 local YUCK_PENNY_TRINKET = Isaac.GetTrinketIdByName("Yuck Penny")
+local DEBUG_ITEM = Isaac.GetItemIdByName("Debug Console")
 
 
 
@@ -948,6 +949,8 @@ if EID then
     EID:addCollectible(FRED_ITEM, "Spawns an immortal friendly Gaper on pickup.#The Gaper persists between floors.", "Fred The Friendly Gaper")
     EID:addTrinket(SIN_PENNY_TRINKET, "Chance for a black heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Sinful Penny")
     EID:addTrinket(BONE_PENNY_TRINKET, "Chance for a bone heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Skele-Penny")
+    EID:addCollectible(DEBUG_ITEM, "Triggers a random debug command effect from the following list for the current room:#debug 3: Infinite HP.#debug 4: High damage.#debug 6: Show hitspheres.#debug 7: Show damage values.#debug 8: Infinite item charges.#debug 9: High luck.#debug 10: Quick kill.#debug 13: Show grid collision.#{{Warning}} All debug effects are cloeared when entering a new room.", "Debug Console")
+    EID:addTrinket(YUCK_PENNY_TRINKET, "Chance for a rotten heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Yuck Penny")
 
 end
 
@@ -3575,6 +3578,75 @@ Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.UpdateFriendlyGaper) ]]
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_REMOVE, Mod.PreventGaperDeath) ]]
+
+local DEBUG_COMMANDS = {
+    "debug 3", -- Infinite HP
+    "debug 4", -- High damage
+    "debug 6", -- Show hitspheres
+    "debug 7", -- Show damage values
+    "debug 8", -- Infinite item charges
+    "debug 9", -- High luck
+    "debug 10", -- Quick kill
+    "debug 13", -- Show grid collision
+}
+
+local lastDebugCommand = {} -- ✅ Stores the last command applied
+
+-- Reset the flag when starting a new run
+function Mod:OnNewGameDebug(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        lastDebugCommand = {}
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameDebug) -- Reset flag between runs
+
+function Mod:OnChaosItemUse(item, rng, player, flags)
+     if player:HasCollectible(DEBUG_ITEM) then
+        player:AnimateCollectible(DEBUG_ITEM, "UseItem", "PlayerPickupSparkle")
+        local commandIndex = rng:RandomInt(#DEBUG_COMMANDS) + 1
+        local chosenCommand = DEBUG_COMMANDS[commandIndex]
+
+        Isaac.ExecuteCommand(chosenCommand) -- ✅ Executes the random debug effect
+        table.insert(lastDebugCommand, chosenCommand) -- ✅ Store all triggered effects
+
+        -- ✅ Visual & sound effect to indicate activation
+        --player:AnimateCollectible(DEBUG_ITEM, "UseItem", "PlayerPickupSparkle")
+        SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnChaosItemUse, DEBUG_ITEM)
+
+function Mod:GetReverseCommand(command)
+    local reversals = {
+        ["debug 3"] = "debug 3", -- Infinite HP
+        ["debug 4"] = "debug 4", -- High damage
+        ["debug 6"] = "debug 6", -- Show hitspheres
+        ["debug 7"] = "debug 7", -- Show damage values
+        ["debug 8"] = "debug 8", -- Infinite item charges
+        ["debug 9"] = "debug 9", -- High luck
+        ["debug 10"] = "debug 10", -- Quick kill
+        ["debug 11"] = "debug 13", -- Show grid collision
+    }
+
+    return reversals[command] -- ✅ Returns the matching reversal, or `nil` if no undo exists
+end
+
+function Mod:UndoDebugEffects()
+    for _, command in ipairs(lastDebugCommand) do
+        local reverseCommand = Mod:GetReverseCommand(command) -- ✅ Get reversal
+
+        --if reverseCommand then
+        Isaac.ExecuteCommand(reverseCommand) -- ✅ Execute reversal
+        --end
+    end
+
+    lastDebugCommand = {} -- ✅ Clear the list after undoing
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.UndoDebugEffects)
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 local SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")

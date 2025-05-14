@@ -36,6 +36,7 @@
         <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Dull Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="'/<<L7" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Debug Console" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="boss">
@@ -126,6 +127,7 @@
         <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Dull Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="'/<<L7" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Debug Console" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="craneGame">

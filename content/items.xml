@@ -57,5 +57,6 @@
     <trinket id="53" name="Sinful Penny" gfx="sin_penny.png" description="Wealth of sin" />
     <trinket id="53" name="Skele-Penny" gfx="bone_penny.png" description="Wealth of bones" />
     <trinket id="54" name="Yuck Penny" gfx="yuck_penny.png" description="Wealth of rot" />
+    <active id="55" name="Debug Console" gfx="debug.png" description="Debug" quality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
 
 </items>
