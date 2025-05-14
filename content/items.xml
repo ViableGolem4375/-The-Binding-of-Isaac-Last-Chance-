@@ -56,5 +56,6 @@
     <passive id="52" name="Fred The Friendly Gaper" gfx="fred.png" description="A helping hand" quality="2" tags="nocantrip offensive" />
     <trinket id="53" name="Sinful Penny" gfx="sin_penny.png" description="Wealth of sin" />
     <trinket id="53" name="Skele-Penny" gfx="bone_penny.png" description="Wealth of bones" />
+    <trinket id="54" name="Yuck Penny" gfx="yuck_penny.png" description="Wealth of rot" />
 
 </items>

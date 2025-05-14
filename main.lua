@@ -95,6 +95,7 @@ local PROTO_ITEM = Isaac.GetItemIdByName("Proto-Tech")
 local FRED_ITEM = Isaac.GetItemIdByName("Fred The Friendly Gaper")
 local SIN_PENNY_TRINKET = Isaac.GetTrinketIdByName("Sinful Penny")
 local BONE_PENNY_TRINKET = Isaac.GetTrinketIdByName("Skele-Penny")
+local YUCK_PENNY_TRINKET = Isaac.GetTrinketIdByName("Yuck Penny")
 
 
 
@@ -3734,11 +3735,6 @@ function Mod:OnCoinPickup(pickup, player)
             chance = 0.37
         end
 
-        -- ✅ If holding the **golden version**, always spawn full black hearts
-        --if player:HasTrinket(SIN_PENNY_TRINKET + 32768) then -- Golden trinkets have a +32768 offset
-        --    chance = chance * 2 -- Increase chance slightly
-        --end
-
         -- ✅ Roll RNG for black heart drop
         if rng:RandomFloat() < chance then
             local heartType = HeartSubType.HEART_BLACK
@@ -3769,12 +3765,7 @@ function Mod:OnCoinPickupBone(pickup, player)
             chance = 0.185
         end
 
-        -- ✅ If holding the **golden version**, always spawn full black hearts
-        --if player:HasTrinket(BONE_PENNY_TRINKET + 32768) then -- Golden trinkets have a +32768 offset
-        --    chance = chance * 2 -- Increase chance slightly
-        --end
-
-        -- ✅ Roll RNG for black heart drop
+        -- ✅ Roll RNG for bone heart drop
         if rng:RandomFloat() < chance then
             local heartType = HeartSubType.HEART_BONE
             if player:HasTrinket(BONE_PENNY_TRINKET + 32768) then
@@ -3786,6 +3777,37 @@ function Mod:OnCoinPickupBone(pickup, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.OnCoinPickupBone, PickupVariant.PICKUP_COIN)
+
+function Mod:OnCoinPickupRot(pickup, player)
+    local player = Isaac.GetPlayer(0) -- Gets the player
+    if player:HasTrinket(YUCK_PENNY_TRINKET) then
+        local rng = player:GetCollectibleRNG(YUCK_PENNY_TRINKET) -- ✅ Use RNG tied to the player
+        local chance = 0
+
+        -- ✅ Set chance based on coin type
+        if pickup.SubType == CoinSubType.COIN_PENNY or pickup.SubType == CoinSubType.COIN_LUCKYPENNY or pickup.SubType == CoinSubType.COIN_GOLDEN then
+            chance = 0.05
+        elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
+            chance = 0.10
+        elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
+            chance = 0.25
+        elseif pickup.SubType == CoinSubType.COIN_DIME then
+            chance = 0.37
+        end
+
+        -- ✅ Roll RNG for rotten heart drop
+        if rng:RandomFloat() < chance then
+            local heartType = HeartSubType.HEART_ROTTEN
+            if player:HasTrinket(YUCK_PENNY_TRINKET + 32768) then
+                chance = math.min(1, chance * 2) -- ✅ Doubles chance, caps at 100%
+            end
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, heartType, pickup.Position, Vector(0,0), nil)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.OnCoinPickupRot, PickupVariant.PICKUP_COIN)
+
 ----------------------------------------------------------------------------------------
 --- Room Code For Essence Reliquary Below.
 
