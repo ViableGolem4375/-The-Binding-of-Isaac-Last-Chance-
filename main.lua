@@ -593,9 +593,9 @@ function Mod:OnPlayerUpdatePontius(player)
 
         -- Stop the default Holy Light sound (ID: 153)
         local sfx = SFXManager()
-        sfx:Stop(SoundEffect.SOUND_ANGEL_BEAM) -- Prevent default sound from playing
-
-
+        --sfx:Stop(SoundEffect.SOUND_LASERRING_WEAK) -- Prevent default sound from playing
+        --sfx:Stop(SoundEffect.SOUND_LASERRING) -- Prevent default sound from playing
+        --sfx:Stop(SoundEffect.SOUND_LASERRING_STRONG) -- Prevent default sound from playing
         -- Play custom sound effect
         local sfx = SFXManager()
         sfx:Play(SoundEffect.SOUND_SWORD_SPIN) -- Replace with your custom sound ID
@@ -1107,7 +1107,7 @@ if EID then
     EID:addCollectible(FRED_ITEM, "Spawns an immortal friendly Gaper on pickup.#The Gaper persists between floors.", "Fred The Friendly Gaper")
     EID:addTrinket(SIN_PENNY_TRINKET, "Chance for a black heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Sinful Penny")
     EID:addTrinket(BONE_PENNY_TRINKET, "Chance for a bone heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Skele-Penny")
-    EID:addCollectible(DEBUG_ITEM, "Triggers a random debug command effect from the following list for the current room:#debug 3: Infinite HP.#debug 4: High damage.#debug 6: Show hitspheres.#debug 7: Show damage values.#debug 8: Infinite item charges.#debug 9: High luck.#debug 10: Quick kill.#debug 13: Show grid collision.#{{Warning}} All debug effects are cloeared when entering a new room.", "Debug Console")
+    EID:addCollectible(DEBUG_ITEM, "Triggers a random debug command effect from the following list for the current room:#debug 3: Infinite HP.#debug 4: High damage.#debug 6: Show hitspheres.#debug 7: Show damage values.#debug 8: Infinite item charges.#debug 9: High luck.#debug 10: Quick kill.#debug 13: Show grid collision.#{{Warning}} When using Debug Console, there is a chance that a previously applied effect will be removed instead.", "Debug Console")
     EID:addTrinket(YUCK_PENNY_TRINKET, "Chance for a rotten heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Yuck Penny")
 
 end
@@ -3750,7 +3750,7 @@ local DEBUG_COMMANDS = {
 
 local lastDebugCommand = {} -- ✅ Stores the last command applied
 
--- Reset the flag when starting a new run
+--[[ -- Reset the flag when starting a new run
 function Mod:OnNewGameDebug(isContinued)
     for _, command in ipairs(lastDebugCommand) do
         local reverseCommand = Mod:GetReverseCommand(command) -- ✅ Get reversal
@@ -3761,9 +3761,9 @@ function Mod:OnNewGameDebug(isContinued)
     end
 
     lastDebugCommand = {} -- ✅ Clear the list after undoing
-end
+end ]]
 
-Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameDebug) -- Reset flag between runs
+--Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameDebug) -- Reset flag between runs
 
 function Mod:OnChaosItemUse(item, rng, player, flags)
      if player:HasCollectible(DEBUG_ITEM) then
@@ -3783,7 +3783,7 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnChaosItemUse, DEBUG_ITEM)
 
-function Mod:GetReverseCommand(command)
+--[[ function Mod:GetReverseCommand(command)
     local reversals = {
         ["debug 3"] = "debug 3", -- Infinite HP
         ["debug 4"] = "debug 4", -- High damage
@@ -3810,7 +3810,7 @@ function Mod:UndoDebugEffects()
     lastDebugCommand = {} -- ✅ Clear the list after undoing
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.UndoDebugEffects)
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.UndoDebugEffects) ]]
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 local SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
