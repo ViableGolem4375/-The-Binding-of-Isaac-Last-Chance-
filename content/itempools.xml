@@ -36,7 +36,7 @@
         <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Dull Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="'/<<L7" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Debug Console" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
+        <Item Name="Debug Console" Weight="0.1" DecreaseBy="0.1" RemoveOn="0.05" />
 
     </Pool>
     <Pool Name="boss">
@@ -53,7 +53,7 @@
 
     </Pool>
     <Pool Name="curse">
-        <Item Name="Necromancy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Necromancy" Weight="1" DecreaseBy="0.5" RemoveOn="0.1" />
 
 
     </Pool>
@@ -102,10 +102,11 @@
         <Item Name="Early Morning Snack" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Defense Tech" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Fred The Friendly Gaper" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Necromancy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
-        <Item Name="Necromancy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Necromancy" Weight="1" DecreaseBy="0.5" RemoveOn="0.1" />
 
 
     </Pool>
@@ -127,7 +128,7 @@
         <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Dull Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="'/<<L7" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Debug Console" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
+        <Item Name="Debug Console" Weight="0.1" DecreaseBy="0.1" RemoveOn="0.05" />
 
     </Pool>
     <Pool Name="craneGame">
@@ -140,6 +141,7 @@
         <Item Name="The Compensator" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Huh?" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Defense Tech" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Fred The Friendly Gaper" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
