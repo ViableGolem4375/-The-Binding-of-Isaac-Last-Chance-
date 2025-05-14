@@ -63,4 +63,34 @@
         costumeSuffix="c"
         costume="104"
     />
+    <player 
+        name="Glitch" 
+        skin="character_glitch.png" 
+        nameimage="playername_glitch.png" 
+        portrait="playerportrait_glitch.png"
+        birthright="Placeholder" 
+        hp="6" 
+        coins="0" 
+        keys="0" 
+        bombs="1" 
+        skinColor="-1"
+        items="721"
+        canShoot="True" 
+    />
+    <player 
+        name="Glitch"
+        skin="character_glitch_b.png" 
+        bSkinParent="Glitch"
+        nameimage="playername_glitch_b.png" 
+        portrait="playerportrait_glitch_b.png"
+        birthright="Placeholder"
+        hp="6"
+        coins="0" 
+        keys="0" 
+        bombs="1"
+        skinColor="-1"
+        canShoot="True"
+        costumeSuffix="d"
+        costume="104"
+    />
 </players>

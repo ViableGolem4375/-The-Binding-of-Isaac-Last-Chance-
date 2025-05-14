@@ -753,6 +753,164 @@ Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, function()
 end)
 
 ----------------------------------------------------------------------------------------
+-- Character code for Glitch below.
+
+local glitchType = Isaac.GetPlayerTypeByName("Glitch", false)
+
+
+local Glitch = { -- shown below are default values, as shown on Isaac, for you to change around
+    SPEED = 1.00,
+    FIREDELAY = 10, -- your tears stat is "30/(FIREDELAY+1)"
+    DAMAGE = 3.5, -- is only the damage stat, not damage multiplier
+    RANGE = 260, -- your range stat is "40*RANGE"
+    SHOTSPEED = 1.00,
+    LUCK = 0.00,
+    TEARHEIGHT = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
+    TEARFALLINGSPEED = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
+    TEARFLAG = 0, -- Determines some behaviors of your tears, https://wofsauge.github.io/IsaacDocs/rep/enums/TearFlags.html
+    TEARCOLOR = Color(1.0, 1.0, 1.0, 1.0, 0, 0, 0), -- r1.0 g1.0 b1.0 a1.0 0r 0g 0b (the last three are offsets)
+    FLYING = false
+}
+
+function Glitch:onPlayerInitGlitch(player)
+    if player:GetPlayerType() == glitchType then
+        player:SetPocketActiveItem(DEBUG_ITEM, ActiveSlot.SLOT_POCKET, true)
+        local pool = game:GetItemPool()
+        pool:RemoveCollectible(DEBUG_ITEM)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Glitch.onPlayerInitGlitch)
+
+function Glitch:onCache(player, cacheFlag)
+    if player:GetPlayerType() == glitchType then
+        if cacheFlag == CacheFlag.CACHE_SPEED then
+            player.MoveSpeed = player.MoveSpeed - 1 + Glitch.SPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+            player.MaxFireDelay = player.MaxFireDelay - 10 + Glitch.FIREDELAY
+        end
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = player.Damage - 3.5 + Glitch.DAMAGE
+        end
+        if cacheFlag == CacheFlag.CACHE_RANGE then
+            player.TearRange = player.TearRange - 260 + Glitch.RANGE
+            player.TearHeight = player.TearHeight + Glitch.TEARHEIGHT
+            player.TearFallingSpeed = player.TearFallingSpeed + Glitch.TEARFALLINGSPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
+            player.ShotSpeed = player.ShotSpeed - 1 + Glitch.SHOTSPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_LUCK then
+            player.Luck = player.Luck + Glitch.LUCK
+        end
+        if cacheFlag == CacheFlag.CACHE_TEARFLAG then
+            player.TearFlags = player.TearFlags | Glitch.TEARFLAG -- The OR here makes sure that if you have an item that changes tear flags, the values you set takes priority
+        end
+        if cacheFlag == CacheFlag.CACHE_TEARCOLOR then
+            player.TearColor = Glitch.TEARCOLOR
+        end
+        if cacheFlag == CacheFlag.CACHE_FLYING and Glitch.FLYING then
+            player.CanFly = true
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Glitch.onCache)
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, function(_, player)
+    if player:GetPlayerType() == glitchType then
+        -- If the player has lost TMTRAINER, restore it
+        if not player:HasCollectible(CollectibleType.COLLECTIBLE_TMTRAINER) then
+            player:AddCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
+
+            -- Find all passive collectibles (excluding TMTRAINER and active items)
+            local inventory = {}
+            for i = 1, CollectibleType.NUM_COLLECTIBLES do
+                local itemConfig = Isaac.GetItemConfig():GetCollectible(i)
+                if player:HasCollectible(i) and i ~= CollectibleType.COLLECTIBLE_TMTRAINER and itemConfig and itemConfig.Type ~= ItemType.ITEM_ACTIVE then
+                    table.insert(inventory, i)
+                end
+            end
+
+            -- Remove a random passive item
+            if #inventory > 0 then
+                local itemToRemove = inventory[math.random(#inventory)]
+                player:RemoveCollectible(itemToRemove)
+            end
+        end
+    end
+end)
+
+----------------------------------------------------------------------------------------
+-- Character code for TaintedGlitch below.
+
+local TAINTED_GLITCH_TYPE = Isaac.GetPlayerTypeByName("Glitch", false)
+
+
+local Glitchb = { -- shown below are default values, as shown on Isaac, for you to change around
+    SPEED = 1.00,
+    FIREDELAY = 10, -- your tears stat is "30/(FIREDELAY+1)"
+    DAMAGE = 3.5, -- is only the damage stat, not damage multiplier
+    RANGE = 260, -- your range stat is "40*RANGE"
+    SHOTSPEED = 1.00,
+    LUCK = 0.00,
+    TEARHEIGHT = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
+    TEARFALLINGSPEED = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
+    TEARFLAG = 0, -- Determines some behaviors of your tears, https://wofsauge.github.io/IsaacDocs/rep/enums/TearFlags.html
+    TEARCOLOR = Color(1.0, 1.0, 1.0, 1.0, 0, 0, 0), -- r1.0 g1.0 b1.0 a1.0 0r 0g 0b (the last three are offsets)
+    FLYING = false
+}
+
+--[[ function Glitch:onPlayerInitGlitchn(player)
+    if player:GetPlayerType() == glitchType then
+        player:SetPocketActiveItem(DEBUG_ITEM, ActiveSlot.SLOT_POCKET, true)
+        local pool = game:GetItemPool()
+        pool:RemoveCollectible(DEBUG_ITEM)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Glitchb.onPlayerInitGlitchb) ]]
+
+function Glitchb:onCache(player, cacheFlag)
+    if player:GetPlayerType() == TAINTED_GLITCH_TYPE then
+        if cacheFlag == CacheFlag.CACHE_SPEED then
+            player.MoveSpeed = player.MoveSpeed - 1 + Glitchb.SPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+            player.MaxFireDelay = player.MaxFireDelay - 10 + Glitchb.FIREDELAY
+        end
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = player.Damage - 3.5 + Glitchb.DAMAGE
+        end
+        if cacheFlag == CacheFlag.CACHE_RANGE then
+            player.TearRange = player.TearRange - 260 + Glitchb.RANGE
+            player.TearHeight = player.TearHeight + Glitchb.TEARHEIGHT
+            player.TearFallingSpeed = player.TearFallingSpeed + Glitchb.TEARFALLINGSPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
+            player.ShotSpeed = player.ShotSpeed - 1 + Glitchb.SHOTSPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_LUCK then
+            player.Luck = player.Luck + Glitchb.LUCK
+        end
+        if cacheFlag == CacheFlag.CACHE_TEARFLAG then
+            player.TearFlags = player.TearFlags | Glitchb.TEARFLAG -- The OR here makes sure that if you have an item that changes tear flags, the values you set takes priority
+        end
+        if cacheFlag == CacheFlag.CACHE_TEARCOLOR then
+            player.TearColor = Glitchb.TEARCOLOR
+        end
+        if cacheFlag == CacheFlag.CACHE_FLYING and Glitchb.FLYING then
+            player.CanFly = true
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Glitchb.onCache)
+
+----------------------------------------------------------------------------------------
 -- Birthright code below.
 
 function Mod:ApplyBirthrightEffect(player)
@@ -3594,9 +3752,15 @@ local lastDebugCommand = {} -- ✅ Stores the last command applied
 
 -- Reset the flag when starting a new run
 function Mod:OnNewGameDebug(isContinued)
-    if not isContinued then -- Ensures it only resets for fresh runs, not continues
-        lastDebugCommand = {}
+    for _, command in ipairs(lastDebugCommand) do
+        local reverseCommand = Mod:GetReverseCommand(command) -- ✅ Get reversal
+
+        --if reverseCommand then
+        Isaac.ExecuteCommand(reverseCommand) -- ✅ Execute reversal
+        --end
     end
+
+    lastDebugCommand = {} -- ✅ Clear the list after undoing
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameDebug) -- Reset flag between runs
