@@ -97,6 +97,7 @@ local SIN_PENNY_TRINKET = Isaac.GetTrinketIdByName("Sinful Penny")
 local BONE_PENNY_TRINKET = Isaac.GetTrinketIdByName("Skele-Penny")
 local YUCK_PENNY_TRINKET = Isaac.GetTrinketIdByName("Yuck Penny")
 local DEBUG_ITEM = Isaac.GetItemIdByName("Debug Console")
+local TOAST_ITEM = Isaac.GetItemIdByName("Toast Sandwich")
 
 
 
@@ -1109,6 +1110,7 @@ if EID then
     EID:addTrinket(BONE_PENNY_TRINKET, "Chance for a bone heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Skele-Penny")
     EID:addCollectible(DEBUG_ITEM, "Triggers a random debug command effect from the following list for the current room:#debug 3: Infinite HP.#debug 4: High damage.#debug 6: Show hitspheres.#debug 7: Show damage values.#debug 8: Infinite item charges.#debug 9: High luck.#debug 10: Quick kill.#debug 13: Show grid collision.#{{Warning}} When using Debug Console, there is a chance that a previously applied effect will be removed instead.", "Debug Console")
     EID:addTrinket(YUCK_PENNY_TRINKET, "Chance for a rotten heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Yuck Penny")
+    EID:addCollectible(TOAST_ITEM, "{{ArrowUp}} +0.1 speed#{{ArrowUp}} +0.03 tears#{{ArrowUp}} +0.2 damage#{{ArrowUp}} +11.25 range#{{ArrowUp}} +3 shot speed#{{ArrowUp}} +1 luck#{{ArrowUp}} +1/2 soul heart", "Toast Sandwich")
 
 end
 
@@ -3811,6 +3813,49 @@ function Mod:UndoDebugEffects()
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.UndoDebugEffects) ]]
+
+local STAT_BOOST = {
+    SPEED = 0.1,
+    FIREDELAY = -0.1, 
+    DAMAGE = 0.2, 
+    RANGE = 450, 
+    SHOTSPEED = 3.00,
+    LUCK = 1.00,
+}
+
+function Mod:ToastPickup(player, cacheFlag)
+    if player:HasCollectible(TOAST_ITEM) then
+        local data = player:GetData()
+    
+        if player:HasCollectible(TOAST_ITEM) and not data.ToastHeartGiven then
+            player:AddSoulHearts(1) -- ✅ Grants half a soul heart
+            data.ToastHeartGiven = true -- ✅ Prevents repeated activation
+        end
+
+        if cacheFlag == CacheFlag.CACHE_SPEED then
+            player.MoveSpeed = player.MoveSpeed + STAT_BOOST.SPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+            player.MaxFireDelay = player.MaxFireDelay + STAT_BOOST.FIREDELAY
+        end
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = player.Damage + STAT_BOOST.DAMAGE
+        end
+        if cacheFlag == CacheFlag.CACHE_RANGE then
+            player.TearRange = player.TearRange + STAT_BOOST.RANGE
+        end
+        if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
+            player.ShotSpeed = player.ShotSpeed+ STAT_BOOST.SHOTSPEED
+        end
+        if cacheFlag == CacheFlag.CACHE_LUCK then
+            player.Luck = player.Luck + STAT_BOOST.LUCK
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ToastPickup)
+
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 local SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
