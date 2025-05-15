@@ -98,6 +98,7 @@ local BONE_PENNY_TRINKET = Isaac.GetTrinketIdByName("Skele-Penny")
 local YUCK_PENNY_TRINKET = Isaac.GetTrinketIdByName("Yuck Penny")
 local DEBUG_ITEM = Isaac.GetItemIdByName("Debug Console")
 local TOAST_ITEM = Isaac.GetItemIdByName("Toast Sandwich")
+local GLITCH_DICE_ITEM = Isaac.GetItemIdByName("D-=777'L")
 
 
 
@@ -775,9 +776,9 @@ local Glitch = { -- shown below are default values, as shown on Isaac, for you t
 
 function Glitch:onPlayerInitGlitch(player)
     if player:GetPlayerType() == glitchType then
-        player:SetPocketActiveItem(DEBUG_ITEM, ActiveSlot.SLOT_POCKET, true)
+        player:SetPocketActiveItem(GLITCH_DICE_ITEM, ActiveSlot.SLOT_POCKET, true)
         local pool = game:GetItemPool()
-        pool:RemoveCollectible(DEBUG_ITEM)
+        pool:RemoveCollectible(GLITCH_DICE_ITEM)
     end
 end
 
@@ -820,14 +821,25 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Glitch.onCache)
 
+local usedDice = false
+
+-- Reset the flag when starting a new run
+function Mod:OnNewGameGlitchDice(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        usedDice = false
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameGlitchDice) -- Reset flag between runs
+
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, function(_, player)
     if player:GetPlayerType() == glitchType then
         -- If the player has lost TMTRAINER, restore it
-        if not player:HasCollectible(CollectibleType.COLLECTIBLE_TMTRAINER) then
+        if not player:HasCollectible(CollectibleType.COLLECTIBLE_TMTRAINER) and usedDice == false then
             player:AddCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
 
             -- Find all passive collectibles (excluding TMTRAINER and active items)
-            local inventory = {}
+            --[[ local inventory = {}
             for i = 1, CollectibleType.NUM_COLLECTIBLES do
                 local itemConfig = Isaac.GetItemConfig():GetCollectible(i)
                 if player:HasCollectible(i) and i ~= CollectibleType.COLLECTIBLE_TMTRAINER and itemConfig and itemConfig.Type ~= ItemType.ITEM_ACTIVE then
@@ -839,10 +851,24 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, function(_, player)
             if #inventory > 0 then
                 local itemToRemove = inventory[math.random(#inventory)]
                 player:RemoveCollectible(itemToRemove)
-            end
+            end ]]
         end
     end
 end)
+
+function Mod:ResetUsedDice()
+    local player = Isaac.GetPlayer(0)
+    local data = player:GetData()
+
+    if usedDice == true then
+        usedDice = false -- ✅ Resets the flag when a new room loads
+        --print("Resetting usedDice - TMTRAINER will now be restored normally.")
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.ResetUsedDice)
+
+
 
 ----------------------------------------------------------------------------------------
 -- Character code for TaintedGlitch below.
@@ -1111,6 +1137,7 @@ if EID then
     EID:addCollectible(DEBUG_ITEM, "Triggers a random debug command effect from the following list for the current room:#debug 3: Infinite HP.#debug 4: High damage.#debug 6: Show hitspheres.#debug 7: Show damage values.#debug 8: Infinite item charges.#debug 9: High luck.#debug 10: Quick kill.#debug 13: Show grid collision.#{{Warning}} When using Debug Console, there is a chance that a previously applied effect will be removed instead.", "Debug Console")
     EID:addTrinket(YUCK_PENNY_TRINKET, "Chance for a rotten heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Yuck Penny")
     EID:addCollectible(TOAST_ITEM, "{{ArrowUp}} +0.1 speed#{{ArrowUp}} +0.03 tears#{{ArrowUp}} +0.2 damage#{{ArrowUp}} +11.25 range#{{ArrowUp}} +3 shot speed#{{ArrowUp}} +1 luck#{{ArrowUp}} +1/2 soul heart", "Toast Sandwich")
+    EID:addCollectible(GLITCH_DICE_ITEM, "Removes TMTRAINER from Isaac's inventory for the current room and rerolls all item pedestals.#Items are rerolled into items from the corresponding item pool.", "D-=777'L")
 
 end
 
@@ -3855,6 +3882,108 @@ end
 
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ToastPickup)
+
+function Mod:FindTMTrainerPedestals()
+    local pedestals = {}
+    local entities = Isaac.GetRoomEntities()
+    
+    for _, entity in ipairs(entities) do
+        if entity.Type == EntityType.ENTITY_PICKUP and entity.Variant == PickupVariant.PICKUP_COLLECTIBLE then
+            local itemConfig = Isaac.GetItemConfig():GetCollectible(entity.SubType)
+            --if  entity.SubType >= 4294967296 then -- ✅ TMTRAINER items are marked "Hidden"
+            print("Found TMTRAINER pedestal at:", entity.Position)
+            table.insert(pedestals, entity)
+            --end
+        end
+    end
+
+    return pedestals
+end
+
+function Mod:GetRoomItemPool()
+    local level = Game():GetLevel()
+    local room = Game():GetRoom()
+    local roomType = room:GetType()
+
+    -- ✅ Assign item pools based on room type
+    if roomType == RoomType.ROOM_SHOP then
+        return ItemPoolType.POOL_SHOP -- Shop pool
+    elseif roomType == RoomType.ROOM_TREASURE then
+        return ItemPoolType.POOL_TREASURE -- Treasure room pool
+    elseif roomType == RoomType.ROOM_BOSS then
+        return ItemPoolType.POOL_BOSS -- Boss room pool
+    elseif roomType == RoomType.ROOM_DEVIL then
+        return ItemPoolType.POOL_DEVIL -- Devil deal pool
+    elseif roomType == RoomType.ROOM_ANGEL then
+        return ItemPoolType.POOL_ANGEL -- Angel room pool
+    elseif roomType == RoomType.ROOM_SECRET then
+        return ItemPoolType.POOL_SECRET -- Secret room pool
+    elseif roomType == RoomType.ROOM_LIBRARY then
+        return ItemPoolType.POOL_LIBRARY -- Library pool
+    elseif roomType == RoomType.ROOM_PLANETARIUM then
+        return ItemPoolType.POOL_PLANETARIUM -- Planetarium pool
+    elseif roomType == RoomType.ROOM_ULTRASECRET then
+        return ItemPoolType.POOL_ULTRA_SECRET -- Ultra secret pool
+    else
+        return ItemPoolType.POOL_TREASURE -- Default to treasure pool
+    end
+end
+
+function Mod:UseTMTrainerFixItem(item, rng, player, flags)
+    if player:HasCollectible(GLITCH_DICE_ITEM) then
+        usedDice = true
+        player:AnimateCollectible(GLITCH_DICE_ITEM, "UseItem", "PlayerPickupSparkle")
+        player:RemoveCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
+        
+        local pedestals = Mod:FindTMTrainerPedestals()
+        local poolType = Mod:GetRoomItemPool() -- ✅ Get correct item pool
+
+        --local entities = Isaac.GetRoomEntities()
+
+        --[[ for _, entity in ipairs(entities) do
+            if entity.Type == EntityType.ENTITY_PICKUP and entity.Variant == PickupVariant.PICKUP_COLLECTIBLE then
+                local pedestal = entity:ToPickup()
+                -- Ensure the pedestal already holds an item before rerolling
+                if pedestal and pedestal.SubType ~= 0 then
+                    local newItem = predefinedItems[rng:RandomInt(#predefinedItems) + 1] -- Pick a random item
+                    pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
+                end
+            end
+        end ]]
+
+
+        for _, pedestal in ipairs(pedestals) do
+            -- ✅ Remove the glitched item
+            --pedestal:Remove()
+            --[[ print("Removing TMTRAINER pedestal at:", pedestal.Position)
+
+            -- ✅ Spawn a normal item in its place
+            local newItemID = Game():GetItemPool():GetCollectible(poolType, true, rng:Next()) -- Chooses a normal item
+            if newItemID == 0 then
+                print("Error: ItemPool returned invalid item!") -- ✅ Debug check
+            else
+                --Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItemID, pedestal.Position, Vector(0,0), player)
+                pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItemID, true, false, false)
+            end ]]
+            if pedestal.Type == EntityType.ENTITY_PICKUP and pedestal.Variant == PickupVariant.PICKUP_COLLECTIBLE then
+                local pedestal = pedestal:ToPickup()
+                -- Ensure the pedestal already holds an item before rerolling
+                if pedestal and pedestal.SubType ~= 0 then
+                    local newItemID = Game():GetItemPool():GetCollectible(poolType, true, rng:Next()) -- Chooses a normal item
+                    pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItemID, true, false, false)
+                end
+            end
+
+        end
+
+        -- ✅ Play an effect to show reroll happened
+        SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
+
+        print("Rerolled TMTRAINER pedestals!")
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTMTrainerFixItem, GLITCH_DICE_ITEM)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
