@@ -99,6 +99,7 @@ local YUCK_PENNY_TRINKET = Isaac.GetTrinketIdByName("Yuck Penny")
 local DEBUG_ITEM = Isaac.GetItemIdByName("Debug Console")
 local TOAST_ITEM = Isaac.GetItemIdByName("Toast Sandwich")
 local GLITCH_DICE_ITEM = Isaac.GetItemIdByName("D-=777'L")
+local GLITCH_DICE_ITEM_2 = Isaac.GetItemIdByName(" D-=777'L ")
 
 
 
@@ -822,11 +823,12 @@ end
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Glitch.onCache)
 
 local usedDice = false
-
+local birthrightTriggered = false
 -- Reset the flag when starting a new run
 function Mod:OnNewGameGlitchDice(isContinued)
     if not isContinued then -- Ensures it only resets for fresh runs, not continues
         usedDice = false
+        birthrightTriggered = false
     end
 end
 
@@ -886,6 +888,18 @@ function Mod:RemoveEmptyPedestalsGlitch(player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.RemoveEmptyPedestalsGlitch)
+
+function Mod:ApplyBirthrightEffectGlitch(player)
+    local data = player:GetData()
+
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and birthrightTriggered == false then
+        player:RemoveCollectible(GLITCH_DICE_ITEM)
+        player:SetPocketActiveItem(GLITCH_DICE_ITEM_2, ActiveSlot.SLOT_POCKET, true)
+        birthrightTriggered = true
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.ApplyBirthrightEffectGlitch)
 
 ----------------------------------------------------------------------------------------
 -- Character code for TaintedGlitch below.
@@ -1155,6 +1169,8 @@ if EID then
     EID:addTrinket(YUCK_PENNY_TRINKET, "Chance for a rotten heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Yuck Penny")
     EID:addCollectible(TOAST_ITEM, "{{ArrowUp}} +0.1 speed#{{ArrowUp}} +0.03 tears#{{ArrowUp}} +0.2 damage#{{ArrowUp}} +11.25 range#{{ArrowUp}} +3 shot speed#{{ArrowUp}} +1 luck#{{ArrowUp}} +1/2 soul heart", "Toast Sandwich")
     EID:addCollectible(GLITCH_DICE_ITEM, "Removes TMTRAINER from Isaac's inventory for the current room and rerolls all item pedestals.#Items are rerolled into items from the corresponding item pool.#{{Warning}}If this item is used in a room with no valid pedestals, the last passive item Isaac collected will be removed from his inventory.#This effect can only store up to 1 item, picking up a new item will lock in all old items.", "D-=777'L")
+    EID:addCollectible(GLITCH_DICE_ITEM_2, "Removes TMTRAINER from Isaac's inventory for the current room and rerolls all item pedestals.#Items are rerolled into items from the corresponding item pool.#{{Warning}}If this item is used in a room with no valid pedestals, the last passive item Isaac collected will be removed from his inventory.#This effect can only store up to 1 item, picking up a new item will lock in all old items.", "D-=777'L")
+    EID:addBirthright(glitchType, "Reduces the charges required to use D-=777'L from 12 to 6.")
 
 end
 
@@ -4008,14 +4024,15 @@ function Mod:UseTMTrainerFixItem(item, rng, player, flags)
 
         if #pedestals == 0 then
             if #collectedItems > 0 then
+                SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
                 local lastItem = table.remove(collectedItems) -- ✅ Remove last collected item
                 player:RemoveCollectible(lastItem) -- ✅ Take it from inventory
             else
+                SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
                 print("No pedestals and no items left to remove!") -- ✅ Debug check
             end
             return
         end
-
 
         -- ✅ Play an effect to show reroll happened
         SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
@@ -4025,6 +4042,50 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTMTrainerFixItem, GLITCH_DICE_ITEM)
 
+function Mod:UseTMTrainerFixItemBirthright(item, rng, player, flags)
+    if player:HasCollectible(GLITCH_DICE_ITEM_2) then
+        usedDice = true
+        player:AnimateCollectible(GLITCH_DICE_ITEM_2, "UseItem", "PlayerPickupSparkle")
+        player:RemoveCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
+
+
+        local pedestals = Mod:FindTMTrainerPedestals()
+        local poolType = Mod:GetRoomItemPool() -- ✅ Get correct item pool
+
+
+
+        for _, pedestal in ipairs(pedestals) do
+            -- ✅ Remove the glitched item
+            if pedestal.Type == EntityType.ENTITY_PICKUP and pedestal.Variant == PickupVariant.PICKUP_COLLECTIBLE then
+                local pedestal = pedestal:ToPickup()
+                -- Ensure the pedestal already holds an item before rerolling
+                if pedestal and pedestal.SubType ~= 0 then
+                    local newItemID = Game():GetItemPool():GetCollectible(poolType, true, rng:Next()) -- Chooses a normal item
+                    pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItemID, true, false, false)
+                end
+            end
+
+        end
+
+        if #pedestals == 0 then
+            if #collectedItems > 0 then
+                SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
+                local lastItem = table.remove(collectedItems) -- ✅ Remove last collected item
+                player:RemoveCollectible(lastItem) -- ✅ Take it from inventory
+            else
+                SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
+                print("No pedestals and no items left to remove!") -- ✅ Debug check
+            end
+            return
+        end
+
+        -- ✅ Play an effect to show reroll happened
+        SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTMTrainerFixItemBirthright, GLITCH_DICE_ITEM_2)
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 local SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")

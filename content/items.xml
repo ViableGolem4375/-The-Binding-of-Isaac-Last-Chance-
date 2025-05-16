@@ -60,5 +60,6 @@
     <active id="55" name="Debug Console" gfx="debug.png" description="Debug" quality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="56" name="Toast Sandwich" gfx="toast_sandwich.png" description="All stats up!" quality="1" tags="nocantrip offensive" cache="all" />
     <active id="57" name="D-=777'L" gfx="glitch_dice.png" description="ur desReroll yotiny. ur" quality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
+    <active id="58" name=" D-=777'L " gfx="glitch_dice.png" description="ur desReroll yotiny. ur" quality="4" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
 
 </items>

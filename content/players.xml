@@ -68,7 +68,7 @@
         skin="character_glitch.png" 
         nameimage="playername_glitch.png" 
         portrait="playerportrait_glitch.png"
-        birthright="Placeholder" 
+        birthright="More control" 
         hp="6" 
         coins="0" 
         keys="0" 
