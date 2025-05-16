@@ -2210,6 +2210,7 @@ function Mod:OnUpdateBond()
 
                 -- Spawn creep at player's position
                 local creep = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_RED, 0, player.Position, Vector(0, 0), player)
+                creep:GetData().IsHealingCreep = true -- ✅ Marks this creep as healing
                 creep:ToEffect():SetTimeout(CREEP_DURATION)
                 creep.Color = Color(1.0, 1.0, 1.0, 0.5, -0.2, -0,5, -0.6) -- RGB: (Red=1, Green=0, Blue=1), Al
                 -- Adjust creep size
@@ -2249,10 +2250,15 @@ end
 
 -- Make the creep heal friendly players on contact
 function Mod:OnCreepUpdate(creep)
-    for _, entity in ipairs(Isaac.FindInRadius(creep.Position, 30, EntityPartition.PLAYER)) do
-        local player = entity:ToPlayer()
-        if player and not player:IsDead() and player:GetMaxHearts() > player:GetHearts() then
-            player:AddHearts(1) -- Grants healing
+    local player = Isaac.GetPlayer(0)
+    local data = creep:GetData()
+
+    if player:HasCollectible(BOND_ITEM) and data.IsHealingCreep then
+        for _, entity in ipairs(Isaac.FindInRadius(creep.Position, 30, EntityPartition.PLAYER)) do
+            local player = entity:ToPlayer()
+            if player and not player:IsDead() and player:GetMaxHearts() > player:GetHearts() then
+                player:AddHearts(1) -- Grants healing
+            end
         end
     end
 end
