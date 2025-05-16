@@ -634,15 +634,15 @@ local Pontiusb = { -- shown below are default values, as shown on Isaac, for you
     FLYING = true
 }
 
---[[ function Pontiusb:onPlayerInitPontiusb(player)
+function Pontiusb:onPlayerInitPontiusb(player)
     if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
-        player:SetPocketActiveItem(DULL_COIN_ID, ActiveSlot.SLOT_POCKET, true)
+        player:SetPocketActiveItem(CollectibleType.COLLECTIBLE_CRACK_THE_SKY, ActiveSlot.SLOT_POCKET, true)
         local pool = game:GetItemPool()
         pool:RemoveCollectible(DULL_COIN_ID)
     end
-end ]]
+end
 
---Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Pontiusb.onPlayerInitPontiusb)
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Pontiusb.onPlayerInitPontiusb)
 
 
 function Pontiusb:onCachePontiusb(player, cacheFlag)
