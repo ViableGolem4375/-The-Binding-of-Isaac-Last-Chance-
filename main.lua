@@ -1326,21 +1326,23 @@ function Mod:DullCoinUse(item, rng, player, flags)
         local berserkID = CollectibleType.COLLECTIBLE_BERSERK
 
         -- Remove previous active item before applying Berserk effect
-        if prevActiveItem ~= nil then
-            player:RemoveCollectible(prevActiveItem)
-        end
+        --if prevActiveItem ~= nil then
+        --    player:RemoveCollectible(prevActiveItem)
+        --end
         
-        player:AddCollectible(berserkID, 0, true)
+        --player:AddCollectible(berserkID, 0, true)
         player:UseActiveItem(berserkID, false, false)
-        player:RemoveCollectible(berserkID) -- Remove Berserk immediately
+        player:UseActiveItem(berserkID, false, false)
+        player:UseActiveItem(berserkID, false, false)
+        --player:RemoveCollectible(berserkID) -- Remove Berserk immediately
 
         -- Remove selected Quality 0 item
         player:RemoveCollectible(itemToRemove)
 
         -- Restore previous active item if it existed
         if prevActiveItem ~= nil then
-            player:AddCollectible(prevActiveItem, 0, true)
-            player:SetActiveCharge(12) -- Fully charge restored item
+            --player:AddCollectible(prevActiveItem, 0, true)
+            player:SetActiveCharge(24) -- Fully charge restored item
         end
     end
 
