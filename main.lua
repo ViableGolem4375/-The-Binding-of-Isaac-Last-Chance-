@@ -1151,7 +1151,7 @@ if EID then
     EID:addCollectible(FRED_ITEM, "Spawns an immortal friendly Gaper on pickup.#The Gaper persists between floors.", "Fred The Friendly Gaper")
     EID:addTrinket(SIN_PENNY_TRINKET, "Chance for a black heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Sinful Penny")
     EID:addTrinket(BONE_PENNY_TRINKET, "Chance for a bone heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Skele-Penny")
-    EID:addCollectible(DEBUG_ITEM, "Triggers a random debug command effect from the following list for the current room:#debug 3: Infinite HP.#debug 4: High damage.#debug 6: Show hitspheres.#debug 7: Show damage values.#debug 8: Infinite item charges.#debug 9: High luck.#debug 10: Quick kill.#debug 13: Show grid collision.#{{Warning}} When using Debug Console, there is a chance that a previously applied effect will be removed instead.", "Debug Console")
+    EID:addCollectible(DEBUG_ITEM, "Triggers a random debug command effect (excluding debug 3: Infinite HP).#{{Warning}} When using Debug Console, there is a chance that a previously applied effect will be removed instead.", "Debug Console")
     EID:addTrinket(YUCK_PENNY_TRINKET, "Chance for a rotten heart to drop when picking up a coin.#Higher coin values have a higher chance to drop hearts.#{{Collectible202}} Chances are doubled when golden.", "Yuck Penny")
     EID:addCollectible(TOAST_ITEM, "{{ArrowUp}} +0.1 speed#{{ArrowUp}} +0.03 tears#{{ArrowUp}} +0.2 damage#{{ArrowUp}} +11.25 range#{{ArrowUp}} +3 shot speed#{{ArrowUp}} +1 luck#{{ArrowUp}} +1/2 soul heart", "Toast Sandwich")
     EID:addCollectible(GLITCH_DICE_ITEM, "Removes TMTRAINER from Isaac's inventory for the current room and rerolls all item pedestals.#Items are rerolled into items from the corresponding item pool.#{{Warning}}If this item is used in a room with no valid pedestals, the last passive item Isaac collected will be removed from his inventory.#This effect can only store up to 1 item, picking up a new item will lock in all old items.", "D-=777'L")
@@ -3784,14 +3784,19 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_REMOVE, Mod.PreventGaperDeath) ]]
 
 local DEBUG_COMMANDS = {
-    "debug 3", -- Infinite HP
+    "debug 1", -- Entity positions
+    "debug 2", -- Grid
     "debug 4", -- High damage
+    "debug 5", -- Show room info
     "debug 6", -- Show hitspheres
     "debug 7", -- Show damage values
     "debug 8", -- Infinite item charges
     "debug 9", -- High luck
     "debug 10", -- Quick kill
+    "debug 11", -- Grid info
+    "debug 12", -- Player item info
     "debug 13", -- Show grid collision
+    "debug 14", -- Lua memory usage
 }
 
 local lastDebugCommand = {} -- ✅ Stores the last command applied
