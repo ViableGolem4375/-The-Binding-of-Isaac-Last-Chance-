@@ -43,6 +43,7 @@
         keys="1" 
         bombs="5" 
         skinColor="-1"
+        costumeSuffix="e"
         canShoot="True" 
     />
     <player 

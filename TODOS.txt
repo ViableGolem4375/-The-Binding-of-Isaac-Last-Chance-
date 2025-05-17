@@ -6,7 +6,8 @@
 - Fix d4 effects on tainted character maybe?
 - Forgotten essence effect is kind of a placeholder, need something more interesting.
 - Tainted glitch needa an effect, not sure what.
-- Need to fix red creep, its healing when you dont have eternal bond.
+- Glitch needs an essence item.
+- Figure out machines.
 
 Item Ideas to Add:
 
