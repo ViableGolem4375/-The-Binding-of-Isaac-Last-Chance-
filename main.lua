@@ -4281,7 +4281,6 @@ function EssenceCollector:onUpdateCollector()
 
         local slotSprite = slot:GetSprite()
         if slotSprite:IsEventTriggered("Prize") then
-            print("working2")
 		    SFXManager():Play(SoundEffect.SOUND_DIVINE_INTERVENTION,1,0,false,1)
 	    end
 
@@ -4334,6 +4333,8 @@ function EssenceCollector:onUpdateCollector()
                 Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, MATT_ESSENCE, player.Position + Vector(32,32), Vector(0,0), nil)
             elseif slotRNG2 < 95 then
                 Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, PONTIUS_ESSENCE, player.Position + Vector(32,32), Vector(0,0), nil)
+            else
+                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, PONTIUS_ESSENCE, player.Position + Vector(32,32), Vector(0,0), nil)
             end
 			local explosion = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_EXPLOSION, 0, slot.Position, Vector(0, 0), nil)
             explosion:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- Prevents explos	
@@ -4358,8 +4359,8 @@ function EssenceCollector:onUpdateCollector()
     end
 end
 
---[[ function EssenceCollector:OnSoulSlotDamaged(entity, amount, flags, source, cooldown)
-    print("function running")
+function EssenceCollector:OnSoulSlotDamaged(entity, amount, flags, source, cooldown)
+    print("working")
     if entity.Variant == 249376971 and (flags & DamageFlag.DAMAGE_EXPLOSION ~= 0) then
         print("Soul Slot Machine hit by explosion!") -- ✅ Debug check
         
@@ -4371,7 +4372,7 @@ end
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, EssenceCollector.OnSoulSlotDamaged) ]]
+Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_REMOVE, EssenceCollector.OnSoulSlotDamaged)
 
 Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, EssenceCollector.onPlayerCollide)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, EssenceCollector.onUpdateCollector)
