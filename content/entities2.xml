@@ -11,5 +11,5 @@
     <entity anm2path="soul_of_matt.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Soul of Matt" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="35">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="essence_collector.anm2" baseHP="1" boss="0" collisionDamage="0" collisionMass="0" collisionRadius="12" friction="1" id="6" name="Essence Collector" numGridCollisionPoints="24" shadowSize="15" stageHP="0" variant="0" />
+    <entity anm2path="essence_collector.anm2" baseHP="1" boss="0" collisionDamage="0" collisionMass="3" collisionRadius="12" friction="1" id="6" name="Essence Collector" numGridCollisionPoints="24" shadowSize="33" stageHP="0" variant="249376971" />
 </entities>
