@@ -4236,10 +4236,6 @@ end
 function EssenceCollector:StopExplosionHack(machine,runeIndex,ReturnedRune)
     local asploded = machine.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND
     if not asploded then return end
-
-	--[[ if ReturnedRune == true then
-		EssenceCollector:RemoveRecentRewards(machine.Position,runeIndex)
-	end ]]
 	
 	local machineSprite = machine:GetSprite()
 	
@@ -4249,42 +4245,24 @@ function EssenceCollector:StopExplosionHack(machine,runeIndex,ReturnedRune)
 
 end
 
---[[ function EssenceCollector:RemoveRecentRewards(pos,runeIndex)
-    for _, pickup in ipairs(Isaac.FindByType(5, -1, -1)) do
-        if pickup.FrameCount <= 1 and pickup.SpawnerType == 0
-        and pickup.Position:DistanceSquared(pos) <= 400 and
-		
-		pickup.Index ~= runeIndex then
-            pickup:Remove()
-        end
-    end
+local currentRoom = Game():GetRoom()
 
-    for _, trollbomb in ipairs(Isaac.FindByType(4, -1, -1)) do
-        if (trollbomb.Variant == 3 or trollbomb.Variant == 4)
-        and trollbomb.FrameCount <= 1 and trollbomb.SpawnerType == 0
-        and trollbomb.Position:DistanceSquared(pos) <= 400 then
-            trollbomb:Remove()
-        end
+function EssenceCollector:onNewRoom()
+    if currentRoom:IsFirstVisit() == true then
+        local donTable = Isaac.FindByType(EntityType.ENTITY_SLOT,1,-1,false,false)
+				
+		for k in pairs(donTable) do
+			local replaceChance = math.random(0,101)
+					
+			--Basic slot machines have a 5% chance to be replaced with essence collectors.
+			if replaceChance <= 4 then
+				Isaac.Spawn(EntityType.ENTITY_SLOT,EssenceCollector.SLOT_ESSENCE_COLLECTOR,0,donTable[k].Position,Vector(0,0),nil)
+				donTable[k]:Remove()
+			end
+		end
     end
-end ]]
-
-function EssenceCollector:OnSoulSlotDamaged(entity, amount, flags, source, cooldown)
-    print("working")
-    --if entity.Variant == 249376971 then
-        --print("Soul Slot Machine took damage! Flags:", flags) -- ✅ Debug check
-        
-    if flags and DamageFlag.DAMAGE_EXPLOSION >= 0 then
-        print("Explosion detected!") -- ✅ Confirm explosion damage
-        local sprite = entity:GetSprite()
-        sprite:Play("Death", true)
-        entity:Die()
-    end
-    --end
-
 end
-
-Mod:AddCallback(ModCallbacks.MC_PRE_BOMB_COLLISION, EssenceCollector.OnSoulSlotDamaged)
-
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM,EssenceCollector.onNewRoom)
 Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, EssenceCollector.onPlayerCollide)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, EssenceCollector.onUpdateCollector)
 
