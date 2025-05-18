@@ -4114,137 +4114,8 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_GET_CARD, Mod.mattSoul) ]]
 
---[[ local SOUL_SLOT_MACHINE = Isaac.GetEntityVariantByName("Essence Collector") -- ✅ Custom slot machine variant
-
-
-EssenceState = {
-    IDLE = 0,
-    PAYNOTHING = 2,
-    PAYPRIZE = 3,
-    PRIZE = 4,
-    TELEPORT = 5
-}
-
-function Mod:onEssenceCollector(entity)
-    --local entity = SOUL_SLOT_MACHINE
-    print("Essence Collector function is running!") -- ✅ Debug check
-
-    local entity = entity:ToNPC()
-    local data = entity:GetData()
-    if data.Position == nil then data.Position = entity.Position end
-    entity.Velocity = data.Position - entity.Position
-
-    local player = Isaac.GetPlayer(0)
-    local sprite = entity:GetSprite()
-    if entity.State == EssenceState.IDLE then
-        if entity.StateFrame == 0 then
-            sprite:Play("Idle", true)
-        end
-        if (entity.Position - player.Position):Length() <= entity.Size + player.Size then
-            SFX:Play(SoundEffect.SOUND_SCAMPER, 1, 0, false, 1)
-            player:AddSoulHearts(-1)
-            if entity.GetDropRNG():RandomInt(100) > 10 then
-                entity.State = EssenceState.PAYNOTHING
-            else
-                entity.State = EssenceState.PAYPRIZE
-            end
-            entity.StateFrame = -1
-        end
-    elseif entity.State == EssenceState.PAYNOTHING then
-        if entity.StateFrame == 0 then
-            sprite:Play("WiggleEnd", true)
-        elseif sprite:IsFinished("WiggleEnd") then
-            entity.State = EssenceState.IDLE
-            entity.StateFrame = -1
-        end
-    elseif entity.State == EssenceState.PAYPRIZE then
-        if entity.StateFrame == 0 then
-            sprite:Play("WiggleEnd", true)
-        elseif sprite:IsFinished("WiggleEnd") then
-            entity.State = EssenceState.PRIZE
-            entity.StateFrame = -1
-        end
-    elseif entity.State == EssenceState.PRIZE then
-        if entity.StateFrame == 0 then
-            sprite:Play("Prize", true)
-        elseif sprite:ISEventTriggered("Prize") then
-            local roll = entity:GetDropRNG():RandomInt(105)
-            if entity.Variant == 0 then
-                if roll < 5 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ISAAC_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 10 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, MAGDALENE_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 15 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CAIN_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 20 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, JUDAS_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 25 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, BLUE_BABY_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 30 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, EVE_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 35 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, SAMSON_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 40 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, AZAZEL_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 45 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LAZARUS_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 50 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, EDEN_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 55 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LOST_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 60 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LILITH_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 65 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, KEEPER_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 70 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, APOLLYON_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 75 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, FORGOTTEN_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 80 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, BETHANY_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 85 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, JACOB_AND_ESAU_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 90 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, MATT_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-                elseif roll < 95 then
-                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, PONTIUS_ESSENCE, entity.Position + Vector(0,32), Vector(0,0), nil)
-
-                end
-            end
-        elseif sprite:IsFinished("Prize") then
-            if entity:GetData().Payout then
-                entity.State = EssenceState.TELEPORT
-                SFX:Play(SoundEffect.SOUND_EXPLOSION_WEAK, 1, 0, false, 1)
-            else
-                entity.State = EssenceState.IDLE
-            end
-                entity.StateFrame = -1
-        end
-    elseif entity.State == EssenceState.TELEPORT then
-        if entity.StateFrame == 0 then
-            sprite:Play("Death", true)
-        elseif sprite:IsFinished("Death") then
-            entity:Remove()
-        end
-
-    end
-    entity.StateFrame = entity.StateFrame + 1
-end
-
-Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, Mod.onEssenceCollector, SOUL_SLOT_MACHINE)
-
-function Mod:EssenceDamage(target, dmg, flag, source, countdown)
-    if flag and DamageFlag.DAMAGE_EXPLOSION > 0 then
-        for i = 1, math.random(5) do
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_HALF_SOUL, target.Position, Vector((math.random(41) - 21) / 4, (math.random(41) - 21) / 4), nil)
-        end
-        return 1
-    else
-        return false
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, Mod.onEssenceCollector, SOUL_SLOT_MACHINE) ]]
+-- Huge credit here to heehoo's card recycler mod for helping me figure out the code below
+-- to get the essence collector working right.
 
 local EssenceCollector = {}
 
@@ -4340,7 +4211,6 @@ function EssenceCollector:onUpdateCollector()
             explosion:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- Prevents explos	
 		end
 
-
         if slotSprite:IsFinished("Initiate") then
 			slotSprite:Play("Wiggle",true)
 		end
@@ -4356,23 +4226,64 @@ function EssenceCollector:onUpdateCollector()
 		if slotSprite:IsFinished("Death") then
 			slotSprite:Play("Broken",true)
 		end
+
+        if slotSprite:IsPlaying("Broken") == false then
+			EssenceCollector:StopExplosionHack(slot,slotData.CardToGive,slotData.ReturnedRune)
+		end
     end
 end
+
+function EssenceCollector:StopExplosionHack(machine,runeIndex,ReturnedRune)
+    local asploded = machine.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND
+    if not asploded then return end
+
+	--[[ if ReturnedRune == true then
+		EssenceCollector:RemoveRecentRewards(machine.Position,runeIndex)
+	end ]]
+	
+	local machineSprite = machine:GetSprite()
+	
+	if machineSprite:GetAnimation() ~= "Death" then
+		machineSprite:Play("Broken",true)
+	end
+
+end
+
+--[[ function EssenceCollector:RemoveRecentRewards(pos,runeIndex)
+    for _, pickup in ipairs(Isaac.FindByType(5, -1, -1)) do
+        if pickup.FrameCount <= 1 and pickup.SpawnerType == 0
+        and pickup.Position:DistanceSquared(pos) <= 400 and
+		
+		pickup.Index ~= runeIndex then
+            pickup:Remove()
+        end
+    end
+
+    for _, trollbomb in ipairs(Isaac.FindByType(4, -1, -1)) do
+        if (trollbomb.Variant == 3 or trollbomb.Variant == 4)
+        and trollbomb.FrameCount <= 1 and trollbomb.SpawnerType == 0
+        and trollbomb.Position:DistanceSquared(pos) <= 400 then
+            trollbomb:Remove()
+        end
+    end
+end ]]
 
 function EssenceCollector:OnSoulSlotDamaged(entity, amount, flags, source, cooldown)
     print("working")
-    if entity.Variant == 249376971 and (flags & DamageFlag.DAMAGE_EXPLOSION ~= 0) then
-        print("Soul Slot Machine hit by explosion!") -- ✅ Debug check
+    --if entity.Variant == 249376971 then
+        --print("Soul Slot Machine took damage! Flags:", flags) -- ✅ Debug check
         
+    if flags and DamageFlag.DAMAGE_EXPLOSION >= 0 then
+        print("Explosion detected!") -- ✅ Confirm explosion damage
         local sprite = entity:GetSprite()
-        sprite:Play("Broken", true) -- ✅ Trigger Death animation
-
-        -- ✅ Optional: Remove slot machine after animation finishes
-        --entity:Die()
+        sprite:Play("Death", true)
+        entity:Die()
     end
+    --end
+
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_REMOVE, EssenceCollector.OnSoulSlotDamaged)
+Mod:AddCallback(ModCallbacks.MC_PRE_BOMB_COLLISION, EssenceCollector.OnSoulSlotDamaged)
 
 Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, EssenceCollector.onPlayerCollide)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, EssenceCollector.onUpdateCollector)
