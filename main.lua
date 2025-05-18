@@ -4134,6 +4134,9 @@ function EssenceCollector:onPlayerCollide(player,collider,_low)
 			if slotSprite:IsPlaying("Idle") and player:GetSoulHearts() >= 1 then
                 player:AddSoulHearts(-1)
                 slotSprite:Play("Prize")
+            elseif slotSprite:IsPlaying("Idle") and player:GetBlackHearts() >= 1 then
+                player:AddBlackHearts(-1)
+                slotSprite:Play("Prize")
             end
     end
 end
@@ -4159,7 +4162,7 @@ function EssenceCollector:onUpdateCollector()
         local slotRNG2 = slot:GetDropRNG():RandomInt(105)
 
         if slotSprite:IsEventTriggered("Prize") then
-            if slotRNG <= 100 then
+            if slotRNG <= 10 then
                 slotSprite:Play("Death")
             end
 
