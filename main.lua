@@ -4129,7 +4129,29 @@ end
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTMTrainerReroll, GLITCH_ESSENCE)
 ----------------------------------------------------------------------------------------
 --- Consumable/machine Code Below
-local SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
+
+local Soul = {}
+
+Soul.SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
+
+local SOULMATT = "gfx/soul_of_matt.anm2"
+local MATTCHANCE = 0.5
+local RunCooldown = 0
+
+function Mod:onPostUpdateMattSoul(player)
+    for _, entity in pairs(Isaac.GetRoomEntities()) do
+        --if entity.Type == 
+    end
+end
+
+function Mod:onMattSoul(...)
+    Isaac.GetPlayer(0):AnimateCard(Card.RUNE_JERA, "UseItem")
+    local player = Isaac.GetPlayer(0)
+    local luckBonusMatt = 2 -- Double Luck bonus for golden version
+    player.Luck = player.Luck + luckBonusMatt
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.onMattSoul, Soul.SOUL_MATT)
 
 --[[ 
 local CustomRunes = (Card.SOUL_MATT)
