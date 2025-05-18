@@ -100,6 +100,7 @@ local DEBUG_ITEM = Isaac.GetItemIdByName("Debug Console")
 local TOAST_ITEM = Isaac.GetItemIdByName("Toast Sandwich")
 local GLITCH_DICE_ITEM = Isaac.GetItemIdByName("D-=777'L")
 local GLITCH_DICE_ITEM_2 = Isaac.GetItemIdByName(" D-=777'L ")
+local GLITCH_ESSENCE = Isaac.GetItemIdByName("64 36")
 
 
 
@@ -1171,6 +1172,7 @@ if EID then
     EID:addCollectible(GLITCH_DICE_ITEM, "Removes TMTRAINER from Isaac's inventory for the current room and rerolls all item pedestals.#Items are rerolled into items from the corresponding item pool.#{{Warning}}If this item is used in a room with no valid pedestals, the last passive item Isaac collected will be removed from his inventory.#This effect can only store up to 1 item, picking up a new item will lock in all old items.", "D-=777'L")
     EID:addCollectible(GLITCH_DICE_ITEM_2, "Removes TMTRAINER from Isaac's inventory for the current room and rerolls all item pedestals.#Items are rerolled into items from the corresponding item pool.#{{Warning}}If this item is used in a room with no valid pedestals, the last passive item Isaac collected will be removed from his inventory.#This effect can only store up to 1 item, picking up a new item will lock in all old items.", "D-=777'L")
     EID:addBirthright(glitchType, "Reduces the charges required to use D-=777'L from 12 to 6.")
+    EID:addCollectible(GLITCH_ESSENCE, "Reroll all item pedestals in the room into TMTRAINER items.", "64 36")
 
 end
 
@@ -4086,6 +4088,45 @@ function Mod:UseTMTrainerFixItemBirthright(item, rng, player, flags)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTMTrainerFixItemBirthright, GLITCH_DICE_ITEM_2)
+
+
+function Mod:FindItemPedestalsGlitchEssence()
+    local pedestals = Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)
+    return pedestals
+end
+
+function Mod:UseTMTrainerReroll(item, rng, player, flags)
+    local player = game:GetPlayer(0)
+    if player:HasCollectible(GLITCH_ESSENCE) then
+        player:AnimateCollectible(GLITCH_ESSENCE, "UseItem", "PlayerPickupSparkle")
+
+        local pedestals = Mod:FindItemPedestalsGlitchEssence()
+
+        if #pedestals == 0 then
+            print("No pedestals to reroll!")
+            return
+        end
+
+        player:AddCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
+
+        for _, pedestal in ipairs(pedestals) do
+            print("Rerolling pedestal at:", pedestal.Position)
+
+            pedestal:Remove() -- ✅ Remove original pedestal
+
+            -- ✅ Spawn a TMTRAINER glitched item in its place
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_TMTRAINER, pedestal.Position, Vector(0,0), player)
+        end
+
+        -- ✅ Play effects for clarity
+        SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
+        Game():SpawnParticles(player.Position, EffectVariant.TEAR_POOF_A, 10, 5, Color(1, 0, 0, 1, 0, 0, 0), 0)
+        player:RemoveCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
+        print("Successfully rerolled all pedestals into TMTRAINER items!")
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTMTrainerReroll, GLITCH_ESSENCE)
 ----------------------------------------------------------------------------------------
 --- Consumable/machine Code Below
 local SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
@@ -4208,7 +4249,7 @@ function EssenceCollector:onUpdateCollector()
             elseif slotRNG2 < 95 then
                 Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, PONTIUS_ESSENCE, player.Position + Vector(32,32), Vector(0,0), nil)
             else
-                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, PONTIUS_ESSENCE, player.Position + Vector(32,32), Vector(0,0), nil)
+                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, GLITCH_ESSENCE, player.Position + Vector(32,32), Vector(0,0), nil)
             end
 			local explosion = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_EXPLOSION, 0, slot.Position, Vector(0, 0), nil)
             explosion:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- Prevents explos	
@@ -4498,7 +4539,8 @@ local RELIQUARY_POOL = {
     PONTIUS_ESSENCE,
     LOST_ESSENCE,
     JACOB_AND_ESAU_ESSENCE,
-    FORGOTTEN_ESSENCE
+    FORGOTTEN_ESSENCE,
+    GLITCH_ESSENCE
     -- Add more items as needed
 }
 
