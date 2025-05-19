@@ -64,6 +64,7 @@
     <active id="59" name="64 36" gfx="glitch_essence.png" description="72 65 72 6F 6C 6C" quality="1" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="60" name="Sack of Lucky Pennies" gfx="sack_of_lucky_pennies.png" description="Sold at your local souvenir shop for only 39.99!" quality="2" tags="nocantrip offensive" />
     <passive id="61" name="Toolbelt" gfx="toolbelt.png" description="Pocket active" quality="3" tags="nocantrip offensive" />
-    <familiar name="Deep Orbit" gfx="orbiting_moons.png" description="Upper orbit" quality="2" cache="familiars" tags="offensive summonable monstermanual" />
+    <familiar name="Deep Orbit" gfx="orbiting_moons.png" description="One small step for man..." quality="2" cache="familiars" tags="offensive summonable monstermanual" />
+    <familiar name="Broken Flux Capacitor" gfx="flux_capacitor.png" description="Localized time distortion" quality="1" cache="familiars" tags="offensive summonable monstermanual" />
 
 </items>

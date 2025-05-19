@@ -105,6 +105,8 @@ local LUCKY_PENNY_ITEM = Isaac.GetItemIdByName("Sack of Lucky Pennies")
 local TOOLBELT_ITEM = Isaac.GetItemIdByName("Toolbelt")
 local MOON_ITEM = Isaac.GetItemIdByName("Deep Orbit")
 local FAMILIAR_MOON = Isaac.GetEntityVariantByName("Deep Orbit")
+local FLUX_ITEM = Isaac.GetItemIdByName("Broken Flux Capacitor")
+local FAMILIAR_FLUX = Isaac.GetEntityVariantByName("Broken Flux Capacitor")
 
 --[[ function Mod:GiveCostumesOnInit(player)
     if player:GetPlayerType() ~= templateType then
@@ -1177,6 +1179,7 @@ if EID then
     EID:addCollectible(LUCKY_PENNY_ITEM, "Spawns 5 lucky pennies on the ground around Isaac.", "Sack of Lucky Pennies")
     EID:addCollectible(TOOLBELT_ITEM, "Makes Isaac's currently held active item into a pocket active.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If Isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} When holding 2 active items via Schoolbag, the currently selected active item will be moved to the pocket slot.", "Toolbelt")
     EID:addCollectible(MOON_ITEM, "Grants 3 fast moving orbitals which orbit Isaac as a far distance.#The orbitals block enemy projectiles and deal 5 damage per tick to enemies.", "Deep Orbit")
+    EID:addCollectible(FLUX_ITEM, "Grants an absudly fast moving orbital.#The orbital can block enemy projectiles and deals 20 damage per tick to enemies.#The orbital will randomly change orbiting distance at random intervals.", "Broken Flux Capacitor")
 
 end
 
@@ -4260,7 +4263,6 @@ function Mod:MoonBlockShots(Moon)
         local tearData = tear:ToProjectile() -- ✅ Convert to projectile for owner detection
         if tearData and tear.SpawnerType ~= EntityType.ENTITY_PLAYER then
             if tear.Position:DistanceSquared(Moon.Position) <= (Moon.Size + tear.Size)^2 then
-                print("Moon blocked an enemy shot!") -- ✅ Debug confirmation
                 tear:Remove() -- ✅ Delete the enemy tear
             end
         end
@@ -4268,6 +4270,61 @@ function Mod:MoonBlockShots(Moon)
 end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.MoonBlockShots, FAMILIAR_MOON)
+
+function Mod:FluxInit(Flux)
+    --Moon.EntityCollisionClass = EntityCollisionClass.ENTCOLL_ENEMIES
+    Flux:AddToOrbit(7007)
+    
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.FluxInit, FAMILIAR_FLUX)
+
+function Mod:FluxUpdate(Flux)
+    local player = Isaac.GetPlayer(0)
+    -- ✅ Initialize data if needed
+    local data = Flux:GetData()
+    if not data.NextChangeFrame then data.NextChangeFrame = Game():GetFrameCount() + math.random(60, 180) end
+    if not data.CurrentOrbitDistance then data.CurrentOrbitDistance = Vector(20, 20) end
+
+    -- ✅ Every few seconds, randomize orbit distance
+    if Game():GetFrameCount() >= data.NextChangeFrame then
+        data.CurrentOrbitDistance = Vector(math.random(10, 500), math.random(10, 500)) -- ✅ Random distance range
+        data.NextChangeFrame = Game():GetFrameCount() + math.random(60, 180) -- ✅ Schedule next change
+    end
+
+    -- ✅ Apply the current orbit properties
+    Flux.OrbitDistance = data.CurrentOrbitDistance
+    Flux.OrbitSpeed = 0.5
+    Flux.OrbitLayer = 7007
+    Flux.Velocity = Flux:GetOrbitPosition(player.Position + player.Velocity) - Flux.Position
+
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.FluxUpdate, FAMILIAR_FLUX)
+
+function Mod:onCacheFlux(player, cacheFlag)
+    local numFamiliars = player:GetCollectibleNum(FLUX_ITEM)
+    if player:HasCollectible(FLUX_ITEM) then
+        player:CheckFamiliar(FAMILIAR_FLUX, numFamiliars, player:GetCollectibleRNG(FLUX_ITEM))
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCacheFlux)
+
+function Mod:FluxBlockShots(Flux)
+    local tears = Isaac.FindByType(EntityType.ENTITY_PROJECTILE)
+
+    for _, tear in ipairs(tears) do
+        local tearData = tear:ToProjectile() -- ✅ Convert to projectile for owner detection
+        if tearData and tear.SpawnerType ~= EntityType.ENTITY_PLAYER then
+            if tear.Position:DistanceSquared(Flux.Position) <= (Flux.Size + tear.Size)^2 then
+                tear:Remove() -- ✅ Delete the enemy tear
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.FluxBlockShots, FAMILIAR_FLUX)
 
 ----------------------------------------------------------------------------------------
 --- Consumable/machine Code Below

@@ -19,6 +19,7 @@
         <Item Name="Fred The Friendly Gaper" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Toast Sandwich" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Deep Orbit" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Broken Flux Capacitor" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="devil">
@@ -82,6 +83,7 @@
         <Item Name="Fred The Friendly Gaper" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Toast Sandwich" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Deep Orbit" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Broken Flux Capacitor" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -116,6 +118,7 @@
         <Item Name="Sack of Lucky Pennies" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Toolbelt" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Deep Orbit" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Broken Flux Capacitor" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
