@@ -103,8 +103,8 @@ local GLITCH_DICE_ITEM_2 = Isaac.GetItemIdByName(" D-=777'L ")
 local GLITCH_ESSENCE = Isaac.GetItemIdByName("64 36")
 local LUCKY_PENNY_ITEM = Isaac.GetItemIdByName("Sack of Lucky Pennies")
 local TOOLBELT_ITEM = Isaac.GetItemIdByName("Toolbelt")
-local MOON_ITEM = Isaac.GetItemIdByName("Orbiting Moons")
-local FAMILIAR_MOON = Isaac.GetEntityVariantByName("Orbiting Moons")
+local MOON_ITEM = Isaac.GetItemIdByName("Deep Orbit")
+local FAMILIAR_MOON = Isaac.GetEntityVariantByName("Deep Orbit")
 
 --[[ function Mod:GiveCostumesOnInit(player)
     if player:GetPlayerType() ~= templateType then
@@ -1176,7 +1176,7 @@ if EID then
     EID:addCollectible(GLITCH_ESSENCE, "Reroll all item pedestals in the room into TMTRAINER items.", "64 36")
     EID:addCollectible(LUCKY_PENNY_ITEM, "Spawns 5 lucky pennies on the ground around Isaac.", "Sack of Lucky Pennies")
     EID:addCollectible(TOOLBELT_ITEM, "Makes Isaac's currently held active item into a pocket active.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If Isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} When holding 2 active items via Schoolbag, the currently selected active item will be moved to the pocket slot.", "Toolbelt")
-    EID:addCollectible(MOON_ITEM, "Grants 3 fast moving orbitals which orbit Isaac as a far distance.#The orbitals block enemy projectiles and deal 5 damage per tick to enemies.", "Orbiting Moons")
+    EID:addCollectible(MOON_ITEM, "Grants 3 fast moving orbitals which orbit Isaac as a far distance.#The orbitals block enemy projectiles and deal 5 damage per tick to enemies.", "Deep Orbit")
 
 end
 
