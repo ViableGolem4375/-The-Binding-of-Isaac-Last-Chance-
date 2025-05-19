@@ -103,8 +103,8 @@ local GLITCH_DICE_ITEM_2 = Isaac.GetItemIdByName(" D-=777'L ")
 local GLITCH_ESSENCE = Isaac.GetItemIdByName("64 36")
 local LUCKY_PENNY_ITEM = Isaac.GetItemIdByName("Sack of Lucky Pennies")
 local TOOLBELT_ITEM = Isaac.GetItemIdByName("Toolbelt")
-
-
+local MOON_ITEM = Isaac.GetItemIdByName("Orbiting Moons")
+local FAMILIAR_MOON = Isaac.GetEntityVariantByName("Orbiting Moons")
 
 --[[ function Mod:GiveCostumesOnInit(player)
     if player:GetPlayerType() ~= templateType then
@@ -1175,7 +1175,8 @@ if EID then
     EID:addBirthright(glitchType, "Reduces the charges required to use D-=777'L from 12 to 6.")
     EID:addCollectible(GLITCH_ESSENCE, "Reroll all item pedestals in the room into TMTRAINER items.", "64 36")
     EID:addCollectible(LUCKY_PENNY_ITEM, "Spawns 5 lucky pennies on the ground around Isaac.", "Sack of Lucky Pennies")
-    EID:addCollectible(TOOLBELT_ITEM, "Makes Isaac's currently held active item into a pocket active.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} When holding 2 active items via Schoolbag, the currently selected active item will be moved to the pocket slot.", "Toolbelt")
+    EID:addCollectible(TOOLBELT_ITEM, "Makes Isaac's currently held active item into a pocket active.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If Isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} When holding 2 active items via Schoolbag, the currently selected active item will be moved to the pocket slot.", "Toolbelt")
+    EID:addCollectible(MOON_ITEM, "Grants 3 fast moving orbitals which orbit Isaac as a far distance.#The orbitals block enemy projectiles and deal 5 damage per tick to enemies.", "Orbiting Moons")
 
 end
 
@@ -4222,6 +4223,51 @@ function Mod:DropActiveItemOnPedestal(player)
     print("Dropping pedestal active item:", randomActive)
     Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, randomActive, pedPosition, Vector(0,0), player)
 end
+
+function Mod:MoonInit(Moon)
+    --Moon.EntityCollisionClass = EntityCollisionClass.ENTCOLL_ENEMIES
+    Moon:AddToOrbit(7007)
+    
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.MoonInit, FAMILIAR_MOON)
+
+function Mod:MoonUpdate(Moon)
+    local player = Isaac.GetPlayer(0)
+    Moon.OrbitDistance = Vector(150,150)
+    Moon.OrbitSpeed = 0.15
+    --Moon.OrbitLayer = 7007
+    Moon.Velocity = Moon:GetOrbitPosition(player.Position + player.Velocity) - Moon.Position
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.MoonUpdate, FAMILIAR_MOON)
+
+function Mod:onCacheMoon(player, cacheFlag)
+    local numFamiliars = player:GetCollectibleNum(MOON_ITEM) * 3
+    --if cacheFlag == cacheFlag.CACHE_FAMILIARS then
+    if player:HasCollectible(MOON_ITEM) then
+        player:CheckFamiliar(FAMILIAR_MOON, numFamiliars, player:GetCollectibleRNG(MOON_ITEM))
+    end
+    --end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCacheMoon)
+
+function Mod:MoonBlockShots(Moon)
+    local tears = Isaac.FindByType(EntityType.ENTITY_PROJECTILE)
+
+    for _, tear in ipairs(tears) do
+        local tearData = tear:ToProjectile() -- ✅ Convert to projectile for owner detection
+        if tearData and tear.SpawnerType ~= EntityType.ENTITY_PLAYER then
+            if tear.Position:DistanceSquared(Moon.Position) <= (Moon.Size + tear.Size)^2 then
+                print("Moon blocked an enemy shot!") -- ✅ Debug confirmation
+                tear:Remove() -- ✅ Delete the enemy tear
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.MoonBlockShots, FAMILIAR_MOON)
 
 ----------------------------------------------------------------------------------------
 --- Consumable/machine Code Below
