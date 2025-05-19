@@ -4452,6 +4452,8 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.FluxBlockShots, FAMILIAR_FLUX)
 
+
+
 local pedestalPositionsAbe1 = {
     Vector(480, 260)  -- Right pedestal
 }
@@ -4510,6 +4512,25 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.AbeItemSelection, PickupVariant.PICKUP_COLLECTIBLE) -- Detect item selection
 
+function Mod:UpdateChoiceCounter(player)
+    local data = player:GetData()
+
+    -- ✅ Ensure the counter exists
+    if not data.ChoiceCounter then
+        data.ChoiceCounter = 0
+    end
+
+    -- ✅ Count items but cap them within the range -4 to 4
+    local lightCount = math.min(4, math.max(-4, player:GetCollectibleNum(LIGHT_ITEM)))
+    local darkCount = math.min(4, math.max(-4, player:GetCollectibleNum(DARK_ITEM)))
+
+    -- ✅ Update the counter based on item amounts
+    data.ChoiceCounter = math.min(4, math.max(-4, darkCount - lightCount)) -- ✅ Caps between -4 and 4
+
+    print("Counter updated! Light:", lightCount, "Dark:", darkCount, "Total:", data.ChoiceCounter)
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.UpdateChoiceCounter)
 
 function Mod:ApplyChoiceEffects(player)
     local data = player:GetData()
@@ -4523,6 +4544,11 @@ function Mod:ApplyChoiceEffects(player)
     elseif data.ChoiceCounter == 3 then
         --print("Boosting player's damage!")
     elseif data.ChoiceCounter == 4 then
+        while player:HasCollectible(LIGHT_ITEM) or player:HasCollectible(DARK_ITEM) do
+        --print("Boosting player's damage!")
+            player:RemoveCollectible(LIGHT_ITEM)
+            player:RemoveCollectible(DARK_ITEM)
+        end
         --print("Boosting player's damage!")
     elseif data.ChoiceCounter == -1 then
         --print("Boosting player's damage!")
@@ -4532,7 +4558,11 @@ function Mod:ApplyChoiceEffects(player)
     elseif data.ChoiceCounter == -3 then
         --print("Boosting player's damage!")
     elseif data.ChoiceCounter == -4 then
+        while player:HasCollectible(LIGHT_ITEM) or player:HasCollectible(DARK_ITEM) do
         --print("Boosting player's damage!")
+            player:RemoveCollectible(LIGHT_ITEM)
+            player:RemoveCollectible(DARK_ITEM)
+        end
     end
 end
 
