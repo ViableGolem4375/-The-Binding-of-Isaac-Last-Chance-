@@ -25,5 +25,6 @@
     <costume id="47" anm2path="necromancy.anm2" type="passive" priority="0" />
     <costume id="51" anm2path="prototech.anm2" type="passive" priority="0" />
     <costume id="56" anm2path="toast_sandwich.anm2" type="passive" priority="0" />
+    <costume id="60" anm2path="sack_of_lucky_pennies_2.anm2" type="passive" priority="0" />
 
 </costumes>

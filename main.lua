@@ -101,7 +101,7 @@ local TOAST_ITEM = Isaac.GetItemIdByName("Toast Sandwich")
 local GLITCH_DICE_ITEM = Isaac.GetItemIdByName("D-=777'L")
 local GLITCH_DICE_ITEM_2 = Isaac.GetItemIdByName(" D-=777'L ")
 local GLITCH_ESSENCE = Isaac.GetItemIdByName("64 36")
-
+local LUCKY_PENNY_ITEM = Isaac.GetItemIdByName("Sack of Lucky Pennies")
 
 
 
@@ -1173,6 +1173,7 @@ if EID then
     EID:addCollectible(GLITCH_DICE_ITEM_2, "Removes TMTRAINER from Isaac's inventory for the current room and rerolls all item pedestals.#Items are rerolled into items from the corresponding item pool.#{{Warning}}If this item is used in a room with no valid pedestals, the last passive item Isaac collected will be removed from his inventory.#This effect can only store up to 1 item, picking up a new item will lock in all old items.", "D-=777'L")
     EID:addBirthright(glitchType, "Reduces the charges required to use D-=777'L from 12 to 6.")
     EID:addCollectible(GLITCH_ESSENCE, "Reroll all item pedestals in the room into TMTRAINER items.", "64 36")
+    EID:addCollectible(LUCKY_PENNY_ITEM, "Spawns 5 lucky pennies on the ground around Isaac.", "Sack of Lucky Pennies")
 
 end
 
@@ -4127,10 +4128,35 @@ function Mod:UseTMTrainerReroll(item, rng, player, flags)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTMTrainerReroll, GLITCH_ESSENCE)
+
+local luckyPennyItemTriggered = false
+
+function Mod:OnNewGameLuckyPenny(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        luckyPennyItemTriggered = false
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameLuckyPenny) -- Reset flag between runs
+
+function Mod:OnLuckyPennyItemPickup(player, item)
+    local player = game:GetPlayer(0)
+    if player:HasCollectible(LUCKY_PENNY_ITEM) and luckyPennyItemTriggered == false then
+        -- ✅ Spawn 5 Lucky Pennies near the player
+        for i = 1, 5 do
+            local dropPosition = player.Position + Vector(math.random(-20, 20), math.random(-20, 20))
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_LUCKYPENNY, dropPosition, Vector(0,0), player)
+        end
+        luckyPennyItemTriggered = true
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnLuckyPennyItemPickup)
+
 ----------------------------------------------------------------------------------------
 --- Consumable/machine Code Below
 
-local Soul = {}
+--[[ local Soul = {}
 
 Soul.SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
 
@@ -4151,7 +4177,7 @@ function Mod:onMattSoul(...)
     player.Luck = player.Luck + luckBonusMatt
 end
 
-Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.onMattSoul, Soul.SOUL_MATT)
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.onMattSoul, Soul.SOUL_MATT) ]]
 
 --[[ 
 local CustomRunes = (Card.SOUL_MATT)
@@ -4331,6 +4357,7 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM,EssenceCollector.onNewRoom)
 Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, EssenceCollector.onPlayerCollide)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, EssenceCollector.onUpdateCollector)
+
 
 
 ----------------------------------------------------------------------------------------

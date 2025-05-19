@@ -46,6 +46,7 @@
         <Item Name="Early Morning Snack" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Kingslayer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Toast Sandwich" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Sack of Lucky Pennies" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="shop">
@@ -86,6 +87,7 @@
         <Item Name="Early Morning Snack" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Kingslayer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Toast Sandwich" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Sack of Lucky Pennies" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedShop">
@@ -108,6 +110,7 @@
         <Item Name="Fred The Friendly Gaper" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Necromancy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Toast Sandwich" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Sack of Lucky Pennies" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
