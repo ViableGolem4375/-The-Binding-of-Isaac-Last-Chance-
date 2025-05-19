@@ -95,4 +95,33 @@
         costumeSuffix="d"
         costume="104"
     />
+    <player 
+        name="Abraham" 
+        skin="character_glitch.png" 
+        nameimage="playername_glitch.png" 
+        portrait="playerportrait_glitch.png"
+        birthright="Placeholder" 
+        hp="6" 
+        coins="0" 
+        keys="0" 
+        bombs="1" 
+        skinColor="-1"
+        canShoot="True" 
+    />
+    <player 
+        name="Abraham"
+        skin="character_glitch_b.png" 
+        bSkinParent="Abraham"
+        nameimage="playername_glitch_b.png" 
+        portrait="playerportrait_glitch_b.png"
+        birthright="Placeholder"
+        hp="6"
+        coins="0" 
+        keys="0" 
+        bombs="1"
+        skinColor="-1"
+        canShoot="True"
+        costumeSuffix="d"
+        costume="104"
+    />
 </players>
