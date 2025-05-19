@@ -102,6 +102,7 @@ local GLITCH_DICE_ITEM = Isaac.GetItemIdByName("D-=777'L")
 local GLITCH_DICE_ITEM_2 = Isaac.GetItemIdByName(" D-=777'L ")
 local GLITCH_ESSENCE = Isaac.GetItemIdByName("64 36")
 local LUCKY_PENNY_ITEM = Isaac.GetItemIdByName("Sack of Lucky Pennies")
+local TOOLBELT_ITEM = Isaac.GetItemIdByName("Toolbelt")
 
 
 
@@ -1174,6 +1175,7 @@ if EID then
     EID:addBirthright(glitchType, "Reduces the charges required to use D-=777'L from 12 to 6.")
     EID:addCollectible(GLITCH_ESSENCE, "Reroll all item pedestals in the room into TMTRAINER items.", "64 36")
     EID:addCollectible(LUCKY_PENNY_ITEM, "Spawns 5 lucky pennies on the ground around Isaac.", "Sack of Lucky Pennies")
+    EID:addCollectible(TOOLBELT_ITEM, "Makes Isaac's currently held active item into a pocket active.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} When holding 2 active items via Schoolbag, the currently selected active item will be moved to the pocket slot.", "Toolbelt")
 
 end
 
@@ -4152,6 +4154,74 @@ function Mod:OnLuckyPennyItemPickup(player, item)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnLuckyPennyItemPickup)
+
+local toolbeltTriggered = false
+
+function Mod:OnNewGameToolbelt(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        toolbeltTriggered = false
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameToolbelt) -- Reset flag between runs
+
+function Mod:ConvertActiveToPocket(player)
+    if player:HasCollectible(TOOLBELT_ITEM) and toolbeltTriggered == false then
+        local activeItem = player:GetActiveItem(ActiveSlot.SLOT_PRIMARY)
+
+        if activeItem and activeItem ~= CollectibleType.COLLECTIBLE_NULL then
+            print("Converting active item to pocket active:", activeItem)
+            player:RemoveCollectible(activeItem, false, ActiveSlot.SLOT_PRIMARY)
+            player:SetPocketActiveItem(activeItem, ActiveSlot.SLOT_POCKET, true)
+        else
+            print("Player has no active item—assigning a new one!")
+            Mod:GiveRandomActiveItem(player)
+        end
+        toolbeltTriggered = true
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.ConvertActiveToPocket)
+
+function Mod:GiveRandomActiveItem(player)
+    -- ✅ Check if player already has a pocket active
+    local pocketActive = player:GetActiveItem(ActiveSlot.SLOT_POCKET)
+
+    if pocketActive and pocketActive ~= CollectibleType.COLLECTIBLE_NULL then
+        print("Player already has a pocket active! Dropping pedestal item instead.")
+        Mod:DropActiveItemOnPedestal(player)
+        return
+    end
+
+    local itemPool = Game():GetItemPool()
+    local rng = player:GetCollectibleRNG(TOOLBELT_ITEM)
+    local randomActive = itemPool:GetCollectible(ItemPoolType.POOL_TREASURE, true, rng:Next())
+
+    -- ✅ Ensure item is an active item (not passive)
+    while Isaac.GetItemConfig():GetCollectible(randomActive).Type ~= ItemType.ITEM_ACTIVE or 
+        Isaac.GetItemConfig():GetCollectible(randomActive):HasTags(ItemConfig.TAG_QUEST) do
+        randomActive = itemPool:GetCollectible(ItemPoolType.POOL_TREASURE, true, rng:Next())
+    end
+
+
+    print("Player received new active item:", randomActive)
+    player:SetPocketActiveItem(randomActive, ActiveSlot.SLOT_POCKET, true)
+end
+
+function Mod:DropActiveItemOnPedestal(player)
+    local pedPosition = Game():GetRoom():FindFreePickupSpawnPosition(player.Position, 20)
+    local itemPool = Game():GetItemPool()
+    local rng = player:GetCollectibleRNG(TOOLBELT_ITEM)
+    local randomActive = itemPool:GetCollectible(ItemPoolType.POOL_TREASURE, true, rng:Next())
+
+   while Isaac.GetItemConfig():GetCollectible(randomActive).Type ~= ItemType.ITEM_ACTIVE or 
+        Isaac.GetItemConfig():GetCollectible(randomActive):HasTags(ItemConfig.TAG_QUEST) do
+        randomActive = itemPool:GetCollectible(ItemPoolType.POOL_TREASURE, true, rng:Next())
+    end
+
+    print("Dropping pedestal active item:", randomActive)
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, randomActive, pedPosition, Vector(0,0), player)
+end
 
 ----------------------------------------------------------------------------------------
 --- Consumable/machine Code Below

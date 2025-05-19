@@ -63,5 +63,6 @@
     <active id="58" name=" D-=777'L " gfx="glitch_dice.png" description="ur desReroll yotiny. ur" quality="4" maxcharges="3" chargetype="normal" tags="noeden quest nocantrip"/>
     <active id="59" name="64 36" gfx="glitch_essence.png" description="72 65 72 6F 6C 6C" quality="1" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="60" name="Sack of Lucky Pennies" gfx="sack_of_lucky_pennies.png" description="Sold at your local souvenir shop for only 39.99!" quality="2" tags="nocantrip offensive" />
+    <passive id="61" name="Toolbelt" gfx="toolbelt.png" description="Pocket active" quality="3" tags="nocantrip offensive" />
 
 </items>

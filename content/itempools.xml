@@ -52,6 +52,7 @@
     <Pool Name="shop">
         <Item Name="Become Back My Money" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Gold Spray Paint" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Toolbelt" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -111,6 +112,7 @@
         <Item Name="Necromancy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Toast Sandwich" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Sack of Lucky Pennies" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Toolbelt" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
