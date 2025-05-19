@@ -108,11 +108,9 @@ MOON_ITEM = Isaac.GetItemIdByName("Deep Orbit")
 FAMILIAR_MOON = Isaac.GetEntityVariantByName("Deep Orbit")
 FLUX_ITEM = Isaac.GetItemIdByName("Broken Flux Capacitor")
 FAMILIAR_FLUX = Isaac.GetEntityVariantByName("Broken Flux Capacitor")
-
-
-
-
-
+DUAE_ITEM = Isaac.GetItemIdByName("Duae Viae")
+LIGHT_ITEM = Isaac.GetItemIdByName("Path of Salvation")
+DARK_ITEM = Isaac.GetItemIdByName("Path of Temptation")
 
 
 ----------------------------------------------------------------------------------------
@@ -1067,32 +1065,32 @@ Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Glitchb.onPlayerInitGlitchb) ]
 function Abrahamb:onCache(player, cacheFlag)
     if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
         if cacheFlag == CacheFlag.CACHE_SPEED then
-            player.MoveSpeed = player.MoveSpeed - 1 + Glitchb.SPEED
+            player.MoveSpeed = player.MoveSpeed - 1 + Abrahamb.SPEED
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            player.MaxFireDelay = player.MaxFireDelay - 10 + Glitchb.FIREDELAY
+            player.MaxFireDelay = player.MaxFireDelay - 10 + Abrahamb.FIREDELAY
         end
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            player.Damage = player.Damage - 3.5 + Glitchb.DAMAGE
+            player.Damage = player.Damage - 3.5 + Abrahamb.DAMAGE
         end
         if cacheFlag == CacheFlag.CACHE_RANGE then
-            player.TearRange = player.TearRange - 260 + Glitchb.RANGE
-            player.TearHeight = player.TearHeight + Glitchb.TEARHEIGHT
-            player.TearFallingSpeed = player.TearFallingSpeed + Glitchb.TEARFALLINGSPEED
+            player.TearRange = player.TearRange - 260 + Abrahamb.RANGE
+            player.TearHeight = player.TearHeight + Abrahamb.TEARHEIGHT
+            player.TearFallingSpeed = player.TearFallingSpeed + Abrahamb.TEARFALLINGSPEED
         end
         if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
-            player.ShotSpeed = player.ShotSpeed - 1 + Glitchb.SHOTSPEED
+            player.ShotSpeed = player.ShotSpeed - 1 + Abrahamb.SHOTSPEED
         end
         if cacheFlag == CacheFlag.CACHE_LUCK then
-            player.Luck = player.Luck + Glitchb.LUCK
+            player.Luck = player.Luck + Abrahamb.LUCK
         end
         if cacheFlag == CacheFlag.CACHE_TEARFLAG then
-            player.TearFlags = player.TearFlags | Glitchb.TEARFLAG -- The OR here makes sure that if you have an item that changes tear flags, the values you set takes priority
+            player.TearFlags = player.TearFlags | Abrahamb.TEARFLAG -- The OR here makes sure that if you have an item that changes tear flags, the values you set takes priority
         end
         if cacheFlag == CacheFlag.CACHE_TEARCOLOR then
-            player.TearColor = Glitchb.TEARCOLOR
+            player.TearColor = Abrahamb.TEARCOLOR
         end
-        if cacheFlag == CacheFlag.CACHE_FLYING and Glitchb.FLYING then
+        if cacheFlag == CacheFlag.CACHE_FLYING and Abrahamb.FLYING then
             player.CanFly = true
         end
     end
@@ -4453,6 +4451,92 @@ function Mod:FluxBlockShots(Flux)
 end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.FluxBlockShots, FAMILIAR_FLUX)
+
+local pedestalPositionsAbe1 = {
+    Vector(480, 260)  -- Right pedestal
+}
+local pedestalPositionsAbe2 = {
+    Vector(320, 260), -- Left pedestal
+}
+local pedestalsAbe = {} -- Store spawned pedestals
+
+local function GetLight()
+    local light = {LIGHT_ITEM}
+    return light[math.random(#light)]
+end
+
+local function GetDark()
+    local dark = {DARK_ITEM}
+    return dark[math.random(#dark)]
+end
+
+function Mod:UseDuaeitem(item, rng, player, flags)
+    local player = game:GetPlayer(0)
+    if player:HasCollectible(DUAE_ITEM) then
+        player:AnimateCollectible(DUAE_ITEM, "UseItem", "PlayerPickupSparkle")
+        for _, pos in ipairs(pedestalPositionsAbe1) do
+            local itemID = GetLight()
+            local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
+            pedestal:GetData().elitePedestal = true -- Mark as part of selection
+            table.insert(pedestals, pedestal)
+        end
+        for _, pos in ipairs(pedestalPositionsAbe2) do
+            local itemID = GetDark()
+            local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
+            pedestal:GetData().elitePedestal = true -- Mark as part of selection
+            table.insert(pedestals, pedestal)
+        end
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseDuaeitem, DUAE_ITEM)
+
+
+function Mod:AbeItemSelection(pickup, collider)
+    local player = collider:ToPlayer() -- Ensure collider is a player
+    if player then
+        if pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE and pickup:GetData().elitePedestal then
+            -- Remove all other pedestals once player picks one
+            for _, otherPedestal in ipairs(pedestalsAbe) do
+                if otherPedestal ~= pickup then
+                    otherPedestal:Remove()
+                end
+            end
+            pedestalsAbe = {} -- Clear stored pedestals
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.AbeItemSelection, PickupVariant.PICKUP_COLLECTIBLE) -- Detect item selection
+
+
+function Mod:ApplyChoiceEffects(player)
+    local data = player:GetData()
+
+    if data.ChoiceCounter == 1 then
+        player:AddCacheFlags(CacheFlag.CACHE_DAMAGE) -- ✅ Boost damage if counter reaches 3+
+        --print("Boosting player's damage!")
+    elseif data.ChoiceCounter == 2 then
+        --print("Boosting player's damage!")
+
+    elseif data.ChoiceCounter == 3 then
+        --print("Boosting player's damage!")
+    elseif data.ChoiceCounter == 4 then
+        --print("Boosting player's damage!")
+    elseif data.ChoiceCounter == -1 then
+        --print("Boosting player's damage!")
+
+    elseif data.ChoiceCounter == -2 then
+        --print("Boosting player's damage!")
+    elseif data.ChoiceCounter == -3 then
+        --print("Boosting player's damage!")
+    elseif data.ChoiceCounter == -4 then
+        --print("Boosting player's damage!")
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.ApplyChoiceEffects)
 
 ----------------------------------------------------------------------------------------
 --- Consumable/machine Code Below
