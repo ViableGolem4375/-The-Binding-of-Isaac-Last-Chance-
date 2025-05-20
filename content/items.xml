@@ -72,10 +72,10 @@
     <passive id="65" name="Devil's Path 1" gfx="toolbelt.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" />
     <passive id="66" name="Angel's Path 1" gfx="toolbelt.png" description="Soul protection" quality="4" tags="quest noeden nocantrip offensive" />
     <passive id="67" name="Devil's Path 2" gfx="toolbelt.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" />
-    <passive id="67" name="Angel's Path 2" gfx="toolbelt.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" cache="flying"/>
-    <passive id="67" name="Devil's Path 3" gfx="toolbelt.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" cache="all"/>
-    <passive id="67" name="Angel's Path 3" gfx="toolbelt.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" />
-    <passive id="67" name="Devil's Path 4" gfx="toolbelt.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" />
-    <passive id="67" name="Angel's Path 4" gfx="toolbelt.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" />
-
+    <passive id="68" name="Angel's Path 2" gfx="toolbelt.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" cache="flying"/>
+    <passive id="69" name="Devil's Path 3" gfx="toolbelt.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" cache="all"/>
+    <passive id="70" name="Angel's Path 3" gfx="toolbelt.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" />
+    <active id="71" name="Devil's Path 4" gfx="toolbelt.png" description="Be Afraid" quality="4" charge="0" tags="quest noeden offensive nocantrip"/>
+    <passive id="72" name="Angel's Path 4" gfx="toolbelt.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" />
+    
 </items>

@@ -4780,7 +4780,173 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.UpdateChoiceCounter)
 
+local STAT_BOOST_DURATION_DEVIL_4 = 900 -- 30 seconds (30 * 30 frames)
+local SFXDemon = SFXManager()
 
+---@param itemUsed2 CollectibleType
+---@param rng2 RNG
+---@param player2 EntityPlayer
+function Mod:OnUseDevilFour(itemUsed2, rng2, player2)
+
+    local data = player2:GetData()
+
+    -- Prevent activation if item was already used
+    if data.DevilFourUsed then
+        return false -- Stops reuse
+    end
+
+    if itemUsed2 == DEVIL_FOUR_ITEM then
+        --local data = player:GetData()
+        -- Mark item as used (prevents reuse)
+        data.DevilFourUsed = true
+
+
+        -- Apply temporary effects
+        data.DevilFourActive = true
+        data.DevilFourTimer = STAT_BOOST_DURATION
+
+        -- **Give the passive item to apply the costume**
+        player2:AddCollectible(FINAL_JUDGMENT_ITEM_VFX, 0, false)
+
+        -- Play activation sound
+        SFX:Play(SoundEffect.SOUND_DEVIL_CARD, 1.5, 0, false, 1.5)
+
+        -- Buffs applied for 30 seconds
+        player2:SetMinDamageCooldown(STAT_BOOST_DURATION * 2) -- Makes player invulnerable
+        player2:AddCacheFlags(CacheFlag.CACHE_ALL) -- Boost all stats
+        player2:EvaluateItems()
+
+        -- **Summon a circle of Holy Light beams**
+        local numBeams = 8 -- Adjust for more or fewer beams
+        local radius = 80 -- Distance from the player
+        for i = 1, numBeams do
+            local angle = (i / numBeams) * (2 * math.pi) -- Evenly distribute in a circle
+            local beamPosition = player2.Position + Vector(math.cos(angle), math.sin(angle)) * radius
+
+            local holyBeam = Isaac.Spawn(
+                EntityType.ENTITY_EFFECT,
+                EffectVariant.FIRE_JET,
+                0,
+                beamPosition,
+                Vector.Zero,
+                nil
+            )
+        end
+
+        
+        return true -- Consume the item
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseDevilFour, DEVIL_FOUR_ITEM)
+
+-- Apply the actual stat boost
+function Mod:EvaluateDevilFourCache(player, cacheFlag)
+    local data = player:GetData()
+
+    if data.DevilFourActive then
+        -- Boost all stats
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = player.Damage + 50.0
+        end
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+            player.MaxFireDelay = math.max(player.MaxFireDelay * 0.25, 1) -- Increases fire rate
+        end
+        if cacheFlag == CacheFlag.CACHE_RANGE then
+            player.TearRange = player.TearRange + 50
+        end
+        if cacheFlag == CacheFlag.CACHE_SPEED then
+            player.MoveSpeed = math.min(player.MoveSpeed + 2.0, 2.0)
+        end
+        if cacheFlag == CacheFlag.CACHE_LUCK then
+            player.Luck = player.Luck + 3
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.EvaluateDevilFourCache)
+
+
+local LIGHT_BEAM_INTERVAL_2 = 10 -- Adjust interval for beam strikes
+
+---@param player EntityPlayer
+function Mod:UpdateDevilFourEffect(player)
+    local data = player:GetData()
+    local playerDamage = player.Damage -- Get player's current damage value
+    local fireDirectionjudge = player:GetFireDirection()
+    local directionjudge
+
+    if data.DevilFourActive then
+        data.DevilFourTimer = data.DevilFourTimer - 1
+
+        if data.DevilFourTimer == 90 then -- 3 seconds remaining
+            SFX:Play(SoundEffect.SOUND_SATAN_APPEAR, 1.5, 0, false, 1)
+        end
+
+
+        if fireDirectionjudge == Direction.LEFT then
+            directionjudge = Vector(-1, 0)
+        elseif fireDirectionjudge == Direction.RIGHT then
+            directionjudge = Vector(1, 0)
+        elseif fireDirectionjudge == Direction.DOWN then
+            directionjudge = Vector(0, 1)
+        elseif fireDirectionjudge == Direction.UP then
+            directionjudge = Vector(0, -1)
+        end
+
+        if directionjudge ~= nil and player.FireDelay == 0 then
+            local laserjudge = Isaac.Spawn(
+                EntityType.ENTITY_LASER,
+                LaserVariant.THICK_RED,
+                0,
+                player.Position,
+                Vector.Zero,
+                player
+            ):ToLaser()
+            laserjudge.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
+            laserjudge.AngleDegrees = directionjudge:GetAngleDegrees() -- Rotate laser to match direction
+            laserjudge.Parent = player -- Attach the laser to the player
+            laserjudge.Timeout = 15 -- Set duration (adjust as needed)
+            laserjudge.CollisionDamage = playerDamage
+
+        end
+
+        -- **Summon Holy Light beams on random enemies**
+        if data.DevilFourTimer % LIGHT_BEAM_INTERVAL_2 == 0 then
+            local enemies = Isaac.FindInRadius(player.Position, 1000, EntityPartition.ENEMY)
+
+            if #enemies > 0 then
+                local randomEnemy = enemies[math.random(#enemies)]
+                local holyBeam = Isaac.Spawn(
+                    EntityType.ENTITY_EFFECT,
+                    EffectVariant.FIRE_JET,
+                    0,
+                    randomEnemy.Position,
+                    Vector.Zero,
+                    nil
+                )
+            end
+        end
+
+        if data.DevilFourTimer <= 0 then
+            -- **Spawn massive explosion**
+            local explosion = Isaac.Spawn(
+                EntityType.ENTITY_EFFECT,
+                EffectVariant.MAMA_MEGA_EXPLOSION,
+                0,
+                player.Position,
+                Vector.Zero,
+                player
+            )
+            SFX:Play(SoundEffect.SOUND_SATAN_RISE_UP, 1.5, 0, false, 1)
+            data.DevilFourActive = false
+            player:RemoveCollectible(DEVIL_FOUR_ITEM)
+            player:RemoveCollectible(FINAL_JUDGMENT_ITEM_VFX)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.UpdateDevilFourEffect)
 
 function Mod:ApplyChoiceEffects(player)
     local data = player:GetData()
@@ -4834,7 +5000,7 @@ function Mod:ApplyChoiceEffects(player)
         player:RemoveCollectible(ANGEL_FOUR_ITEM)
         player:RemoveCollectible(DEVIL_FOUR_ITEM)
     elseif data.ChoiceCounter == 4 then -- Devil 4
-    
+        player:UseActiveItem(DEVIL_FOUR_ITEM, false, false)
         if player:HasCollectible(DEVIL_ONE_ITEM) == false then
             player:AddCollectible(DEVIL_ONE_ITEM)
         end
