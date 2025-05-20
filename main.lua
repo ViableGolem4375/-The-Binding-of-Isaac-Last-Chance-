@@ -111,6 +111,14 @@ FAMILIAR_FLUX = Isaac.GetEntityVariantByName("Broken Flux Capacitor")
 DUAE_ITEM = Isaac.GetItemIdByName("Duae Viae")
 LIGHT_ITEM = Isaac.GetItemIdByName("Path of Salvation")
 DARK_ITEM = Isaac.GetItemIdByName("Path of Temptation")
+DEVIL_ONE_ITEM = Isaac.GetItemIdByName("Devil's Path 1")
+ANGEL_ONE_ITEM = Isaac.GetItemIdByName("Angel's Path 1")
+DEVIL_TWO_ITEM = Isaac.GetItemIdByName("Devil's Path 2")
+ANGEL_TWO_ITEM = Isaac.GetItemIdByName("Angel's Path 2")
+DEVIL_THREE_ITEM = Isaac.GetItemIdByName("Devil's Path 3")
+ANGEL_THREE_ITEM = Isaac.GetItemIdByName("Angel's Path 3")
+DEVIL_FOUR_ITEM = Isaac.GetItemIdByName("Devil's Path 4")
+ANGEL_FOUR_ITEM = Isaac.GetItemIdByName("Angel's Path 4")
 
 
 ----------------------------------------------------------------------------------------
@@ -4452,7 +4460,90 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.FluxBlockShots, FAMILIAR_FLUX)
 
+local HasGlitchEffect = false
 
+
+function Mod:onUpdateDevilOne(player)
+	if game:GetFrameCount() == 1 then
+		HasGlitchEffect = false
+	end
+	if not HasGlitchEffect and player:HasCollectible(DEVIL_ONE_ITEM) then
+		HasGlitchEffect = true
+	end
+end
+
+local function getRandomFireEffect(player)
+    local baseChance = 1
+    local luckScaling = 0
+
+    local luckBonus = math.max(0, player.Luck * luckScaling) -- Ensure non-negative
+    local finalChance = math.min(1, baseChance + luckBonus) -- Cap at 90% chance
+
+    local rand = math.random()
+    return rand <= finalChance -- Effect triggers if random number falls within chance
+end
+
+function Mod:onTearInitDevilOne(tear)
+    if HasGlitchEffect then
+        local parent = tear.SpawnerEntity
+        if parent and parent:ToPlayer() then
+            local player = parent:ToPlayer()
+            if player:HasCollectible(DEVIL_ONE_ITEM) and getRandomFireEffect(player) then
+                tear:GetData().starTrigger = true
+                -- ✅ Make the tear glow orange
+                tear:GetSprite().Color = Color(2.0, 0.6, 0.2, 1.2, 0.4, 0.2, 0) -- Orange tint
+
+                -- ✅ Apply burn effect when tear hits an enemy
+                tear:GetData().burnOnHit = true
+
+
+
+            end
+        end
+    end
+end
+
+function Mod:onEnemyDamaged(entity, amount, flag, source, countdown)
+    if source and source.Entity and source.Entity:ToTear() then
+        local tear = source.Entity:ToTear()
+        
+        if tear:GetData().burnOnHit then
+            entity:AddBurn(EntityRef(tear), 120, 2.0) -- ✅ Burns enemy for 120 frames at 2 dmg/sec
+            print("Enemy hit by burning tear! Applied fire effect.")
+        end
+    end
+end
+
+function Mod:onTearUpdateDevilOne(tear)
+    if tear:GetData().burnOnHit then
+        -- ✅ Creates a small flickering light source around the tear
+        local light = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.LIGHT, 0, tear.Position, Vector(0,0), tear)
+        light.Color = Color(2.0, 0.6, 0.2, 0.5) -- Adjust light color to match the fiery glow
+        light.SpriteScale = Vector(0.5, 0.5) -- Small light size
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, Mod.onTearUpdateDevilOne)
+Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.onEnemyDamaged)
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateDevilOne)
+Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitDevilOne)
+
+function Mod:onEnemyDeathAngelOne(entity)
+    local player = Isaac.GetPlayer(0)
+
+    if player:HasCollectible(ANGEL_ONE_ITEM) and entity:IsEnemy() then
+        -- ✅ Base chance (5%) + Luck scaling (5% per Luck point)
+        local luckFactor = math.max(0, player.Luck * 0.05) -- Prevent negative values
+        local finalChance = math.min(0.5, 0.1 + luckFactor) -- Cap at 50% drop rate
+
+        -- ✅ Random chance to spawn a Golden Heart upon enemy death
+        if math.random() <= finalChance then
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_HALF_SOUL, entity.Position, Vector.Zero, nil)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.onEnemyDeathAngelOne)
 
 local pedestalPositionsAbe1 = {
     Vector(480, 260)  -- Right pedestal
@@ -4521,48 +4612,88 @@ function Mod:UpdateChoiceCounter(player)
     end
 
     -- ✅ Count items but cap them within the range -4 to 4
-    local lightCount = math.min(4, math.max(-4, player:GetCollectibleNum(LIGHT_ITEM)))
-    local darkCount = math.min(4, math.max(-4, player:GetCollectibleNum(DARK_ITEM)))
+    local lightCount = player:GetCollectibleNum(LIGHT_ITEM)
+    local darkCount = player:GetCollectibleNum(DARK_ITEM)
 
     -- ✅ Update the counter based on item amounts
     data.ChoiceCounter = math.min(4, math.max(-4, darkCount - lightCount)) -- ✅ Caps between -4 and 4
 
-    --print("Counter updated! Light:", lightCount, "Dark:", darkCount, "Total:", data.ChoiceCounter)
+    print("Counter updated! Light:", lightCount, "Dark:", darkCount, "Total:", data.ChoiceCounter)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.UpdateChoiceCounter)
 
 function Mod:ApplyChoiceEffects(player)
     local data = player:GetData()
+    if data.ChoiceCounter == 0 then
+        player:RemoveCollectible(ANGEL_ONE_ITEM)
+        player:RemoveCollectible(DEVIL_ONE_ITEM)
+        player:RemoveCollectible(ANGEL_TWO_ITEM)
+        player:RemoveCollectible(DEVIL_TWO_ITEM)
+        player:RemoveCollectible(ANGEL_THREE_ITEM)
+        player:RemoveCollectible(DEVIL_THREE_ITEM)
+        player:RemoveCollectible(ANGEL_FOUR_ITEM)
+        player:RemoveCollectible(DEVIL_FOUR_ITEM)
+    elseif data.ChoiceCounter == 1 then -- Devil 1
+        if player:HasCollectible(DEVIL_ONE_ITEM) == false then
+            player:AddCollectible(DEVIL_ONE_ITEM)
+        end
+        player:RemoveCollectible(ANGEL_ONE_ITEM)
+        player:RemoveCollectible(ANGEL_TWO_ITEM)
+        player:RemoveCollectible(ANGEL_THREE_ITEM)
+        player:RemoveCollectible(ANGEL_FOUR_ITEM)
+    elseif data.ChoiceCounter == 2 then -- Devil 2
 
-    if data.ChoiceCounter == 1 then
-        player:AddCacheFlags(CacheFlag.CACHE_DAMAGE) -- ✅ Boost damage if counter reaches 3+
-        --print("Boosting player's damage!")
-    elseif data.ChoiceCounter == 2 then
-        --print("Boosting player's damage!")
+        player:RemoveCollectible(ANGEL_ONE_ITEM)
+        player:RemoveCollectible(ANGEL_TWO_ITEM)
+        player:RemoveCollectible(ANGEL_THREE_ITEM)
+        player:RemoveCollectible(ANGEL_FOUR_ITEM)
 
-    elseif data.ChoiceCounter == 3 then
-        --print("Boosting player's damage!")
-    elseif data.ChoiceCounter == 4 then
+    elseif data.ChoiceCounter == 3 then -- Devil 3
+
+        player:RemoveCollectible(ANGEL_ONE_ITEM)
+        player:RemoveCollectible(ANGEL_TWO_ITEM)
+        player:RemoveCollectible(ANGEL_THREE_ITEM)
+        player:RemoveCollectible(ANGEL_FOUR_ITEM)
+    elseif data.ChoiceCounter == 4 then -- Devil 4
         while player:HasCollectible(LIGHT_ITEM) or player:HasCollectible(DARK_ITEM) do
-        --print("Boosting player's damage!")
+
             player:RemoveCollectible(LIGHT_ITEM)
             player:RemoveCollectible(DARK_ITEM)
         end
-        --print("Boosting player's damage!")
-    elseif data.ChoiceCounter == -1 then
-        --print("Boosting player's damage!")
+        player:RemoveCollectible(ANGEL_ONE_ITEM)
+        player:RemoveCollectible(ANGEL_TWO_ITEM)
+        player:RemoveCollectible(ANGEL_THREE_ITEM)
+        player:RemoveCollectible(ANGEL_FOUR_ITEM)
+    elseif data.ChoiceCounter == -1 then -- Angel 1
+        if player:HasCollectible(ANGEL_ONE_ITEM) == false then
+            player:AddCollectible(ANGEL_ONE_ITEM)
+        end
+        player:RemoveCollectible(DEVIL_ONE_ITEM)
+        player:RemoveCollectible(DEVIL_TWO_ITEM)
+        player:RemoveCollectible(DEVIL_THREE_ITEM)
+        player:RemoveCollectible(DEVIL_FOUR_ITEM)
+    elseif data.ChoiceCounter == -2 then -- Angel 2
 
-    elseif data.ChoiceCounter == -2 then
-        --print("Boosting player's damage!")
-    elseif data.ChoiceCounter == -3 then
-        --print("Boosting player's damage!")
-    elseif data.ChoiceCounter == -4 then
+        player:RemoveCollectible(DEVIL_ONE_ITEM)
+        player:RemoveCollectible(DEVIL_TWO_ITEM)
+        player:RemoveCollectible(DEVIL_THREE_ITEM)
+        player:RemoveCollectible(DEVIL_FOUR_ITEM)
+    elseif data.ChoiceCounter == -3 then -- Angel 3
+
+        player:RemoveCollectible(DEVIL_ONE_ITEM)
+        player:RemoveCollectible(DEVIL_TWO_ITEM)
+        player:RemoveCollectible(DEVIL_THREE_ITEM)
+        player:RemoveCollectible(DEVIL_FOUR_ITEM)
+    elseif data.ChoiceCounter == -4 then -- Angel 4
         while player:HasCollectible(LIGHT_ITEM) or player:HasCollectible(DARK_ITEM) do
-        --print("Boosting player's damage!")
             player:RemoveCollectible(LIGHT_ITEM)
             player:RemoveCollectible(DARK_ITEM)
         end
+        player:RemoveCollectible(DEVIL_ONE_ITEM)
+        player:RemoveCollectible(DEVIL_TWO_ITEM)
+        player:RemoveCollectible(DEVIL_THREE_ITEM)
+        player:RemoveCollectible(DEVIL_FOUR_ITEM)
     end
 end
 
