@@ -4545,6 +4545,39 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.onEnemyDeathAngelOne)
 
+function Mod:DevilTwo()
+    local player = Isaac.GetPlayer(0)
+    if player:HasCollectible(DEVIL_TWO_ITEM) then
+        -- Spawn creep at player's position
+        local creep = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_RED, 0, player.Position, Vector(0, 0), player)
+        creep:GetData().IsBurningCreep = true -- ✅ Marks this creep as healing
+        creep:ToEffect():SetTimeout(5)
+        creep.Color = Color(1.2, 0.4, 0.1, 1, 0.2, 0, 0) -- RGB: (Red=1, Green=0, Blue=1), Al
+        -- Adjust creep size
+        creep.SpriteScale = Vector(2.5, 2.5) -- Increase size (1.0 is default)
+        -- Change creep color to purple
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.DevilTwo)
+
+function Mod:BurnEnemiesOnCreep(effect)
+    local player = Isaac.GetPlayer(0)
+    if effect.Variant == EffectVariant.PLAYER_CREEP_RED and effect:GetData().IsBurningCreep and player:HasCollectible(DEVIL_TWO_ITEM) then
+        local enemies = Isaac.FindInRadius(effect.Position, 30, EntityPartition.ENEMY) -- ✅ Find nearby enemies
+
+        for _, entity in ipairs(enemies) do
+            if entity:IsVulnerableEnemy() then
+                entity:AddBurn(EntityRef(effect), 120, 2.0) -- ✅ Burn for 120 frames at 2 dmg/sec
+                print("Enemy burned by fire creep!")
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Mod.BurnEnemiesOnCreep, EffectVariant.PLAYER_CREEP_RED)
+
+
 local pedestalPositionsAbe1 = {
     Vector(480, 260)  -- Right pedestal
 }
@@ -4643,7 +4676,12 @@ function Mod:ApplyChoiceEffects(player)
         player:RemoveCollectible(ANGEL_THREE_ITEM)
         player:RemoveCollectible(ANGEL_FOUR_ITEM)
     elseif data.ChoiceCounter == 2 then -- Devil 2
-
+        if player:HasCollectible(DEVIL_ONE_ITEM) == false then
+            player:AddCollectible(DEVIL_ONE_ITEM)
+        end
+        if player:HasCollectible(DEVIL_TWO_ITEM) == false then
+            player:AddCollectible(DEVIL_TWO_ITEM)
+        end
         player:RemoveCollectible(ANGEL_ONE_ITEM)
         player:RemoveCollectible(ANGEL_TWO_ITEM)
         player:RemoveCollectible(ANGEL_THREE_ITEM)
