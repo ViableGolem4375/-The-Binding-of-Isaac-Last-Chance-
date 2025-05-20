@@ -8,6 +8,7 @@
 - Tainted glitch needa an effect, not sure what.
 - Remember to make sure local/global variable thing isnt causing problems.
 - Work needs to be done on Abraham spawning logic.
+- Eden hair 20 for abraham
 
 Item Ideas to Add:
 

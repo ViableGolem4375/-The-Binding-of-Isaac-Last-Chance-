@@ -4578,6 +4578,7 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Mod.BurnEnemiesOnCreep, EffectVariant.PLAYER_CREEP_RED)
 
 
+
 local pedestalPositionsAbe1 = {
     Vector(480, 260)  -- Right pedestal
 }
@@ -4688,12 +4689,23 @@ function Mod:ApplyChoiceEffects(player)
         player:RemoveCollectible(ANGEL_FOUR_ITEM)
 
     elseif data.ChoiceCounter == 3 then -- Devil 3
-
+        if player:HasCollectible(DEVIL_ONE_ITEM) == false then
+            player:AddCollectible(DEVIL_ONE_ITEM)
+        end
+        if player:HasCollectible(DEVIL_TWO_ITEM) == false then
+            player:AddCollectible(DEVIL_TWO_ITEM)
+        end
         player:RemoveCollectible(ANGEL_ONE_ITEM)
         player:RemoveCollectible(ANGEL_TWO_ITEM)
         player:RemoveCollectible(ANGEL_THREE_ITEM)
         player:RemoveCollectible(ANGEL_FOUR_ITEM)
     elseif data.ChoiceCounter == 4 then -- Devil 4
+    if player:HasCollectible(DEVIL_ONE_ITEM) == false then
+            player:AddCollectible(DEVIL_ONE_ITEM)
+        end
+        if player:HasCollectible(DEVIL_TWO_ITEM) == false then
+            player:AddCollectible(DEVIL_TWO_ITEM)
+        end
         while player:HasCollectible(LIGHT_ITEM) or player:HasCollectible(DARK_ITEM) do
 
             player:RemoveCollectible(LIGHT_ITEM)
@@ -4712,18 +4724,25 @@ function Mod:ApplyChoiceEffects(player)
         player:RemoveCollectible(DEVIL_THREE_ITEM)
         player:RemoveCollectible(DEVIL_FOUR_ITEM)
     elseif data.ChoiceCounter == -2 then -- Angel 2
-
+        if player:HasCollectible(ANGEL_ONE_ITEM) == false then
+            player:AddCollectible(ANGEL_ONE_ITEM)
+        end
         player:RemoveCollectible(DEVIL_ONE_ITEM)
         player:RemoveCollectible(DEVIL_TWO_ITEM)
         player:RemoveCollectible(DEVIL_THREE_ITEM)
         player:RemoveCollectible(DEVIL_FOUR_ITEM)
     elseif data.ChoiceCounter == -3 then -- Angel 3
-
+        if player:HasCollectible(ANGEL_ONE_ITEM) == false then
+            player:AddCollectible(ANGEL_ONE_ITEM)
+        end
         player:RemoveCollectible(DEVIL_ONE_ITEM)
         player:RemoveCollectible(DEVIL_TWO_ITEM)
         player:RemoveCollectible(DEVIL_THREE_ITEM)
         player:RemoveCollectible(DEVIL_FOUR_ITEM)
     elseif data.ChoiceCounter == -4 then -- Angel 4
+        if player:HasCollectible(ANGEL_ONE_ITEM) == false then
+            player:AddCollectible(ANGEL_ONE_ITEM)
+        end
         while player:HasCollectible(LIGHT_ITEM) or player:HasCollectible(DARK_ITEM) do
             player:RemoveCollectible(LIGHT_ITEM)
             player:RemoveCollectible(DARK_ITEM)
