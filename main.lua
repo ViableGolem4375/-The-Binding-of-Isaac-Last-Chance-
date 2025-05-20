@@ -4611,8 +4611,99 @@ function Mod:DevilThree(player, cacheFlag)
     end
 end
 
-
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.DevilThree)
+
+local HasLightEffect = false
+
+--local HasHomingShot = false
+
+function Mod:onUpdateAngelThree(player)
+	if game:GetFrameCount() == 1 then
+		HasLightEffect = false
+	end
+	if not HasLightEffect and player:HasCollectible(ANGEL_THREE_ITEM) then
+		HasLightEffect = true
+	end
+end
+
+local function getRandomLightEffect(player)
+    local baseChance = 0.05 -- Default chance (10%)
+    local luckScaling = 0.05 -- Each Luck point increases chance by 5%
+
+    local luckBonus = math.max(0, player.Luck * luckScaling) -- Ensure non-negative
+    local finalChance = math.min(1, baseChance + luckBonus) -- Cap at 90% chance
+
+    local rand = math.random()
+    return rand <= finalChance -- Effect triggers if random number falls within chance
+end
+
+function Mod:onTearInitAngelThree(tear)
+    if HasLightEffect then
+        local parent = tear.SpawnerEntity
+        if parent and parent:ToPlayer() then
+            local player = parent:ToPlayer()
+            if player:HasCollectible(ANGEL_THREE_ITEM) and getRandomLightEffect(player) then
+                tear:GetData().angelTrigger = true -- Mark tear for laser effect
+                -- ✅ Change tear color (Example: Red Glow)
+                tear.Color = Color(1, 1, 1, 0.5, 0, 0, 0) -- RGB: Red, Alpha: 1 (opaque)
+
+            end
+        end
+    end
+end
+
+
+function Mod:onTearImpactAngelThree(entity)
+    if entity.Type == EntityType.ENTITY_TEAR and entity:GetData().angelTrigger then
+        local position = entity.Position
+        local player = Isaac.GetPlayer(0)
+        local fireDirectionAngelThree = player:GetFireDirection()
+        local directionangelthree
+
+        if fireDirectionAngelThree == Direction.LEFT then
+            directionangelthree = Vector(-1, 0)
+        elseif fireDirectionAngelThree == Direction.RIGHT then
+            directionangelthree = Vector(1, 0)
+        elseif fireDirectionAngelThree == Direction.DOWN then
+            directionangelthree = Vector(0, 1)
+        elseif fireDirectionAngelThree == Direction.UP then
+            directionangelthree = Vector(0, -1)
+        elseif fireDirectionAngelThree == Direction.NO_DIRECTION then
+            directionangelthree = Vector(0, 1)
+        end
+
+        -- Spawn a visible laser ring at the impact location
+        local AngelThreeLaser = Isaac.Spawn(
+            EntityType.ENTITY_LASER,
+                LaserVariant.LIGHT_BEAM,
+                0,
+                player.Position,
+                Vector.Zero,
+                player
+        ):ToLaser()
+
+        if AngelThreeLaser then -- Ensure the laser was spawned successfully
+            AngelThreeLaser.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
+
+            AngelThreeLaser.AngleDegrees = directionangelthree:GetAngleDegrees() -- Rotate laser to match direction
+            AngelThreeLaser.CollisionDamage = 3 + player.Damage -- Set laser damage
+            AngelThreeLaser.Timeout = 15 -- Laser duration
+            --laserRing:AddTearFlags(TearFlags.TEAR_HOMING) -- Apply homing effect
+            AngelThreeLaser.Parent = player -- Prevent self-damage
+ 
+            
+        else
+            print("Laser failed to spawn!") -- Debug statement
+        end
+
+
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateAngelThree)
+Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitAngelThree)
+Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_REMOVE, Mod.onTearImpactAngelThree)
 
 local pedestalPositionsAbe1 = {
     Vector(480, 260)  -- Right pedestal
@@ -4793,6 +4884,9 @@ function Mod:ApplyChoiceEffects(player)
         if player:HasCollectible(ANGEL_TWO_ITEM) == false then
             player:AddCollectible(ANGEL_TWO_ITEM)
         end
+        if player:HasCollectible(ANGEL_THREE_ITEM) == false then
+            player:AddCollectible(ANGEL_THREE_ITEM)
+        end
         player:RemoveCollectible(DEVIL_ONE_ITEM)
         player:RemoveCollectible(DEVIL_TWO_ITEM)
         player:RemoveCollectible(DEVIL_THREE_ITEM)
@@ -4804,6 +4898,9 @@ function Mod:ApplyChoiceEffects(player)
         end
         if player:HasCollectible(ANGEL_TWO_ITEM) == false then
             player:AddCollectible(ANGEL_TWO_ITEM)
+        end
+        if player:HasCollectible(ANGEL_THREE_ITEM) == false then
+            player:AddCollectible(ANGEL_THREE_ITEM)
         end
         while player:HasCollectible(LIGHT_ITEM) or player:HasCollectible(DARK_ITEM) do
             player:RemoveCollectible(LIGHT_ITEM)
