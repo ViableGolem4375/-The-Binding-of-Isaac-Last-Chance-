@@ -1251,7 +1251,7 @@ if EID then
     EID:addCollectible(GABRIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires 4 holy light beams in an 'X' pattern.#Scales with Isaac's damage.", "Lil' Gabriel")
     EID:addCollectible(CATALYST_SHEET_ITEM, "No no no NO NO NO nO no AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "Catalyst Character Sheet")
     EID:addCollectible(FAIL_ITEM, "Familiar that fires Haemolaceria tears.#Tears deal 10 damage and split into multiple smaller tears upon contact with a surface or enemy.", "Failed Abortion")
-    EID:addCollectible(FINAL_JUDGMENT_ITEM, "One time use active item that spawns a circle of light beams around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire holy light beams, and random light beams from the sky targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room and immediately kills Isaac.", "Final Judgement")
+    EID:addCollectible(FINAL_JUDGMENT_ITEM, "One time use active item that spawns a circle of light beams around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire holy light beams, and random light beams from the sky targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room.", "Final Judgement")
     EID:addCollectible(FINAL_JUDGMENT_ITEM_VFX, "I exist to make the visuals work!", "Final Judgement VFX")
     EID:addCollectible(LILITH_ESSENCE, "Makes all enemies in the current room friendly upon use.", "Essence of Lilith")
     EID:addBirthright(templateType, "{{ArrowUp}} +10 luck#{{ArrowUp}} Gives a scaling damage up equal to 50% of Isaac's luck stat.")
@@ -2045,7 +2045,7 @@ function Mod:UpdateFinalJudgmentEffect(player)
             )
             SFX:Play(SoundEffect.SOUND_BEAST_ANGELIC_BLAST, 1.5, 0, false, 1)
             player:RemoveCollectible(CollectibleType.COLLECTIBLE_HOLY_GRAIL)
-            player:Kill()
+            --player:Kill()
             data.FinalJudgmentActive = false
             player:RemoveCollectible(FINAL_JUDGMENT_ITEM)
             player:RemoveCollectible(FINAL_JUDGMENT_ITEM_VFX)
@@ -4695,11 +4695,8 @@ function Mod:onTearImpactAngelThree(entity)
         else
             print("Laser failed to spawn!") -- Debug statement
         end
-
-
     end
 end
-
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateAngelThree)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitAngelThree)
@@ -4783,6 +4780,8 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.UpdateChoiceCounter)
 
+
+
 function Mod:ApplyChoiceEffects(player)
     local data = player:GetData()
     if data.ChoiceCounter == 0 then
@@ -4835,7 +4834,8 @@ function Mod:ApplyChoiceEffects(player)
         player:RemoveCollectible(ANGEL_FOUR_ITEM)
         player:RemoveCollectible(DEVIL_FOUR_ITEM)
     elseif data.ChoiceCounter == 4 then -- Devil 4
-    if player:HasCollectible(DEVIL_ONE_ITEM) == false then
+    
+        if player:HasCollectible(DEVIL_ONE_ITEM) == false then
             player:AddCollectible(DEVIL_ONE_ITEM)
         end
         if player:HasCollectible(DEVIL_TWO_ITEM) == false then
@@ -4845,7 +4845,6 @@ function Mod:ApplyChoiceEffects(player)
             player:AddCollectible(DEVIL_THREE_ITEM)
         end
         while player:HasCollectible(LIGHT_ITEM) or player:HasCollectible(DARK_ITEM) do
-
             player:RemoveCollectible(LIGHT_ITEM)
             player:RemoveCollectible(DARK_ITEM)
         end
@@ -4893,6 +4892,8 @@ function Mod:ApplyChoiceEffects(player)
         player:RemoveCollectible(ANGEL_FOUR_ITEM)
         player:RemoveCollectible(DEVIL_FOUR_ITEM)
     elseif data.ChoiceCounter == -4 then -- Angel 4
+        player:UseActiveItem(FINAL_JUDGMENT_ITEM, false, false)
+
         if player:HasCollectible(ANGEL_ONE_ITEM) == false then
             player:AddCollectible(ANGEL_ONE_ITEM)
         end
