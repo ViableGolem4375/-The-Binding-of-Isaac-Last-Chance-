@@ -112,7 +112,7 @@
     />
     <player 
         name="Abraham"
-        skin="character_glitch_b.png" 
+        skin="character_abraham_b.png" 
         bSkinParent="Abraham"
         nameimage="playername_abraham_b.png" 
         portrait="playerportrait_abraham_b.png"
@@ -123,6 +123,5 @@
         bombs="1"
         skinColor="-1"
         canShoot="True"
-        costumeSuffix="d"
     />
 </players>

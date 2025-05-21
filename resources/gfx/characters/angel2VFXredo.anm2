@@ -1,5 +1,5 @@
 <AnimatedActor>
-	<Info CreatedBy="Unknown" CreatedOn="5/21/2025 12:34:48 PM" Version="18" Fps="30"/>
+	<Info CreatedBy="Unknown" CreatedOn="5/21/2025 1:31:32 PM" Version="20" Fps="30"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="costumes\angel2VFXredo.png" Id="0"/>

@@ -120,6 +120,7 @@ ANGEL_THREE_ITEM = Isaac.GetItemIdByName("Angel's Path 3")
 DEVIL_FOUR_ITEM = Isaac.GetItemIdByName("Devil's Path 4")
 ANGEL_FOUR_ITEM = Isaac.GetItemIdByName("Angel's Path 4")
 DEVIL_FOUR_VFX = Isaac.GetItemIdByName("Devil's Path 4 VFX")
+DEMON_DASH_ITEM = Isaac.GetItemIdByName("Rend")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Matt below.
@@ -1047,7 +1048,7 @@ local TAINTED_ABRAHAM_TYPE = Isaac.GetPlayerTypeByName("Abraham", true)
 
 
 local Abrahamb = { -- shown below are default values, as shown on Isaac, for you to change around
-    SPEED = 1.00,
+    SPEED = 2.00,
     FIREDELAY = 10, -- your tears stat is "30/(FIREDELAY+1)"
     DAMAGE = 3.5, -- is only the damage stat, not damage multiplier
     RANGE = 260, -- your range stat is "40*RANGE"
@@ -1060,15 +1061,15 @@ local Abrahamb = { -- shown below are default values, as shown on Isaac, for you
     FLYING = false
 }
 
---[[ function Glitch:onPlayerInitGlitchn(player)
-    if player:GetPlayerType() == glitchType then
-        player:SetPocketActiveItem(DEBUG_ITEM, ActiveSlot.SLOT_POCKET, true)
+function Abrahamb:onPlayerInitAbrahamb(player)
+    if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
+        player:SetPocketActiveItem(DEMON_DASH_ITEM, ActiveSlot.SLOT_POCKET, true)
         local pool = game:GetItemPool()
-        pool:RemoveCollectible(DEBUG_ITEM)
+        pool:RemoveCollectible(DEMON_DASH_ITEM)
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Glitchb.onPlayerInitGlitchb) ]]
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Abrahamb.onPlayerInitAbrahamb)
 
 function Abrahamb:onCache(player, cacheFlag)
     if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
@@ -1079,7 +1080,7 @@ function Abrahamb:onCache(player, cacheFlag)
             player.MaxFireDelay = player.MaxFireDelay - 10 + Abrahamb.FIREDELAY
         end
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            player.Damage = player.Damage - 3.5 + Abrahamb.DAMAGE
+            player.Damage = (player.Damage - 3.5 + Abrahamb.DAMAGE) * 2
         end
         if cacheFlag == CacheFlag.CACHE_RANGE then
             player.TearRange = player.TearRange - 260 + Abrahamb.RANGE
@@ -1106,6 +1107,73 @@ end
 
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Abrahamb.onCache)
+
+function Mod:PreventDamage(entity, amount, flag, source, countdown)
+    local player = entity:ToPlayer()
+    
+    if player and player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
+        return false -- ✅ Completely negates damage
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.PreventDamage)
+
+function Mod:UpdateDeathTimer(player)
+    if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
+        local timersfx = SFXManager()
+        local data = player:GetData()
+        if not data.DeathTimer then data.DeathTimer = 1800 end -- ✅ Set timer to 30 seconds (1800 frames)
+
+        data.DeathTimer = math.max(0, data.DeathTimer - 1) -- ✅ Reduce timer every frame
+
+        if data.DeathTimer == 300 then
+            timersfx:Play(SoundEffect.SOUND_DOGMA_APPEAR_SCREAM, 1.5, 0, false, 1)
+        end
+
+        if data.DeathTimer == 0 then
+            player:Kill() -- ✅ Player dies if timer runs out
+            print("Death Timer expired! Player died.")
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.UpdateDeathTimer)
+
+function Mod:ResetTimerOnDamage(entity, amount, flag, source, countdown)
+    if source and source.Entity and source.Entity:ToPlayer() then
+        local player = source.Entity:ToPlayer()
+
+        if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
+            local data = player:GetData()
+            data.DeathTimer = 1800 -- ✅ Reset timer to 30 seconds
+            print("Damage dealt! Timer reset.")
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.ResetTimerOnDamage)
+
+function Mod:DealContactDamage(player)
+    if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
+        local data = player:GetData()
+        if not data.LastContactHitFrame then data.LastContactHitFrame = 0 end
+
+        if Game():GetFrameCount() > data.LastContactHitFrame + 10 then -- ✅ Limits hits to once every 10 frames
+            local enemies = Isaac.FindInRadius(player.Position, 30, EntityPartition.ENEMY)
+
+            for _, enemy in ipairs(enemies) do
+                if enemy:IsVulnerableEnemy() then
+                    enemy:TakeDamage(20, DamageFlag.DAMAGE_IGNORE_ARMOR | DamageFlag.DAMAGE_NO_PENALTIES, EntityRef(player), 0)
+                    print("Enemy hit by contact damage!")
+                end
+            end
+            data.LastContactHitFrame = Game():GetFrameCount() -- ✅ Updates cooldown time
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.DealContactDamage)
+
 
 ----------------------------------------------------------------------------------------
 -- Birthright code below.
@@ -1324,6 +1392,7 @@ if EID then
     EID:addCollectible(DEVIL_TWO_ITEM, "Isaac constantly emits creep that lights enemies on fire.", "Devil's Path 2")
     EID:addCollectible(DEVIL_THREE_ITEM, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} -1 tear delay.#{{ArrowUp}} +0.5 speed.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +1 shot speed.#{{ArrowUp}} +2 luck.", "Devil's Path 3")
     EID:addCollectible(DEVIL_FOUR_ITEM, "Spawns a circle of fire pillars around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire brimstone beams, and random fire pillars targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room.", "Devil's Path 4")
+    EID:addCollectible(DEMON_DASH_ITEM, "Dash forward becoming invulnerable and deal 100 damage to enemies in your path.", "Rend")
 
 end
 
@@ -5090,6 +5159,82 @@ function Mod:ApplyChoiceEffects(player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.ApplyChoiceEffects)
+
+local DASH_SPEED_2 = 40 -- Adjust dash speed
+local DASH_DURATION_2 = 5 -- Frames per dash
+
+
+local lastMoveVec = {} -- Store last movement direction for each player
+local dashingPlayers = {} -- Tracks players who are dashing
+
+
+function Mod:OnUseAbrahamDash(_, _, player)
+    local abesfx = SFXManager()
+    if not dashingPlayers[player.Index] then
+        dashingPlayers[player.Index] = {dashTimer = DASH_DURATION_2, cooldown = DASH_COOLDOWN, chargeRefreshCount = 0, chargeTimer = 0, chargeExpireTimer = 0, enemiesHit = {} }
+        player:SetMinDamageCooldown(25) -- Proper invulnerability effect
+        abesfx:Play(SoundEffect.SOUND_KNIFE_PULL, 1, 0, false, 1.2)
+        -- Immediately trigger first dash update to bypass animation delay
+        Mod:OnUpdateAbrahamDash()
+    end
+    --return true
+end
+
+function Mod:OnUpdateAbrahamDash()
+    --local game = Game()
+    for i = 0, game:GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(i)
+        local dashData = dashingPlayers[player.Index]
+
+        if dashData then
+            if dashData.dashTimer > 0 then
+
+                -- Detect player's held direction
+                local moveVec = Vector(0, 0)
+
+                if Input.IsActionPressed(ButtonAction.ACTION_LEFT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_RIGHT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X + 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_UP, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_DOWN, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y + 1
+                end
+
+                -- If the player is actively moving, update lastMoveVec
+                if moveVec:Length() > 0 then
+                    lastMoveVec[player.Index] = moveVec:Normalized() * DASH_SPEED_2
+                end
+
+                -- Use last movement direction if no input is given
+                local finalMoveVec = lastMoveVec[player.Index] or Vector(DASH_SPEED_2, 0)
+                
+                -- Apply movement
+                player.Velocity = finalMoveVec
+
+                -- Store enemies hit during the dash
+                for _, entity in ipairs(Isaac.FindInRadius(player.Position, 50, EntityPartition.ENEMY)) do
+                    if entity:IsVulnerableEnemy() and not dashData.enemiesHit[entity.InitSeed] then
+                        entity:TakeDamage(100, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(player), 0)
+                    end
+                end
+
+
+                dashData.dashTimer = dashData.dashTimer - 1
+            else
+                dashingPlayers[player.Index] = nil
+                player:SetMinDamageCooldown(0)
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseAbrahamDash, DEMON_DASH_ITEM)
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.OnUpdateAbrahamDash)
 
 ----------------------------------------------------------------------------------------
 --- Consumable/machine Code Below

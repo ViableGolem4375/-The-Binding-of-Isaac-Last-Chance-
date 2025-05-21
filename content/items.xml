@@ -67,16 +67,17 @@
     <familiar name="Deep Orbit" gfx="orbiting_moons.png" description="One small step for man..." quality="2" cache="familiars" tags="offensive summonable monstermanual" />
     <familiar name="Broken Flux Capacitor" gfx="flux_capacitor.png" description="Localized time distortion" quality="1" cache="familiars" tags="offensive summonable monstermanual" />
     <active id="62" name="Duae Viae" gfx="duae.png" description="Make your choice" quality="4" maxcharges="3" chargetype="normal" hidden="true" tags="quest nocantrip" />
-    <passive id="63" name="Path of Salvation" gfx="angelpath.png" description="I am saved" quality="4" tags="quest noeden nocantrip offensive" />
-    <passive id="64" name="Path of Temptation" gfx="devilpath.png" description="My life is yours" quality="4" tags="quest noeden nocantrip offensive" />
-    <passive id="65" name="Devil's Path 1" gfx="devilpath1.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" />
-    <passive id="66" name="Angel's Path 1" gfx="angelpath1.png" description="Soul protection" quality="4" tags="quest noeden nocantrip offensive" />
-    <passive id="67" name="Devil's Path 2" gfx="devilpath2.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" />
-    <passive id="68" name="Angel's Path 2" gfx="angelpath2.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" cache="flying"/>
-    <passive id="69" name="Devil's Path 3" gfx="devilpath3.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" cache="all"/>
-    <passive id="70" name="Angel's Path 3" gfx="angelpath3.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" />
-    <active id="71" name="Devil's Path 4" gfx="devilpath4.png" description="Be Afraid" quality="4" charge="0" tags="quest noeden offensive nocantrip"/>
-    <passive id="72" name="Angel's Path 4" gfx="angelpath4.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" />
-    <passive id="73" name="Devil's Path 4 VFX" gfx="devilpath4.png" description="I exist to make devil path 4's visuals work!" quality="4" tags="quest noeden nocantrip offensive" />
+    <passive id="63" name="Path of Salvation" gfx="angelpath.png" description="I am saved" quality="4" tags="quest noeden nocantrip" />
+    <passive id="64" name="Path of Temptation" gfx="devilpath.png" description="My life is yours" quality="4" tags="quest noeden nocantrip" />
+    <passive id="65" name="Devil's Path 1" gfx="devilpath1.png" description="Fire shot" quality="4" tags="quest noeden nocantrip" />
+    <passive id="66" name="Angel's Path 1" gfx="angelpath1.png" description="Soul protection" quality="4" tags="quest noeden nocantrip" />
+    <passive id="67" name="Devil's Path 2" gfx="devilpath2.png" description="Fire shot" quality="4" tags="quest noeden nocantrip" />
+    <passive id="68" name="Angel's Path 2" gfx="angelpath2.png" description="Fire shot" quality="4" tags="quest noeden nocantrip" cache="flying"/>
+    <passive id="69" name="Devil's Path 3" gfx="devilpath3.png" description="Fire shot" quality="4" tags="quest noeden nocantrip" cache="all"/>
+    <passive id="70" name="Angel's Path 3" gfx="angelpath3.png" description="Fire shot" quality="4" tags="quest noeden nocantrip" />
+    <active id="71" name="Devil's Path 4" gfx="devilpath4.png" description="Be Afraid" quality="4" charge="0" tags="quest noeden nocantrip"/>
+    <passive id="72" name="Angel's Path 4" gfx="angelpath4.png" description="Fire shot" quality="4" tags="quest noeden nocantrip" />
+    <passive id="73" name="Devil's Path 4 VFX" gfx="devilpath4.png" description="I exist to make devil path 4's visuals work!" quality="4" tags="quest noeden nocantrip" />
+    <active id="74" name="Rend" gfx="rend.png" description="Your soul is mine" quality="4" maxcharges="50" chargetype="timed" tags="quest noeden nocantrip" />
 
 </items>
