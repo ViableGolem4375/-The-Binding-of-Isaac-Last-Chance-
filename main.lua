@@ -4581,7 +4581,6 @@ function Mod:AngelTwo(player, cacheFlag)
     if player:HasCollectible(ANGEL_TWO_ITEM) then
         if cacheFlag == CacheFlag.CACHE_FLYING then
             player.CanFly = true -- ✅ Enables flight
-            print("Player granted flight!")
         end
     end
 end
@@ -4775,7 +4774,7 @@ function Mod:UpdateChoiceCounter(player)
     -- ✅ Update the counter based on item amounts
     data.ChoiceCounter = math.min(4, math.max(-4, darkCount - lightCount)) -- ✅ Caps between -4 and 4
 
-    print("Counter updated! Light:", lightCount, "Dark:", darkCount, "Total:", data.ChoiceCounter)
+    --print("Counter updated! Light:", lightCount, "Dark:", darkCount, "Total:", data.ChoiceCounter)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.UpdateChoiceCounter)
