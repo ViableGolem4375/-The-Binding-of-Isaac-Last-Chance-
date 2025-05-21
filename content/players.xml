@@ -65,8 +65,15 @@
         card="51"
         costume="104"
     />
+    <!-- 
+		Hi, I'm an unfinished character. 
+        My creator did not realize I in fact already exist in a different mod!
+        Work will not be continued on me for respect to the other mod creators.
+        Check out The Deleted mod for a more fleshed out iteration of me if you like!
+	 -->
     <player 
-        name="Glitch" 
+        name="Glitch"
+        hidden="true" 
         skin="character_glitch.png" 
         nameimage="playername_glitch.png" 
         portrait="playerportrait_glitch.png"
@@ -81,6 +88,7 @@
     />
     <player 
         name="Glitch"
+        hidden="true"
         skin="character_glitch_b.png" 
         bSkinParent="Glitch"
         nameimage="playername_glitch_b.png" 
