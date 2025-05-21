@@ -1314,6 +1314,16 @@ if EID then
     EID:addCollectible(TOOLBELT_ITEM, "Makes Isaac's currently held active item into a pocket active.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If Isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} When holding 2 active items via Schoolbag, the currently selected active item will be moved to the pocket slot.", "Toolbelt")
     EID:addCollectible(MOON_ITEM, "Grants 3 fast moving orbitals which orbit Isaac as a far distance.#The orbitals block enemy projectiles and deal 5 damage per tick to enemies.", "Deep Orbit")
     EID:addCollectible(FLUX_ITEM, "Grants an absudly fast moving orbital.#The orbital can block enemy projectiles and deals 20 damage per tick to enemies.#The orbital will randomly change orbiting distance at random intervals.", "Broken Flux Capacitor")
+    EID:addCollectible(LIGHT_ITEM, "Grants 1 stack towards the angel path.", "Path of Salvation")
+    EID:addCollectible(DARK_ITEM, "Grants 1 stack towards the devil path.", "Path of Temptation")
+    EID:addCollectible(ANGEL_ONE_ITEM, "5% chance for enemies to drop a golden heart on death.#{{Luck}} 50% chance at 9 luck.", "Angel's Path 1")
+    EID:addCollectible(ANGEL_TWO_ITEM, "Grants flight.", "Angel's Path 2")
+    EID:addCollectible(ANGEL_THREE_ITEM, "5% chance to fire a tear that causes Isaac to fire a holy light beam on contact with something.#{{Luck}} 100% chance at 19 luck.", "Angel's Path 3")
+    EID:addCollectible(ANGEL_FOUR_ITEM, "Spawns a circle of light beams around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire holy light beams, and random light beams from the sky targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room.", "Angel's Path 4")
+    EID:addCollectible(DEVIL_ONE_ITEM, "Isaac's tears light enemies on fire.", "Devil's Path 1")
+    EID:addCollectible(DEVIL_TWO_ITEM, "Isaac constantly emits creep that lights enemies on fire.", "Devil's Path 2")
+    EID:addCollectible(DEVIL_THREE_ITEM, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} -1 tear delay.#{{ArrowUp}} +0.5 speed.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +1 shot speed.#{{ArrowUp}} +2 luck.", "Devil's Path 3")
+    EID:addCollectible(DEVIL_FOUR_ITEM, "Spawns a circle of fire pillars around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire brimstone beams, and random fire pillars targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room.", "Devil's Path 4")
 
 end
 
