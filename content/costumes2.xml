@@ -32,7 +32,7 @@
     <costume id="67" anm2path="devil2VFX.anm2" type="passive" priority="0" />
     <costume id="65" anm2path="devil1VFX.anm2" type="passive" priority="0" />
     <costume id="70" anm2path="angel3VFX.anm2" type="passive" priority="0" />
-    <costume id="68" anm2path="angel2VFX.anm2" type="passive" priority="0" />
+    <costume id="68" anm2path="angel2VFXredo.anm2" type="passive" priority="10" isFlying="true" />
     <costume id="66" anm2path="angel1VFX.anm2" type="passive" priority="0" />
 
 </costumes>
