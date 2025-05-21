@@ -121,6 +121,7 @@ DEVIL_FOUR_ITEM = Isaac.GetItemIdByName("Devil's Path 4")
 ANGEL_FOUR_ITEM = Isaac.GetItemIdByName("Angel's Path 4")
 DEVIL_FOUR_VFX = Isaac.GetItemIdByName("Devil's Path 4 VFX")
 DEMON_DASH_ITEM = Isaac.GetItemIdByName("Rend")
+NEUTRAL_ITEM = Isaac.GetItemIdByName("Neutrality")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Matt below.
@@ -895,7 +896,7 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.RemoveEmptyPedestalsGlitch)
 
-function Mod:ApplyBirthrightEffectGlitch(player)
+--[[ function Mod:ApplyBirthrightEffectGlitch(player)
     local data = player:GetData()
 
     if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and birthrightTriggered == false then
@@ -905,7 +906,7 @@ function Mod:ApplyBirthrightEffectGlitch(player)
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.ApplyBirthrightEffectGlitch)
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.ApplyBirthrightEffectGlitch) ]]
 
 ----------------------------------------------------------------------------------------
 -- Character code for TaintedGlitch below.
@@ -1122,7 +1123,10 @@ function Mod:UpdateDeathTimer(player)
     if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
         local timersfx = SFXManager()
         local data = player:GetData()
-        if not data.DeathTimer then data.DeathTimer = 1800 end -- ✅ Set timer to 30 seconds (1800 frames)
+       if not data.DeathTimer then 
+            data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 3600 or 1800 -- ✅ 60 sec with Birthright, 30 sec default
+        end
+
 
         data.DeathTimer = math.max(0, data.DeathTimer - 1) -- ✅ Reduce timer every frame
 
@@ -1132,8 +1136,9 @@ function Mod:UpdateDeathTimer(player)
 
         if data.DeathTimer == 0 then
             player:Kill() -- ✅ Player dies if timer runs out
-            print("Death Timer expired! Player died.")
+            --print("Death Timer expired! Player died.")
         end
+        print(data.DeathTimer)
     end
 end
 
@@ -1145,8 +1150,9 @@ function Mod:ResetTimerOnDamage(entity, amount, flag, source, countdown)
 
         if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
             local data = player:GetData()
-            data.DeathTimer = 1800 -- ✅ Reset timer to 30 seconds
-            print("Damage dealt! Timer reset.")
+            data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 3600 or 1800 -- ✅ Resets to 60 sec with Birthright, 30 sec otherwise
+            --print("Damage dealt! Timer reset to:", data.DeathTimer)
+
         end
     end
 end
@@ -1164,7 +1170,7 @@ function Mod:DealContactDamage(player)
             for _, enemy in ipairs(enemies) do
                 if enemy:IsVulnerableEnemy() then
                     enemy:TakeDamage(20, DamageFlag.DAMAGE_IGNORE_ARMOR | DamageFlag.DAMAGE_NO_PENALTIES, EntityRef(player), 0)
-                    print("Enemy hit by contact damage!")
+                    --print("Enemy hit by contact damage!")
                 end
             end
             data.LastContactHitFrame = Game():GetFrameCount() -- ✅ Updates cooldown time
@@ -1393,6 +1399,9 @@ if EID then
     EID:addCollectible(DEVIL_THREE_ITEM, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} -1 tear delay.#{{ArrowUp}} +0.5 speed.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +1 shot speed.#{{ArrowUp}} +2 luck.", "Devil's Path 3")
     EID:addCollectible(DEVIL_FOUR_ITEM, "Spawns a circle of fire pillars around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire brimstone beams, and random fire pillars targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room.", "Devil's Path 4")
     EID:addCollectible(DEMON_DASH_ITEM, "Dash forward becoming invulnerable and deal 100 damage to enemies in your path.", "Rend")
+    EID:addBirthright(TAINTED_ABRAHAM_TYPE, "Death timer is extended to 60 seconds.")
+    EID:addBirthright(abrahamType, "Grants the Neutrality item when stacks for both the angel and devil paths are 0.")
+    EID:addCollectible(NEUTRAL_ITEM, "{{ArrowUp}} +50% damage.", "Neutrality")
 
 end
 
@@ -5026,9 +5035,22 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.UpdateDevilFourEffect)
 
+function Mod:Neutral(player, cacheFlag)
+    if player:HasCollectible(NEUTRAL_ITEM) then
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = (player.Damage + 1) * 1.5
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.Neutral)
+
 function Mod:ApplyChoiceEffects(player)
     local data = player:GetData()
     if data.ChoiceCounter == 0 then
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) == true and player:HasCollectible(NEUTRAL_ITEM) == false then
+            player:AddCollectible(NEUTRAL_ITEM)
+        end
         player:RemoveCollectible(ANGEL_ONE_ITEM)
         player:RemoveCollectible(DEVIL_ONE_ITEM)
         player:RemoveCollectible(ANGEL_TWO_ITEM)
@@ -5041,6 +5063,7 @@ function Mod:ApplyChoiceEffects(player)
         if player:HasCollectible(DEVIL_ONE_ITEM) == false then
             player:AddCollectible(DEVIL_ONE_ITEM)
         end
+        player:RemoveCollectible(NEUTRAL_ITEM)
         player:RemoveCollectible(ANGEL_ONE_ITEM)
         player:RemoveCollectible(ANGEL_TWO_ITEM)
         player:RemoveCollectible(DEVIL_TWO_ITEM)
@@ -5055,6 +5078,7 @@ function Mod:ApplyChoiceEffects(player)
         if player:HasCollectible(DEVIL_TWO_ITEM) == false then
             player:AddCollectible(DEVIL_TWO_ITEM)
         end
+        player:RemoveCollectible(NEUTRAL_ITEM)
         player:RemoveCollectible(ANGEL_ONE_ITEM)
         player:RemoveCollectible(ANGEL_TWO_ITEM)
         player:RemoveCollectible(ANGEL_THREE_ITEM)
@@ -5072,6 +5096,7 @@ function Mod:ApplyChoiceEffects(player)
         if player:HasCollectible(DEVIL_THREE_ITEM) == false then
             player:AddCollectible(DEVIL_THREE_ITEM)
         end
+        player:RemoveCollectible(NEUTRAL_ITEM)
         player:RemoveCollectible(ANGEL_ONE_ITEM)
         player:RemoveCollectible(ANGEL_TWO_ITEM)
         player:RemoveCollectible(ANGEL_THREE_ITEM)
@@ -5092,6 +5117,7 @@ function Mod:ApplyChoiceEffects(player)
             player:RemoveCollectible(LIGHT_ITEM)
             player:RemoveCollectible(DARK_ITEM)
         end
+        player:RemoveCollectible(NEUTRAL_ITEM)
         player:RemoveCollectible(ANGEL_ONE_ITEM)
         player:RemoveCollectible(ANGEL_TWO_ITEM)
         player:RemoveCollectible(ANGEL_THREE_ITEM)
@@ -5100,6 +5126,7 @@ function Mod:ApplyChoiceEffects(player)
         if player:HasCollectible(ANGEL_ONE_ITEM) == false then
             player:AddCollectible(ANGEL_ONE_ITEM)
         end
+        player:RemoveCollectible(NEUTRAL_ITEM)
         player:RemoveCollectible(DEVIL_ONE_ITEM)
         player:RemoveCollectible(ANGEL_TWO_ITEM)
         player:RemoveCollectible(DEVIL_TWO_ITEM)
@@ -5114,6 +5141,7 @@ function Mod:ApplyChoiceEffects(player)
         if player:HasCollectible(ANGEL_TWO_ITEM) == false then
             player:AddCollectible(ANGEL_TWO_ITEM)
         end
+        player:RemoveCollectible(NEUTRAL_ITEM)
         player:RemoveCollectible(DEVIL_ONE_ITEM)
         player:RemoveCollectible(DEVIL_TWO_ITEM)
         player:RemoveCollectible(ANGEL_THREE_ITEM)
@@ -5130,6 +5158,7 @@ function Mod:ApplyChoiceEffects(player)
         if player:HasCollectible(ANGEL_THREE_ITEM) == false then
             player:AddCollectible(ANGEL_THREE_ITEM)
         end
+        player:RemoveCollectible(NEUTRAL_ITEM)
         player:RemoveCollectible(DEVIL_ONE_ITEM)
         player:RemoveCollectible(DEVIL_TWO_ITEM)
         player:RemoveCollectible(DEVIL_THREE_ITEM)
@@ -5151,6 +5180,7 @@ function Mod:ApplyChoiceEffects(player)
             player:RemoveCollectible(LIGHT_ITEM)
             player:RemoveCollectible(DARK_ITEM)
         end
+        player:RemoveCollectible(NEUTRAL_ITEM)
         player:RemoveCollectible(DEVIL_ONE_ITEM)
         player:RemoveCollectible(DEVIL_TWO_ITEM)
         player:RemoveCollectible(DEVIL_THREE_ITEM)
@@ -5671,8 +5701,7 @@ local RELIQUARY_POOL = {
     PONTIUS_ESSENCE,
     LOST_ESSENCE,
     JACOB_AND_ESAU_ESSENCE,
-    FORGOTTEN_ESSENCE,
-    GLITCH_ESSENCE
+    FORGOTTEN_ESSENCE
     -- Add more items as needed
 }
 

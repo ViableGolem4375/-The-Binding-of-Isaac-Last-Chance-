@@ -71,13 +71,14 @@
     <passive id="64" name="Path of Temptation" gfx="devilpath.png" description="My life is yours" quality="4" tags="quest noeden nocantrip" />
     <passive id="65" name="Devil's Path 1" gfx="devilpath1.png" description="Fire shot" quality="4" tags="quest noeden nocantrip" />
     <passive id="66" name="Angel's Path 1" gfx="angelpath1.png" description="Soul protection" quality="4" tags="quest noeden nocantrip" />
-    <passive id="67" name="Devil's Path 2" gfx="devilpath2.png" description="Fire shot" quality="4" tags="quest noeden nocantrip" />
-    <passive id="68" name="Angel's Path 2" gfx="angelpath2.png" description="Fire shot" quality="4" tags="quest noeden nocantrip" cache="flying"/>
-    <passive id="69" name="Devil's Path 3" gfx="devilpath3.png" description="Fire shot" quality="4" tags="quest noeden nocantrip" cache="all"/>
-    <passive id="70" name="Angel's Path 3" gfx="angelpath3.png" description="Fire shot" quality="4" tags="quest noeden nocantrip" />
+    <passive id="67" name="Devil's Path 2" gfx="devilpath2.png" description="Burning lava" quality="4" tags="quest noeden nocantrip" />
+    <passive id="68" name="Angel's Path 2" gfx="angelpath2.png" description="Flight of the angel" quality="4" tags="quest noeden nocantrip" cache="flying"/>
+    <passive id="69" name="Devil's Path 3" gfx="devilpath3.png" description="All stats up" quality="4" tags="quest noeden nocantrip" cache="all"/>
+    <passive id="70" name="Angel's Path 3" gfx="angelpath3.png" description="Smite" quality="4" tags="quest noeden nocantrip" />
     <active id="71" name="Devil's Path 4" gfx="devilpath4.png" description="Be Afraid" quality="4" charge="0" tags="quest noeden nocantrip"/>
-    <passive id="72" name="Angel's Path 4" gfx="angelpath4.png" description="Fire shot" quality="4" tags="quest noeden nocantrip" />
+    <passive id="72" name="Angel's Path 4" gfx="angelpath4.png" description="Burn in hell" quality="4" tags="quest noeden nocantrip" />
     <passive id="73" name="Devil's Path 4 VFX" gfx="devilpath4.png" description="I exist to make devil path 4's visuals work!" quality="4" tags="quest noeden nocantrip" />
     <active id="74" name="Rend" gfx="rend.png" description="Your soul is mine" quality="4" maxcharges="50" chargetype="timed" tags="quest noeden nocantrip" />
+    <passive id="75" name="Neutrality" gfx="neutrality.png" description="Take the road less travelled" quality="4" tags="quest noeden nocantrip" cache="damage" />
 
 </items>
