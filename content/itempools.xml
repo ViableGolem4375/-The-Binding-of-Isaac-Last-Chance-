@@ -37,7 +37,6 @@
     <Pool Name="secret">
         <Item Name="Eternal Bond" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Dull Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="'/<<L7" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Debug Console" Weight="0.1" DecreaseBy="0.1" RemoveOn="0.05" />
         <Item Name="64 36" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
@@ -143,7 +142,6 @@
     <Pool Name="greedSecret">
         <Item Name="Eternal Bond" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Dull Coin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="'/<<L7" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Debug Console" Weight="0.1" DecreaseBy="0.1" RemoveOn="0.05" />
         <Item Name="64 36" Weight="1" DecreaseBy="1" RemoveOn="0.1" />

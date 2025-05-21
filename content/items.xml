@@ -1,6 +1,6 @@
 <items gfxroot="gfx/items/" version="1">
     <active id="1" name="Lucky Coin" gfx="dice.png" description="Take control of your destiny" quality="4" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
-    <active id="2" name="Dull Coin" gfx="dice2.png" description="Reroll your destiny?" quality="2" charge="0" tags="offensive nocantrip"/>
+    <active id="2" name="Dull Coin" gfx="dice2.png" description="Reroll your destiny?" quality="4" charge="0" tags="quest noeden nocantrip"/>
     <passive id="3" name="Unholy Mantle" gfx="unholymantle.png" description="Revel in Their Pain" quality="2" tags="devil nocantrip"/>
     <familiar name="Lil' Uriel" gfx="uriel.png" description="Angelic friend" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel" />
     <familiar name="Lil' Gabriel" gfx="gabriel.png" description="Eternal friend" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel" />
