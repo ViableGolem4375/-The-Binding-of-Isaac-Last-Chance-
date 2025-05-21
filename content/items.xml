@@ -77,5 +77,6 @@
     <passive id="70" name="Angel's Path 3" gfx="toolbelt.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" />
     <active id="71" name="Devil's Path 4" gfx="toolbelt.png" description="Be Afraid" quality="4" charge="0" tags="quest noeden offensive nocantrip"/>
     <passive id="72" name="Angel's Path 4" gfx="toolbelt.png" description="Fire shot" quality="4" tags="quest noeden nocantrip offensive" />
-    
+    <passive id="73" name="Devil's Path 4 VFX" gfx="toolbelt.png" description="I exist to make devil path 4's visuals work!" quality="4" tags="quest noeden nocantrip offensive" />
+
 </items>

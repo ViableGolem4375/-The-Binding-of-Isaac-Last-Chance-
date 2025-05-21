@@ -119,7 +119,7 @@ DEVIL_THREE_ITEM = Isaac.GetItemIdByName("Devil's Path 3")
 ANGEL_THREE_ITEM = Isaac.GetItemIdByName("Angel's Path 3")
 DEVIL_FOUR_ITEM = Isaac.GetItemIdByName("Devil's Path 4")
 ANGEL_FOUR_ITEM = Isaac.GetItemIdByName("Angel's Path 4")
-
+DEVIL_FOUR_VFX = Isaac.GetItemIdByName("Devil's Path 4 VFX")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Matt below.
@@ -4806,7 +4806,7 @@ function Mod:OnUseDevilFour(itemUsed2, rng2, player2)
         data.DevilFourTimer = STAT_BOOST_DURATION
 
         -- **Give the passive item to apply the costume**
-        player2:AddCollectible(FINAL_JUDGMENT_ITEM_VFX, 0, false)
+        player2:AddCollectible(DEVIL_FOUR_VFX, 0, false)
 
         -- Play activation sound
         SFX:Play(SoundEffect.SOUND_DEVIL_CARD, 1.5, 0, false, 1.5)
@@ -4940,8 +4940,8 @@ function Mod:UpdateDevilFourEffect(player)
             )
             SFX:Play(SoundEffect.SOUND_SATAN_RISE_UP, 1.5, 0, false, 1)
             data.DevilFourActive = false
-            player:RemoveCollectible(DEVIL_FOUR_ITEM)
-            player:RemoveCollectible(FINAL_JUDGMENT_ITEM_VFX)
+            --player:RemoveCollectible(DEVIL_FOUR_ITEM)
+            player:RemoveCollectible(DEVIL_FOUR_VFX)
         end
     end
 end

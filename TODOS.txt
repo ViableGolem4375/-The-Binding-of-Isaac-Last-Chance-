@@ -9,6 +9,7 @@
 - Remember to make sure local/global variable thing isnt causing problems.
 - Work needs to be done on Abraham spawning logic.
 - Eden hair 20 for abraham
+- Sack of lucky pennies might me bugged.
 
 Item Ideas to Add:
 

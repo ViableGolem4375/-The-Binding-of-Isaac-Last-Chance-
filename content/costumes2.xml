@@ -27,5 +27,9 @@
     <costume id="56" anm2path="toast_sandwich.anm2" type="passive" priority="0" />
     <costume id="60" anm2path="sack_of_lucky_pennies_2.anm2" type="passive" priority="0" />
     <costume id="61" anm2path="toolbelt.anm2" type="passive" priority="0" />
+    <costume id="73" anm2path="devil4VFX.anm2" type="passive" priority="0" />
+    <costume id="69" anm2path="devil3VFX.anm2" type="passive" priority="0" />
+    <costume id="67" anm2path="devil2VFX.anm2" type="passive" priority="0" />
+    <costume id="65" anm2path="devil1VFX.anm2" type="passive" priority="0" />
 
 </costumes>

@@ -97,7 +97,7 @@
     />
     <player 
         name="Abraham" 
-        skin="character_glitch.png" 
+        skin="character_abraham.png" 
         nameimage="playername_abraham.png" 
         portrait="playerportrait_abraham.png"
         birthright="Placeholder" 
@@ -106,7 +106,9 @@
         keys="0" 
         bombs="1" 
         skinColor="-1"
-        canShoot="True" 
+        canShoot="True"
+        costumeSuffix="f"
+        costume="104"
     />
     <player 
         name="Abraham"
@@ -122,6 +124,5 @@
         skinColor="-1"
         canShoot="True"
         costumeSuffix="d"
-        costume="104"
     />
 </players>
