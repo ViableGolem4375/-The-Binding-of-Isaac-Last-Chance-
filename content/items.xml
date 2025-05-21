@@ -80,5 +80,6 @@
     <passive id="73" name="Devil's Path 4 VFX" gfx="devilpath4.png" description="I exist to make devil path 4's visuals work!" quality="4" tags="quest noeden nocantrip" />
     <active id="74" name="Rend" gfx="rend.png" description="Your soul is mine" quality="4" maxcharges="50" chargetype="timed" tags="quest noeden nocantrip" />
     <passive id="75" name="Neutrality" gfx="neutrality.png" description="Take the road less travelled" quality="4" tags="quest noeden nocantrip" cache="damage" />
+    <passive id="76" name="Essence of Abraham" gfx="abraham_essence.png" description="Duality" quality="2" tags="offensive nocantrip" />
 
 </items>

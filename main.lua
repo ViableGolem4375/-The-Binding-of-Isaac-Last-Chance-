@@ -122,6 +122,7 @@ ANGEL_FOUR_ITEM = Isaac.GetItemIdByName("Angel's Path 4")
 DEVIL_FOUR_VFX = Isaac.GetItemIdByName("Devil's Path 4 VFX")
 DEMON_DASH_ITEM = Isaac.GetItemIdByName("Rend")
 NEUTRAL_ITEM = Isaac.GetItemIdByName("Neutrality")
+ABRAHAM_ESSENCE_ITEM = Isaac.GetItemIdByName("Essence of Abraham")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Matt below.
@@ -1402,6 +1403,7 @@ if EID then
     EID:addBirthright(TAINTED_ABRAHAM_TYPE, "Death timer is extended to 60 seconds.")
     EID:addBirthright(abrahamType, "Grants the Neutrality item when stacks for both the angel and devil paths are 0.")
     EID:addCollectible(NEUTRAL_ITEM, "{{ArrowUp}} +50% damage.", "Neutrality")
+    EID:addCollectible(ABRAHAM_ESSENCE_ITEM, "Grants 3 soul hearts when entering an angel room for the first time.#Grants 3 black hearts when entering a devil room for the first time.#Essence of Abraham can be triggered once per floor.", "Essence of Abraham")
 
 end
 
@@ -5266,6 +5268,41 @@ end
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseAbrahamDash, DEMON_DASH_ITEM)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.OnUpdateAbrahamDash)
 
+function Mod:OnEnterSpecialRoom()
+    local player = Isaac.GetPlayer(0)
+    local room = Game():GetRoom()
+    local data = player:GetData()
+
+    if player:HasCollectible(ABRAHAM_ESSENCE_ITEM) then
+        if not data.HasClaimedHeartBonus then data.HasClaimedHeartBonus = {} end -- ✅ Track claimed bonuses
+
+        -- ✅ Check if room is Angel or Devil and ensure effect hasn't been triggered before
+        if room:GetType() == RoomType.ROOM_ANGEL and not data.HasClaimedHeartBonus[RoomType.ROOM_ANGEL] then
+            player:AddSoulHearts(6) -- ✅ Grants 3 Soul Hearts (6 half-hearts)
+            data.HasClaimedHeartBonus[RoomType.ROOM_ANGEL] = true -- ✅ Marks Angel room bonus as claimed
+            print("Entered Angel Room! Granted 3 Soul Hearts.")
+        elseif room:GetType() == RoomType.ROOM_DEVIL and not data.HasClaimedHeartBonus[RoomType.ROOM_DEVIL] then
+            player:AddBlackHearts(6) -- ✅ Grants 3 Black Hearts (6 half-hearts)
+            data.HasClaimedHeartBonus[RoomType.ROOM_DEVIL] = true -- ✅ Marks Devil room bonus as claimed
+            print("Entered Devil Room! Granted 3 Black Hearts.")
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnEnterSpecialRoom)
+
+
+function Mod:ResetHeartBonusOnNewFloor()
+    local player = Isaac.GetPlayer(0)
+    local data = player:GetData()
+
+    if data.HasClaimedHeartBonus then
+        data.HasClaimedHeartBonus = {} -- ✅ Clears stored room bonuses
+        print("New floor entered! Heart bonus reset.")
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.ResetHeartBonusOnNewFloor)
 ----------------------------------------------------------------------------------------
 --- Consumable/machine Code Below
 
@@ -5410,7 +5447,7 @@ function EssenceCollector:onUpdateCollector()
             elseif slotRNG2 < 95 then
                 Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, PONTIUS_ESSENCE, player.Position + Vector(32,32), Vector(0,0), nil)
             else
-                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, GLITCH_ESSENCE, player.Position + Vector(32,32), Vector(0,0), nil)
+                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ABRAHAM_ESSENCE_ITEM, player.Position + Vector(32,32), Vector(0,0), nil)
             end
 			local explosion = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_EXPLOSION, 0, slot.Position, Vector(0, 0), nil)
             explosion:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- Prevents explos	
