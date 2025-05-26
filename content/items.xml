@@ -83,5 +83,6 @@
     <passive id="76" name="Essence of Abraham" gfx="abraham_essence.png" description="Duality" quality="2" tags="offensive nocantrip" />
     <passive id="77" name=" Toolbelt " gfx="toolbelt.png" description="Pocket active" quality="3" hidden="true" tags="nocantrip offensive" />
     <active id="78" name="Technology Omega" gfx="omegatech.png" description="Technological advancement" quality="2" maxcharges="4" chargetype="normal" tags="quest nocantrip" />
+    <trinket id="79" name="Bootleg Tech" gfx="bootleg.png" description="It sort of works" cache="luck" />
 
 </items>

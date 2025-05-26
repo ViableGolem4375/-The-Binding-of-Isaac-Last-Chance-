@@ -125,6 +125,7 @@ DEMON_DASH_ITEM = Isaac.GetItemIdByName("Rend")
 NEUTRAL_ITEM = Isaac.GetItemIdByName("Neutrality")
 ABRAHAM_ESSENCE_ITEM = Isaac.GetItemIdByName("Essence of Abraham")
 OMEGA_ITEM = Isaac.GetItemIdByName("Technology Omega")
+TECH_TRINKET = Isaac.GetTrinketIdByName("Bootleg Tech")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Matt below.
@@ -1408,6 +1409,7 @@ if EID then
     EID:addCollectible(NEUTRAL_ITEM, "{{ArrowUp}} +50% damage.", "Neutrality")
     EID:addCollectible(ABRAHAM_ESSENCE_ITEM, "Grants 3 soul hearts when entering an angel room for the first time.#Grants 3 black hearts when entering a devil room for the first time.#Essence of Abraham can be triggered once per floor.", "Essence of Abraham")
     EID:addCollectible(OMEGA_ITEM, "Rapidly fire a barrage of lasers for 4 seconds.#The lasers deal 0.5x Isaac's damage.", "Technology Omega")
+    EID:addTrinket(TECH_TRINKET, "10% chance to fire a technology laser instead of a normal tear.#{{Luck}} +5% chance to trigger per point of luck.#{{Collectible202}} +10% chance to trigger per point of luck when golden.", "Bootleg Tech")
 
 end
 
@@ -5773,6 +5775,65 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.OnCoinPickupRot, PickupVariant.PICKUP_COIN)
 
+function Mod:ReplaceTearWithLaser(tear)
+    local laserchance = 0.05
+    local player = tear.SpawnerEntity and tear.SpawnerEntity:ToPlayer()
+
+    if player and player:HasTrinket(TECH_TRINKET) then
+        if player:GetTrinketMultiplier(CANDLE_TRINKET) > 1 then
+            laserchance = 0.1
+        end
+        local luck = player.Luck
+        local chance = 0.1 + (luck * laserchance) -- ✅ Base 10% chance + 5% per luck point
+
+        if math.random() < chance then
+            Mod:FireLaserInstead(player, tear.Position, tear.Velocity) -- ✅ Replace tear with a laser
+            tear:Remove() -- ✅ Remove original tear
+            print("Laser fired instead of tear!")
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.ReplaceTearWithLaser)
+
+function Mod:FireLaserInstead(player, position, velocity)
+    local player = Isaac.GetPlayer(0)
+    local fireDirectionAzazel = player:GetFireDirection()
+    local directionazazel
+
+    if fireDirectionAzazel == Direction.LEFT then
+        directionazazel = Vector(-1, 0)
+    elseif fireDirectionAzazel == Direction.RIGHT then
+        directionazazel = Vector(1, 0)
+    elseif fireDirectionAzazel == Direction.DOWN then
+        directionazazel = Vector(0, 1)
+    elseif fireDirectionAzazel == Direction.UP then
+        directionazazel = Vector(0, -1)
+    elseif fireDirectionAzazel == Direction.NO_DIRECTION then
+        directionazazel = Vector(0, 1)
+    end
+
+    -- Spawn a visible laser ring at the impact location
+    local laserRing = Isaac.Spawn(
+        EntityType.ENTITY_LASER,
+            LaserVariant.THIN_RED,
+            0,
+            player.Position,
+            Vector.Zero,
+            player
+    ):ToLaser()
+
+    if laserRing then -- Ensure the laser was spawned successfully
+        laserRing.PositionOffset = Vector(0, -20) -- Adjust Y value as needed
+
+        laserRing.AngleDegrees = directionazazel:GetAngleDegrees() -- Rotate laser to match direction
+        laserRing.CollisionDamage = player.Damage -- Set laser damage
+        laserRing.Timeout = 1 -- Laser duration
+        laserRing:AddTearFlags(TearFlags.TEAR_HOMING) -- Apply homing effect
+        laserRing.Parent = player -- Prevent self-damage
+    end
+
+end
 ----------------------------------------------------------------------------------------
 --- Room Code For Essence Reliquary Below.
 
