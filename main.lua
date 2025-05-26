@@ -1407,6 +1407,7 @@ if EID then
     EID:addBirthright(abrahamType, "Grants the Neutrality item when stacks for both the angel and devil paths are 0.")
     EID:addCollectible(NEUTRAL_ITEM, "{{ArrowUp}} +50% damage.", "Neutrality")
     EID:addCollectible(ABRAHAM_ESSENCE_ITEM, "Grants 3 soul hearts when entering an angel room for the first time.#Grants 3 black hearts when entering a devil room for the first time.#Essence of Abraham can be triggered once per floor.", "Essence of Abraham")
+    EID:addCollectible(OMEGA_ITEM, "Rapidly fire a barrage of lasers for 4 seconds.#The lasers deal 0.5x Isaac's damage.", "Technology Omega")
 
 end
 
@@ -5315,58 +5316,74 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.ResetHeartBonusOnNewFloor)
 
-function Mod:UseLaserBarrage(item, rng, player, flags)
+local barrageActive = false
+local barrageEndTime = 0
+
+-- ✅ Activate invulnerability and contact damage on use
+function Mod:ActivateBarrage(_, item, rng, player)
+    local player = Isaac.GetPlayer(0)
+    player:AnimateCollectible(OMEGA_ITEM, "UseItem", "PlayerPickupSparkle")
+
+
     if player:HasCollectible(OMEGA_ITEM) then
-        local numLasers = 50 -- ✅ Fires 10 lasers
-        local laserDelay = 5  -- ✅ Short delay between shots
-        
-        for i = 0, numLasers - 1 do
-            Mod:FireBarrageLaser() -- ✅ Delayed laser sequence
+
+        barrageActive = true
+        barrageEndTime = Isaac.GetFrameCount() + (4 * 60) -- 10 seconds in frames
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.ActivateBarrage, OMEGA_ITEM)
+
+-- ✅ Apply contact damage effect
+function Mod:OnPlayerUpdateBarrage(player)
+    local player = Isaac.GetPlayer(0)
+    if barrageActive then
+        -- ✅ Damage enemies on contact
+        local player = Isaac.GetPlayer(0)
+        local fireDirectionAzazel = player:GetFireDirection()
+        local directionazazel
+
+        if fireDirectionAzazel == Direction.LEFT then
+            directionazazel = Vector(-1, 0)
+        elseif fireDirectionAzazel == Direction.RIGHT then
+            directionazazel = Vector(1, 0)
+        elseif fireDirectionAzazel == Direction.DOWN then
+            directionazazel = Vector(0, 1)
+        elseif fireDirectionAzazel == Direction.UP then
+            directionazazel = Vector(0, -1)
+        elseif fireDirectionAzazel == Direction.NO_DIRECTION then
+            directionazazel = Vector(0, 1)
         end
 
+        -- Spawn a visible laser ring at the impact location
+        local laserRing = Isaac.Spawn(
+            EntityType.ENTITY_LASER,
+                LaserVariant.THIN_RED,
+                0,
+                player.Position,
+                Vector.Zero,
+                player
+        ):ToLaser()
+
+        if laserRing then -- Ensure the laser was spawned successfully
+            laserRing.PositionOffset = Vector(0, -20) -- Adjust Y value as needed
+
+            laserRing.AngleDegrees = directionazazel:GetAngleDegrees() -- Rotate laser to match direction
+            laserRing.CollisionDamage = player.Damage * 0.5 -- Set laser damage
+            laserRing.Timeout = 1 -- Laser duration
+            laserRing:AddTearFlags(TearFlags.TEAR_HOMING) -- Apply homing effect
+            laserRing.Parent = player -- Prevent self-damage
+        end
+
+        -- ✅ End effect after 10 seconds
+        if Isaac.GetFrameCount() >= barrageEndTime then
+            barrageActive = false
+        end
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseLaserBarrage, OMEGA_ITEM)
-
-function Mod:FireBarrageLaser()
-    --local position = entity.Position
-    local player = Isaac.GetPlayer(0)
-    local fireDirectionAzazel = player:GetFireDirection()
-    local directionazazel
-
-    if fireDirectionAzazel == Direction.LEFT then
-        directionazazel = Vector(-1, 0)
-    elseif fireDirectionAzazel == Direction.RIGHT then
-        directionazazel = Vector(1, 0)
-    elseif fireDirectionAzazel == Direction.DOWN then
-        directionazazel = Vector(0, 1)
-    elseif fireDirectionAzazel == Direction.UP then
-        directionazazel = Vector(0, -1)
-    elseif fireDirectionAzazel == Direction.NO_DIRECTION then
-        directionazazel = Vector(0, 1)
-    end
-
-    -- Spawn a visible laser ring at the impact location
-    local laserRing = Isaac.Spawn(
-        EntityType.ENTITY_LASER,
-            LaserVariant.THIN_RED,
-            0,
-            player.Position,
-            Vector.Zero,
-            player
-    ):ToLaser()
-
-    if laserRing then -- Ensure the laser was spawned successfully
-        laserRing.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
-
-        laserRing.AngleDegrees = directionazazel:GetAngleDegrees() -- Rotate laser to match direction
-        laserRing.CollisionDamage = 3 + player.Damage -- Set laser damage
-        laserRing.Timeout = 1 -- Laser duration
-        laserRing:AddTearFlags(TearFlags.TEAR_HOMING) -- Apply homing effect
-        laserRing.Parent = player -- Prevent self-damage
-    end
-end
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdateBarrage)
 ----------------------------------------------------------------------------------------
 --- Consumable/machine Code Below
 

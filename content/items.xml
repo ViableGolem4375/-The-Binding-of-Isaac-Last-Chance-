@@ -82,6 +82,6 @@
     <passive id="75" name="Neutrality" gfx="neutrality.png" description="Take the road less travelled" quality="4" hidden="true" tags="quest noeden nocantrip" cache="damage" />
     <passive id="76" name="Essence of Abraham" gfx="abraham_essence.png" description="Duality" quality="2" tags="offensive nocantrip" />
     <passive id="77" name=" Toolbelt " gfx="toolbelt.png" description="Pocket active" quality="3" hidden="true" tags="nocantrip offensive" />
-    <active id="78" name="Technology Omega" gfx="duae.png" description="Technological advancement" quality="2" maxcharges="4" chargetype="normal" tags="quest nocantrip" />
+    <active id="78" name="Technology Omega" gfx="omegatech.png" description="Technological advancement" quality="2" maxcharges="4" chargetype="normal" tags="quest nocantrip" />
 
 </items>
