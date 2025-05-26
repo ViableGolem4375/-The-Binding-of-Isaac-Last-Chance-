@@ -7,10 +7,16 @@
 - Forgotten essence effect is kind of a placeholder, need something more interesting.
 - Remember to make sure local/global variable thing isnt causing problems.
 - Sack of lucky pennies might me bugged.
+- Health ups not working on esau.
+- Stat up items need stacking behavior.
 
 Item Ideas to Add:
 
 - Ban hammer: one use active that erases all enemies in the room.
+- Technology effectsa for a room.
 
 Trinket Ideas:
 
+- Tech trinket
+
+Win streak: 7

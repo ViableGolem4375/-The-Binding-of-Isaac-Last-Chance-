@@ -1,7 +1,7 @@
 local Mod = RegisterMod("Mod", 1)
 local game = Game()
 
-include("lua.constants.items")
+--include("lua.constants.items")
 
 local itemConfig = Isaac.GetItemConfig()
 
@@ -104,6 +104,7 @@ GLITCH_DICE_ITEM_2 = Isaac.GetItemIdByName(" D-=777'L ")
 GLITCH_ESSENCE = Isaac.GetItemIdByName("64 36")
 LUCKY_PENNY_ITEM = Isaac.GetItemIdByName("Sack of Lucky Pennies")
 TOOLBELT_ITEM = Isaac.GetItemIdByName("Toolbelt")
+TOOLBELT_FIX_ITEM = Isaac.GetItemIdByName(" Toolbelt ")
 MOON_ITEM = Isaac.GetItemIdByName("Deep Orbit")
 FAMILIAR_MOON = Isaac.GetEntityVariantByName("Deep Orbit")
 FLUX_ITEM = Isaac.GetItemIdByName("Broken Flux Capacitor")
@@ -1337,7 +1338,7 @@ if EID then
     EID:addTrinket(CLOVER_TRINKET, "{{ArrowUp}} +1 luck.#{{Collectible202}} +2 luck if golden.", "4 Leaf Clover")
     EID:addTrinket(ORB_TRINKET, "Grants a 25% chance for quality 0 items to be automatically rerolled once.#{{Collectible202}} 50% chance to reroll if golden.", "Orb Shard")
     EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.#{{Collectible202}} No effect if golden.", "Stitched Photo")
-    EID:addTrinket(CANDLE_TRINKET, "Prevents seeing the same curse twice while held.#{{Collectible202}} No effect if golden.", "Black Candle Wick")
+    EID:addTrinket(CANDLE_TRINKET, "Grants 2 black hearts at the beginning of a floor if there is an active curse.#{{Collectible202}} Grants 4 black hearts if golden.", "Black Candle Wick")
     EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond")
     EID:addCollectible(COMP_ITEM, "{{ArrowUp}} Grants +1 damage for every quality 0 item Isaac holds.")
     EID:addCollectible(ANATOMY_ITEM, "Grants 1 bone heart on use.")
@@ -1387,6 +1388,7 @@ if EID then
     EID:addCollectible(GLITCH_ESSENCE, "Reroll all item pedestals in the room into TMTRAINER items.", "64 36")
     EID:addCollectible(LUCKY_PENNY_ITEM, "Spawns 5 lucky pennies on the ground around Isaac.", "Sack of Lucky Pennies")
     EID:addCollectible(TOOLBELT_ITEM, "Makes Isaac's currently held active item into a pocket active.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If Isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} When holding 2 active items via Schoolbag, the currently selected active item will be moved to the pocket slot.", "Toolbelt")
+    EID:addCollectible(TOOLBELT_FIX_ITEM, "Makes Isaac's currently held active item into a pocket active.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If Isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} When holding 2 active items via Schoolbag, the currently selected active item will be moved to the pocket slot.", " Toolbelt ")
     EID:addCollectible(MOON_ITEM, "Grants 3 fast moving orbitals which orbit Isaac as a far distance.#The orbitals block enemy projectiles and deal 5 damage per tick to enemies.", "Deep Orbit")
     EID:addCollectible(FLUX_ITEM, "Grants an absudly fast moving orbital.#The orbital can block enemy projectiles and deals 20 damage per tick to enemies.#The orbital will randomly change orbiting distance at random intervals.", "Broken Flux Capacitor")
     EID:addCollectible(LIGHT_ITEM, "Grants 1 stack towards the angel path.", "Path of Salvation")
@@ -2343,8 +2345,9 @@ end
 function Mod:OnCacheUpdateComp(player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_DAMAGE then
         if player:HasCollectible(COMP_ITEM) then
+            local numcomp = player:GetCollectibleNum(COMP_ITEM)
             local quality0Count = CountQuality0Items(player)
-            player.Damage = player.Damage + (quality0Count * 1)
+            player.Damage = player.Damage + (quality0Count * numcomp)
         end
     end
 end
@@ -2652,6 +2655,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloor) -- Spawn golden 
 function Mod:OnCacheUpdateJudasEssence(player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_DAMAGE then
         if player:HasCollectible(JUDAS_ESSENCE) then
+            local judasnum = player:GetCollectibleNum(JUDAS_ESSENCE) * 2.5
             -- Base bonus: +1 damage
             local damageBonus = 1
             
@@ -2660,7 +2664,7 @@ function Mod:OnCacheUpdateJudasEssence(player, cacheFlag)
 
             -- Apply 2.5x multiplier if total health is 3 hearts (6 half-hearts) or less
             if totalHearts <= 6 then
-                player.Damage = player.Damage * 2.5
+                player.Damage = player.Damage * judasnum
             end
             
             -- Apply the base damage bonus
@@ -2676,8 +2680,9 @@ function Mod:OnNewRoomBlueBabyEssence()
     local player = Isaac.GetPlayer(0)
     -- Ensure the player has the item before triggering effect
     if player:HasCollectible(BLUE_BABY_ESSENCE) then
-        -- Spawn 6 Blue Flies around the player
-        player:AddBlueFlies(10, player.Position, player)
+        local babynum = player:GetCollectibleNum(BLUE_BABY_ESSENCE) * 10
+        -- Spawn Blue Flies around the player
+        player:AddBlueFlies(babynum, player.Position, player)
     end
 end
 
@@ -2703,14 +2708,14 @@ end
 function Mod:OnCacheUpdateEveEssence(player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_DAMAGE then
         if player:HasCollectible(EVE_ESSENCE) then
-            
+            local evenum = player:GetCollectibleNum(EVE_ESSENCE) * 30
             -- Calculate total hearts (Red, Soul, Bone converted to half-hearts)
             local totalHearts = player:GetHearts() + player:GetSoulHearts() + player:GetBlackHearts() + player:GetRottenHearts() + (player:GetBoneHearts() * 2)
 
             -- Add 30 damage when health is at 1 heart or less.
             if totalHearts <= 2 and eveEssencetriggered == false then
                 eveEssencetriggered2 = true
-                player.Damage = player.Damage + 30
+                player.Damage = player.Damage + evenum
             end
             
         end
@@ -2852,7 +2857,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.OnEnemyKilled)
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplySamsonEssenceEffect, CacheFlag.CACHE_DAMAGE)
 
 local HasLaserEffect = false
-local LASER_RING_CHANCE = 100 -- 25% chance to trigger
+local LASER_RING_CHANCE = 25 -- 25% chance to trigger
 
 --local HasHomingShot = false
 
@@ -2898,6 +2903,7 @@ function Mod:onTearImpact(entity)
         local player = Isaac.GetPlayer(0)
         local fireDirectionAzazel = player:GetFireDirection()
         local directionazazel
+        local azazelnum = player:GetCollectibleNum(AZAZEL_ESSENCE) * 3
 
         if fireDirectionAzazel == Direction.LEFT then
             directionazazel = Vector(-1, 0)
@@ -2925,7 +2931,7 @@ function Mod:onTearImpact(entity)
             laserRing.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
 
             laserRing.AngleDegrees = directionazazel:GetAngleDegrees() -- Rotate laser to match direction
-            laserRing.CollisionDamage = 3 + player.Damage -- Set laser damage
+            laserRing.CollisionDamage = azazelnum + player.Damage -- Set laser damage
             laserRing.Timeout = 15 -- Laser duration
             laserRing:AddTearFlags(TearFlags.TEAR_HOMING) -- Apply homing effect
             laserRing.Parent = player -- Prevent self-damage
@@ -2955,23 +2961,24 @@ local STAT_BOOST = {
 
 function Mod:lazEssencePickup(player, cacheFlag)
     if player:HasCollectible(LAZARUS_ESSENCE_UNLOCKED) then
+        local numlaz = player:GetCollectibleNum(LAZARUS_ESSENCE_UNLOCKED)
         if cacheFlag == CacheFlag.CACHE_SPEED then
-            player.MoveSpeed = player.MoveSpeed + STAT_BOOST.SPEED
+            player.MoveSpeed = player.MoveSpeed + (STAT_BOOST.SPEED * numlaz)
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            player.MaxFireDelay = player.MaxFireDelay + STAT_BOOST.FIREDELAY
+            player.MaxFireDelay = player.MaxFireDelay + (STAT_BOOST.FIREDELAY * numlaz)
         end
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            player.Damage = (player.Damage + STAT_BOOST.DAMAGE) * 1.5
+            player.Damage = (player.Damage + STAT_BOOST.DAMAGE) * (1.5 * numlaz)
         end
         if cacheFlag == CacheFlag.CACHE_RANGE then
-            player.TearRange = player.TearRange + STAT_BOOST.RANGE
+            player.TearRange = player.TearRange + (STAT_BOOST.RANGE * numlaz)
         end
         if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
-            player.ShotSpeed = player.ShotSpeed+ STAT_BOOST.SHOTSPEED
+            player.ShotSpeed = player.ShotSpeed+ (STAT_BOOST.SHOTSPEED * numlaz)
         end
         if cacheFlag == CacheFlag.CACHE_LUCK then
-            player.Luck = player.Luck + STAT_BOOST.LUCK
+            player.Luck = player.Luck + (STAT_BOOST.LUCK * numlaz)
         end
     end
 end
@@ -3297,6 +3304,7 @@ local predefinedItemList = {
 function Mod:OnPickupRewardItem(_, player)
     local player = Isaac.GetPlayer(0)
     if player:HasCollectible(MATT_ESSENCE) then
+        local nummatt = player:GetCollectibleNum(MATT_ESSENCE) * 3
 
         -- Select two random items from the list
         local chosenItems = {}
@@ -3315,7 +3323,7 @@ function Mod:OnPickupRewardItem(_, player)
 
         -- ✅ Grant a luck upgrade
         player:AddCacheFlags(CacheFlag.CACHE_LUCK)
-        player:GetData().luckBoost = 3 -- Adjust as needed
+        player:GetData().luckBoost = nummatt -- Adjust as needed
         player:EvaluateItems()
 
         -- ✅ Remove itself after activation (if desired)
@@ -3476,6 +3484,7 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItemForgotten, FORGOTTEN_ES
 
 local HasStarEffect = false
 
+
 function Mod:onUpdateStarDavid(player)
 	if game:GetFrameCount() == 1 then
 		HasStarEffect = false
@@ -3503,13 +3512,14 @@ function Mod:onTearInitStar(tear)
             local player = parent:ToPlayer()
             if player:HasCollectible(STAR_OF_DAVID) and getRandomStarEffect(player) then
                 tear:GetData().starTrigger = true
+                local starnum = player:GetCollectibleNum(STAR_OF_DAVID) * 1.3
 
                 local sprite = tear:GetSprite()
                 sprite:Load("gfx/star_of_david_tear.anm2", true)
                 sprite:Play("Stone4Move", true)
 
                 -- ✅ Increase damage by 30%
-                tear.CollisionDamage = tear.CollisionDamage * 1.3
+                tear.CollisionDamage = tear.CollisionDamage * starnum
                 --tear.AddTearFlags(TearFlags.TEAR_HP_DROP)
 
                 -- ✅ Apply bleed effect on hit
@@ -3526,10 +3536,11 @@ local goldenHeartChance = 0.05 -- Set the drop chance (10%)
 
 function Mod:onEnemyDeath(entity)
     local player = Isaac.GetPlayer(0)
+    local starnumheart = player:GetCollectibleNum(STAR_OF_DAVID) * 0.05
 
     if player:HasCollectible(STAR_OF_DAVID) and entity:IsEnemy() then
         -- ✅ Base chance (5%) + Luck scaling (5% per Luck point)
-        local luckFactor = math.max(0, player.Luck * 0.05) -- Prevent negative values
+        local luckFactor = math.max(0, player.Luck * starnumheart) -- Prevent negative values
         local finalChance = math.min(0.5, 0.1 + luckFactor) -- Cap at 50% drop rate
 
         -- ✅ Random chance to spawn a Golden Heart upon enemy death
@@ -3592,65 +3603,54 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseGun, GUN_ITEM)
 
+function Mod:OnPickupAppetizer()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local data = player:GetData()
 
-local appetizerTaken = false
+        if not data.AppetizerCount then data.AppetizerCount = 0 end
 
--- Reset the flag when starting a new run
-function Mod:OnNewGameAppetizer(isContinued)
-    if not isContinued then -- Ensures it only resets for fresh runs, not continues
-        appetizerTaken = false
+        local currentCount = player:GetCollectibleNum(APPETIZER_ITEM)
+
+        if currentCount > data.AppetizerCount then
+            local healthGain = (currentCount - data.AppetizerCount) * 2
+
+            player:AddMaxHearts(healthGain)
+            player:AddHearts(healthGain)
+
+            print("Appetizer applied to:", player:GetName(), "Total health increase:", healthGain)
+        end
+
+        data.AppetizerCount = currentCount
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameAppetizer) -- Reset flag between runs
-
-function Mod:OnPickupAppetizer(_, player)
-    local player = Isaac.GetPlayer(0)
-    if player:HasCollectible(APPETIZER_ITEM) and appetizerTaken == false then
-        
-        -- ✅ Grant a Red Heart container
-        player:AddMaxHearts(2)
-        player:AddHearts(2) -- Fill the new container
-
-        -- ✅ Mark that the effect has been used
-        appetizerTaken = true
-
-    elseif not player:HasCollectible(APPETIZER_ITEM) then
-        appetizerTaken = false
-
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupAppetizer)
-
-local morningSnack = false
-
--- Reset the flag when starting a new run
-function Mod:OnNewGameMorningSnack(isContinued)
-    if not isContinued then -- Ensures it only resets for fresh runs, not continues
-        morningSnack = false
-    end
-end
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPickupAppetizer)
 
 Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameMorningSnack) -- Reset flag between runs
 
-function Mod:OnPickupMorningSnack(_, player)
-    local player = Isaac.GetPlayer(0)
-    if player:HasCollectible(MORNING_SNACK_ITEM) and morningSnack == false then
-        
-        -- ✅ Grant a Red Heart container
-        player:AddMaxHearts(2)
-        player:AddHearts(2) -- Fill the new container
+function Mod:OnPickupMorningSnack()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local data = player:GetData()
 
-        -- ✅ Mark that the effect has been used
-        morningSnack = true
+        if not data.SnackCount then data.SnackCount = 0 end
 
-    elseif not player:HasCollectible(MORNING_SNACK_ITEM) then
-        morningSnack = false
+        local currentCount = player:GetCollectibleNum(MORNING_SNACK_ITEM)
+
+        if currentCount > data.SnackCount then
+            local healthGain = (currentCount - data.SnackCount) * 2
+
+            player:AddMaxHearts(healthGain)
+            player:AddHearts(healthGain)
+
+        end
+
+        data.SnackCount = currentCount
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupMorningSnack)
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPickupMorningSnack)
 
 local BOSS_ROOM_DAMAGE_BOOST = 1.5 -- 50% extra damage
 
@@ -3658,12 +3658,13 @@ function Mod:UpdateBossRoomDamage(player)
     --local game = Game()
     local level = game:GetLevel()
     local room = game:GetRoom()
+    local kingnum = player:GetCollectibleNum(KINGSLAYER_ITEM) * 1.5
 
     -- ✅ Check if player is in an uncleared boss room
     if player:HasCollectible(KINGSLAYER_ITEM) and room:GetType() == RoomType.ROOM_BOSS and not room:IsClear() then
 
         -- ✅ Apply temporary damage boost
-        player:GetData().bossDamageBoost = BOSS_ROOM_DAMAGE_BOOST
+        player:GetData().bossDamageBoost = kingnum
         player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
         player:EvaluateItems()
     else
@@ -3680,7 +3681,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.UpdateBossRoomDamage)
 
 function Mod:ApplyBossRoomDamage(player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_DAMAGE and player:GetData().bossDamageBoost then
-        player.Damage = player.Damage + player:GetData().bossDamageBoost
+        player.Damage = player.Damage * player:GetData().bossDamageBoost
     end
 end
 
@@ -3755,11 +3756,12 @@ local LUCK_SCALING = 0.05 -- ✅ +5% chance per Luck point
 
 function Mod:OnEnemyDeath(entity)
     local player = Isaac.GetPlayer(0)
+    local necronum = player:GetCollectibleNum(NECROMANCY_ITEM) * 0.05
 
     -- ✅ Check if player has the item and enemy is valid
     if player:HasCollectible(NECROMANCY_ITEM) and entity:IsEnemy() then
         -- ✅ Scale chance with Luck
-        local luckFactor = math.max(0, player.Luck * LUCK_SCALING)
+        local luckFactor = math.max(0, player.Luck * necronum)
         local finalChance = math.min(0.75, BASE_CHANCE + luckFactor) -- Cap at 75% chance
 
         if math.random() < finalChance then
@@ -3874,7 +3876,7 @@ end
 
 local function getRandomGlitchEffect(player)
     local baseChance = 0.00000001
-    local luckScaling = 0.00000001
+    local luckScaling = 0.00000001 * player:GetCollectibleNum(GLITCH_ITEM)
 
     local luckBonus = math.max(0, player.Luck * luckScaling) -- Ensure non-negative
     local finalChance = math.min(1, baseChance + luckBonus) -- Cap at 90% chance
@@ -4132,6 +4134,7 @@ local STAT_BOOST = {
 function Mod:ToastPickup(player, cacheFlag)
     if player:HasCollectible(TOAST_ITEM) then
         local data = player:GetData()
+        local toastnum = player:GetCollectibleNum(TOAST_ITEM)
     
         if player:HasCollectible(TOAST_ITEM) and not data.ToastHeartGiven then
             player:AddSoulHearts(1) -- ✅ Grants half a soul heart
@@ -4139,22 +4142,22 @@ function Mod:ToastPickup(player, cacheFlag)
         end
 
         if cacheFlag == CacheFlag.CACHE_SPEED then
-            player.MoveSpeed = player.MoveSpeed + STAT_BOOST.SPEED
+            player.MoveSpeed = player.MoveSpeed + (STAT_BOOST.SPEED * toastnum)
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            player.MaxFireDelay = player.MaxFireDelay + STAT_BOOST.FIREDELAY
+            player.MaxFireDelay = player.MaxFireDelay + (STAT_BOOST.FIREDELAY * toastnum)
         end
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            player.Damage = player.Damage + STAT_BOOST.DAMAGE
+            player.Damage = player.Damage + (STAT_BOOST.DAMAGE * toastnum)
         end
         if cacheFlag == CacheFlag.CACHE_RANGE then
-            player.TearRange = player.TearRange + STAT_BOOST.RANGE
+            player.TearRange = player.TearRange + (STAT_BOOST.RANGE * toastnum)
         end
         if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
-            player.ShotSpeed = player.ShotSpeed+ STAT_BOOST.SHOTSPEED
+            player.ShotSpeed = player.ShotSpeed+ (STAT_BOOST.SHOTSPEED * toastnum)
         end
         if cacheFlag == CacheFlag.CACHE_LUCK then
-            player.Luck = player.Luck + STAT_BOOST.LUCK
+            player.Luck = player.Luck + (STAT_BOOST.LUCK * toastnum)
         end
     end
 end
@@ -4406,6 +4409,8 @@ function Mod:ConvertActiveToPocket(player)
             Mod:GiveRandomActiveItem(player)
         end
         toolbeltTriggered = true
+        player:RemoveCollectible(TOOLBELT_ITEM)
+        player:AddCollectible(TOOLBELT_FIX_ITEM)
     end
 end
 
@@ -5517,9 +5522,9 @@ function Mod:OnCacheUpdateClover(player, cacheFlag)
 
     if cacheFlag == CacheFlag.CACHE_LUCK then
         if player:HasTrinket(CLOVER_TRINKET) then
-            local luckBonus = 1
+            local luckBonus = 2
             if player:GetTrinketMultiplier(CLOVER_TRINKET) > 1 then
-                luckBonus = 2 -- Double Luck bonus for golden version
+                luckBonus = 4 -- Double Luck bonus for golden version
             end
             player.Luck = player.Luck + luckBonus
 
@@ -5586,18 +5591,25 @@ function Mod:OnNewLevel()
     --local game = Game()
     local level = game:GetLevel()
     local player = Isaac.GetPlayer(0) -- Gets the main player
+    local numhearts = 4
 
     if player:HasTrinket(CANDLE_TRINKET) then
         local currentCurse = level:GetCurses()
+        if player:GetTrinketMultiplier(CANDLE_TRINKET) > 1 then
+            numhearts = 8
+        end
 
-        if seenCurses[currentCurse] then
+        if currentCurse ~= LevelCurse.CURSE_NONE then
+            player:AddBlackHearts(numhearts)
+        end
+        --[[ if seenCurses[currentCurse] then
             -- Already seen this curse, reroll to a new one
             local newCurse = Mod:SelectNewCurse()
             level:AddCurse(newCurse, true)
         end
 
         -- Mark this curse as seen
-        seenCurses[currentCurse] = true
+        seenCurses[currentCurse] = true ]]
     end
 end
 
