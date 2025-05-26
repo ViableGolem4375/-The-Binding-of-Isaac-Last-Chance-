@@ -3966,7 +3966,7 @@ function ProtoTech:onUpdateTech(player)
                 ProtoTechLaser.TearFlags = player.TearFlags
                 ProtoTechLaser.AngleDegrees = directiontech:GetAngleDegrees()
                 ProtoTechLaser.CollisionDamage = player.Damage * 10
-                ProtoTechLaser.PositionOffset = Vector(0, -10)
+                ProtoTechLaser.PositionOffset = Vector(0, -20)
                 ProtoTechLaser.Timeout = 1
                 ProtoTechLaser.Parent = player
                 --end
