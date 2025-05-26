@@ -66,7 +66,7 @@
     <passive id="61" name="Toolbelt" gfx="toolbelt.png" description="Pocket active" quality="3" tags="nocantrip offensive" />
     <familiar name="Deep Orbit" gfx="orbiting_moons.png" description="One small step for man..." quality="2" cache="familiars" tags="offensive summonable monstermanual" />
     <familiar name="Broken Flux Capacitor" gfx="flux_capacitor.png" description="Localized time distortion" quality="1" cache="familiars" tags="offensive summonable monstermanual" />
-    <active id="62" name="Duae Viae" gfx="duae.png" description="Make your choice" quality="4" maxcharges="3" chargetype="normal" hidden="true" tags="quest nocantrip" />
+    <active id="62" name="Duae Viae" gfx="duae.png" description="Make your choice" quality="4" maxcharges="3" chargetype="normal" hidden="true" tags="quest nocantrip book noeden" />
     <passive id="63" name="Path of Salvation" gfx="angelpath.png" description="I am saved" quality="4" hidden="true" tags="quest noeden nocantrip" />
     <passive id="64" name="Path of Temptation" gfx="devilpath.png" description="My life is yours" quality="4" hidden="true" tags="quest noeden nocantrip" />
     <passive id="65" name="Devil's Path 1" gfx="devilpath1.png" description="Fire shot" quality="4" hidden="true" tags="quest noeden nocantrip" />
@@ -82,5 +82,6 @@
     <passive id="75" name="Neutrality" gfx="neutrality.png" description="Take the road less travelled" quality="4" hidden="true" tags="quest noeden nocantrip" cache="damage" />
     <passive id="76" name="Essence of Abraham" gfx="abraham_essence.png" description="Duality" quality="2" tags="offensive nocantrip" />
     <passive id="77" name=" Toolbelt " gfx="toolbelt.png" description="Pocket active" quality="3" hidden="true" tags="nocantrip offensive" />
+    <active id="78" name="Technology Omega" gfx="duae.png" description="Technological advancement" quality="2" maxcharges="4" chargetype="normal" tags="quest nocantrip" />
 
 </items>

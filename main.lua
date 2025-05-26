@@ -124,6 +124,7 @@ DEVIL_FOUR_VFX = Isaac.GetItemIdByName("Devil's Path 4 VFX")
 DEMON_DASH_ITEM = Isaac.GetItemIdByName("Rend")
 NEUTRAL_ITEM = Isaac.GetItemIdByName("Neutrality")
 ABRAHAM_ESSENCE_ITEM = Isaac.GetItemIdByName("Essence of Abraham")
+OMEGA_ITEM = Isaac.GetItemIdByName("Technology Omega")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Matt below.
@@ -3123,7 +3124,7 @@ local killCount = 0
 -- ✅ Activate invulnerability and contact damage on use
 function Mod:ActivateRampage(_, item, rng, player)
     local player = Isaac.GetPlayer(0)
-    player:AnimateCollectible(EDEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
+    player:AnimateCollectible(APOLLYON_ESSENCE, "UseItem", "PlayerPickupSparkle")
     player:AddCollectible(APOLLYON_ESSENCE_VFX)
     local apollyonsfx = SFXManager()
     apollyonsfx:Play(SoundEffect.SOUND_BEAST_SUCTION_LOOP) -- Play sound effect
@@ -3627,7 +3628,6 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPickupAppetizer)
 
-Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameMorningSnack) -- Reset flag between runs
 
 function Mod:OnPickupMorningSnack()
     for i = 0, Game():GetNumPlayers() - 1 do
@@ -5274,22 +5274,26 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseAbrahamDash, DEMON_DASH_ITEM)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.OnUpdateAbrahamDash)
 
 function Mod:OnEnterSpecialRoom()
-    local player = Isaac.GetPlayer(0)
     local room = Game():GetRoom()
-    local data = player:GetData()
 
-    if player:HasCollectible(ABRAHAM_ESSENCE_ITEM) then
-        if not data.HasClaimedHeartBonus then data.HasClaimedHeartBonus = {} end -- ✅ Track claimed bonuses
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local data = player:GetData()
 
-        -- ✅ Check if room is Angel or Devil and ensure effect hasn't been triggered before
-        if room:GetType() == RoomType.ROOM_ANGEL and not data.HasClaimedHeartBonus[RoomType.ROOM_ANGEL] then
-            player:AddSoulHearts(6) -- ✅ Grants 3 Soul Hearts (6 half-hearts)
-            data.HasClaimedHeartBonus[RoomType.ROOM_ANGEL] = true -- ✅ Marks Angel room bonus as claimed
-            print("Entered Angel Room! Granted 3 Soul Hearts.")
-        elseif room:GetType() == RoomType.ROOM_DEVIL and not data.HasClaimedHeartBonus[RoomType.ROOM_DEVIL] then
-            player:AddBlackHearts(6) -- ✅ Grants 3 Black Hearts (6 half-hearts)
-            data.HasClaimedHeartBonus[RoomType.ROOM_DEVIL] = true -- ✅ Marks Devil room bonus as claimed
-            print("Entered Devil Room! Granted 3 Black Hearts.")
+        if player:HasCollectible(ABRAHAM_ESSENCE_ITEM) then
+            if not data.HasClaimedHeartBonus then data.HasClaimedHeartBonus = {} end -- ✅ Track claimed bonuses
+
+            -- ✅ Check if room is Angel or Devil and ensure effect hasn't triggered before
+            if room:GetType() == RoomType.ROOM_ANGEL and not data.HasClaimedHeartBonus[RoomType.ROOM_ANGEL] then
+                player:AddSoulHearts(6) -- ✅ Grants 3 Soul Hearts (6 half-hearts)
+
+                data.HasClaimedHeartBonus[RoomType.ROOM_ANGEL] = true -- ✅ Marks Angel room bonus as claimed
+                print(player:GetName(), "entered Angel Room! Granted 3 Soul Hearts.")
+            elseif room:GetType() == RoomType.ROOM_DEVIL and not data.HasClaimedHeartBonus[RoomType.ROOM_DEVIL] then
+                player:AddBlackHearts(6) -- ✅ Grants 3 Black Hearts (6 half-hearts)
+                data.HasClaimedHeartBonus[RoomType.ROOM_DEVIL] = true -- ✅ Marks Devil room bonus as claimed
+                print(player:GetName(), "entered Devil Room! Granted 3 Black Hearts.")
+            end
         end
     end
 end
@@ -5298,16 +5302,71 @@ Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnEnterSpecialRoom)
 
 
 function Mod:ResetHeartBonusOnNewFloor()
-    local player = Isaac.GetPlayer(0)
-    local data = player:GetData()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local data = player:GetData()
 
-    if data.HasClaimedHeartBonus then
-        data.HasClaimedHeartBonus = {} -- ✅ Clears stored room bonuses
-        print("New floor entered! Heart bonus reset.")
+        if data.HasClaimedHeartBonus then
+            data.HasClaimedHeartBonus = {} -- ✅ Clears stored room bonuses for each player
+            print(player:GetName(), "entered a new floor! Heart bonus reset.")
+        end
     end
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.ResetHeartBonusOnNewFloor)
+
+function Mod:UseLaserBarrage(item, rng, player, flags)
+    if player:HasCollectible(OMEGA_ITEM) then
+        local numLasers = 50 -- ✅ Fires 10 lasers
+        local laserDelay = 5  -- ✅ Short delay between shots
+        
+        for i = 0, numLasers - 1 do
+            Mod:FireBarrageLaser() -- ✅ Delayed laser sequence
+        end
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseLaserBarrage, OMEGA_ITEM)
+
+function Mod:FireBarrageLaser()
+    --local position = entity.Position
+    local player = Isaac.GetPlayer(0)
+    local fireDirectionAzazel = player:GetFireDirection()
+    local directionazazel
+
+    if fireDirectionAzazel == Direction.LEFT then
+        directionazazel = Vector(-1, 0)
+    elseif fireDirectionAzazel == Direction.RIGHT then
+        directionazazel = Vector(1, 0)
+    elseif fireDirectionAzazel == Direction.DOWN then
+        directionazazel = Vector(0, 1)
+    elseif fireDirectionAzazel == Direction.UP then
+        directionazazel = Vector(0, -1)
+    elseif fireDirectionAzazel == Direction.NO_DIRECTION then
+        directionazazel = Vector(0, 1)
+    end
+
+    -- Spawn a visible laser ring at the impact location
+    local laserRing = Isaac.Spawn(
+        EntityType.ENTITY_LASER,
+            LaserVariant.THIN_RED,
+            0,
+            player.Position,
+            Vector.Zero,
+            player
+    ):ToLaser()
+
+    if laserRing then -- Ensure the laser was spawned successfully
+        laserRing.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
+
+        laserRing.AngleDegrees = directionazazel:GetAngleDegrees() -- Rotate laser to match direction
+        laserRing.CollisionDamage = 3 + player.Damage -- Set laser damage
+        laserRing.Timeout = 1 -- Laser duration
+        laserRing:AddTearFlags(TearFlags.TEAR_HOMING) -- Apply homing effect
+        laserRing.Parent = player -- Prevent self-damage
+    end
+end
 ----------------------------------------------------------------------------------------
 --- Consumable/machine Code Below
 
@@ -5585,55 +5644,24 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnItemPickupPhoto)
 
-local seenCurses = {} -- Stores curses that have already appeared
-
 function Mod:OnNewLevel()
-    --local game = Game()
-    local level = game:GetLevel()
-    local player = Isaac.GetPlayer(0) -- Gets the main player
-    local numhearts = 4
+    local level = Game():GetLevel()
 
-    if player:HasTrinket(CANDLE_TRINKET) then
-        local currentCurse = level:GetCurses()
-        if player:GetTrinketMultiplier(CANDLE_TRINKET) > 1 then
-            numhearts = 8
-        end
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i) -- ✅ Loops through all players
+        local numhearts = 4
 
-        if currentCurse ~= LevelCurse.CURSE_NONE then
-            player:AddBlackHearts(numhearts)
-        end
-        --[[ if seenCurses[currentCurse] then
-            -- Already seen this curse, reroll to a new one
-            local newCurse = Mod:SelectNewCurse()
-            level:AddCurse(newCurse, true)
-        end
+        if player:HasTrinket(CANDLE_TRINKET) then
+            local currentCurse = level:GetCurses()
+            if player:GetTrinketMultiplier(CANDLE_TRINKET) > 1 then
+                numhearts = 8
+            end
 
-        -- Mark this curse as seen
-        seenCurses[currentCurse] = true ]]
-    end
-end
-
-function Mod:SelectNewCurse()
-    local availableCurses = {
-        LevelCurse.CURSE_OF_DARKNESS,
-        LevelCurse.CURSE_OF_THE_LOST,
-        LevelCurse.CURSE_OF_MAZE,
-        LevelCurse.CURSE_OF_BLIND,
-        LevelCurse.CURSE_OF_THE_UNKNOWN
-    }
-
-    -- Remove already seen curses
-    for i = #availableCurses, 1, -1 do
-        if seenCurses[availableCurses[i]] then
-            table.remove(availableCurses, i)
+            if currentCurse ~= LevelCurse.CURSE_NONE then
+                player:AddBlackHearts(numhearts) -- ✅ Grants hearts to Jacob & Esau separately
+            end
         end
     end
-
-    if #availableCurses > 0 then
-        return availableCurses[math.random(1, #availableCurses)]
-    end
-
-    return LevelCurse.CURSE_NONE -- If all curses were seen, remove curses
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewLevel)
