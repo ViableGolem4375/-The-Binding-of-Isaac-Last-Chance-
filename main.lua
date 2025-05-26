@@ -1414,6 +1414,7 @@ if EID then
     EID:addCollectible(OMEGA_ITEM, "Rapidly fire a barrage of lasers for 4 seconds.#The lasers deal 0.5x Isaac's damage.", "Technology Omega")
     EID:addTrinket(TECH_TRINKET, "10% chance to fire a technology laser instead of a normal tear.#{{Luck}} +5% chance to trigger per point of luck.#{{Collectible202}} +10% chance to trigger per point of luck when golden.", "Bootleg Tech")
     EID:addCard(SOUL_MATT, "{{Luck}} +10 luck for the current room.", "Soul of Matt")
+
 end
 
 --Function to handle dice item rerolls.
@@ -5392,13 +5393,20 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdateBarrage)
 ----------------------------------------------------------------------------------------
 --- Consumable/machine Code Below
 
+
 function Mod:UseSoulStone(card, player)
     if card == SOUL_MATT then
         local data = player:GetData()
-        data.TempLuckBoost = 10 -- ✅ Store the temporary luck boost
         
-        player:AddCacheFlags(CacheFlag.CACHE_LUCK) -- ✅ Refresh player stats
+        -- ✅ If no existing boost, initialize it
+        if not data.TempLuckBoost then data.TempLuckBoost = 0 end
+        
+        -- ✅ Add 10 Luck instead of overwriting the boost
+        data.TempLuckBoost = data.TempLuckBoost + 10
+
+        player:AddCacheFlags(CacheFlag.CACHE_LUCK)
         player:EvaluateItems()
+
 
     end
 end
@@ -5410,12 +5418,12 @@ function Mod:ResetLuckOnRoomExit()
         local player = Game():GetPlayer(i)
         local data = player:GetData()
 
-        if data.TempLuckBoost then
-            data.TempLuckBoost = nil -- ✅ Reset Luck boost for this player
+        if data.TempLuckBoost and data.TempLuckBoost > 0 then
+            data.TempLuckBoost = nil -- ✅ Reset all stacked boosts
             player:AddCacheFlags(CacheFlag.CACHE_LUCK)
             player:EvaluateItems()
-
         end
+
     end
 end
 
@@ -5430,53 +5438,7 @@ function Mod:ApplyLuckBoost(player, cacheFlag)
 end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyLuckBoost)
---[[ local Soul = {}
 
-Soul.SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
-
-
-local SOULMATT = "gfx/soul_of_matt.anm2"
-local MATTCHANCE = 0.5
-local RunCooldown = 0
-
-function Mod:onPostUpdateMattSoul(player)
-    for _, entity in pairs(Isaac.GetRoomEntities()) do
-        --if entity.Type == 
-    end
-end
-
-function Mod:onMattSoul(...)
-    Isaac.GetPlayer(0):AnimateCard(Card.RUNE_JERA, "UseItem")
-    local player = Isaac.GetPlayer(0)
-    local luckBonusMatt = 2 -- Double Luck bonus for golden version
-    player.Luck = player.Luck + luckBonusMatt
-end
-
-Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.onMattSoul, Soul.SOUL_MATT) ]]
-
---[[ 
-local CustomRunes = (Card.SOUL_MATT)
-local RuneChance = {0.5}
-
-function Mod:mattSoul(rng, iCurrentCard, bPlaying, bRunes, bOnlyRunes)
-    if bRunes then
-        local roll = rng:RandomFloat()
-        local index = 1
-        while index <= #RuneChance and roll > RuneChance[index] do
-            roll = roll - RuneChance[index]
-            index = index + 1
-        end
-        if index <= #RuneChance then
-            return CustomRunes[index]
-        end
-    elseif bPlaying then
-        local player = game:GetPlayer(0)
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, iCurrentCard, player.Position, Vector(0,0), player)
-
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_GET_CARD, Mod.mattSoul) ]]
 
 -- Huge credit here to heehoo's card recycler mod for helping me figure out the code below
 -- to get the essence collector working right.

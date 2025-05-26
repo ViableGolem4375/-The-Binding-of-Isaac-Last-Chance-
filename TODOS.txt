@@ -8,14 +8,15 @@
 - Remember to make sure local/global variable thing isnt causing problems.
 - Sack of lucky pennies might me bugged.
 - Stat up items need stacking behavior.
+- Abraham needs controls
 
 Item Ideas to Add:
 
 - Ban hammer: one use active that erases all enemies in the room.
-- Technology effectsa for a room.
+
 
 Trinket Ideas:
 
-- Tech trinket
+
 
 Win streak: 7
