@@ -1,10 +1,10 @@
 <AnimatedActor>
-	<Info CreatedBy="robot" CreatedOn="5/10/2025 9:04:52 AM" Version="107" Fps="30"/>
+	<Info CreatedBy="robot" CreatedOn="5/26/2025 5:09:13 PM" Version="110" Fps="30"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="pickups\pickup_soulstones.png" Id="0"/>
 			<Spritesheet Path="ui\ui_cardspills.png" Id="1"/>
-			<Spritesheet Path="Effects\Effect_023_StarFlash.png" Id="2"/>
+			<Spritesheet Path="ui\effect_023_starflash.png" Id="2"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="body" Id="0" SpritesheetId="0"/>

@@ -127,6 +127,9 @@ ABRAHAM_ESSENCE_ITEM = Isaac.GetItemIdByName("Essence of Abraham")
 OMEGA_ITEM = Isaac.GetItemIdByName("Technology Omega")
 TECH_TRINKET = Isaac.GetTrinketIdByName("Bootleg Tech")
 
+SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
+
+
 ----------------------------------------------------------------------------------------
 -- Character code for Matt below.
 
@@ -1410,7 +1413,7 @@ if EID then
     EID:addCollectible(ABRAHAM_ESSENCE_ITEM, "Grants 3 soul hearts when entering an angel room for the first time.#Grants 3 black hearts when entering a devil room for the first time.#Essence of Abraham can be triggered once per floor.", "Essence of Abraham")
     EID:addCollectible(OMEGA_ITEM, "Rapidly fire a barrage of lasers for 4 seconds.#The lasers deal 0.5x Isaac's damage.", "Technology Omega")
     EID:addTrinket(TECH_TRINKET, "10% chance to fire a technology laser instead of a normal tear.#{{Luck}} +5% chance to trigger per point of luck.#{{Collectible202}} +10% chance to trigger per point of luck when golden.", "Bootleg Tech")
-
+    EID:addCard(SOUL_MATT, "{{Luck}} +10 luck for the current room.", "Soul of Matt")
 end
 
 --Function to handle dice item rerolls.
@@ -5389,9 +5392,48 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdateBarrage)
 ----------------------------------------------------------------------------------------
 --- Consumable/machine Code Below
 
+function Mod:UseSoulStone(card, player)
+    if card == SOUL_MATT then
+        local data = player:GetData()
+        data.TempLuckBoost = 10 -- ✅ Store the temporary luck boost
+        
+        player:AddCacheFlags(CacheFlag.CACHE_LUCK) -- ✅ Refresh player stats
+        player:EvaluateItems()
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseSoulStone, SOUL_MATT)
+
+function Mod:ResetLuckOnRoomExit()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local data = player:GetData()
+
+        if data.TempLuckBoost then
+            data.TempLuckBoost = nil -- ✅ Reset Luck boost for this player
+            player:AddCacheFlags(CacheFlag.CACHE_LUCK)
+            player:EvaluateItems()
+
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.ResetLuckOnRoomExit)
+
+function Mod:ApplyLuckBoost(player, cacheFlag)
+    local data = player:GetData()
+
+    if cacheFlag == CacheFlag.CACHE_LUCK and data.TempLuckBoost then
+        player.Luck = player.Luck + data.TempLuckBoost -- ✅ Properly apply temporary Luck boost
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyLuckBoost)
 --[[ local Soul = {}
 
 Soul.SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
+
 
 local SOULMATT = "gfx/soul_of_matt.anm2"
 local MATTCHANCE = 0.5
