@@ -1,5 +1,5 @@
 <AnimatedActor>
-	<Info CreatedBy="robot" CreatedOn="5/26/2025 5:57:48 PM" Version="111" Fps="30"/>
+	<Info CreatedBy="robot" CreatedOn="5/26/2025 6:26:57 PM" Version="113" Fps="30"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="pickups\pickup_soulstones.png" Id="0"/>
