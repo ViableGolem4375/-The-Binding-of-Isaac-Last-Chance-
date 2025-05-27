@@ -8,6 +8,7 @@
 - Remember to make sure local/global variable thing isnt causing problems.
 - Sack of lucky pennies might me bugged.
 - Stat up items need stacking behavior.
+- Penny trinkets not working for esau
 
 Item Ideas to Add:
 
@@ -18,4 +19,4 @@ Trinket Ideas:
 
 
 
-Win streak: 7
+Win streak: 8

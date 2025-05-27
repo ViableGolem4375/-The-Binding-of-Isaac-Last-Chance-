@@ -5689,90 +5689,111 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewLevel)
 
-function Mod:OnCoinPickup(pickup, player)
-    local player = Isaac.GetPlayer(0) -- Gets the player
-    if player:HasTrinket(SIN_PENNY_TRINKET) then
-        local rng = player:GetCollectibleRNG(SIN_PENNY_TRINKET) -- ✅ Use RNG tied to the player
-        local chance = 0
+function Mod:OnCoinPickup(pickup, collider)
+    if collider:ToPlayer() then -- ✅ Ensure the colliding entity is a player
+        for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
 
-        -- ✅ Set chance based on coin type
-        if pickup.SubType == CoinSubType.COIN_PENNY or pickup.SubType == CoinSubType.COIN_LUCKYPENNY or pickup.SubType == CoinSubType.COIN_GOLDEN then
-            chance = 0.05
-        elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
-            chance = 0.10
-        elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
-            chance = 0.25
-        elseif pickup.SubType == CoinSubType.COIN_DIME then
-            chance = 0.37
-        end
+            if player:HasTrinket(SIN_PENNY_TRINKET) then
+                local rng = player:GetCollectibleRNG(SIN_PENNY_TRINKET) -- ✅ Use individual RNG per player
+                local chance = 0
 
-        -- ✅ Roll RNG for black heart drop
-        if rng:RandomFloat() < chance then
-            local heartType = HeartSubType.HEART_BLACK
-            if player:HasTrinket(SIN_PENNY_TRINKET + 32768) then
-                chance = math.min(1, chance * 2) -- ✅ Doubles chance, caps at 100%
+                -- ✅ Set chance based on coin type
+                if pickup.SubType == CoinSubType.COIN_PENNY or pickup.SubType == CoinSubType.COIN_LUCKYPENNY or pickup.SubType == CoinSubType.COIN_GOLDEN then
+                    chance = 0.05
+                elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
+                    chance = 0.10
+                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
+                    chance = 0.25
+                elseif pickup.SubType == CoinSubType.COIN_DIME then
+                    chance = 0.37
+                end
+
+                -- ✅ Apply golden trinket multiplier
+                if player:HasTrinket(SIN_PENNY_TRINKET + 32768) then
+                    chance = math.min(1, chance * 2) -- ✅ Doubles chance, caps at 100%
+                end
+
+                -- ✅ Roll RNG for black heart drop
+                if rng:RandomFloat() < chance then
+                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_BLACK, pickup.Position, Vector(0,0), nil)
+                    print(player:GetName(), "triggered a Black Heart drop!")
+                end
             end
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, heartType, pickup.Position, Vector(0,0), nil)
         end
     end
 end
 
 Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.OnCoinPickup, PickupVariant.PICKUP_COIN)
 
-function Mod:OnCoinPickupBone(pickup, player)
-    local player = Isaac.GetPlayer(0) -- Gets the player
-    if player:HasTrinket(BONE_PENNY_TRINKET) then
-        local rng = player:GetCollectibleRNG(BONE_PENNY_TRINKET) -- ✅ Use RNG tied to the player
-        local chance = 0
+function Mod:OnCoinPickupBone(pickup, collider)
+    if collider:ToPlayer() then -- ✅ Ensure the colliding entity is a player
+        for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
 
-        -- ✅ Set chance based on coin type
-        if pickup.SubType == CoinSubType.COIN_PENNY or pickup.SubType == CoinSubType.COIN_LUCKYPENNY or pickup.SubType == CoinSubType.COIN_GOLDEN then
-            chance = 0.025
-        elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
-            chance = 0.5
-        elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
-            chance = 0.125
-        elseif pickup.SubType == CoinSubType.COIN_DIME then
-            chance = 0.185
-        end
+            if player:HasTrinket(BONE_PENNY_TRINKET) then
+                local rng = player:GetCollectibleRNG(BONE_PENNY_TRINKET) -- ✅ Use individual RNG per player
+                local chance = 0
 
-        -- ✅ Roll RNG for bone heart drop
-        if rng:RandomFloat() < chance then
-            local heartType = HeartSubType.HEART_BONE
-            if player:HasTrinket(BONE_PENNY_TRINKET + 32768) then
-                chance = math.min(1, chance * 2) -- ✅ Doubles chance, caps at 100%
+                -- ✅ Set chance based on coin type
+                if pickup.SubType == CoinSubType.COIN_PENNY or pickup.SubType == CoinSubType.COIN_LUCKYPENNY or pickup.SubType == CoinSubType.COIN_GOLDEN then
+                    chance = 0.025
+                elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
+                    chance = 0.05
+                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
+                    chance = 0.125
+                elseif pickup.SubType == CoinSubType.COIN_DIME then
+                    chance = 0.185
+                end
+
+                -- ✅ Apply golden trinket multiplier
+                if player:HasTrinket(BONE_PENNY_TRINKET + 32768) then
+                    chance = math.min(1, chance * 2) -- ✅ Doubles chance, caps at 100%
+                end
+
+                -- ✅ Roll RNG for bone heart drop
+                if rng:RandomFloat() < chance then
+                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_BONE, pickup.Position, Vector(0,0), nil)
+                    print(player:GetName(), "triggered a Bone Heart drop!")
+                end
             end
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, heartType, pickup.Position, Vector(0,0), nil)
         end
     end
 end
 
 Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.OnCoinPickupBone, PickupVariant.PICKUP_COIN)
 
-function Mod:OnCoinPickupRot(pickup, player)
-    local player = Isaac.GetPlayer(0) -- Gets the player
-    if player:HasTrinket(YUCK_PENNY_TRINKET) then
-        local rng = player:GetCollectibleRNG(YUCK_PENNY_TRINKET) -- ✅ Use RNG tied to the player
-        local chance = 0
+function Mod:OnCoinPickupRot(pickup, collider)
+    if collider:ToPlayer() then -- ✅ Ensure the colliding entity is a player
+        for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
 
-        -- ✅ Set chance based on coin type
-        if pickup.SubType == CoinSubType.COIN_PENNY or pickup.SubType == CoinSubType.COIN_LUCKYPENNY or pickup.SubType == CoinSubType.COIN_GOLDEN then
-            chance = 0.05
-        elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
-            chance = 0.10
-        elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
-            chance = 0.25
-        elseif pickup.SubType == CoinSubType.COIN_DIME then
-            chance = 0.37
-        end
+            if player:HasTrinket(YUCK_PENNY_TRINKET) then
+                local rng = player:GetCollectibleRNG(YUCK_PENNY_TRINKET) -- ✅ Use individual RNG per player
+                local chance = 0
 
-        -- ✅ Roll RNG for rotten heart drop
-        if rng:RandomFloat() < chance then
-            local heartType = HeartSubType.HEART_ROTTEN
-            if player:HasTrinket(YUCK_PENNY_TRINKET + 32768) then
-                chance = math.min(1, chance * 2) -- ✅ Doubles chance, caps at 100%
+                -- ✅ Set chance based on coin type
+                if pickup.SubType == CoinSubType.COIN_PENNY or pickup.SubType == CoinSubType.COIN_LUCKYPENNY or pickup.SubType == CoinSubType.COIN_GOLDEN then
+                    chance = 0.05
+                elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
+                    chance = 0.10
+                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
+                    chance = 0.25
+                elseif pickup.SubType == CoinSubType.COIN_DIME then
+                    chance = 0.37
+                end
+
+                -- ✅ Apply golden trinket multiplier
+                if player:HasTrinket(YUCK_PENNY_TRINKET + 32768) then
+                    chance = math.min(1, chance * 2) -- ✅ Doubles chance, caps at 100%
+                end
+
+                -- ✅ Roll RNG for Rotten Heart drop
+                if rng:RandomFloat() < chance then
+                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_ROTTEN, pickup.Position, Vector(0,0), nil)
+                    print(player:GetName(), "triggered a Rotten Heart drop!")
+                end
             end
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, heartType, pickup.Position, Vector(0,0), nil)
         end
     end
 end
