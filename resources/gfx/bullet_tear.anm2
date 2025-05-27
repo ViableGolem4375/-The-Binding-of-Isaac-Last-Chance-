@@ -1,8 +1,8 @@
 <AnimatedActor>
-	<Info CreatedBy="robot" CreatedOn="25.02.2015 03:33:00" Version="103" Fps="30"/>
+	<Info CreatedBy="robot" CreatedOn="5/27/2025 12:23:46 PM" Version="104" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="bullet_tears.png" Id="0"/>
+			<Spritesheet Path="effects\bullet_tears.png" Id="0"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="body" Id="0" SpritesheetId="0"/>

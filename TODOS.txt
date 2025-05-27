@@ -8,7 +8,8 @@
 - Remember to make sure local/global variable thing isnt causing problems.
 - Sack of lucky pennies might me bugged.
 - Stat up items need stacking behavior.
-- Penny trinkets not working for esau
+- Maybe fix the issue with omega tech where it activates both both J+E if they both have it.
+- Need to fix more J+E bugs, keeper essence is next.
 
 Item Ideas to Add:
 

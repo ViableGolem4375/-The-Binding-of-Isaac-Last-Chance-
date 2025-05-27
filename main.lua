@@ -1349,7 +1349,7 @@ if EID then
     EID:addCollectible(ANATOMY_ITEM, "Grants 1 bone heart on use.")
     EID:addCollectible(BLANK_SLATE_ITEM, "Counts as an item for every transformation in the game.#Doesn't have any effect on its own.", "Blank Slate")
     EID:addCollectible(ISAAC_ESSENCE, "Spawns 3 item pedestals containing quality 4 items.#{{Warning}} Taking one of the items will cause Isaac to lose this item and cause the other two item pedestals to dissapear.", "Essence of Isaac")
-    EID:addCollectible(MAGDALENE_ESSENCE, "Heals Isaac to full health on use.", "Essence of Magdalene")
+    EID:addCollectible(MAGDALENE_ESSENCE, "Heals all players to full health on use.", "Essence of Magdalene")
     EID:addCollectible(CAIN_ESSENCE, "Gives 20 coins, keys, and bombs upon pickup.#At the start of every new floor, spawns a golden penny, golden key, and golden bomb.", "Essence of Cain")
     EID:addCollectible(JUDAS_ESSENCE, "{{ArrowUp}} Gives +1 damage.#{{ArrowUp}} Grants a 2.5x damage multiplier when Isaac has 3 total hearts (of any type) or less.", "Essence of Judas")
     EID:addCollectible(BLUE_BABY_ESSENCE, "Entering a new room spawns 10 blue flies.", "Essence of ???")
@@ -1629,10 +1629,13 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.ApplyBrokenHearts)
 
 function Mod:GrantInvulnerabilityOnHit(entity, amount, flags, source, countdown)
-    local player = Isaac.GetPlayer(0)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i) -- ✅ Loop through all players
 
-    if player:HasCollectible(HATRED_ITEM) and source and source.Entity then
-        player:SetMinDamageCooldown(60) -- 1 second (30 frames)
+        if player:HasCollectible(HATRED_ITEM) and source and source.Entity then
+            player:SetMinDamageCooldown(60) -- ✅ Apply 1 second (30 frames) of invulnerability
+            print(player:GetName(), "activated invulnerability!")
+        end
     end
 end
 
@@ -1955,6 +1958,7 @@ function Mod:HandleUpdatee(familiar)
             familiar
         ):ToTear()
 
+        
         tear.Scale = TEAR_SCALE_FAIL
         tear.CollisionDamage = TEAR_DAMAGE_FAIL
         tear.TearFlags = TearFlags.TEAR_BURSTSPLIT -- Makes tears explode into smaller projectiles.
@@ -1995,7 +1999,7 @@ function Mod:OnUseFinalJudgment(itemUsed, rng, player)
         return false -- Stops reuse
     end
 
-    if itemUsed == FINAL_JUDGMENT_ITEM then
+    if player:HasCollectible(FINAL_JUDGMENT_ITEM) then
         --local data = player:GetData()
         -- Mark item as used (prevents reuse)
         data.FinalJudgmentUsed = true
@@ -2003,6 +2007,7 @@ function Mod:OnUseFinalJudgment(itemUsed, rng, player)
 
         -- Apply temporary effects
         data.FinalJudgmentActive = true
+        judgementactive = true
         data.FinalJudgmentTimer = STAT_BOOST_DURATION
 
         -- **Track if the player already had Holy Grail**
@@ -2076,13 +2081,13 @@ local LIGHT_BEAM_INTERVAL = 10 -- Adjust interval for beam strikes
 ---@param player EntityPlayer
 function Mod:UpdateFinalJudgmentEffect(player)
     local data = player:GetData()
-    local playerDamage = player.Damage -- Get player's current damage value
-    local fireDirectionjudge = player:GetFireDirection()
-    local directionjudge
 
     if data.FinalJudgmentActive then
+        local playerDamage = player.Damage -- Get player's current damage value
+        local fireDirectionjudge = player:GetFireDirection()
+        local directionjudge
+        local firedelay = player.FireDelay
         data.FinalJudgmentTimer = data.FinalJudgmentTimer - 1
-
         if data.FinalJudgmentTimer == 90 then -- 3 seconds remaining
             SFX:Play(SoundEffect.SOUND_DOGMA_APPEAR_SCREAM, 1.5, 0, false, 1)
         end
@@ -2098,7 +2103,7 @@ function Mod:UpdateFinalJudgmentEffect(player)
             directionjudge = Vector(0, -1)
         end
 
-        if directionjudge ~= nil and player.FireDelay == 0 then
+        if directionjudge ~= nil and firedelay <= 0.1 then
             local laserjudge = Isaac.Spawn(
                 EntityType.ENTITY_LASER,
                 LaserVariant.LIGHT_BEAM,
@@ -2107,11 +2112,14 @@ function Mod:UpdateFinalJudgmentEffect(player)
                 Vector.Zero,
                 player
             ):ToLaser()
-            laserjudge.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
-            laserjudge.AngleDegrees = directionjudge:GetAngleDegrees() -- Rotate laser to match direction
-            laserjudge.Parent = player -- Attach the laser to the player
-            laserjudge.Timeout = 15 -- Set duration (adjust as needed)
-            laserjudge.CollisionDamage = playerDamage
+
+            if laserjudge then
+                laserjudge.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
+                laserjudge.AngleDegrees = directionjudge:GetAngleDegrees() -- Rotate laser to match direction
+                laserjudge.Parent = player -- Attach the laser to the player
+                laserjudge.Timeout = 15 -- Set duration (adjust as needed)
+                laserjudge.CollisionDamage = playerDamage
+            end
 
         end
 
@@ -2568,15 +2576,17 @@ Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameIsaacEssence) --
 
 
 function Mod:OnPickupIsaacEssence(_, player)
-    local player = Isaac.GetPlayer(0) -- Gets the player
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(i) -- Gets the player
     -- Spawn 3 item pedestals with Quality 4 items upon pickup
-    if player:HasCollectible(ISAAC_ESSENCE) and not pedestalsSpawned then
-        pedestalsSpawned = true -- Mark the effect as triggered
-        for _, pos in ipairs(pedestalPositions) do
-            local itemID = GetQuality4Item() -- Get a Quality 4 item
-            local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
-            pedestal:GetData().elitePedestal = true -- Mark as part of selection
-            table.insert(pedestals, pedestal)
+        if player:HasCollectible(ISAAC_ESSENCE) and not pedestalsSpawned then
+            pedestalsSpawned = true -- Mark the effect as triggered
+            for _, pos in ipairs(pedestalPositions) do
+                local itemID = GetQuality4Item() -- Get a Quality 4 item
+                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
+                pedestal:GetData().elitePedestal = true -- Mark as part of selection
+                table.insert(pedestals, pedestal)
+            end
         end
     end
 end
@@ -2603,14 +2613,16 @@ Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupIsaacEssence) --
 Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.OnItemTaken, PickupVariant.PICKUP_COLLECTIBLE) -- Detect item selection
 
 function Mod:MagEssenceUse(item, rng, player, flags)
-    local player = Isaac.GetPlayer(0) -- Gets the player
-    player:AnimateCollectible(MAGDALENE_ESSENCE, "UseItem", "PlayerPickupSparkle")
-    local healsfx = SFXManager()
-    healsfx:Play(SoundEffect.SOUND_VAMP_DOUBLE) -- Play sound effect
-    -- Grant the player Full HP.
-    player:SetFullHearts()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(i) -- Gets the player
+        player:AnimateCollectible(MAGDALENE_ESSENCE, "UseItem", "PlayerPickupSparkle")
+        local healsfx = SFXManager()
+        healsfx:Play(SoundEffect.SOUND_VAMP_DOUBLE) -- Play sound effect
+        -- Grant the player Full HP.
+        player:SetFullHearts()
 
-    return true -- Prevents extra effects from triggering                  
+    end
+    return true
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.MagEssenceUse, MAGDALENE_ESSENCE) 
@@ -2627,12 +2639,14 @@ end
 
 -- Function to grant resources upon pickup
 function Mod:OnPickupCainEssence(_, player)
-    local player = Isaac.GetPlayer(0)
-    if player:HasCollectible(CAIN_ESSENCE) and cain_essence_triggered == false then
-        cain_essence_triggered = true
-        player:AddCoins(20)
-        player:AddKeys(20)
-        player:AddBombs(20)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(i)
+        if player:HasCollectible(CAIN_ESSENCE) and cain_essence_triggered == false then
+            cain_essence_triggered = true
+            player:AddCoins(20)
+            player:AddKeys(20)
+            player:AddBombs(20)
+        end
     end
 end
 
@@ -2641,20 +2655,23 @@ function Mod:OnNewFloor()
     --local game = Game()
     local level = game:GetLevel()
     local room = game:GetRoom()
-    local player = Isaac.GetPlayer(0)
+    for i = 0, Game():GetNumPlayers() - 1 do
+    
+        local player = Isaac.GetPlayer(i)
 
     -- Ensure player has the item before spawning golden rewards
-    if player:HasCollectible(CAIN_ESSENCE) then
-        local spawnPositions = {
-            room:GetCenterPos(), -- Golden Key
-            room:GetCenterPos() + Vector(-40, 0), -- Golden Penny
-            room:GetCenterPos() + Vector(40, 0) -- Golden Bomb
-        }
+        if player:HasCollectible(CAIN_ESSENCE) then
+            local spawnPositions = {
+                room:GetCenterPos(), -- Golden Key
+                room:GetCenterPos() + Vector(-40, 0), -- Golden Penny
+                room:GetCenterPos() + Vector(40, 0) -- Golden Bomb
+            }
 
-        -- Spawn golden rewards
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_KEY, KeySubType.KEY_GOLDEN, spawnPositions[1], Vector.Zero, player)
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_GOLDEN, spawnPositions[2], Vector.Zero, player)
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_BOMB, BombSubType.BOMB_GOLDEN, spawnPositions[3], Vector.Zero, player)
+            -- Spawn golden rewards
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_KEY, KeySubType.KEY_GOLDEN, spawnPositions[1], Vector.Zero, player)
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_GOLDEN, spawnPositions[2], Vector.Zero, player)
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_BOMB, BombSubType.BOMB_GOLDEN, spawnPositions[3], Vector.Zero, player)
+        end
     end
 end
 
@@ -2687,12 +2704,14 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateJudasEssence)
 
 
 function Mod:OnNewRoomBlueBabyEssence()
-    local player = Isaac.GetPlayer(0)
-    -- Ensure the player has the item before triggering effect
-    if player:HasCollectible(BLUE_BABY_ESSENCE) then
-        local babynum = player:GetCollectibleNum(BLUE_BABY_ESSENCE) * 10
-        -- Spawn Blue Flies around the player
-        player:AddBlueFlies(babynum, player.Position, player)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(i)
+        -- Ensure the player has the item before triggering effect
+        if player:HasCollectible(BLUE_BABY_ESSENCE) then
+            local babynum = player:GetCollectibleNum(BLUE_BABY_ESSENCE) * 10
+            -- Spawn Blue Flies around the player
+            player:AddBlueFlies(babynum, player.Position, player)
+        end
     end
 end
 
@@ -3023,44 +3042,47 @@ local rerolledItems = {} -- Track rerolled items to prevent duplicates
 
 -- Function to upgrade all passive items by +1 quality
 function Mod:UpgradeItemsOnUse(_, item, rng, player)
-    local player = Isaac.GetPlayer(0)
-    player:AnimateCollectible(EDEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
-    if player:HasCollectible(EDEN_ESSENCE) then
+    for j = 0, Game():GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(j)
+        player:AnimateCollectible(EDEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
+        if player:HasCollectible(EDEN_ESSENCE) then
 
-        local collectiblesToReroll = {} -- Store all valid passive items for rerolling
+            local collectiblesToReroll = {} -- Store all valid passive items for rerolling
 
-        -- ✅ Collect all valid passive items FIRST
-        for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
-            if player:HasCollectible(i) then
-                local itemConfig = Isaac.GetItemConfig():GetCollectible(i)
+            -- ✅ Collect all valid passive items FIRST
+            for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
+                if player:HasCollectible(i) then
+                    local itemConfig = Isaac.GetItemConfig():GetCollectible(i)
                 
-                -- Ensure item exists, is passive, and isn't a quest item
-                if itemConfig and itemConfig.Quality < 4 and itemConfig.Type == ItemType.ITEM_PASSIVE then
-                    if not (itemConfig.Tags & ItemConfig.TAG_QUEST == ItemConfig.TAG_QUEST) then
-                        table.insert(collectiblesToReroll, i) -- ✅ Store valid items for later processing
+                    -- Ensure item exists, is passive, and isn't a quest item
+                    if itemConfig and itemConfig.Quality < 4 and itemConfig.Type == ItemType.ITEM_PASSIVE then
+                        if not (itemConfig.Tags & ItemConfig.TAG_QUEST == ItemConfig.TAG_QUEST) then
+                            table.insert(collectiblesToReroll, i) -- ✅ Store valid items for later processing
+                        end
                     end
                 end
             end
-        end
 
-        -- ✅ Process all stored collectibles AFTER gathering them
-        for _, itemID in ipairs(collectiblesToReroll) do
-            local itemConfig = Isaac.GetItemConfig():GetCollectible(itemID)
-            if itemConfig then
-                local newQuality = itemConfig.Quality + 1
-                local rerolledItem = Mod:GetRandomValidItemOfQuality(newQuality)
+            -- ✅ Process all stored collectibles AFTER gathering them
+            for _, itemID in ipairs(collectiblesToReroll) do
+                local itemConfig = Isaac.GetItemConfig():GetCollectible(itemID)
+                if itemConfig then
+                    local newQuality = itemConfig.Quality + 1
+                    local rerolledItem = Mod:GetRandomValidItemOfQuality(newQuality)
 
-                if rerolledItem then
-                    player:RemoveCollectible(itemID) -- Remove current item
-                    player:AddCollectible(rerolledItem) -- Add upgraded item
-                    rerolledItems[rerolledItem] = true -- ✅ Track the rerolled item to prevent duplicates
+                    if rerolledItem then
+                        player:RemoveCollectible(itemID) -- Remove current item
+                        player:AddCollectible(rerolledItem) -- Add upgraded item
+                        rerolledItems[rerolledItem] = true -- ✅ Track the rerolled item to prevent duplicates
+                    end
                 end
             end
-        end
 
-        -- ✅ Consume the active item after processing all upgrades
-        player:RemoveCollectible(EDEN_ESSENCE)
+            -- ✅ Consume the active item after processing all upgrades
+            player:RemoveCollectible(EDEN_ESSENCE)
+        end
     end
+    
 end
 
 
@@ -3564,8 +3586,8 @@ Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.onEnemyDeath)
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateStarDavid)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitStar)
 
-function Mod:UseGun(_, item, rng, player)
-    local player = Isaac.GetPlayer(0)
+function Mod:UseGun(item, rng, player)
+    --local player = Isaac.GetPlayer(0)
     if player:HasCollectible(GUN_ITEM) then
 
         local data = player:GetData()
@@ -5335,12 +5357,12 @@ local barrageActive = false
 local barrageEndTime = 0
 
 -- ✅ Activate invulnerability and contact damage on use
-function Mod:ActivateBarrage(_, item, rng, player)
-    local player = Isaac.GetPlayer(0)
-    player:AnimateCollectible(OMEGA_ITEM, "UseItem", "PlayerPickupSparkle")
-
-
+function Mod:ActivateBarrage(item, rng, player)
+    --local player = Isaac.GetPlayer(0)
+    --player:AnimateCollectible(OMEGA_ITEM, "UseItem", "PlayerPickupSparkle")
     if player:HasCollectible(OMEGA_ITEM) then
+        player:AnimateCollectible(OMEGA_ITEM, "UseItem", "PlayerPickupSparkle")
+
 
         barrageActive = true
         barrageEndTime = Isaac.GetFrameCount() + (4 * 60) -- 10 seconds in frames
@@ -5352,10 +5374,10 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.ActivateBarrage, OMEGA_ITEM)
 
 -- ✅ Apply contact damage effect
 function Mod:OnPlayerUpdateBarrage(player)
-    local player = Isaac.GetPlayer(0)
-    if barrageActive then
+    --local player = Isaac.GetPlayer(0)
+    if barrageActive and player:HasCollectible(OMEGA_ITEM) then
         -- ✅ Damage enemies on contact
-        local player = Isaac.GetPlayer(0)
+        --local player = Isaac.GetPlayer(0)
         local fireDirectionAzazel = player:GetFireDirection()
         local directionazazel
 
@@ -5387,7 +5409,7 @@ function Mod:OnPlayerUpdateBarrage(player)
             laserRing.AngleDegrees = directionazazel:GetAngleDegrees() -- Rotate laser to match direction
             laserRing.CollisionDamage = player.Damage * 0.5 -- Set laser damage
             laserRing.Timeout = 1 -- Laser duration
-            laserRing:AddTearFlags(TearFlags.TEAR_HOMING) -- Apply homing effect
+            --laserRing:AddTearFlags(TearFlags.TEAR_HOMING) -- Apply homing effect
             laserRing.Parent = player -- Prevent self-damage
         end
 
@@ -5639,19 +5661,21 @@ function Mod:OnPickupInitOrb(pickup)
     local orbsfx = SFXManager()
 
     if pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE then
-        local seed = pickup.InitSeed
-        if not rerolledPedestals[seed] then -- Ensures each pedestal rerolls only once
-            local player = Isaac.GetPlayer(0) -- Gets the player
-            if player:HasTrinket(ORB_TRINKET) then
-                local itemConfig = Isaac.GetItemConfig():GetCollectible(pickup.SubType)
-                if itemConfig and itemConfig.Quality == 0 then
-                    local multiplier = player:GetTrinketMultiplier(ORB_TRINKET) > 1 and GOLDEN_MULT or 1
-                    local finalChance = REROLL_CHANCE * multiplier
-                    if math.random() < REROLL_CHANCE then
-                        orbsfx:Play(SoundEffect.SOUND_EDEN_GLITCH) -- Play sound effect
-                        --pickup:TryRemove() -- Removes the existing pedestal
-                        pickup:Morph(pickup.Type, pickup.Variant, game:GetItemPool():GetCollectible(ItemPoolType.POOL_TREASURE, true, pickup.InitSeed), true, true) -- Rerolls item
-                        rerolledPedestals[seed] = true -- Marks this pedestal as rerolled
+        for i = 0, Game():GetNumPlayers() - 1 do
+            local seed = pickup.InitSeed
+            if not rerolledPedestals[seed] then -- Ensures each pedestal rerolls only once
+                local player = Isaac.GetPlayer(i) -- Gets the player
+                if player:HasTrinket(ORB_TRINKET) then
+                    local itemConfig = Isaac.GetItemConfig():GetCollectible(pickup.SubType)
+                    if itemConfig and itemConfig.Quality == 0 then
+                        local multiplier = player:GetTrinketMultiplier(ORB_TRINKET) > 1 and GOLDEN_MULT or 1
+                        local finalChance = REROLL_CHANCE * multiplier
+                        if math.random() < REROLL_CHANCE then
+                            orbsfx:Play(SoundEffect.SOUND_EDEN_GLITCH) -- Play sound effect
+                            --pickup:TryRemove() -- Removes the existing pedestal
+                            pickup:Morph(pickup.Type, pickup.Variant, game:GetItemPool():GetCollectible(ItemPoolType.POOL_TREASURE, true, pickup.InitSeed), true, true) -- Rerolls item
+                            rerolledPedestals[seed] = true -- Marks this pedestal as rerolled
+                        end
                     end
                 end
             end
@@ -5946,22 +5970,31 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.FilterItemPoolOnRoomEntry)
 
 function OnTrinketPickup(player)
-    local player = Game():GetPlayer(1) -- Try different indices if needed
-    if player:HasTrinket(RELIQUARY_TRINKET) then
-        --local game = Game()
-        local level = game:GetLevel()
-        local TELEPORT_ROOM_ID = -3 -- Replace with your special room ID
-        Isaac.ExecuteCommand("goto s.library.6969")
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i) -- Try different indices if needed
+        if player:HasTrinket(RELIQUARY_TRINKET) then
+            --local game = Game()
+            local level = game:GetLevel()
+            local TELEPORT_ROOM_ID = -3 -- Replace with your special room ID
+            Isaac.ExecuteCommand("goto s.library.6969")
+        end
     end
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, OnTrinketPickup)
 
 function OnNewRoom()
-    local player = Isaac.GetPlayer(0)
-    if player:HasTrinket(RELIQUARY_TRINKET) then
-        player:TryRemoveTrinket(RELIQUARY_TRINKET)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i) -- ✅ Loop through all players
+
+        if player:HasTrinket(RELIQUARY_TRINKET) then
+            player:TryRemoveTrinket(RELIQUARY_TRINKET)
+        end
     end
+    --local player = Isaac.GetPlayer(0)
+    --if player:HasTrinket(RELIQUARY_TRINKET) then
+    --    player:TryRemoveTrinket(RELIQUARY_TRINKET)
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, OnNewRoom)
