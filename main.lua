@@ -3963,20 +3963,27 @@ function ProtoTech:onUpdateTech(player)
                 --local ProtoTechLaser = EntityLaser.ShootAngle(LaserType.THICK_RED, player.Position, 0, LASER_DURATION, Vector(0,0), player)
                 local ProtoTechLaser = Isaac.Spawn(
                     EntityType.ENTITY_LASER,
-                    LaserVariant.BRIM_TECH,
+                    LaserVariant.ELECTRIC,
                     0,
                     player.Position,
                     Vector.Zero,
                     player
                 ):ToLaser()
+                if ProtoTechLaser then
+                    local sprite = ProtoTechLaser:GetSprite()
+                    sprite:Load("gfx/prototech.anm2", true)
+                    sprite:Play("LargeRedLaser", true)
+                end
                 local protosfx = SFXManager()
                 protosfx:Play(SoundEffect.SOUND_LASERRING_STRONG)
                 ProtoTechLaser.TearFlags = player.TearFlags
                 ProtoTechLaser.AngleDegrees = directiontech:GetAngleDegrees()
                 ProtoTechLaser.CollisionDamage = player.Damage * 10
-                ProtoTechLaser.PositionOffset = Vector(0, -20)
+                ProtoTechLaser.PositionOffset = Vector(0, -25)
                 ProtoTechLaser.Timeout = 1
                 ProtoTechLaser.Parent = player
+                ProtoTechLaser.Size = 100
+                
                 --end
                 PlayerData.TechCool = LASER_DURATION * 2
             else
