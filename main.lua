@@ -1864,7 +1864,8 @@ function Mod:OnUseBaitItem(itemUsed, rng, player)
 
         for _, enemy in ipairs(enemies) do
             if enemy:IsVulnerableEnemy() then
-                enemy:AddEntityFlags(EntityFlag.FLAG_BAITED | EntityFlag.FLAG_CONFUSION) -- Apply effects
+                enemy:AddEntityFlags(EntityFlag.FLAG_BAITED) -- Apply effects
+                enemy:AddEntityFlags(EntityFlag.FLAG_CONFUSION)
 
                 -- Apply red tint
                 local redColor = Color(1, 0, 0, 0.25, 1, 0, 0) -- Red RGBA overlay
@@ -2211,8 +2212,9 @@ function Mod:OnAmpItemUse(item, rng, player, flags)
         local familiar = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FAMILIAR_VARIANT_AMP, 0, player.Position, Vector(0,0), player)
         
         -- Make it stationary
-        familiar:AddEntityFlags(EntityFlag.FLAG_NO_PHYSICS_KNOCKBACK | EntityFlag.FLAG_NO_KNOCKBACK)
+        familiar:AddEntityFlags(EntityFlag.FLAG_NO_PHYSICS_KNOCKBACK)
         --familiar:GetSprite():Play("Appear")
+        familiar:AddEntityFlags(EntityFlag.FLAG_NO_KNOCKBACK)
 
         -- Set data so it applies the aura effect
         familiar:GetData().IsAmpFamiliar = true
