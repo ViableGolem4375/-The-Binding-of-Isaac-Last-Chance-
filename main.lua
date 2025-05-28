@@ -128,7 +128,7 @@ OMEGA_ITEM = Isaac.GetItemIdByName("Technology Omega")
 TECH_TRINKET = Isaac.GetTrinketIdByName("Bootleg Tech")
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
-
+SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Pontius")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Matt below.
@@ -1412,6 +1412,7 @@ if EID then
     EID:addCollectible(OMEGA_ITEM, "Rapidly fire a barrage of lasers for 4 seconds.#The lasers deal 0.5x Isaac's damage.", "Technology Omega")
     EID:addTrinket(TECH_TRINKET, "10% chance to fire a technology laser instead of a normal tear.#{{Luck}} +5% chance to trigger per point of luck.#{{Collectible202}} +10% chance to trigger per point of luck when golden.", "Bootleg Tech")
     EID:addCard(SOUL_MATT, "{{Luck}} +10 luck for the current room.", "Soul of Matt")
+    EID:addCard(SOUL_PONTIUS, "Fire 8 spears in a circular pattern around yourself.#The spears deal 10x Isaac's damage.", "Soul of Pontius")
 
 end
 
@@ -5510,7 +5511,7 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdateBarrage)
 ----------------------------------------------------------------------------------------
---- Consumable/machine Code Below
+--- Consumable Code Below
 
 
 function Mod:UseSoulStone(card, player)
@@ -5558,6 +5559,52 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyLuckBoost)
 
+
+function Mod:UseSoulStonePontius(card, player)
+    if card == SOUL_PONTIUS then
+        local data = player:GetData()
+        local playerDamage = player.Damage
+
+        -- Play activation sound
+        local sfx = SFXManager()
+        sfx:Stop(SoundEffect.SOUND_ANGEL_BEAM)
+        sfx:Play(SoundEffect.SOUND_SWORD_SPIN) -- Replace with your custom sound ID
+
+        -- **Spawn 8 lasers in a circular pattern**
+        local numLasers = 8
+        local radius = 40 -- Distance from player
+        for i = 1, numLasers do
+            local angle = (i / numLasers) * (2 * math.pi) -- Evenly distribute in a circle
+            local laserDirection = Vector(math.cos(angle), math.sin(angle)) -- Convert angle to vector
+
+            local laser = Isaac.Spawn(
+                EntityType.ENTITY_LASER,
+                LaserVariant.ELECTRIC,
+                0,
+                player.Position + laserDirection * radius, -- Position lasers around the player
+                Vector.Zero,
+                player
+            ):ToLaser()
+            if laser then
+                local sprite = laser:GetSprite()
+                sprite:Load("gfx/pontius_spear_throw.anm2", true)
+                sprite:Play("LargeRedLaser", true)
+            end
+
+            if laser then
+                laser.AngleDegrees = laserDirection:GetAngleDegrees() -- Set correct angle
+                laser.PositionOffset = laserDirection * 10 -- Adjust for proper visuals
+                laser.Parent = player
+                laser.Timeout = 1 -- Set duration (adjust as needed)
+                laser.CollisionDamage = playerDamage * 10 -- Apply high damage
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseSoulStonePontius, SOUL_PONTIUS)
+----------------------------------------------------------------------------------------
+--- Machine code below.
 
 -- Huge credit here to heehoo's card recycler mod for helping me figure out the code below
 -- to get the essence collector working right.
@@ -6005,7 +6052,8 @@ local RELIQUARY_POOL = {
     PONTIUS_ESSENCE,
     LOST_ESSENCE,
     JACOB_AND_ESAU_ESSENCE,
-    FORGOTTEN_ESSENCE
+    FORGOTTEN_ESSENCE,
+    ABRAHAM_ESSENCE_ITEM
     -- Add more items as needed
 }
 
