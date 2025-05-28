@@ -129,6 +129,7 @@ TECH_TRINKET = Isaac.GetTrinketIdByName("Bootleg Tech")
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Pontius")
+SOUL_ABRAHAM = Isaac.GetCardIdByName("Soul of Abraham")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Matt below.
@@ -1413,6 +1414,7 @@ if EID then
     EID:addTrinket(TECH_TRINKET, "10% chance to fire a technology laser instead of a normal tear.#{{Luck}} +5% chance to trigger per point of luck.#{{Collectible202}} +10% chance to trigger per point of luck when golden.", "Bootleg Tech")
     EID:addCard(SOUL_MATT, "{{Luck}} +10 luck for the current room.", "Soul of Matt")
     EID:addCard(SOUL_PONTIUS, "Fire 8 spears in a circular pattern around yourself.#The spears deal 10x Isaac's damage.", "Soul of Pontius")
+    EID:addCard(SOUL_ABRAHAM, "Removes all devil room chances and grants 100% angel room chance.#{{Warning}} Taking red heart damage after activation can still reduce your chances of seeing an angel room.", "Soul of Abraham")
 
 end
 
@@ -5603,6 +5605,22 @@ function Mod:UseSoulStonePontius(card, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseSoulStonePontius, SOUL_PONTIUS)
+
+function Mod:UseSoulStoneRoomChance(card, player)
+    if card == SOUL_ABRAHAM then
+        local level = Game():GetLevel()
+
+        -- ✅ Increase Angel room chance
+        level:AddAngelRoomChance(100) -- 25% boost to Angel room odds
+        
+        -- ✅ Play activation effect
+        local sfx = SFXManager()
+        sfx:Play(SoundEffect.SOUND_SUPERHOLY) -- Play a fitting sound effect
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseSoulStoneRoomChance, SOUL_ABRAHAM)
 ----------------------------------------------------------------------------------------
 --- Machine code below.
 
