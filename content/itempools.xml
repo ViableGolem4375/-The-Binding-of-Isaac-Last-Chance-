@@ -21,6 +21,7 @@
         <Item Name="Deep Orbit" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Broken Flux Capacitor" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Technology Omega" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="devil">
@@ -34,6 +35,7 @@
         <Item Name="Lil' Uriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lil' Gabriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Final Judgement" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="secret">
@@ -87,6 +89,7 @@
         <Item Name="Deep Orbit" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Broken Flux Capacitor" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Technology Omega" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -123,6 +126,7 @@
         <Item Name="Deep Orbit" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Broken Flux Capacitor" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Technology Omega" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
@@ -141,6 +145,7 @@
         <Item Name="Lil' Uriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lil' Gabriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Final Judgement" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedSecret">
@@ -167,6 +172,7 @@
     </Pool>
     <Pool Name="library">
         <Item Name="Anatomy Textbook" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>

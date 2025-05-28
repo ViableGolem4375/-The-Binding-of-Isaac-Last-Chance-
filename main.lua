@@ -126,6 +126,8 @@ NEUTRAL_ITEM = Isaac.GetItemIdByName("Neutrality")
 ABRAHAM_ESSENCE_ITEM = Isaac.GetItemIdByName("Essence of Abraham")
 OMEGA_ITEM = Isaac.GetItemIdByName("Technology Omega")
 TECH_TRINKET = Isaac.GetTrinketIdByName("Bootleg Tech")
+JUBILEES_ITEM = Isaac.GetItemIdByName("Book of Jubilees")
+
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Pontius")
@@ -1414,7 +1416,8 @@ if EID then
     EID:addTrinket(TECH_TRINKET, "10% chance to fire a technology laser instead of a normal tear.#{{Luck}} +5% chance to trigger per point of luck.#{{Collectible202}} +10% chance to trigger per point of luck when golden.", "Bootleg Tech")
     EID:addCard(SOUL_MATT, "{{Luck}} +10 luck for the current room.", "Soul of Matt")
     EID:addCard(SOUL_PONTIUS, "Fire 8 spears in a circular pattern around yourself.#The spears deal 10x Isaac's damage.", "Soul of Pontius")
-    EID:addCard(SOUL_ABRAHAM, "Removes all devil room chances and grants 100% angel room chance for the floor.#{{Warning}} Taking red heart damage after activation can still reduce your chances of seeing an angel room.", "Soul of Abraham")
+    EID:addCard(SOUL_ABRAHAM, "Removes all devil room chances and converts the into angel room chances for the floor.#{{Warning}} Taking red heart damage after activation can still reduce your chances of seeing an angel room.", "Soul of Abraham")
+    EID:addCollectible(JUBILEES_ITEM, "Isaac takes damage equal to half of his total health and is sent to an angel room.#Prioritizes red health.#The Keepers take one coin heart of damage.#This damage does not reduce normal devil/angel room chances.", "Book of Jubilees")
 
 end
 
@@ -5512,6 +5515,42 @@ function Mod:OnPlayerUpdateBarrage(player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdateBarrage)
+
+function Mod:UseJubilees(item, rng, player)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(JUBILEES_ITEM) then
+            player:AnimateCollectible(JUBILEES_ITEM, "UseItem", "PlayerPickupSparkle")
+            local level = Game():GetLevel()
+            --local currentChance = level:GetAngelRoomChance()
+            --print(currentChance)
+
+            -- ✅ Increase Angel room chance by 10%
+            --level:AddAngelRoomChance(currentChance)
+
+            -- ✅ Play activation sound
+            --level:InitializeDevilAngelRoom(true, false)
+            local redhealth = player:GetEffectiveMaxHearts()
+            local soulhealth = player:GetSoulHearts()
+            local blackhealth = player:GetBlackHearts()
+            local bonehealth = player:GetBoneHearts()
+            local rothealth = player:GetRottenHearts()
+            local damage = (redhealth + soulhealth + blackhealth + bonehealth + rothealth) / 2
+
+            player:TakeDamage(damage, DamageFlag.DAMAGE_RED_HEARTS, EntityRef(player), 0)
+
+
+            Isaac.ExecuteCommand("goto s.angel")
+
+            local sfx = SFXManager()
+            sfx:Play(SoundEffect.SOUND_HOLY) -- Use a fitting sound effect
+
+        --return true -- ✅ Consume the item properly
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseJubilees, JUBILEES_ITEM)
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 

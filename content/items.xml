@@ -84,5 +84,6 @@
     <passive id="77" name=" Toolbelt " gfx="toolbelt.png" description="Pocket active" quality="3" hidden="true" tags="nocantrip offensive" />
     <active id="78" name="Technology Omega" gfx="omegatech.png" description="Technological advancement" quality="2" maxcharges="4" chargetype="normal" tags="quest nocantrip" />
     <trinket id="79" name="Bootleg Tech" gfx="bootleg.png" description="It sort of works" cache="luck" />
+    <active id="80" name="Book of Jubilees" gfx="jubilees.png" description="Deliver me unto salvation" quality="4" maxcharges="12" chargetype="normal" tags="offensive book nocantrip" />
 
 </items>
