@@ -1065,7 +1065,7 @@ local Abrahamb = { -- shown below are default values, as shown on Isaac, for you
     TEARHEIGHT = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
     TEARFALLINGSPEED = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
     TEARFLAG = 0, -- Determines some behaviors of your tears, https://wofsauge.github.io/IsaacDocs/rep/enums/TearFlags.html
-    TEARCOLOR = Color(1.0, 1.0, 1.0, 1.0, 0, 0, 0), -- r1.0 g1.0 b1.0 a1.0 0r 0g 0b (the last three are offsets)
+    TEARCOLOR = Color(0, 0, 0, 1.0, 0, 0, 0), -- r1.0 g1.0 b1.0 a1.0 0r 0g 0b (the last three are offsets)
     FLYING = false
 }
 
@@ -1131,7 +1131,7 @@ function Mod:UpdateDeathTimer(player)
         local timersfx = SFXManager()
         local data = player:GetData()
        if not data.DeathTimer then 
-            data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 3600 or 1800 -- ✅ 60 sec with Birthright, 30 sec default
+            data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600 -- ✅ 60 sec with Birthright, 30 sec default
         end
 
 
@@ -1157,7 +1157,7 @@ function Mod:ResetTimerOnDamage(entity, amount, flag, source, countdown)
 
         if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
             local data = player:GetData()
-            data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 3600 or 1800 -- ✅ Resets to 60 sec with Birthright, 30 sec otherwise
+            data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600 -- ✅ Resets to 60 sec with Birthright, 30 sec otherwise
             --print("Damage dealt! Timer reset to:", data.DeathTimer)
 
         end
@@ -1211,13 +1211,11 @@ function Mod:ApplyBirthrightEffect(player)
                 -- Maybe fix actives at some point.
                 local quality4Items = {
                     -- Mod items.
-                    LUCKY_DICE_ID,
-                    DULL_COIN_ID,
                     URIEL_ITEM,
                     GABRIEL_ITEM,
-                    FINAL_JUDGMENT_ITEM,
                     AZAZEL_ESSENCE,
                     CAIN_ESSENCE,
+                    FINAL_JUDGMENT_ITEM,
                     -- Vanilla items.
                     330,  -- Sacred Heart
                     169,  -- Polyphemus
@@ -1407,7 +1405,7 @@ if EID then
     EID:addCollectible(DEVIL_THREE_ITEM, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} -1 tear delay.#{{ArrowUp}} +0.5 speed.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +1 shot speed.#{{ArrowUp}} +2 luck.", "Devil's Path 3")
     EID:addCollectible(DEVIL_FOUR_ITEM, "Spawns a circle of fire pillars around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire brimstone beams, and random fire pillars targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room.", "Devil's Path 4")
     EID:addCollectible(DEMON_DASH_ITEM, "Dash forward becoming invulnerable and deal 100 damage to enemies in your path.", "Rend")
-    EID:addBirthright(TAINTED_ABRAHAM_TYPE, "Death timer is extended to 60 seconds.")
+    EID:addBirthright(TAINTED_ABRAHAM_TYPE, "Death timer is extended to 15 seconds.")
     EID:addBirthright(abrahamType, "Grants the Neutrality item when stacks for both the angel and devil paths are 0.")
     EID:addCollectible(NEUTRAL_ITEM, "{{ArrowUp}} +50% damage.", "Neutrality")
     EID:addCollectible(ABRAHAM_ESSENCE_ITEM, "Grants 3 soul hearts when entering an angel room for the first time.#Grants 3 black hearts when entering a devil room for the first time.#Essence of Abraham can be triggered once per floor.", "Essence of Abraham")
@@ -2007,7 +2005,6 @@ function Mod:OnUseFinalJudgment(itemUsed, rng, player)
 
         -- Apply temporary effects
         data.FinalJudgmentActive = true
-        judgementactive = true
         data.FinalJudgmentTimer = STAT_BOOST_DURATION
 
         -- **Track if the player already had Holy Grail**
@@ -2040,7 +2037,9 @@ function Mod:OnUseFinalJudgment(itemUsed, rng, player)
                 Vector.Zero,
                 nil
             )
+            holyBeam.Parent = player
         end
+
 
         
         return true -- Consume the item
@@ -2101,9 +2100,11 @@ function Mod:UpdateFinalJudgmentEffect(player)
             directionjudge = Vector(0, 1)
         elseif fireDirectionjudge == Direction.UP then
             directionjudge = Vector(0, -1)
+        elseif fireDirectionjudge == Direction.NO_DIRECTION then
+            directionjudge = Vector(0, 1)
         end
 
-        if directionjudge ~= nil and firedelay <= 0.1 then
+        --if firedelay <= 0.1 then
             local laserjudge = Isaac.Spawn(
                 EntityType.ENTITY_LASER,
                 LaserVariant.LIGHT_BEAM,
@@ -2121,7 +2122,7 @@ function Mod:UpdateFinalJudgmentEffect(player)
                 laserjudge.CollisionDamage = playerDamage
             end
 
-        end
+        --end
 
         -- **Summon Holy Light beams on random enemies**
         if data.FinalJudgmentTimer % LIGHT_BEAM_INTERVAL == 0 then
@@ -2137,6 +2138,7 @@ function Mod:UpdateFinalJudgmentEffect(player)
                     Vector.Zero,
                     nil
                 )
+                holyBeam.Parent = player
             end
         end
 
@@ -3129,17 +3131,21 @@ end
 
  -- Function to grant resources upon pickup
 function Mod:OnPickupKeeperEssence(_, player)
-    local player = Isaac.GetPlayer(0)
-    if player:HasCollectible(KEEPER_ESSENCE) and keeper_essence_active == false then
-        player:AddCoins(99)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(KEEPER_ESSENCE) and keeper_essence_active == false then
+            player:AddCoins(99)
+        end
     end
 end
 
 function Mod:OnNewFloorKeeperEssence()
-    local player = Isaac.GetPlayer(0)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
 
-    if player:HasCollectible(KEEPER_ESSENCE) then
-        keeper_essence_active = true
+        if player:HasCollectible(KEEPER_ESSENCE) then
+            keeper_essence_active = true
+        end
     end
 end
 
@@ -3154,22 +3160,25 @@ local killCount = 0
 
 -- ✅ Activate invulnerability and contact damage on use
 function Mod:ActivateRampage(_, item, rng, player)
-    local player = Isaac.GetPlayer(0)
-    player:AnimateCollectible(APOLLYON_ESSENCE, "UseItem", "PlayerPickupSparkle")
-    player:AddCollectible(APOLLYON_ESSENCE_VFX)
-    local apollyonsfx = SFXManager()
-    apollyonsfx:Play(SoundEffect.SOUND_BEAST_SUCTION_LOOP) -- Play sound effect
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(APOLLYON_ESSENCE) then
+            player:AnimateCollectible(APOLLYON_ESSENCE, "UseItem", "PlayerPickupSparkle")
+            player:AddCollectible(APOLLYON_ESSENCE_VFX)
+            local apollyonsfx = SFXManager()
+            apollyonsfx:Play(SoundEffect.SOUND_BEAST_SUCTION_LOOP) -- Play sound effect
 
 
-    if player:HasCollectible(APOLLYON_ESSENCE) then
+        --if player:HasCollectible(APOLLYON_ESSENCE) then
 
-        rampageActive = true
-        rampageEndTime = Isaac.GetFrameCount() + (8 * 60) -- 10 seconds in frames
-        killCount = 0
+            rampageActive = true
+            rampageEndTime = Isaac.GetFrameCount() + (8 * 60) -- 10 seconds in frames
+            killCount = 0
 
-        -- Make player invulnerable
-        player:SetMinDamageCooldown(480)
-        player:GetData().contactDamageBoost = true
+            -- Make player invulnerable
+            player:SetMinDamageCooldown(480)
+            player:GetData().contactDamageBoost = true
+        end
     end
 end
 
@@ -3177,31 +3186,36 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.ActivateRampage, APOLLYON_ESSENCE)
 
 -- ✅ Apply contact damage effect
 function Mod:OnPlayerUpdateApollyon(player)
-    local player = Isaac.GetPlayer(0)
-    if rampageActive then
-        -- ✅ Damage enemies on contact
-        for _, enemy in ipairs(Isaac.GetRoomEntities()) do
-            if enemy:IsEnemy() and enemy.Position:Distance(player.Position) < enemy.Size + player.Size then
-                enemy:TakeDamage(40, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(player), 0)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if rampageActive then
+            -- ✅ Damage enemies on contact
+            for _, enemy in ipairs(Isaac.GetRoomEntities()) do
+                if enemy:IsEnemy() and enemy.Position:Distance(player.Position) < enemy.Size + player.Size then
+                    enemy:TakeDamage(40, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(player), 0)
 
-                -- ✅ Count kills for damage scaling
-                if enemy:IsDead() then
-                    killCount = killCount + 1
+                    -- ✅ Count kills for damage scaling
+                    if enemy:IsDead() then
+                        killCount = killCount + 1
+                    end
                 end
             end
-        end
 
-        -- ✅ End effect after 10 seconds
-        if Isaac.GetFrameCount() >= rampageEndTime then
-            player:SetMinDamageCooldown(30)
-            player:RemoveCollectible(APOLLYON_ESSENCE_VFX)
-            rampageActive = false
-            player:GetData().contactDamageBoost = nil
+            -- ✅ End effect after 10 seconds
+            if Isaac.GetFrameCount() >= rampageEndTime then
+                for i = 0, Game():GetNumPlayers() - 1 do
+                    local player = Game():GetPlayer(i)
+                    player:SetMinDamageCooldown(30)
+                    player:RemoveCollectible(APOLLYON_ESSENCE_VFX)
+                    rampageActive = false
+                    player:GetData().contactDamageBoost = nil
             
-            -- ✅ Apply damage boost based on kills
-            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
-            player:GetData().temporaryDamageBoost = killCount * 0.05
-            player:EvaluateItems()
+                    -- ✅ Apply damage boost based on kills
+                    player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+                    player:GetData().temporaryDamageBoost = killCount * 0.05
+                    player:EvaluateItems()
+                end
+            end
         end
     end
 end
@@ -3209,8 +3223,11 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdateApollyon)
 
 function Mod:onCacheApollyonEssence(player, cacheFlag)
-    if cacheFlag == CacheFlag.CACHE_DAMAGE and player:GetData().temporaryDamageBoost then
-        player.Damage = player.Damage + player:GetData().temporaryDamageBoost
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if cacheFlag == CacheFlag.CACHE_DAMAGE and player:GetData().temporaryDamageBoost and player:HasCollectible(APOLLYON_ESSENCE) then
+            player.Damage = player.Damage + player:GetData().temporaryDamageBoost
+        end
     end
 
     --[[ f cacheFlag == CacheFlag.CACHE_DAMAGE then
@@ -3247,21 +3264,24 @@ end
 
 -- ✅ Spawn a wisp when entering a new room
 function Mod:OnNewRoomBethEssence()
-    local player = Isaac.GetPlayer(0)
-    local room = Game():GetLevel():GetCurrentRoomIndex()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
 
-    if player:HasCollectible(BETHANY_ESSENCE) then
+        local room = Game():GetLevel():GetCurrentRoomIndex()
 
-        -- ✅ Check if the room has already been visited
-        if not visitedRoomsBethEssence[room] then
+        if player:HasCollectible(BETHANY_ESSENCE) then
 
-            local randomCollectible = Mod:GetRandomWisppableItem()
-            if randomCollectible then
-                player:AddWisp(randomCollectible, player.Position, true)
+            -- ✅ Check if the room has already been visited
+            if not visitedRoomsBethEssence[room] then
+
+                local randomCollectible = Mod:GetRandomWisppableItem()
+                if randomCollectible then
+                    player:AddWisp(randomCollectible, player.Position, true)
+                end
+
+                -- ✅ Mark the room as visited
+                visitedRoomsBethEssence[room] = true
             end
-
-            -- ✅ Mark the room as visited
-            visitedRoomsBethEssence[room] = true
         end
     end
 end
@@ -3269,6 +3289,15 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoomBethEssence)
 
+local mattTrigger = false
+
+function Mod:OnNewGameMatt(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        mattTrigger = false
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameMatt) -- Reset flag between runs
 
 -- ✅ Define a list of possible items to grant
 local predefinedItemList = {
@@ -3334,32 +3363,35 @@ local predefinedItemList = {
 
 -- ✅ Grant items and a luck upgrade on pickup
 function Mod:OnPickupRewardItem(_, player)
-    local player = Isaac.GetPlayer(0)
-    if player:HasCollectible(MATT_ESSENCE) then
-        local nummatt = player:GetCollectibleNum(MATT_ESSENCE) * 3
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(MATT_ESSENCE) and mattTrigger == false then
+            local nummatt = player:GetCollectibleNum(MATT_ESSENCE) * 3
 
-        -- Select two random items from the list
-        local chosenItems = {}
+            -- Select two random items from the list
+            local chosenItems = {}
         
-        while #chosenItems < 2 do
-            local selectedItem = predefinedItemList[math.random(#predefinedItemList)]
-            if not chosenItems[selectedItem] then
-                table.insert(chosenItems, selectedItem)
+            while #chosenItems < 2 do
+                local selectedItem = predefinedItemList[math.random(#predefinedItemList)]
+                if not chosenItems[selectedItem] then
+                    table.insert(chosenItems, selectedItem)
+                end
             end
+
+            -- ✅ Give the selected items to the player
+            for _, itemID in ipairs(chosenItems) do
+                player:AddCollectible(itemID)
+            end
+
+            -- ✅ Grant a luck upgrade
+            player:AddCacheFlags(CacheFlag.CACHE_LUCK)
+            player:GetData().luckBoost = nummatt -- Adjust as needed
+            player:EvaluateItems()
+
+            -- ✅ Remove itself after activation (if desired)
+            --player:RemoveCollectible(MATT_ESSENCE)
+            mattTrigger = true
         end
-
-        -- ✅ Give the selected items to the player
-        for _, itemID in ipairs(chosenItems) do
-            player:AddCollectible(itemID)
-        end
-
-        -- ✅ Grant a luck upgrade
-        player:AddCacheFlags(CacheFlag.CACHE_LUCK)
-        player:GetData().luckBoost = nummatt -- Adjust as needed
-        player:EvaluateItems()
-
-        -- ✅ Remove itself after activation (if desired)
-        player:RemoveCollectible(MATT_ESSENCE)
     end
 end
 
@@ -3367,12 +3399,13 @@ Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupRewardItem)
 
 -- ✅ Ensure luck boost applies properly
 function Mod:onCacheMattEssence(player, cacheFlag)
-    --local player = Isaac.GetPlayer(0)
-    if cacheFlag == CacheFlag.CACHE_LUCK and player:GetData().luckBoost then
-        player.Luck = player.Luck + player:GetData().luckBoost
+    if cacheFlag == CacheFlag.CACHE_LUCK then
+        local data = player:GetData()
 
+        if player:HasCollectible(MATT_ESSENCE) then
+            player.Luck = player.Luck + player:GetCollectibleNum(MATT_ESSENCE) * 3 -- ✅ Apply luck boost individually
+        end
     end
-
 end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCacheMattEssence)
@@ -4939,6 +4972,8 @@ function Mod:OnUseDevilFour(itemUsed2, rng2, player2)
 
         -- **Give the passive item to apply the costume**
         player2:AddCollectible(DEVIL_FOUR_VFX, 0, false)
+        --player2:AddCollectible(DEMON_DASH_ITEM)
+        player2:SetPocketActiveItem(DEMON_DASH_ITEM, ActiveSlot.SLOT_POCKET, true)
 
         -- Play activation sound
         SFX:Play(SoundEffect.SOUND_DEVIL_CARD, 1.5, 0, false, 1.5)
@@ -4963,6 +4998,7 @@ function Mod:OnUseDevilFour(itemUsed2, rng2, player2)
                 Vector.Zero,
                 nil
             )
+            holyBeam.Parent = player2
         end
 
         
@@ -5016,7 +5052,7 @@ function Mod:UpdateDevilFourEffect(player)
         end
 
 
-        if fireDirectionjudge == Direction.LEFT then
+        --[[ if fireDirectionjudge == Direction.LEFT then
             directionjudge = Vector(-1, 0)
         elseif fireDirectionjudge == Direction.RIGHT then
             directionjudge = Vector(1, 0)
@@ -5041,7 +5077,7 @@ function Mod:UpdateDevilFourEffect(player)
             laserjudge.Timeout = 15 -- Set duration (adjust as needed)
             laserjudge.CollisionDamage = playerDamage
 
-        end
+        end ]]
 
         -- **Summon Holy Light beams on random enemies**
         if data.DevilFourTimer % LIGHT_BEAM_INTERVAL_2 == 0 then
@@ -5057,6 +5093,7 @@ function Mod:UpdateDevilFourEffect(player)
                     Vector.Zero,
                     nil
                 )
+                holyBeam.Parent = player
             end
         end
 
@@ -5072,7 +5109,9 @@ function Mod:UpdateDevilFourEffect(player)
             )
             SFX:Play(SoundEffect.SOUND_SATAN_RISE_UP, 1.5, 0, false, 1)
             data.DevilFourActive = false
-            --player:RemoveCollectible(DEVIL_FOUR_ITEM)
+            --player:RemoveCollectible(DEMON_DASH_ITEM)
+            player:SetPocketActiveItem(DUAE_ITEM, ActiveSlot.SLOT_POCKET, true)
+
             player:RemoveCollectible(DEVIL_FOUR_VFX)
         end
     end
@@ -5243,7 +5282,7 @@ local lastMoveVec = {} -- Store last movement direction for each player
 local dashingPlayers = {} -- Tracks players who are dashing
 
 
-function Mod:OnUseAbrahamDash(_, _, player)
+function Mod:OnUseAbrahamDash(_, _, player, tear)
     local abesfx = SFXManager()
     if not dashingPlayers[player.Index] then
         dashingPlayers[player.Index] = {dashTimer = DASH_DURATION_2, cooldown = DASH_COOLDOWN, chargeRefreshCount = 0, chargeTimer = 0, chargeExpireTimer = 0, enemiesHit = {} }
@@ -5251,6 +5290,7 @@ function Mod:OnUseAbrahamDash(_, _, player)
         abesfx:Play(SoundEffect.SOUND_KNIFE_PULL, 1, 0, false, 1.2)
         -- Immediately trigger first dash update to bypass animation delay
         Mod:OnUpdateAbrahamDash()
+
     end
     --return true
 end
