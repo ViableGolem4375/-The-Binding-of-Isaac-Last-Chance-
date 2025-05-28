@@ -1414,7 +1414,7 @@ if EID then
     EID:addTrinket(TECH_TRINKET, "10% chance to fire a technology laser instead of a normal tear.#{{Luck}} +5% chance to trigger per point of luck.#{{Collectible202}} +10% chance to trigger per point of luck when golden.", "Bootleg Tech")
     EID:addCard(SOUL_MATT, "{{Luck}} +10 luck for the current room.", "Soul of Matt")
     EID:addCard(SOUL_PONTIUS, "Fire 8 spears in a circular pattern around yourself.#The spears deal 10x Isaac's damage.", "Soul of Pontius")
-    EID:addCard(SOUL_ABRAHAM, "Removes all devil room chances and grants 100% angel room chance.#{{Warning}} Taking red heart damage after activation can still reduce your chances of seeing an angel room.", "Soul of Abraham")
+    EID:addCard(SOUL_ABRAHAM, "Removes all devil room chances and grants 100% angel room chance for the floor.#{{Warning}} Taking red heart damage after activation can still reduce your chances of seeing an angel room.", "Soul of Abraham")
 
 end
 
