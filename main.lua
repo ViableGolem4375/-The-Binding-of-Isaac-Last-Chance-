@@ -1376,7 +1376,7 @@ if EID then
     EID:addCollectible(DEFENSE_TECH_ITEM, "Spawns a laser ring around Isaac that deals 25% of his damage every tick.", "Defense Tech")
     EID:addCollectible(NECROMANCY_ITEM, "Killed enemies have a 10% chance to be revived as friendlies which last for the current room.#{{Luck}} 75% chance at 18 luck.", "Necromancy")
     EID:addCollectible(MONEY_ITEM, "One time use active item that gives Isaac coins equal to the amount of money spent throughout the run.", "Become Back My Money")
-    EID:addCollectible(PAINT_ITEM, "Turns Isaac's currently held trinket into its golden version.#{{Warning}} Will only affect one trinket at a time, always turns the trinket held in the first slot to gold.", "Gold Spray Paint")
+    EID:addCollectible(PAINT_ITEM, "Turns Isaac's currently held trinket into its golden version.#{{Warning}} Using the item on a golden trinket will turn it into its non0golden variant.#{{Warning}} Will only affect one trinket at a time, always turns the trinket held in the first slot to gold.", "Gold Spray Paint")
     EID:addCollectible(GLITCH_ITEM, "Grants a 1 in 100,000,000 chance to fire a tear that instantly kills any enemy it hits inclusing bosses.#{{Luck}} 100% chance at 99,999,999 luck.", "'/<<L7")
     EID:addCollectible(PROTO_ITEM, "Isaac's tears are replaced by a chargeable 1 tick laser which deals 10x Isaac's damage.", "Proto-Tech")
     EID:addCollectible(FRED_ITEM, "Spawns an immortal friendly Gaper on pickup.#The Gaper persists between floors.", "Fred The Friendly Gaper")
@@ -3837,22 +3837,24 @@ local BASE_CHANCE = 0.1 -- ✅ Base 10% chance
 local LUCK_SCALING = 0.05 -- ✅ +5% chance per Luck point
 
 function Mod:OnEnemyDeath(entity)
-    local player = Isaac.GetPlayer(0)
-    local necronum = player:GetCollectibleNum(NECROMANCY_ITEM) * 0.05
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local necronum = player:GetCollectibleNum(NECROMANCY_ITEM) * 0.05
 
-    -- ✅ Check if player has the item and enemy is valid
-    if player:HasCollectible(NECROMANCY_ITEM) and entity:IsEnemy() then
-        -- ✅ Scale chance with Luck
-        local luckFactor = math.max(0, player.Luck * necronum)
-        local finalChance = math.min(0.75, BASE_CHANCE + luckFactor) -- Cap at 75% chance
+        -- ✅ Check if player has the item and enemy is valid
+        if player:HasCollectible(NECROMANCY_ITEM) and entity:IsEnemy() then
+            -- ✅ Scale chance with Luck
+            local luckFactor = math.max(0, player.Luck * necronum)
+            local finalChance = math.min(0.75, BASE_CHANCE + luckFactor) -- Cap at 75% chance
 
-        if math.random() < finalChance then
+            if math.random() < finalChance then
 
-            -- ✅ Spawn friendly version of the enemy
-            local ally = Isaac.Spawn(entity.Type, entity.Variant, entity.SubType, entity.Position, Vector.Zero, player)
-            ally:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
-            -- **Apply permanent charmed effect (adds the hearts visual)**
-            ally:AddEntityFlags(EntityFlag.FLAG_CHARM)
+                -- ✅ Spawn friendly version of the enemy
+                local ally = Isaac.Spawn(entity.Type, entity.Variant, entity.SubType, entity.Position, Vector.Zero, player)
+                ally:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+                -- **Apply permanent charmed effect (adds the hearts visual)**
+                ally:AddEntityFlags(EntityFlag.FLAG_CHARM)
+            end
         end
     end
 end
@@ -3861,23 +3863,25 @@ Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.OnEnemyDeath)
 
 
 function Mod:TrackMoneySpent(player)
-    local player = Isaac.GetPlayer(0)
-    if not player:GetData().moneySpent then
-        player:GetData().moneySpent = 0 -- ✅ Initialize tracking
-    end
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if not player:GetData().moneySpent then
+            player:GetData().moneySpent = 0 -- ✅ Initialize tracking
+        end
 
-    -- ✅ Detect spending (subtracting money)
-    local prevCoins = player:GetData().lastCoins or player:GetNumCoins()
-    local currentCoins = player:GetNumCoins()
+        -- ✅ Detect spending (subtracting money)
+        local prevCoins = player:GetData().lastCoins or player:GetNumCoins()
+        local currentCoins = player:GetNumCoins()
 
-    if currentCoins < prevCoins then
-        local spentAmount = prevCoins - currentCoins
-        player:GetData().moneySpent = player:GetData().moneySpent + spentAmount
+        if currentCoins < prevCoins then
+            local spentAmount = prevCoins - currentCoins
+            player:GetData().moneySpent = player:GetData().moneySpent + spentAmount
         
-    end
+        end
 
-    -- ✅ Store last known coin count for next check
-    player:GetData().lastCoins = currentCoins
+        -- ✅ Store last known coin count for next check
+        player:GetData().lastCoins = currentCoins
+    end
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.TrackMoneySpent)
@@ -3894,22 +3898,24 @@ Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameMoney) -- Reset 
 
 
 function Mod:UseRefundItem(_, item, rng, player)
-    local player = Isaac.GetPlayer(0)
-    if player:HasCollectible(MONEY_ITEM) then
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(MONEY_ITEM) then
 
-        player:AnimateCollectible(MONEY_ITEM, "UseItem", "PlayerPickupSparkle")
+            player:AnimateCollectible(MONEY_ITEM, "UseItem", "PlayerPickupSparkle")
 
-        local refundAmount = player:GetData().moneySpent or 0
+            local refundAmount = player:GetData().moneySpent or 0
 
-        if refundAmount > 0 then
+            if refundAmount > 0 then
 
-            -- ✅ Give the stored money back to the player
-            player:AddCoins(refundAmount)
+                -- ✅ Give the stored money back to the player
+                player:AddCoins(refundAmount)
 
-            -- ✅ Reset spent money counter after refund
-            --player:GetData().moneySpent = 0
-            player:RemoveCollectible(MONEY_ITEM)
+                -- ✅ Reset spent money counter after refund
+                --player:GetData().moneySpent = 0
+                player:RemoveCollectible(MONEY_ITEM)
 
+            end
         end
     end
 end
@@ -3918,26 +3924,28 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseRefundItem, MONEY_ITEM)
 
 
 function Mod:UseGoldSprayPaint(_, item, rng, player)
-    local player = Isaac.GetPlayer(0)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
 
-    if player:HasCollectible(PAINT_ITEM) then
-        player:AnimateCollectible(PAINT_ITEM, "UseItem", "PlayerPickupSparkle")
+        if player:HasCollectible(PAINT_ITEM) then
+            player:AnimateCollectible(PAINT_ITEM, "UseItem", "PlayerPickupSparkle")
 
-        -- ✅ Get the player's first held trinket
-        local heldTrinket = player:GetTrinket(0)
-        local goldTrinket
-        print(heldTrinket)
+            -- ✅ Get the player's first held trinket
+            local heldTrinket = player:GetTrinket(0)
+            local goldTrinket
+            print(heldTrinket)
 
-        if heldTrinket ~= TrinketType.TRINKET_NULL then
-            goldTrinket = heldTrinket + 32768
+            if heldTrinket ~= TrinketType.TRINKET_NULL then
+                goldTrinket = heldTrinket + 32768
 
-            -- ✅ Convert the trinket to its golden version
-            player:TryRemoveTrinket(heldTrinket) -- Remove normal version
-            player:AddTrinket(goldTrinket) -- Add golden version
+                -- ✅ Convert the trinket to its golden version
+                player:TryRemoveTrinket(heldTrinket) -- Remove normal version
+                player:AddTrinket(goldTrinket) -- Add golden version
 
-            -- ✅ Reapply trinket effects
-            player:AddCacheFlags(CacheFlag.CACHE_ALL)
-            player:EvaluateItems()
+                -- ✅ Reapply trinket effects
+                player:AddCacheFlags(CacheFlag.CACHE_ALL)
+                player:EvaluateItems()
+            end
         end
     end
 end
@@ -4083,18 +4091,20 @@ Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameGaper) -- Reset 
 
 
 function Mod:SpawnFriendlyGaper(player)
-    local player = Isaac.GetPlayer(0)
-    if player:HasCollectible(FRED_ITEM) and gaperSpawned == false then
-        local gaper = Isaac.Spawn(EntityType.ENTITY_GAPER, 0, 0, player.Position, Vector(0,0), player)
-        gaper:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- ✅ Makes it friendly
-        gaper:AddEntityFlags(EntityFlag.FLAG_PERSISTENT) -- ✅ Makes it friendly
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(FRED_ITEM) and gaperSpawned == false then
+            local gaper = Isaac.Spawn(EntityType.ENTITY_GAPER, 0, 0, player.Position, Vector(0,0), player)
+            gaper:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- ✅ Makes it friendly
+            gaper:AddEntityFlags(EntityFlag.FLAG_PERSISTENT) -- ✅ Makes it friendly
 
-        -- **Apply permanent charmed effect (adds the hearts visual)**
-        gaper:AddEntityFlags(EntityFlag.FLAG_CHARM)
-        gaper:GetData().IsImmortalGaper = true
+            -- **Apply permanent charmed effect (adds the hearts visual)**
+            gaper:AddEntityFlags(EntityFlag.FLAG_CHARM)
+            gaper:GetData().IsImmortalGaper = true
 
         
-        gaperSpawned = true
+            gaperSpawned = true
+        end
     end
 end
 
@@ -4165,18 +4175,21 @@ end ]]
 --Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameDebug) -- Reset flag between runs
 
 function Mod:OnChaosItemUse(item, rng, player, flags)
-     if player:HasCollectible(DEBUG_ITEM) then
-        player:AnimateCollectible(DEBUG_ITEM, "UseItem", "PlayerPickupSparkle")
-        local commandIndex = rng:RandomInt(#DEBUG_COMMANDS) + 1
-        local chosenCommand = DEBUG_COMMANDS[commandIndex]
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(DEBUG_ITEM) then
+            player:AnimateCollectible(DEBUG_ITEM, "UseItem", "PlayerPickupSparkle")
+            local commandIndex = rng:RandomInt(#DEBUG_COMMANDS) + 1
+            local chosenCommand = DEBUG_COMMANDS[commandIndex]
 
-        Isaac.ExecuteCommand(chosenCommand) -- ✅ Executes the random debug effect
-        table.insert(lastDebugCommand, chosenCommand) -- ✅ Store all triggered effects
+            Isaac.ExecuteCommand(chosenCommand) -- ✅ Executes the random debug effect
+            table.insert(lastDebugCommand, chosenCommand) -- ✅ Store all triggered effects
 
-        -- ✅ Visual & sound effect to indicate activation
-        --player:AnimateCollectible(DEBUG_ITEM, "UseItem", "PlayerPickupSparkle")
-        SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
+            -- ✅ Visual & sound effect to indicate activation
+            --player:AnimateCollectible(DEBUG_ITEM, "UseItem", "PlayerPickupSparkle")
+            SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
 
+        end
     end
 end
 
@@ -4419,33 +4432,35 @@ function Mod:FindItemPedestalsGlitchEssence()
 end
 
 function Mod:UseTMTrainerReroll(item, rng, player, flags)
-    local player = game:GetPlayer(0)
-    if player:HasCollectible(GLITCH_ESSENCE) then
-        player:AnimateCollectible(GLITCH_ESSENCE, "UseItem", "PlayerPickupSparkle")
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(GLITCH_ESSENCE) then
+            player:AnimateCollectible(GLITCH_ESSENCE, "UseItem", "PlayerPickupSparkle")
 
-        local pedestals = Mod:FindItemPedestalsGlitchEssence()
+            local pedestals = Mod:FindItemPedestalsGlitchEssence()
 
-        if #pedestals == 0 then
-            print("No pedestals to reroll!")
-            return
+            if #pedestals == 0 then
+                print("No pedestals to reroll!")
+                return
+            end
+
+            player:AddCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
+
+            for _, pedestal in ipairs(pedestals) do
+                print("Rerolling pedestal at:", pedestal.Position)
+
+                pedestal:Remove() -- ✅ Remove original pedestal
+
+                -- ✅ Spawn a TMTRAINER glitched item in its place
+                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_TMTRAINER, pedestal.Position, Vector(0,0), player)
+            end
+
+            -- ✅ Play effects for clarity
+            SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
+            Game():SpawnParticles(player.Position, EffectVariant.TEAR_POOF_A, 10, 5, Color(1, 0, 0, 1, 0, 0, 0), 0)
+            player:RemoveCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
+            print("Successfully rerolled all pedestals into TMTRAINER items!")
         end
-
-        player:AddCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
-
-        for _, pedestal in ipairs(pedestals) do
-            print("Rerolling pedestal at:", pedestal.Position)
-
-            pedestal:Remove() -- ✅ Remove original pedestal
-
-            -- ✅ Spawn a TMTRAINER glitched item in its place
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_TMTRAINER, pedestal.Position, Vector(0,0), player)
-        end
-
-        -- ✅ Play effects for clarity
-        SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
-        Game():SpawnParticles(player.Position, EffectVariant.TEAR_POOF_A, 10, 5, Color(1, 0, 0, 1, 0, 0, 0), 0)
-        player:RemoveCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
-        print("Successfully rerolled all pedestals into TMTRAINER items!")
     end
 end
 
@@ -4462,14 +4477,16 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameLuckyPenny) -- Reset flag between runs
 
 function Mod:OnLuckyPennyItemPickup(player, item)
-    local player = game:GetPlayer(0)
-    if player:HasCollectible(LUCKY_PENNY_ITEM) and luckyPennyItemTriggered == false then
-        -- ✅ Spawn 5 Lucky Pennies near the player
-        for i = 1, 5 do
-            local dropPosition = player.Position + Vector(math.random(-20, 20), math.random(-20, 20))
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_LUCKYPENNY, dropPosition, Vector(0,0), player)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(LUCKY_PENNY_ITEM) and luckyPennyItemTriggered == false then
+            -- ✅ Spawn 5 Lucky Pennies near the player
+            for i = 1, 5 do
+                local dropPosition = player.Position + Vector(math.random(-20, 20), math.random(-20, 20))
+                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_LUCKYPENNY, dropPosition, Vector(0,0), player)
+            end
+            luckyPennyItemTriggered = true
         end
-        luckyPennyItemTriggered = true
     end
 end
 
@@ -4554,22 +4571,27 @@ end
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.MoonInit, FAMILIAR_MOON)
 
 function Mod:MoonUpdate(Moon)
-    local player = Isaac.GetPlayer(0)
-    Moon.OrbitDistance = Vector(150,150)
-    Moon.OrbitSpeed = 0.15
-    --Moon.OrbitLayer = 7007
-    Moon.Velocity = Moon:GetOrbitPosition(player.Position + player.Velocity) - Moon.Position
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+    
+        Moon.OrbitDistance = Vector(150,150)
+        Moon.OrbitSpeed = 0.15
+        --Moon.OrbitLayer = 7007
+        Moon.Velocity = Moon:GetOrbitPosition(player.Position + player.Velocity) - Moon.Position
+    end
 end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.MoonUpdate, FAMILIAR_MOON)
 
 function Mod:onCacheMoon(player, cacheFlag)
-    local numFamiliars = player:GetCollectibleNum(MOON_ITEM) * 3
-    --if cacheFlag == cacheFlag.CACHE_FAMILIARS then
-    if player:HasCollectible(MOON_ITEM) then
-        player:CheckFamiliar(FAMILIAR_MOON, numFamiliars, player:GetCollectibleRNG(MOON_ITEM))
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local numFamiliars = player:GetCollectibleNum(MOON_ITEM) * 3
+        --if cacheFlag == cacheFlag.CACHE_FAMILIARS then
+        if player:HasCollectible(MOON_ITEM) then
+            player:CheckFamiliar(FAMILIAR_MOON, numFamiliars, player:GetCollectibleRNG(MOON_ITEM))
+        end
     end
-    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCacheMoon)
@@ -4598,32 +4620,36 @@ end
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.FluxInit, FAMILIAR_FLUX)
 
 function Mod:FluxUpdate(Flux)
-    local player = Isaac.GetPlayer(0)
-    -- ✅ Initialize data if needed
-    local data = Flux:GetData()
-    if not data.NextChangeFrame then data.NextChangeFrame = Game():GetFrameCount() + math.random(60, 180) end
-    if not data.CurrentOrbitDistance then data.CurrentOrbitDistance = Vector(20, 20) end
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        -- ✅ Initialize data if needed
+        local data = Flux:GetData()
+        if not data.NextChangeFrame then data.NextChangeFrame = Game():GetFrameCount() + math.random(60, 180) end
+        if not data.CurrentOrbitDistance then data.CurrentOrbitDistance = Vector(20, 20) end
 
-    -- ✅ Every few seconds, randomize orbit distance
-    if Game():GetFrameCount() >= data.NextChangeFrame then
-        data.CurrentOrbitDistance = Vector(math.random(10, 500), math.random(10, 500)) -- ✅ Random distance range
-        data.NextChangeFrame = Game():GetFrameCount() + math.random(60, 180) -- ✅ Schedule next change
+        -- ✅ Every few seconds, randomize orbit distance
+        if Game():GetFrameCount() >= data.NextChangeFrame then
+            data.CurrentOrbitDistance = Vector(math.random(10, 500), math.random(10, 500)) -- ✅ Random distance range
+            data.NextChangeFrame = Game():GetFrameCount() + math.random(60, 180) -- ✅ Schedule next change
+        end
+
+        -- ✅ Apply the current orbit properties
+        Flux.OrbitDistance = data.CurrentOrbitDistance
+        Flux.OrbitSpeed = 0.5
+        Flux.OrbitLayer = 7007
+        Flux.Velocity = Flux:GetOrbitPosition(player.Position + player.Velocity) - Flux.Position
     end
-
-    -- ✅ Apply the current orbit properties
-    Flux.OrbitDistance = data.CurrentOrbitDistance
-    Flux.OrbitSpeed = 0.5
-    Flux.OrbitLayer = 7007
-    Flux.Velocity = Flux:GetOrbitPosition(player.Position + player.Velocity) - Flux.Position
-
 end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.FluxUpdate, FAMILIAR_FLUX)
 
 function Mod:onCacheFlux(player, cacheFlag)
-    local numFamiliars = player:GetCollectibleNum(FLUX_ITEM)
-    if player:HasCollectible(FLUX_ITEM) then
-        player:CheckFamiliar(FAMILIAR_FLUX, numFamiliars, player:GetCollectibleRNG(FLUX_ITEM))
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local numFamiliars = player:GetCollectibleNum(FLUX_ITEM)
+        if player:HasCollectible(FLUX_ITEM) then
+            player:CheckFamiliar(FAMILIAR_FLUX, numFamiliars, player:GetCollectibleRNG(FLUX_ITEM))
+        end
     end
 end
 
@@ -4713,16 +4739,18 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateDevilOne)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitDevilOne)
 
 function Mod:onEnemyDeathAngelOne(entity)
-    local player = Isaac.GetPlayer(0)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
 
-    if player:HasCollectible(ANGEL_ONE_ITEM) and entity:IsEnemy() then
-        -- ✅ Base chance (5%) + Luck scaling (5% per Luck point)
-        local luckFactor = math.max(0, player.Luck * 0.05) -- Prevent negative values
-        local finalChance = math.min(0.5, 0.1 + luckFactor) -- Cap at 50% drop rate
+        if player:HasCollectible(ANGEL_ONE_ITEM) and entity:IsEnemy() then
+            -- ✅ Base chance (5%) + Luck scaling (5% per Luck point)
+            local luckFactor = math.max(0, player.Luck * 0.05) -- Prevent negative values
+            local finalChance = math.min(0.5, 0.1 + luckFactor) -- Cap at 50% drop rate
 
-        -- ✅ Random chance to spawn a Golden Heart upon enemy death
-        if math.random() <= finalChance then
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_HALF_SOUL, entity.Position, Vector.Zero, nil)
+            -- ✅ Random chance to spawn a Golden Heart upon enemy death
+            if math.random() <= finalChance then
+                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_HALF_SOUL, entity.Position, Vector.Zero, nil)
+            end
         end
     end
 end
@@ -4904,22 +4932,24 @@ local function GetDark()
 end
 
 function Mod:UseDuaeitem(item, rng, player, flags)
-    local player = game:GetPlayer(0)
-    if player:HasCollectible(DUAE_ITEM) then
-        player:AnimateCollectible(DUAE_ITEM, "UseItem", "PlayerPickupSparkle")
-        for _, pos in ipairs(pedestalPositionsAbe1) do
-            local itemID = GetLight()
-            local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
-            pedestal:GetData().elitePedestal = true -- Mark as part of selection
-            table.insert(pedestals, pedestal)
-        end
-        for _, pos in ipairs(pedestalPositionsAbe2) do
-            local itemID = GetDark()
-            local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
-            pedestal:GetData().elitePedestal = true -- Mark as part of selection
-            table.insert(pedestals, pedestal)
-        end
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(DUAE_ITEM) then
+            player:AnimateCollectible(DUAE_ITEM, "UseItem", "PlayerPickupSparkle")
+            for _, pos in ipairs(pedestalPositionsAbe1) do
+                local itemID = GetLight()
+                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
+                pedestal:GetData().elitePedestal = true -- Mark as part of selection
+                table.insert(pedestals, pedestal)
+            end
+            for _, pos in ipairs(pedestalPositionsAbe2) do
+                local itemID = GetDark()
+                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
+                pedestal:GetData().elitePedestal = true -- Mark as part of selection
+                table.insert(pedestals, pedestal)
+            end
 
+        end
     end
 end
 
@@ -5913,42 +5943,45 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.ReplaceTearWithLaser)
 
 function Mod:FireLaserInstead(player, position, velocity)
-    local player = Isaac.GetPlayer(0)
-    local fireDirectionAzazel = player:GetFireDirection()
-    local directionazazel
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasTrinket(TECH_TRINKET) then
+            local fireDirectionAzazel = player:GetFireDirection()
+            local directionazazel
 
-    if fireDirectionAzazel == Direction.LEFT then
-        directionazazel = Vector(-1, 0)
-    elseif fireDirectionAzazel == Direction.RIGHT then
-        directionazazel = Vector(1, 0)
-    elseif fireDirectionAzazel == Direction.DOWN then
-        directionazazel = Vector(0, 1)
-    elseif fireDirectionAzazel == Direction.UP then
-        directionazazel = Vector(0, -1)
-    elseif fireDirectionAzazel == Direction.NO_DIRECTION then
-        directionazazel = Vector(0, 1)
+            if fireDirectionAzazel == Direction.LEFT then
+                directionazazel = Vector(-1, 0)
+            elseif fireDirectionAzazel == Direction.RIGHT then
+                directionazazel = Vector(1, 0)
+            elseif fireDirectionAzazel == Direction.DOWN then
+                directionazazel = Vector(0, 1)
+            elseif fireDirectionAzazel == Direction.UP then
+                directionazazel = Vector(0, -1)
+            elseif fireDirectionAzazel == Direction.NO_DIRECTION then
+                directionazazel = Vector(0, 1)
+            end
+
+            -- Spawn a visible laser ring at the impact location
+            local laserRing = Isaac.Spawn(
+                EntityType.ENTITY_LASER,
+                LaserVariant.THIN_RED,
+                0,
+                player.Position,
+                Vector.Zero,
+                player
+            ):ToLaser()
+
+            if laserRing then -- Ensure the laser was spawned successfully
+                laserRing.PositionOffset = Vector(0, -20) -- Adjust Y value as needed
+
+                laserRing.AngleDegrees = directionazazel:GetAngleDegrees() -- Rotate laser to match direction
+                laserRing.CollisionDamage = player.Damage -- Set laser damage
+                laserRing.Timeout = 1 -- Laser duration
+                --laserRing:AddTearFlags(TearFlags.TEAR_HOMING) -- Apply homing effect
+                laserRing.Parent = player -- Prevent self-damage
+            end
+        end
     end
-
-    -- Spawn a visible laser ring at the impact location
-    local laserRing = Isaac.Spawn(
-        EntityType.ENTITY_LASER,
-            LaserVariant.THIN_RED,
-            0,
-            player.Position,
-            Vector.Zero,
-            player
-    ):ToLaser()
-
-    if laserRing then -- Ensure the laser was spawned successfully
-        laserRing.PositionOffset = Vector(0, -20) -- Adjust Y value as needed
-
-        laserRing.AngleDegrees = directionazazel:GetAngleDegrees() -- Rotate laser to match direction
-        laserRing.CollisionDamage = player.Damage -- Set laser damage
-        laserRing.Timeout = 1 -- Laser duration
-        laserRing:AddTearFlags(TearFlags.TEAR_HOMING) -- Apply homing effect
-        laserRing.Parent = player -- Prevent self-damage
-    end
-
 end
 ----------------------------------------------------------------------------------------
 --- Room Code For Essence Reliquary Below.
