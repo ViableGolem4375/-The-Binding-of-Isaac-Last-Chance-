@@ -38,9 +38,9 @@
     <passive id="34" name="Essence of Bethany" gfx="beth_essence.png" description="Army of eternal flame" quality="3" tags="offensive nocantrip"/>
     <passive id="35" name="Essence of Matt" gfx="matt_essence.png" description="Luck up + power through chance" quality="3" tags="offensive nocantrip" cache="luck"/>
     <active id="36" name="Essence of Pontius" gfx="pontius_essence.png" description="Spear thrower" quality="2" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage"/>
-    <active id="37" name="Essence of The Lost" gfx="lost_essence.png" description="Glass cannon" quality="2" maxcharges="1" chargetype="normal" tags="nocantrip" cache="damage"/>
-    <active id="38" name="Essence of Jacob and Esau" gfx="JE_essence.png" description="Brotherly bond" quality="3" maxcharges="4" chargetype="normal" tags="offensive nocantrip"/>
-    <active id="39" name="Essence of The Forgotten" gfx="forgotten_essence.png" description="A helping skeleton" quality="3" maxcharges="4" chargetype="normal" tags="offensive nocantrip"/>
+    <active id="37" name="Essence of The Lost" gfx="lost_essence.png" description="Glass cannon" quality="3" maxcharges="1" chargetype="normal" tags="nocantrip" cache="damage"/>
+    <active id="38" name="Essence of Jacob and Esau" gfx="JE_essence.png" description="Brotherly bond" quality="3" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
+    <active id="39" name="Essence of The Forgotten" gfx="forgotten_essence.png" description="A helping skeleton" quality="3" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="40" name="Star of David" gfx="star_of_david.png" description="Jewish!" quality="3" tags="offensive nocantrip" cache="damage luck"/>
     <active id="41" name="A Gun" gfx="gun.png" description="You'll shoot your eye out!" quality="1" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage shotspeed"/>
     <passive id="42" name="Appetizer" gfx="brunch.png" description="Health up" quality="1" tags="nocantrip nolostbr" />

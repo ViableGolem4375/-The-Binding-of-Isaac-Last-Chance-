@@ -3413,57 +3413,59 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCacheMattEssence)
 local spearCooldown = 0 -- Shared cooldown for all characters
 
 function Mod:UseSpearAttack(_, item, rng, player)
-    local player = Isaac.GetPlayer(0)
-    if player:HasCollectible(PONTIUS_ESSENCE) then
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(PONTIUS_ESSENCE) then
 
-        local data = player:GetData()
-        local playerDamage = player.Damage
-        local fireDirectionspear = player:GetFireDirection()
-        local directionspear
+            local data = player:GetData()
+            local playerDamage = player.Damage
+            local fireDirectionspear = player:GetFireDirection()
+            local directionspear
 
-        -- Set correct spear direction
-        if fireDirectionspear == Direction.LEFT then
-            directionspear = Vector(-1, 0)
-        elseif fireDirectionspear == Direction.RIGHT then
-            directionspear = Vector(1, 0)
-        elseif fireDirectionspear == Direction.DOWN then
-            directionspear = Vector(0, 1)
-        elseif fireDirectionspear == Direction.UP then
-            directionspear = Vector(0, -1)
-        elseif fireDirectionspear == Direction.NO_DIRECTION then
-            directionspear = Vector(0, 1)
-        end
-
-        if directionspear then
-            local spear = Isaac.Spawn(
-                EntityType.ENTITY_LASER,
-                LaserVariant.ELECTRIC,
-                0,
-                player.Position,
-                Vector.Zero,
-                player
-            ):ToLaser()
-
-            -- Apply custom animation
-            if spear then
-                local sprite = spear:GetSprite()
-                sprite:Load("gfx/pontius_spear_throw.anm2", true)
-                sprite:Play("LargeRedLaser", true)
+            -- Set correct spear direction
+            if fireDirectionspear == Direction.LEFT then
+                directionspear = Vector(-1, 0)
+            elseif fireDirectionspear == Direction.RIGHT then
+                directionspear = Vector(1, 0)
+            elseif fireDirectionspear == Direction.DOWN then
+                directionspear = Vector(0, 1)
+            elseif fireDirectionspear == Direction.UP then
+                directionspear = Vector(0, -1)
+            elseif fireDirectionspear == Direction.NO_DIRECTION then
+                directionspear = Vector(0, 1)
             end
 
-            -- Stop default sound and play custom effect
-            local sfx = SFXManager()
-            sfx:Stop(SoundEffect.SOUND_ANGEL_BEAM)
-            sfx:Play(SoundEffect.SOUND_SWORD_SPIN) -- Replace with your custom sound ID
+            if directionspear then
+                local spear = Isaac.Spawn(
+                    EntityType.ENTITY_LASER,
+                    LaserVariant.ELECTRIC,
+                    0,
+                    player.Position,
+                    Vector.Zero,
+                    player
+                ):ToLaser()
 
-            spear.PositionOffset = Vector(0, -10)
-            spear.TearFlags = player.TearFlags
-            spear.AngleDegrees = directionspear:GetAngleDegrees()
-            spear.Parent = player
-            spear.Timeout = 1
-            spear.CollisionDamage = playerDamage * 10
+                -- Apply custom animation
+                if spear then
+                    local sprite = spear:GetSprite()
+                    sprite:Load("gfx/pontius_spear_throw.anm2", true)
+                    sprite:Play("LargeRedLaser", true)
+                end
 
-            spearCooldown = 30 -- Set a cooldown (adjust as needed)
+                -- Stop default sound and play custom effect
+                local sfx = SFXManager()
+                sfx:Stop(SoundEffect.SOUND_ANGEL_BEAM)
+                sfx:Play(SoundEffect.SOUND_SWORD_SPIN) -- Replace with your custom sound ID
+
+                spear.PositionOffset = Vector(0, -10)
+                spear.TearFlags = player.TearFlags
+                spear.AngleDegrees = directionspear:GetAngleDegrees()
+                spear.Parent = player
+                spear.Timeout = 1
+                spear.CollisionDamage = playerDamage * 10
+
+                spearCooldown = 30 -- Set a cooldown (adjust as needed)
+            end
         end
     end
 end
@@ -3474,32 +3476,36 @@ local SOUL_OF_THE_LOST = Card.CARD_SOUL_LOST -- Replace with actual Soul of the 
 
 
 function Mod:UseSoulItem(_, item, rng, player)
-    local player = Isaac.GetPlayer(0)
-    player:AnimateCollectible(LOST_ESSENCE, "UseItem", "PlayerPickupSparkle")
-    if player:HasCollectible(LOST_ESSENCE) then
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        player:AnimateCollectible(LOST_ESSENCE, "UseItem", "PlayerPickupSparkle")
+        if player:HasCollectible(LOST_ESSENCE) then
 
-        -- ✅ Force immediate use
-        player:UseCard(SOUL_OF_THE_LOST)
+            -- ✅ Force immediate use
+            player:UseCard(SOUL_OF_THE_LOST)
 
-         -- ✅ Apply temporary damage boost
-         player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
-         player:GetData().temporaryDamageBoost = 20 -- Adjust as needed
-         player:EvaluateItems()
+            -- ✅ Apply temporary damage boost
+            --[[ player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+            player:GetData().temporaryDamageBoost = 20 -- Adjust as needed
+            player:EvaluateItems() ]]
 
+        end
     end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItem, LOST_ESSENCE)
 
--- ✅ Remove effect upon leaving the room
+--[[ -- ✅ Remove effect upon leaving the room
 function Mod:OnNewRoomLostEssence()
-    local player = Isaac.GetPlayer(0)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
 
-    -- Reset player state after leaving the room
-    if player:GetData().temporaryDamageBoost then
-        player:GetData().temporaryDamageBoost = nil
-        player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
-        player:EvaluateItems()
+        -- Reset player state after leaving the room
+        if player:GetData().temporaryDamageBoost then
+            player:GetData().temporaryDamageBoost = nil
+            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+            player:EvaluateItems()
+        end
     end
 end
 
@@ -3507,24 +3513,26 @@ Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoomLostEssence)
 
 -- ✅ Ensure damage boost applies correctly
 function Mod:ApplySoulDamageBoost(_, player, cacheFlag)
-    if cacheFlag == CacheFlag.CACHE_DAMAGE and player:GetData().temporaryDamageBoost then
+    if cacheFlag == CacheFlag.CACHE_DAMAGE and player:HasCollectible(LOST_ESSENCE) then
         player.Damage = player.Damage + player:GetData().temporaryDamageBoost
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplySoulDamageBoost)
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplySoulDamageBoost) ]]
 
 local SOUL_OF_JE = Card.CARD_SOUL_JACOB -- Replace with actual Soul of the Lost ID
 
 
 function Mod:UseSoulItemJE(_, item, rng, player)
-    local player = Isaac.GetPlayer(0)
-    player:AnimateCollectible(JACOB_AND_ESAU_ESSENCE, "UseItem", "PlayerPickupSparkle")
-    if player:HasCollectible(JACOB_AND_ESAU_ESSENCE) then
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        player:AnimateCollectible(JACOB_AND_ESAU_ESSENCE, "UseItem", "PlayerPickupSparkle")
+        if player:HasCollectible(JACOB_AND_ESAU_ESSENCE) then
 
-        -- ✅ Force immediate use
-        player:UseCard(SOUL_OF_JE)
+            -- ✅ Force immediate use
+            player:UseCard(SOUL_OF_JE)
 
+        end
     end
 end
 
@@ -3534,13 +3542,15 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItemJE, JACOB_AND_ESAU_ESSE
 local SOUL_OF_FORGOTTEN = Card.CARD_SOUL_FORGOTTEN -- Replace with actual Soul of the Lost ID
 
 function Mod:UseSoulItemForgotten(_, item, rng, player)
-    local player = Isaac.GetPlayer(0)
-    player:AnimateCollectible(FORGOTTEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
-    if player:HasCollectible(FORGOTTEN_ESSENCE) then
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        player:AnimateCollectible(FORGOTTEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
+        if player:HasCollectible(FORGOTTEN_ESSENCE) then
 
-        -- ✅ Force immediate use
-        player:UseCard(SOUL_OF_FORGOTTEN)
+            -- ✅ Force immediate use
+            player:UseCard(SOUL_OF_FORGOTTEN)
 
+        end
     end
 end
 
@@ -3571,6 +3581,7 @@ local function getRandomStarEffect(player)
 end
 
 function Mod:onTearInitStar(tear)
+    
     if HasStarEffect then
         local parent = tear.SpawnerEntity
         if parent and parent:ToPlayer() then
@@ -3600,17 +3611,20 @@ end
 local goldenHeartChance = 0.05 -- Set the drop chance (10%)
 
 function Mod:onEnemyDeath(entity)
-    local player = Isaac.GetPlayer(0)
-    local starnumheart = player:GetCollectibleNum(STAR_OF_DAVID) * 0.05
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local starnumheart = player:GetCollectibleNum(STAR_OF_DAVID) * 0.05
 
-    if player:HasCollectible(STAR_OF_DAVID) and entity:IsEnemy() then
-        -- ✅ Base chance (5%) + Luck scaling (5% per Luck point)
-        local luckFactor = math.max(0, player.Luck * starnumheart) -- Prevent negative values
-        local finalChance = math.min(0.5, 0.1 + luckFactor) -- Cap at 50% drop rate
+        if player:HasCollectible(STAR_OF_DAVID) and entity:IsEnemy() then
+            -- ✅ Base chance (5%) + Luck scaling (5% per Luck point)
+            print("work")
+            local luckFactor = math.max(0, player.Luck * starnumheart) -- Prevent negative values
+            local finalChance = math.min(0.5, 0.1 + luckFactor) -- Cap at 50% drop rate
 
-        -- ✅ Random chance to spawn a Golden Heart upon enemy death
-        if math.random() <= finalChance then
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_GOLDEN, entity.Position, Vector.Zero, nil)
+            -- ✅ Random chance to spawn a Golden Heart upon enemy death
+            if math.random() <= finalChance then
+                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_GOLDEN, entity.Position, Vector.Zero, nil)
+            end
         end
     end
 end
@@ -3754,16 +3768,18 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyBossRoomDamage)
 local INVINCIBILITY_DURATION = 30 -- 1 second (since Isaac runs at 30 FPS)
 
 function Mod:UseInvincibilityItem(_, item, rng, player)
-    local player = Isaac.GetPlayer(0)
-    if player:HasCollectible(PHALANX_ITEM) then
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(PHALANX_ITEM) then
 
-        -- ✅ Apply invulnerability effect
-        player:SetMinDamageCooldown(60)
+            -- ✅ Apply invulnerability effect
+            player:SetMinDamageCooldown(60)
 
 
-        -- ✅ Play sound effect (optional)
-        local sfx = SFXManager()
-        sfx:Play(SoundEffect.SOUND_BALL_AND_CHAIN_HIT)
+            -- ✅ Play sound effect (optional)
+            local sfx = SFXManager()
+            sfx:Play(SoundEffect.SOUND_BALL_AND_CHAIN_HIT)
+        end
     end
 end
 
@@ -3773,42 +3789,44 @@ local LASER_COUNT = 6 -- ✅ Number of lasers in the ring
 local LASER_RADIUS = 40 -- ✅ Distance from player
 
 function Mod:UpdateLaserRing(player)
-    local player = Isaac.GetPlayer(0)
-    if player:HasCollectible(DEFENSE_TECH_ITEM) then
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(DEFENSE_TECH_ITEM) then
 
-        local data = player:GetData()
-        local playerDamage = player.Damage
-        local fireDirectionspear = player:GetFireDirection()
-        local directionspear
+            local data = player:GetData()
+            local playerDamage = player.Damage
+            local fireDirectionspear = player:GetFireDirection()
+            local directionspear
 
-        -- Set correct spear direction
-        if fireDirectionspear == Direction.LEFT then
-            directionspear = Vector(-1, 0)
-        elseif fireDirectionspear == Direction.RIGHT then
-            directionspear = Vector(1, 0)
-        elseif fireDirectionspear == Direction.DOWN then
-            directionspear = Vector(0, 1)
-        elseif fireDirectionspear == Direction.UP then
-            directionspear = Vector(0, -1)
-        elseif fireDirectionspear == Direction.NO_DIRECTION then
-            directionspear = Vector(0, 1)
-        end
+            -- Set correct spear direction
+            if fireDirectionspear == Direction.LEFT then
+                directionspear = Vector(-1, 0)
+            elseif fireDirectionspear == Direction.RIGHT then
+                directionspear = Vector(1, 0)
+            elseif fireDirectionspear == Direction.DOWN then
+                directionspear = Vector(0, 1)
+            elseif fireDirectionspear == Direction.UP then
+                directionspear = Vector(0, -1)
+            elseif fireDirectionspear == Direction.NO_DIRECTION then
+                directionspear = Vector(0, 1)
+            end
 
-        if directionspear then
-            local spear = Isaac.Spawn(
-                EntityType.ENTITY_LASER,
-                LaserVariant.THIN_RED,
-                3,
-                player.Position,
-                Vector.Zero,
-                player
-            ):ToLaser()
+            if directionspear then
+                local spear = Isaac.Spawn(
+                    EntityType.ENTITY_LASER,
+                    LaserVariant.THIN_RED,
+                    3,
+                    player.Position,
+                    Vector.Zero,
+                    player
+                ):ToLaser()
 
-            spear.PositionOffset = Vector(0, -10)
-            spear.AngleDegrees = directionspear:GetAngleDegrees()
-            spear.Parent = player
-            spear.Timeout = 9999999
-            spear.CollisionDamage = playerDamage * 0.25
+                spear.PositionOffset = Vector(0, -10)
+                spear.AngleDegrees = directionspear:GetAngleDegrees()
+                spear.Parent = player
+                spear.Timeout = 9999999
+                spear.CollisionDamage = playerDamage * 0.25
+            end
         end
     end
 end
