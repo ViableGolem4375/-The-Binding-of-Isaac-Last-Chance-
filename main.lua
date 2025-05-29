@@ -1380,7 +1380,7 @@ if EID then
     EID:addCollectible(DEFENSE_TECH_ITEM, "Spawns a laser ring around Isaac that deals 25% of his damage every tick.", "Defense Tech")
     EID:addCollectible(NECROMANCY_ITEM, "Killed enemies have a 10% chance to be revived as friendlies which last for the current room.#{{Luck}} 75% chance at 18 luck.", "Necromancy")
     EID:addCollectible(MONEY_ITEM, "One time use active item that gives Isaac coins equal to the amount of money spent throughout the run.", "Become Back My Money")
-    EID:addCollectible(PAINT_ITEM, "Turns Isaac's currently held trinket into its golden version.#{{Warning}} Using the item on a golden trinket will turn it into its non0golden variant.#{{Warning}} Will only affect one trinket at a time, always turns the trinket held in the first slot to gold.", "Gold Spray Paint")
+    EID:addCollectible(PAINT_ITEM, "Turns Isaac's currently held trinket into its golden version.#{{Warning}} Using the item on a golden trinket will turn it into its non golden variant.#{{Warning}} Will only affect one trinket at a time, always turns the trinket held in the first slot to gold.", "Gold Spray Paint")
     EID:addCollectible(GLITCH_ITEM, "Grants a 1 in 100,000,000 chance to fire a tear that instantly kills any enemy it hits inclusing bosses.#{{Luck}} 100% chance at 99,999,999 luck.", "'/<<L7")
     EID:addCollectible(PROTO_ITEM, "Isaac's tears are replaced by a chargeable 1 tick laser which deals 10x Isaac's damage.", "Proto-Tech")
     EID:addCollectible(FRED_ITEM, "Spawns an immortal friendly Gaper on pickup.#The Gaper persists between floors.", "Fred The Friendly Gaper")
