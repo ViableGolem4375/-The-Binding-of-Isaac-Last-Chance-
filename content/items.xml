@@ -10,15 +10,15 @@
     <passive id="6" name="Final Judgement VFX" gfx="finaljudgement.png" description="I exist to make the Final Judgement VFX work!" quality="4" hidden="true" tags="nocantrip quest noeden"/>
     <active id="7" name="Essence of Lilith" gfx="essence_of_lilith.png" description="To me my children" quality="2" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
     <trinket id="8" name="Reliquary Access Card" gfx="reliquary_card.png" description="Access granted" />
-    <active id="9" name="Amplifier" gfx="amp.png" description="Enjoy the amplifier!" quality="2" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
-    <passive id="10" name="Amp Damage" gfx="amp.png" description="I exist to give amplifier's damage!" quality="4" hidden="true" tags="nocantrip quest noeden" cache="damage"/>
+    <active id="9" name="Amplifier" gfx="amp2.png" description="Enjoy the amplifier!" quality="2" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
+    <passive id="10" name="Amp Damage" gfx="amp2.png" description="I exist to give amplifier's damage!" quality="4" hidden="true" tags="nocantrip quest noeden" cache="damage"/>
     <active id="11" name="Huh?" gfx="huh.png" description="What happened to my D6?" quality="0" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="12" name="The Compensator" gfx="compensator.png" description="Garbage = Power!" quality="3" tags="offensive nocantrip" cache="damage"/>
     <trinket id="13" name="4 Leaf Clover" gfx="clover.png" description="Luck up!" cache="luck"/>
     <trinket id="14" name="Orb Shard" gfx="orb.png" description="Destined for greatness?"/>
     <trinket id="15" name="Stitched Photo" gfx="photo.png" description="Fate chosen?"/>
     <trinket id="16" name="Black Candle Wick" gfx="candlewick.png" description="Curse resistance"/>
-    <active id="17" name="Eternal Bond" gfx="bond.png" description="Us against the world!" quality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
+    <active id="17" name="Eternal Bond" gfx="bond2.png" description="Us against the world!" quality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
     <active id="18" name="Anatomy Textbook" gfx="anatomy_textbook.png" description="Reusable bone protection." quality="3" maxcharges="6" chargetype="normal" tags="nolostbr nocantrip book"/>
     <passive id="19" name="Blank Slate" gfx="blank_slate.png" description="Transform yourself" quality="1" tags="offensive nocantrip angel baby battery bob book devil fly guppy mom mushroom poop spider syringe"/>
     <passive id="20" name="Essence of Isaac" gfx="essence_of_isaac.png" description="Options!" quality="4" tags="offensive nocantrip"/>
@@ -41,7 +41,7 @@
     <active id="37" name="Essence of The Lost" gfx="lost_essence.png" description="Glass cannon" quality="3" maxcharges="1" chargetype="normal" tags="nocantrip" cache="damage"/>
     <active id="38" name="Essence of Jacob and Esau" gfx="JE_essence.png" description="Brotherly bond" quality="3" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
     <active id="39" name="Essence of The Forgotten" gfx="forgotten_essence.png" description="A helping skeleton" quality="3" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
-    <passive id="40" name="Star of David" gfx="star_of_david.png" description="Jewish!" quality="3" tags="offensive nocantrip" cache="damage luck"/>
+    <passive id="40" name="Yamika" gfx="star_of_david.png" description="Mazeltov!" quality="3" tags="offensive nocantrip" cache="damage luck"/>
     <active id="41" name="A Gun" gfx="gun.png" description="You'll shoot your eye out!" quality="1" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage shotspeed"/>
     <passive id="42" name="Appetizer" gfx="brunch.png" description="Health up" quality="1" tags="nocantrip nolostbr" />
     <passive id="43" name="Early Morning Snack" gfx="midnight_snack.png" description="Health up" quality="1" tags="nocantrip nolostbr" />

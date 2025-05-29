@@ -7,7 +7,7 @@
         <Item Name="Amplifier" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Anatomy Textbook" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Star of David" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Yamika" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="A Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Kingslayer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Appetizer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
@@ -75,7 +75,7 @@
         <Item Name="Amplifier" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Anatomy Textbook" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Star of David" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Yamika" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="A Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Kingslayer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Appetizer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
@@ -112,7 +112,7 @@
         <Item Name="Amplifier" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Anatomy Textbook" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Star of David" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Yamika" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="A Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Kingslayer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Appetizer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
