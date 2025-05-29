@@ -10,7 +10,7 @@
 - Stat up items need stacking behavior.
 - Maybe fix the issue with omega tech where it activates both both J+E if they both have it.
 - Soul of lilith is using soul of abraham on the HUD.
-- Fix gold paint description.
+- Update clover description.
 
 
 Here's this code bc its always necessary:
