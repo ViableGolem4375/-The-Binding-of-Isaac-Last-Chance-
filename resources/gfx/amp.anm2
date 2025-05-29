@@ -1,8 +1,8 @@
 <AnimatedActor>
-	<Info CreatedBy="vinh" CreatedOn="5/3/2025 8:44:21 AM" Version="3" Fps="30"/>
+	<Info CreatedBy="vinh" CreatedOn="5/29/2025 12:23:01 PM" Version="3" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="familiar\amp.png" Id="0"/>
+			<Spritesheet Path="familiar\amp_familiar.png" Id="0"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="body" Id="0" SpritesheetId="0"/>
