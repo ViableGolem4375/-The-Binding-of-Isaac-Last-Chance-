@@ -132,6 +132,7 @@ JUBILEES_ITEM = Isaac.GetItemIdByName("Book of Jubilees")
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Pontius")
 SOUL_ABRAHAM = Isaac.GetCardIdByName("Soul of Abraham")
+RELIQUARY_CARD = Isaac.GetCardIdByName("Essence Card")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Matt below.
@@ -1418,6 +1419,7 @@ if EID then
     EID:addCard(SOUL_PONTIUS, "Fire 8 spears in a circular pattern around yourself.#The spears deal 10x Isaac's damage.", "Soul of Pontius")
     EID:addCard(SOUL_ABRAHAM, "Removes all devil room chances and converts the into angel room chances for the floor.#{{Warning}} Taking red heart damage after activation can still reduce your chances of seeing an angel room.", "Soul of Abraham")
     EID:addCollectible(JUBILEES_ITEM, "Isaac takes damage equal to half of his total health and is sent to an angel room.#Prioritizes red health.#The Keepers take one coin heart of damage.#This damage does not reduce normal devil/angel room chances.", "Book of Jubilees")
+    EID:addCard(RELIQUARY_CARD, "Spawns an Essence Collector.", "Essence Card")
 
 end
 
@@ -5660,6 +5662,27 @@ function Mod:UseSoulStoneRoomChance(card, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseSoulStoneRoomChance, SOUL_ABRAHAM)
+
+function Mod:UseEssenceCard(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == RELIQUARY_CARD then
+        --Isaac.ExecuteCommand("spawn essence collector")
+        local spawnPosition = player.Position + Vector(40, 40) -- ✅ Adjusts offset (40 pixels to the right)
+
+        -- ✅ Spawn the custom slot machine near the player
+        Isaac.Spawn(EntityType.ENTITY_SLOT, 249376971, 0, spawnPosition, Vector.Zero, player)
+
+
+        local sfx = SFXManager()
+        sfx:Play(SoundEffect.SOUND_SUMMON_POOF)
+        sfx:Play(SoundEffect.SOUND_CHEST_DROP)
+        
+        --end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseEssenceCard, RELIQUARY_CARD)
 ----------------------------------------------------------------------------------------
 --- Machine code below.
 
