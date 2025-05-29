@@ -2556,6 +2556,11 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.AnatomyBookUse, ANATOMY_ITEM) 
 
+local function GetSafePedestalPosition(basePos)
+    local room = Game():GetRoom()
+    return room:FindFreeTilePosition(basePos, 20) -- ✅ Finds nearest valid position within 20-pixel radius
+end
+
 local function GetQuality4Item()
     local quality4Items = {} -- Store all Quality 4 items
     for i = 1, CollectibleType.NUM_COLLECTIBLES do
@@ -2592,9 +2597,13 @@ function Mod:OnPickupIsaacEssence(_, player)
         if player:HasCollectible(ISAAC_ESSENCE) and not pedestalsSpawned then
             pedestalsSpawned = true -- Mark the effect as triggered
             for _, pos in ipairs(pedestalPositions) do
+                local playerPos = player.Position
+                local safePos = GetSafePedestalPosition(pos)
                 local itemID = GetQuality4Item() -- Get a Quality 4 item
-                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
+                --local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
+                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, safePos, Vector.Zero, player)
                 pedestal:GetData().elitePedestal = true -- Mark as part of selection
+                pedestal:GetData().spawnTime = Isaac.GetFrameCount()
                 table.insert(pedestals, pedestal)
             end
         end
@@ -2604,8 +2613,10 @@ end
 
 function Mod:OnItemTaken(pickup, collider)
     local player = collider:ToPlayer() -- Ensure collider is a player
-    if player then
-        if pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE and pickup:GetData().elitePedestal then
+    if player and pickup:GetData().elitePedestal then
+        local spawnTime = pickup:GetData().spawnTime or 0
+        local currentFrame = Isaac.GetFrameCount()
+        if currentFrame - spawnTime > 30 then
             -- Remove all other pedestals once player picks one
             for _, otherPedestal in ipairs(pedestals) do
                 if otherPedestal ~= pickup then
@@ -2613,7 +2624,10 @@ function Mod:OnItemTaken(pickup, collider)
                 end
             end
             pedestals = {} -- Clear stored pedestals
-            player:RemoveCollectible(ISAAC_ESSENCE)
+            for i = 0, Game():GetNumPlayers() - 1 do
+                local player = Game():GetPlayer(i)
+                player:RemoveCollectible(ISAAC_ESSENCE)
+            end
             pedestalsSpawned = false
         end
     end
@@ -4945,15 +4959,22 @@ function Mod:UseDuaeitem(item, rng, player, flags)
         if player:HasCollectible(DUAE_ITEM) then
             player:AnimateCollectible(DUAE_ITEM, "UseItem", "PlayerPickupSparkle")
             for _, pos in ipairs(pedestalPositionsAbe1) do
+                local safePos = GetSafePedestalPosition(pos)
                 local itemID = GetLight()
-                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
+                --local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
+                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, safePos, Vector.Zero, player)
+                --pedestal:GetData().spawnTime = Isaac.GetFrameCount()
                 pedestal:GetData().elitePedestal = true -- Mark as part of selection
+                pedestal:GetData().spawnTime = Isaac.GetFrameCount()
                 table.insert(pedestals, pedestal)
             end
             for _, pos in ipairs(pedestalPositionsAbe2) do
+                local safePos = GetSafePedestalPosition(pos)
                 local itemID = GetDark()
-                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
-                pedestal:GetData().elitePedestal = true -- Mark as part of selection
+                --local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
+                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, safePos, Vector.Zero, player)
+                pedestal:GetData().elitePedestal = true -- ✅ Mark as part of selection
+                pedestal:GetData().spawnTime = Isaac.GetFrameCount()
                 table.insert(pedestals, pedestal)
             end
 
@@ -4966,8 +4987,11 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseDuaeitem, DUAE_ITEM)
 
 function Mod:AbeItemSelection(pickup, collider)
     local player = collider:ToPlayer() -- Ensure collider is a player
-    if player then
-        if pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE and pickup:GetData().elitePedestal then
+    if player and pickup:GetData().elitePedestal then
+        local spawnTime = pickup:GetData().spawnTime or 0
+        local currentFrame = Isaac.GetFrameCount()
+
+        if currentFrame - spawnTime > 30 then
             -- Remove all other pedestals once player picks one
             for _, otherPedestal in ipairs(pedestalsAbe) do
                 if otherPedestal ~= pickup then
