@@ -2005,7 +2005,7 @@ function Mod:OnUseFinalJudgment(itemUsed, rng, player)
         return false -- Stops reuse
     end
 
-    if player:HasCollectible(FINAL_JUDGMENT_ITEM) then
+    if itemUsed == FINAL_JUDGMENT_ITEM then
         --local data = player:GetData()
         -- Mark item as used (prevents reuse)
         data.FinalJudgmentUsed = true
