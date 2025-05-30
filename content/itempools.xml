@@ -34,7 +34,6 @@
     <Pool Name="angel">
         <Item Name="Lil' Uriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lil' Gabriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Final Judgement" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
@@ -144,7 +143,6 @@
     <Pool Name="greedAngel">
         <Item Name="Lil' Uriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lil' Gabriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Final Judgement" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>

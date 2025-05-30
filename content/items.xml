@@ -6,7 +6,7 @@
     <familiar name="Lil' Gabriel" gfx="gabriel.png" description="Eternal friend" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel" />
     <active id="4" name="Catalyst Character Sheet" gfx="catalyst_character_sheet.png" description="It's in my head IT'S IN MY HEAD AAAAAAAAAAA" quality="3" maxcharges="4" chargetype="normal" tags="offensive nocantrip"/>
     <familiar name="Failed Abortion" gfx="failed_abortion.png" description="It's still breathing!" quality="2" cache="familiars" tags="baby offensive summonable monstermanual" />
-    <active id="5" name="Final Judgement" gfx="finaljudgement.png" description="Be Afraid" quality="4" charge="12" tags="offensive nocantrip"/>
+    <active id="5" name="Final Judgement" gfx="finaljudgement.png" description="Be Afraid" quality="4" maxcharges="12" chargetype="normal" hidden="true" tags="quest noeden nocantrip"/>
     <passive id="6" name="Final Judgement VFX" gfx="finaljudgement.png" description="I exist to make the Final Judgement VFX work!" quality="4" hidden="true" tags="nocantrip quest noeden"/>
     <active id="7" name="Essence of Lilith" gfx="essence_of_lilith.png" description="To me my children" quality="2" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
     <trinket id="8" name="Reliquary Access Card" gfx="reliquary_card.png" description="Access granted" />
@@ -85,5 +85,6 @@
     <active id="78" name="Technology Omega" gfx="omegatech.png" description="Technological advancement" quality="2" maxcharges="4" chargetype="normal" tags="quest nocantrip" />
     <trinket id="79" name="Bootleg Tech" gfx="bootleg.png" description="It sort of works" cache="luck" />
     <active id="80" name="Book of Jubilees" gfx="jubilees.png" description="Deliver me unto salvation" quality="4" maxcharges="12" chargetype="normal" tags="offensive book nocantrip" />
+    <active id="81" name="Angel Blast" gfx="finaljudgement.png" description="Be Afraid" quality="4" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip"/>
 
 </items>

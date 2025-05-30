@@ -127,6 +127,7 @@ ABRAHAM_ESSENCE_ITEM = Isaac.GetItemIdByName("Essence of Abraham")
 OMEGA_ITEM = Isaac.GetItemIdByName("Technology Omega")
 TECH_TRINKET = Isaac.GetTrinketIdByName("Bootleg Tech")
 JUBILEES_ITEM = Isaac.GetItemIdByName("Book of Jubilees")
+ANGEL_BLAST_ITEM = Isaac.GetItemIdByName("Angel Blast")
 
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
@@ -1990,6 +1991,55 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdatee, FAMILIAR_VARIANT_FAIL)
 
+function Mod:UseAngelBlast(_, item, rng, player)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(ANGEL_BLAST_ITEM) then
+
+            local data = player:GetData()
+            local playerDamage = player.Damage
+            local fireDirectionspear = player:GetFireDirection()
+            local directionspear
+
+            -- Set correct spear direction
+            if fireDirectionspear == Direction.LEFT then
+                directionspear = Vector(-1, 0)
+            elseif fireDirectionspear == Direction.RIGHT then
+                directionspear = Vector(1, 0)
+            elseif fireDirectionspear == Direction.DOWN then
+                directionspear = Vector(0, 1)
+            elseif fireDirectionspear == Direction.UP then
+                directionspear = Vector(0, -1)
+            elseif fireDirectionspear == Direction.NO_DIRECTION then
+                directionspear = Vector(0, 1)
+            end
+
+            if directionspear then
+                local spear = Isaac.Spawn(
+                    EntityType.ENTITY_LASER,
+                    LaserVariant.LIGHT_BEAM,
+                    0,
+                    player.Position,
+                    Vector.Zero,
+                    player
+                ):ToLaser()
+
+                spear.PositionOffset = Vector(0, -10)
+                spear.TearFlags = player.TearFlags
+                spear.AngleDegrees = directionspear:GetAngleDegrees()
+                spear.Parent = player
+                spear.Timeout = 15
+                spear.CollisionDamage = playerDamage + 3
+
+                spearCooldown = 30 -- Set a cooldown (adjust as needed)
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseAngelBlast, ANGEL_BLAST_ITEM)
+
+
 local STAT_BOOST_DURATION = 900 -- 30 seconds (30 * 30 frames)
 local SFX = SFXManager()
 
@@ -2020,6 +2070,7 @@ function Mod:OnUseFinalJudgment(itemUsed, rng, player)
 
         -- **Give the passive item to apply the costume**
         player:AddCollectible(FINAL_JUDGMENT_ITEM_VFX, 0, false)
+        player:SetPocketActiveItem(ANGEL_BLAST_ITEM, ActiveSlot.SLOT_POCKET, true)
 
         -- Play activation sound
         SFX:Play(SoundEffect.SOUND_DOGMA_ANGEL_TRANSFORM_END, 1.5, 0, false, 1.5)
@@ -2100,7 +2151,7 @@ function Mod:UpdateFinalJudgmentEffect(player)
         end
 
 
-        if fireDirectionjudge == Direction.LEFT then
+        --[[ if fireDirectionjudge == Direction.LEFT then
             directionjudge = Vector(-1, 0)
         elseif fireDirectionjudge == Direction.RIGHT then
             directionjudge = Vector(1, 0)
@@ -2128,7 +2179,7 @@ function Mod:UpdateFinalJudgmentEffect(player)
                 laserjudge.Parent = player -- Attach the laser to the player
                 laserjudge.Timeout = 15 -- Set duration (adjust as needed)
                 laserjudge.CollisionDamage = playerDamage
-            end
+            end ]]
 
         --end
 
@@ -2166,6 +2217,8 @@ function Mod:UpdateFinalJudgmentEffect(player)
             player:RemoveCollectible(CollectibleType.COLLECTIBLE_HOLY_GRAIL)
             --player:Kill()
             data.FinalJudgmentActive = false
+            player:SetPocketActiveItem(DUAE_ITEM, ActiveSlot.SLOT_POCKET, true)
+
             player:RemoveCollectible(FINAL_JUDGMENT_ITEM)
             player:RemoveCollectible(FINAL_JUDGMENT_ITEM_VFX)
         end
