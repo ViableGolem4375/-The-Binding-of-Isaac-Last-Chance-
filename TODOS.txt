@@ -9,8 +9,6 @@
 - Sack of lucky pennies might me bugged.
 - Stat up items need stacking behavior.
 - Maybe fix the issue with omega tech where it activates both both J+E if they both have it.
-- Soul of lilith is using soul of abraham on the HUD.
-- Update clover description.
 
 Here's this code bc its always necessary:
 for i = 0, Game():GetNumPlayers() - 1 do
@@ -24,6 +22,6 @@ Item Ideas to Add:
 
 Trinket Ideas:
 
-
+- Noisemaker
 
 Win streak: 6

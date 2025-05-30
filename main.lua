@@ -5647,6 +5647,8 @@ function Mod:UseJubilees(item, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseJubilees, JUBILEES_ITEM)
+
+
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 
@@ -6204,6 +6206,8 @@ function Mod:FireLaserInstead(player, position, velocity)
         end
     end
 end
+
+
 ----------------------------------------------------------------------------------------
 --- Room Code For Essence Reliquary Below.
 
