@@ -12,7 +12,6 @@
 - Soul of lilith is using soul of abraham on the HUD.
 - Update clover description.
 
-
 Here's this code bc its always necessary:
 for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
@@ -27,4 +26,4 @@ Trinket Ideas:
 
 
 
-Win streak: 5
+Win streak: 6

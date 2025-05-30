@@ -1334,7 +1334,7 @@ if EID then
     EID:addCollectible(GABRIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires 4 holy light beams in an 'X' pattern.#Scales with Isaac's damage.", "Lil' Gabriel")
     EID:addCollectible(CATALYST_SHEET_ITEM, "No no no NO NO NO nO no AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "Catalyst Character Sheet")
     EID:addCollectible(FAIL_ITEM, "Familiar that fires Haemolaceria tears.#Tears deal 10 damage and split into multiple smaller tears upon contact with a surface or enemy.", "Failed Abortion")
-    EID:addCollectible(FINAL_JUDGMENT_ITEM, "One time use active item that spawns a circle of light beams around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire holy light beams, and random light beams from the sky targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room.", "Final Judgement")
+    EID:addCollectible(FINAL_JUDGMENT_ITEM, "Spawns a circle of light beams around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire holy light beams, and random light beams from the sky targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room.", "Final Judgement")
     EID:addCollectible(FINAL_JUDGMENT_ITEM_VFX, "I exist to make the visuals work!", "Final Judgement VFX")
     EID:addCollectible(LILITH_ESSENCE, "Makes all enemies in the current room friendly upon use.", "Essence of Lilith")
     EID:addBirthright(templateType, "{{ArrowUp}} +10 luck#{{ArrowUp}} Gives a scaling damage up equal to 50% of Isaac's luck stat.")
@@ -2001,9 +2001,9 @@ function Mod:OnUseFinalJudgment(itemUsed, rng, player)
     local data = player:GetData()
 
     -- Prevent activation if item was already used
-    if data.FinalJudgmentUsed then
+    --[[ if data.FinalJudgmentUsed then
         return false -- Stops reuse
-    end
+    end ]]
 
     if itemUsed == FINAL_JUDGMENT_ITEM then
         --local data = player:GetData()
@@ -5036,9 +5036,9 @@ function Mod:OnUseDevilFour(itemUsed2, rng2, player2)
     local data = player2:GetData()
 
     -- Prevent activation if item was already used
-    if data.DevilFourUsed then
+    --[[ if data.DevilFourUsed then
         return false -- Stops reuse
-    end
+    end ]]
 
     if itemUsed2 == DEVIL_FOUR_ITEM then
         --local data = player:GetData()
