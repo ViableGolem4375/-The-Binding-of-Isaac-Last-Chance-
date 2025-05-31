@@ -51,7 +51,7 @@ AMP_DMG_ITEM = Isaac.GetItemIdByName("Amp Damage")
 
 HUH_ITEM = Isaac.GetItemIdByName("Huh?")
 COMP_ITEM = Isaac.GetItemIdByName("The Compensator")
-CLOVER_TRINKET = Isaac.GetTrinketIdByName("4 Leaf Clover")
+CLOVER_TRINKET = Isaac.GetTrinketIdByName("Four Leaf Clover")
 ORB_TRINKET = Isaac.GetTrinketIdByName("Orb Shard")
 PHOTO_TRINKET = Isaac.GetTrinketIdByName("Stitched Photo")
 CANDLE_TRINKET = Isaac.GetTrinketIdByName("Black Candle Wick")
@@ -128,6 +128,7 @@ OMEGA_ITEM = Isaac.GetItemIdByName("Technology Omega")
 TECH_TRINKET = Isaac.GetTrinketIdByName("Bootleg Tech")
 JUBILEES_ITEM = Isaac.GetItemIdByName("Book of Jubilees")
 ANGEL_BLAST_ITEM = Isaac.GetItemIdByName("Angel Blast")
+NOISEMAKER_TRINKET = Isaac.GetTrinketIdByName("The Devil's Noisemaker")
 
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
@@ -1335,7 +1336,7 @@ if EID then
     EID:addCollectible(GABRIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires 4 holy light beams in an 'X' pattern.#Scales with Isaac's damage.", "Lil' Gabriel")
     EID:addCollectible(CATALYST_SHEET_ITEM, "No no no NO NO NO nO no AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "Catalyst Character Sheet")
     EID:addCollectible(FAIL_ITEM, "Familiar that fires Haemolaceria tears.#Tears deal 10 damage and split into multiple smaller tears upon contact with a surface or enemy.", "Failed Abortion")
-    EID:addCollectible(FINAL_JUDGMENT_ITEM, "Spawns a circle of light beams around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire holy light beams, and random light beams from the sky targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room.", "Final Judgement")
+    EID:addCollectible(FINAL_JUDGMENT_ITEM, "Spawns a circle of light beams around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, a pocket active that allows firing of holy light beams, and random light beams from the sky targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room.", "Final Judgement")
     EID:addCollectible(FINAL_JUDGMENT_ITEM_VFX, "I exist to make the visuals work!", "Final Judgement VFX")
     EID:addCollectible(LILITH_ESSENCE, "Makes all enemies in the current room friendly upon use.", "Essence of Lilith")
     EID:addBirthright(templateType, "{{ArrowUp}} +10 luck#{{ArrowUp}} Gives a scaling damage up equal to 50% of Isaac's luck stat.")
@@ -1343,7 +1344,7 @@ if EID then
     EID:addTrinket(RELIQUARY_TRINKET, "{{Warning}} Picking up this trinket will immediately teleport Isaac to a special Essence Reliquary room.#This room will contain an item from a unique item pool containing various items relating to character's gimmicks.", "Reliquary Access Card")
     EID:addCollectible(AMP_ITEM, "Spawn a familiar which projects a damage amplification area onto the ground.#{{ArrowUp}} Standing within this area will multiply Isaac's damage by 5.#{{Warning}} Familiar expires after 20 seconds.", "Amplifier")
     EID:addCollectible(HUH_ITEM, "Rerolls all item pedestals in the room into The Poop.", "Huh?")
-    EID:addTrinket(CLOVER_TRINKET, "{{ArrowUp}} +2 luck.#{{Collectible202}} +4 luck if golden.", "4 Leaf Clover")
+    EID:addTrinket(CLOVER_TRINKET, "{{ArrowUp}} +2 luck.#{{Collectible202}} +4 luck if golden.", "Four Leaf Clover")
     EID:addTrinket(ORB_TRINKET, "Grants a 25% chance for quality 0 items to be automatically rerolled once.#{{Collectible202}} 50% chance to reroll if golden.", "Orb Shard")
     EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.#{{Collectible202}} No effect if golden.", "Stitched Photo")
     EID:addTrinket(CANDLE_TRINKET, "Grants 2 black hearts at the beginning of a floor if there is an active curse.#{{Collectible202}} Grants 4 black hearts if golden.", "Black Candle Wick")
@@ -1408,7 +1409,7 @@ if EID then
     EID:addCollectible(DEVIL_ONE_ITEM, "Isaac's tears light enemies on fire.#0.5% chance for enemies to drop a golden heart on death.#{{Luck}} +0.5% chance per point of luck.", "Devil's Path 1")
     EID:addCollectible(DEVIL_TWO_ITEM, "Isaac constantly emits creep that lights enemies on fire.", "Devil's Path 2")
     EID:addCollectible(DEVIL_THREE_ITEM, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} -1 tear delay.#{{ArrowUp}} +0.5 speed.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +1 shot speed.#{{ArrowUp}} +2 luck.", "Devil's Path 3")
-    EID:addCollectible(DEVIL_FOUR_ITEM, "Spawns a circle of fire pillars around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, rapid fire brimstone beams, and random fire pillars targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room.", "Devil's Path 4")
+    EID:addCollectible(DEVIL_FOUR_ITEM, "Spawns a circle of fire pillars around Isaac, gives Isaac +50 damage, 4x fire rate, +1.25 range, +2 speed, and +3 luck along with total invulnerability, a pocket active that allows for rapid dashes which deal high damage to enemies, and random fire pillars targetting enemies for 30 seconds.#{{Warning}} Upon expiration, this effect causes a large explosion in the current room.", "Devil's Path 4")
     EID:addCollectible(DEMON_DASH_ITEM, "Dash forward becoming invulnerable and deal 100 damage to enemies in your path.", "Rend")
     EID:addBirthright(TAINTED_ABRAHAM_TYPE, "Death timer is extended to 15 seconds.")
     EID:addBirthright(abrahamType, "Grants the Neutrality item when stacks for both the angel and devil paths are 0.")
@@ -1421,6 +1422,8 @@ if EID then
     EID:addCard(SOUL_ABRAHAM, "Removes all devil room chances and converts the into angel room chances for the floor.#{{Warning}} Taking red heart damage after activation can still reduce your chances of seeing an angel room.", "Soul of Abraham")
     EID:addCollectible(JUBILEES_ITEM, "Isaac takes damage equal to half of his total health and is sent to an angel room.#Prioritizes red health.#The Keepers take one coin heart of damage.#This damage does not reduce normal devil/angel room chances.", "Book of Jubilees")
     EID:addCard(RELIQUARY_CARD, "Spawns an Essence Collector.", "Essence Card")
+    EID:addCollectible(ANGEL_BLAST_ITEM, "Fire a holy light beam which deals Isaac's damage .", "Angel Blast")
+    EID:addTrinket(NOISEMAKER_TRINKET, "{{ArrowUp}} +0.25 speed.#{{ArrowUp}} -1 fire delay.#{{ArrowUp}} +1 damage.#{{ArrowUp}} +25% damage multiplier.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +0.3 shot speed.#{{ArrowUp}} +1 luck.#{{Warning}} While The Devil's Noisemaker is held random sound effects will be repeatedly played at an extremely high volume.#{{Collectible202}} When golden, all stat ups except for the damage multiplier are doubled and the volume of the sound effects is doubled.", "The Devil's Noisemaker")
 
 end
 
@@ -6207,7 +6210,69 @@ function Mod:FireLaserInstead(player, position, velocity)
     end
 end
 
+local loudSoundPool = {
+    SoundEffect.SOUND_BLOOD_LASER, -- Example: Loud laser sound
+    SoundEffect.SOUND_DOGMA_ANGEL_TRANSFORM, -- Example: Strong beep
+    SoundEffect.SOUND_EXPLOSION_STRONG, -- Example: Massive explosion
+    SoundEffect.SOUND_SATAN_BLAST -- Example: Creepy siren
+}
 
+
+function Mod:devilNoisemaker(player, cacheFlag)
+    if player:HasTrinket(NOISEMAKER_TRINKET) then
+        local mult = 1
+        if player:GetTrinketMultiplier(NOISEMAKER_TRINKET) > 1 then
+            mult = 2
+        end
+        if cacheFlag == CacheFlag.CACHE_SPEED then
+            player.MoveSpeed = player.MoveSpeed + (0.25 * mult)
+        end
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+            player.MaxFireDelay = player.MaxFireDelay - mult
+        end
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = (player.Damage + mult) * 1.25
+        end
+        if cacheFlag == CacheFlag.CACHE_RANGE then
+            player.TearRange = player.TearRange + (150 * mult)
+        end
+        if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
+            player.ShotSpeed = player.ShotSpeed + (0.3 * mult)
+        end
+        if cacheFlag == CacheFlag.CACHE_LUCK then
+            player.Luck = player.Luck + mult
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.devilNoisemaker)
+
+local soundTimer = 0
+
+function Mod:RandomLoudSounds(player)
+    if player:HasTrinket(NOISEMAKER_TRINKET) then
+        soundTimer = soundTimer - 1
+        local volume = 2.5
+        if player:GetTrinketMultiplier(NOISEMAKER_TRINKET) > 1 then
+            volume = 2
+        end
+
+        if soundTimer <= 0 then
+            -- ✅ Pick a random sound from the pool
+            local randomSound = loudSoundPool[math.random(#loudSoundPool)]
+
+            -- ✅ Play the sound at maximum volume
+            local sfx = SFXManager()
+            sfx:Play(randomSound, 2.0, 0, false, volume) -- LOUD with pitch boost
+
+            --soundTimer = math.random(30, 120) -- ✅ Random delay between sounds (adjust as needed)
+            soundTimer = 2
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.RandomLoudSounds)
 ----------------------------------------------------------------------------------------
 --- Room Code For Essence Reliquary Below.
 

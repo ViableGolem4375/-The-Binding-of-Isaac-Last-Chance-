@@ -14,7 +14,7 @@
     <passive id="10" name="Amp Damage" gfx="amp2.png" description="I exist to give amplifier's damage!" quality="4" hidden="true" tags="nocantrip quest noeden" cache="damage"/>
     <active id="11" name="Huh?" gfx="huh.png" description="What happened to my D6?" quality="0" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="12" name="The Compensator" gfx="compensator.png" description="Garbage = Power!" quality="3" tags="offensive nocantrip" cache="damage"/>
-    <trinket id="13" name="4 Leaf Clover" gfx="clover.png" description="Luck up!" cache="luck"/>
+    <trinket id="13" name="Four Leaf Clover" gfx="clover.png" description="Luck up!" cache="luck"/>
     <trinket id="14" name="Orb Shard" gfx="orb.png" description="Destined for greatness?"/>
     <trinket id="15" name="Stitched Photo" gfx="photo.png" description="Fate chosen?"/>
     <trinket id="16" name="Black Candle Wick" gfx="candlewick.png" description="Curse resistance"/>
@@ -66,7 +66,7 @@
     <passive id="61" name="Toolbelt" gfx="toolbelt.png" description="Pocket active" quality="3" tags="nocantrip offensive" />
     <familiar name="Deep Orbit" gfx="orbiting_moons.png" description="One small step for man..." quality="2" cache="familiars" tags="offensive summonable monstermanual" />
     <familiar name="Broken Flux Capacitor" gfx="flux_capacitor_2.png" description="Localized time distortion" quality="1" cache="familiars" tags="offensive summonable monstermanual" />
-    <active id="62" name="Duae Viae" gfx="duae.png" description="Make your choice" quality="4" maxcharges="3" chargetype="normal" hidden="true" tags="quest nocantrip book noeden" />
+    <active id="62" name="Duae Viae" gfx="duae.png" description="Make your choice" quality="4" maxcharges="6" chargetype="normal" hidden="true" tags="quest nocantrip book noeden" />
     <passive id="63" name="Path of Salvation" gfx="angelpath.png" description="I am saved" quality="4" hidden="true" tags="quest noeden nocantrip" />
     <passive id="64" name="Path of Temptation" gfx="devilpath.png" description="My life is yours" quality="4" hidden="true" tags="quest noeden nocantrip" />
     <passive id="65" name="Devil's Path 1" gfx="devilpath1.png" description="Fire shot" quality="4" hidden="true" tags="quest noeden nocantrip" />
@@ -86,5 +86,6 @@
     <trinket id="79" name="Bootleg Tech" gfx="bootleg.png" description="It sort of works" cache="luck" />
     <active id="80" name="Book of Jubilees" gfx="jubilees.png" description="Deliver me unto salvation" quality="4" maxcharges="12" chargetype="normal" tags="offensive book nocantrip" />
     <active id="81" name="Angel Blast" gfx="finaljudgement.png" description="Be Afraid" quality="4" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip"/>
+    <trinket id="82" name="The Devil's Noisemaker" gfx="noisemaker.png" description="All stats up + annoyance up!" cache="all" />
 
 </items>
