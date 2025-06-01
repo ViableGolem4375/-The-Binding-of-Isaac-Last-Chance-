@@ -87,5 +87,7 @@
     <active id="80" name="Book of Jubilees" gfx="jubilees.png" description="Deliver me unto salvation" quality="4" maxcharges="12" chargetype="normal" tags="offensive book nocantrip" />
     <active id="81" name="Angel Blast" gfx="finaljudgement.png" description="Be Afraid" quality="4" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip"/>
     <trinket id="82" name="The Devil's Noisemaker" gfx="noisemaker.png" description="All stats up + annoyance up!" cache="all" />
+    <passive id="83" name="Gluttony" gfx="gluttony.png" description="All consuming" quality="3" tags="nocantrip offensive" cache="all" />
+    <passive id="84" name="Greed" gfx="greed.png" description="Hoard your wealth" quality="2" tags="nocantrip offensive" cache="damage" />
 
 </items>

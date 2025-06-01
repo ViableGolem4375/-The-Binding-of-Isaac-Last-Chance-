@@ -14,14 +14,14 @@ Here's this code bc its always necessary:
 for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
 
-
 Item Ideas to Add:
 
 - Ban hammer: one use active that erases all enemies in the room.
+- Sins + virtues.
 
 
 Trinket Ideas:
 
-- Noisemaker
+
 
 Win streak: 6

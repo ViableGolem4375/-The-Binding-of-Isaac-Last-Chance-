@@ -129,6 +129,9 @@ TECH_TRINKET = Isaac.GetTrinketIdByName("Bootleg Tech")
 JUBILEES_ITEM = Isaac.GetItemIdByName("Book of Jubilees")
 ANGEL_BLAST_ITEM = Isaac.GetItemIdByName("Angel Blast")
 NOISEMAKER_TRINKET = Isaac.GetTrinketIdByName("The Devil's Noisemaker")
+GLUTTONY_ITEM = Isaac.GetItemIdByName("Gluttony")
+GREED_ITEM = Isaac.GetItemIdByName("Greed")
+
 
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
@@ -1432,16 +1435,17 @@ if EID then
     EID:addCard(SOUL_ABRAHAM, "Removes all devil room chances and converts the into angel room chances for the floor.#{{Warning}} Taking red heart damage after activation can still reduce your chances of seeing an angel room.", "Soul of Abraham")
     EID:addCollectible(JUBILEES_ITEM, "Isaac takes damage equal to half of his total health and is sent to an angel room.#Prioritizes red health.#The Keepers take one coin heart of damage.#This damage does not reduce normal devil/angel room chances.", "Book of Jubilees")
     EID:addCard(RELIQUARY_CARD, "Spawns an Essence Collector.", "Essence Card")
-    EID:addCollectible(ANGEL_BLAST_ITEM, "Fire a holy light beam which deals Isaac's damage .", "Angel Blast")
+    EID:addCollectible(ANGEL_BLAST_ITEM, "Fire a holy light beam which deals Isaac's damage.", "Angel Blast")
     EID:addTrinket(NOISEMAKER_TRINKET, "{{ArrowUp}} +0.25 speed.#{{ArrowUp}} -1 fire delay.#{{ArrowUp}} +1 damage.#{{ArrowUp}} +25% damage multiplier.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +0.3 shot speed.#{{ArrowUp}} +1 luck.#{{Warning}} While The Devil's Noisemaker is held random sound effects will be repeatedly played at an extremely high volume.#{{Collectible202}} When golden, all stat ups except for the damage multiplier are doubled and the volume of the sound effects is doubled.", "The Devil's Noisemaker")
     EID:addEntity(6, 249376971, -1, "Essence Collector", "{{Warning}} Removes 1/2 soul heart or black heart when touched.#{{ArrowUp}} Has a 10% chance to pay out with an essence item every use.#Spawns random pickups when destroyed.")
     EID:addCharacterInfo(templateType, "{{ArrowUp}} High luck stat.#Starts with Lucky Coin as a pocket active item.", "Matt")
-    EID:addCharacterInfo(TAINTED_TEMPLATE_TYPE, "{{ArrowDown}} Items above quality 2 are automatically rerolled into lower qiality items.#{{Warning}} These rerolls are chosen from random item pools.#{{ArrowUp}} Picking up quality 0 items has a chance to spawn another item pedestal containing a quality 0 item.#Starts with Dull Coin as a pocket active item.", "The Jinxed")
+    EID:addCharacterInfo(TAINTED_TEMPLATE_TYPE, "{{ArrowDown}} Items above quality 2 are automatically rerolled into lower quality items.#{{Warning}} These rerolls are chosen from random item pools.#{{ArrowUp}} Picking up quality 0 items has a chance to spawn another item pedestal containing a quality 0 item.#Starts with Dull Coin as a pocket active item.", "The Jinxed")
     EID:addCharacterInfo(pontiusType, "Throws spears instead of firing normal tears.#{{ArrowUp}} Spears pierce enemies and deal 5x normal damage.#{{ArrowDown}} Spears are unaffected by tears stat and do not interact with most special tear effects.", "Pontius")
     EID:addCharacterInfo(TAINTED_PONTIUS_TYPE, "Flight.#{{ArrowUp}} A Soul of The Lost spawns after defeating a boss.#{{ArrowUp}} Becomes invulnerable for 1 second when damaging an enemy.#{{Warning}} Dies if he takes damage.#Starts with Spirit Sword, a Holy Card, and Crack the Sky as a pocket active item.#{{Warning}} Spirit Sword cannot be rerolled.", "The Awoken")
     EID:addCharacterInfo(abrahamType, "Starts with Duae Viae as a pocket active item.", "Abraham")
     EID:addCharacterInfo(TAINTED_ABRAHAM_TYPE, "{{ArrowUp}} Extremely high stats.#{{ArrowUp}} The Heretic cannot take damage.#{{Warning}} The Heretic is on a 10 second timer, if it runs out he dies.#The timer can be reset by dealing damage to an enemy.#Starts with Rend as a pocket active item.", "The Heretic")
     EID:addCollectible(DUAE_ITEM, "Spawns two item pedestals in the room, one containing Path of Salvation and the other containing Path of Temptation.#Picking up these items will grant 1 stack towards their respective path and remove 1 stack from the other path.#Stacks grant special effects depending on how many you have and culminate in an incredibly powerful effect at 4 stacks which resets the stack counter on activation.", "Duae Viae")
+    EID:addCollectible(GLUTTONY_ITEM, "{{ArrowUp}} Gain a small all stats up which increases depending on how many items are held.", "Gluttony")
 
 end
 
@@ -5669,7 +5673,66 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseJubilees, JUBILEES_ITEM)
 
+function Mod:UpdateGluttony(player)
+    if player:HasCollectible(GLUTTONY_ITEM) then
+        local totalItems = 0
 
+        -- ✅ Loop **once** when an item is gained instead of every frame
+        for i = 1, 5000 do
+            if player:HasCollectible(i) then
+                totalItems = totalItems + player:GetCollectibleNum(i) -- ✅ Count duplicates too
+            end
+        end
+
+        -- ✅ Store item count in player data to avoid re-scanning each frame
+        player:GetData().statBoostItemCount = totalItems
+
+        -- ✅ Trigger stat refresh
+        player:AddCacheFlags(CacheFlag.CACHE_ALL)
+        player:EvaluateItems()
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.UpdateGluttony)
+
+function Mod:UpdateStatsByCachedItemsGluttony(player, cacheFlag)
+    if player:HasCollectible(GLUTTONY_ITEM) then
+        local totalItems = player:GetData().statBoostItemCount or 0 -- ✅ Use cached item count
+
+        -- ✅ Define stat scaling based on stored total item count
+        local statBoost = totalItems * 0.1
+
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = player.Damage + statBoost
+        end
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+            player.MaxFireDelay = player.MaxFireDelay - (statBoost / 2)
+        end
+        if cacheFlag == CacheFlag.CACHE_SPEED then
+            player.MoveSpeed = player.MoveSpeed + (statBoost/2)
+        end
+        if cacheFlag == CacheFlag.CACHE_RANGE then
+            player.TearRange = player.TearRange + (statBoost * 10)
+        end
+        if cacheFlag == CacheFlag.CACHE_LUCK then
+            player.Luck = player.Luck + statBoost
+        end
+        if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
+            player.ShotSpeed = player.ShotSpeed + statBoost
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.UpdateStatsByCachedItemsGluttony)
+
+--[[ function Mod:OnItemPickupGluttony(player)
+    if player:HasCollectible(GLUTTONY_ITEM) then
+        player:AddCacheFlags(CacheFlag.CACHE_ALL)
+        player:EvaluateItems()
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnItemPickupGluttony) ]]
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 

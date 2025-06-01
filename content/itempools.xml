@@ -29,6 +29,7 @@
         <Item Name="Failed Abortion" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="A Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Necromancy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Gluttony" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="angel">
@@ -138,6 +139,7 @@
         <Item Name="Failed Abortion" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="A Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Necromancy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Gluttony" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedAngel">
