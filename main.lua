@@ -131,6 +131,7 @@ ANGEL_BLAST_ITEM = Isaac.GetItemIdByName("Angel Blast")
 NOISEMAKER_TRINKET = Isaac.GetTrinketIdByName("The Devil's Noisemaker")
 GLUTTONY_ITEM = Isaac.GetItemIdByName("Gluttony")
 GREED_ITEM = Isaac.GetItemIdByName("Greed")
+LUST_ITEM = Isaac.GetItemIdByName("Lust")
 
 
 
@@ -1447,6 +1448,7 @@ if EID then
     EID:addCollectible(DUAE_ITEM, "Spawns two item pedestals in the room, one containing Path of Salvation and the other containing Path of Temptation.#Picking up these items will grant 1 stack towards their respective path and remove 1 stack from the other path.#Stacks grant special effects depending on how many you have and culminate in an incredibly powerful effect at 4 stacks which resets the stack counter on activation.", "Duae Viae")
     EID:addCollectible(GLUTTONY_ITEM, "{{ArrowUp}} Gain a small all stats up which increases depending on how many items are held.", "Gluttony")
     EID:addCollectible(GREED_ITEM, "{{ArrowUp}} Gain 5x damage.#{{Warning}} This item will be removed from Isaac's inventory if any money is lost or spent.", "Greed")
+    EID:addCollectible(LUST_ITEM, "Enemies that touch Isaac become charmed for 10 seconds.", "Lust")
 
 end
 
@@ -5764,6 +5766,16 @@ function Mod:CheckMoneySpent(player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.CheckMoneySpent)
+
+function Mod:CharmOnContact(player, collider)
+    if collider and collider:IsEnemy() and player:HasCollectible(LUST_ITEM) then
+        collider:AddCharmed(EntityRef(player), 300) -- ✅ Charm enemy for 10 seconds
+        -- ✅ Spawn floating heart effect
+        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.HEART, 0, collider.Position, Vector.Zero, player)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, Mod.CharmOnContact)
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 
