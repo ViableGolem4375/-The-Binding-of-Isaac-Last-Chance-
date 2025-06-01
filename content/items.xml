@@ -89,6 +89,7 @@
     <trinket id="82" name="The Devil's Noisemaker" gfx="noisemaker.png" description="All stats up + annoyance up!" cache="all" />
     <passive id="83" name="Gluttony" gfx="gluttony.png" description="All consuming" quality="3" tags="nocantrip offensive" cache="all" />
     <passive id="84" name="Greed" gfx="greed.png" description="Hoard your wealth" quality="2" tags="nocantrip offensive" cache="damage" />
-    <passive id="85" name="Lust" gfx="lust.png" description="Love at first touch" quality="1" tags="nocantrip offensive" cache="damage" />
+    <passive id="85" name="Lust" gfx="lust.png" description="Love at first touch" quality="1" tags="nocantrip offensive nolostbr" />
+    <passive id="86" name="Pride" gfx="pride.png" description="Don't fly too close to the sun" quality="2" tags="nocantrip" cache="all" />
 
 </items>
