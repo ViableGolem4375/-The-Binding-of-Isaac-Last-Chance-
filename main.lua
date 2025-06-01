@@ -1446,6 +1446,7 @@ if EID then
     EID:addCharacterInfo(TAINTED_ABRAHAM_TYPE, "{{ArrowUp}} Extremely high stats.#{{ArrowUp}} The Heretic cannot take damage.#{{Warning}} The Heretic is on a 10 second timer, if it runs out he dies.#The timer can be reset by dealing damage to an enemy.#Starts with Rend as a pocket active item.", "The Heretic")
     EID:addCollectible(DUAE_ITEM, "Spawns two item pedestals in the room, one containing Path of Salvation and the other containing Path of Temptation.#Picking up these items will grant 1 stack towards their respective path and remove 1 stack from the other path.#Stacks grant special effects depending on how many you have and culminate in an incredibly powerful effect at 4 stacks which resets the stack counter on activation.", "Duae Viae")
     EID:addCollectible(GLUTTONY_ITEM, "{{ArrowUp}} Gain a small all stats up which increases depending on how many items are held.", "Gluttony")
+    EID:addCollectible(GREED_ITEM, "{{ArrowUp}} Gain 5x damage.#{{Warning}} This item will be removed from Isaac's inventory if any money is lost or spent.", "Greed")
 
 end
 
@@ -5725,14 +5726,44 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.UpdateStatsByCachedItemsGluttony)
 
---[[ function Mod:OnItemPickupGluttony(player)
-    if player:HasCollectible(GLUTTONY_ITEM) then
-        player:AddCacheFlags(CacheFlag.CACHE_ALL)
-        player:EvaluateItems()
+function Mod:ApplyMoneyDamageBoost(player, cacheFlag)
+    local data = player:GetData()
+    data.moneySpent = false
+
+    if player:HasCollectible(GREED_ITEM) then
+        -- ✅ Grant +10 damage only if they haven't spent money
+
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = player.Damage *5
+        end
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnItemPickupGluttony) ]]
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyMoneyDamageBoost)
+
+function Mod:CheckMoneySpent(player)
+    local data = player:GetData()
+
+    if player:HasCollectible(GREED_ITEM) then
+        local currentCoins = player:GetNumCoins()
+
+
+        -- ✅ If player spends money, remove the boost and refresh stats
+        if data.lastCoinCount and currentCoins < data.lastCoinCount then
+            data.moneySpent = true
+            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+            player:EvaluateItems()
+            player:RemoveCollectible(GREED_ITEM)
+        end
+
+        -- ✅ Store current coin count for next frame comparison
+        data.lastCoinCount = currentCoins
+        print(data.lastCoinCount)
+        print(currentCoins)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.CheckMoneySpent)
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 
