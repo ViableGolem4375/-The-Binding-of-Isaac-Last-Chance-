@@ -1449,6 +1449,7 @@ if EID then
     EID:addCollectible(GLUTTONY_ITEM, "{{ArrowUp}} Gain a small all stats up which increases depending on how many items are held.", "Gluttony")
     EID:addCollectible(GREED_ITEM, "{{ArrowUp}} Gain 5x damage.#{{Warning}} This item will be removed from Isaac's inventory if any money is lost or spent.", "Greed")
     EID:addCollectible(LUST_ITEM, "Enemies that touch Isaac become charmed for 10 seconds.", "Lust")
+    EID:addCollectible(PRIDE_ITEM, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.", "Pride")
 
 end
 
@@ -5777,89 +5778,39 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, Mod.CharmOnContact)
 
-local prideactive = false
-local stagescomplete = 1
+function Mod:UsePrideItem(item, rng, player)
+    if item == PRIDE_ITEM then
+        local roll = rng:RandomFloat() -- Get a random number between 0 and 1
 
-function Mod:OnNewGamePride(isContinued)
-    if not isContinued then -- Ensures it only resets for fresh runs, not continues
-        prideactive = false
-        stagescomplete = 1
+        if roll <= 0.5 then
+            -- ✅ Instantly kill all enemies in the room
+            local room = Game():GetRoom()
+            for _, entity in ipairs(Isaac.GetRoomEntities()) do
+                if entity:IsEnemy() and entity:CanShutDoors() then
+                    local effectPos = entity.Position
+                    entity:Remove()
+
+                    -- ✅ Spawn a small explosion effect at the enemy’s position
+                    local particle = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, effectPos, Vector.Zero, player)
+                    particle:ToEffect():SetTimeout(10) -- ✅ Make effect fade quickly
+                end
+            end
+
+            print(player:GetName(), "used the item—wiped out all enemies!")
+            SFXManager():Play(SoundEffect.SOUND_SATAN_APPEAR)
+        else
+            -- ✅ Instantly kill the player
+            player:Kill()
+
+            print(player:GetName(), "used the item—instantly perished!")
+            SFXManager():Play(SoundEffect.SOUND_DEATH_CARD)
+        end
+
+        return true -- ✅ Ensure item is consumed properly
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGamePride)
-
-function Mod:OnPickupPrideItem(pickup, collider)
-    local player = collider:ToPlayer()
-    
-    if player and pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE and pickup.SubType == PRIDE_ITEM and prideactive == false then
-        -- ✅ Change the player into Tainted Lost
-        player:ChangePlayerType(PlayerType.PLAYER_THELOST_B)
-
-        -- ✅ Store the fact that the item is active
-        player:GetData().lostChallengeActive = true
-
-        -- ✅ Play a transformation sound effect
-        local sfx = SFXManager()
-        sfx:Play(SoundEffect.SOUND_DEVIL_CARD)
-        prideactive = true
-
-        --pickup:Remove() -- ✅ Remove item after pickup
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.OnPickupPrideItem)
-
-function Mod:GrantStatBoostOnFloorChange()
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        local data = player:GetData()
-
-        -- ✅ If the player has the item, grant stat boosts every floor
-        if player:HasCollectible(PRIDE_ITEM) then
-            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
-            player:AddCacheFlags(CacheFlag.CACHE_SPEED)
-            player:AddCacheFlags(CacheFlag.CACHE_LUCK)
-            player:EvaluateItems()
-            stagescomplete = stagescomplete + 1
-
-        end
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.GrantStatBoostOnFloorChange)
-
-function Mod:ApplyPrideStats(player, cacheFlag)
-    local data = player:GetData()
-    
-    if player:HasCollectible(PRIDE_ITEM) then
-        -- ✅ Apply the stored bonus count to stats
-        local statBoost = stagescomplete
-
-        if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            player.Damage = player.Damage * (1 + (0.1 * statBoost))
-        end
-        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            player.MaxFireDelay = player.MaxFireDelay - (statBoost / 2)
-        end
-        if cacheFlag == CacheFlag.CACHE_SPEED then
-            player.MoveSpeed = player.MoveSpeed + (statBoost / 10)
-        end
-        if cacheFlag == CacheFlag.CACHE_RANGE then
-            player.TearRange = player.TearRange + (statBoost * 10)
-        end
-        if cacheFlag == CacheFlag.CACHE_LUCK then
-            player.Luck = player.Luck + statBoost
-        end
-        if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
-            player.ShotSpeed = player.ShotSpeed + (statBoost / 10)
-        end
-
-        print(player:GetName(), "applied stat boosts! Current stats:", "Damage:", player.Damage, "Speed:", player.MoveSpeed, "Luck:", player.Luck)
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyPrideStats)
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UsePrideItem, PRIDE_ITEM)
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 
