@@ -1,5 +1,5 @@
 <AnimatedActor>
-	<Info CreatedBy="robot" CreatedOn="6/2/2025 2:41:40 PM" Version="104" Fps="30"/>
+	<Info CreatedBy="robot" CreatedOn="6/2/2025 2:58:14 PM" Version="106" Fps="30"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="familiar\envy_familiar.png" Id="0"/>

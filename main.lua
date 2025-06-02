@@ -139,6 +139,9 @@ ENVY_ITEM = Isaac.GetItemIdByName("Envy")
 CONFIG_ENVY = itemConfig:GetCollectible(ENVY_ITEM)
 FAMILIAR_VARIANT_ENVY = Isaac.GetEntityVariantByName("Envy")
 
+WRATH_ITEM = Isaac.GetItemIdByName("Wrath")
+
+
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Pontius")
 SOUL_ABRAHAM = Isaac.GetCardIdByName("Soul of Abraham")
@@ -1455,6 +1458,7 @@ if EID then
     EID:addCollectible(LUST_ITEM, "Enemies that touch Isaac become charmed for 10 seconds.", "Lust")
     EID:addCollectible(PRIDE_ITEM, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.", "Pride")
     EID:addCollectible(ENVY_ITEM, "Gain a familiar which copies your tear effects.#{{Warning}} Picking up this item immediately removes all of your items (excluding quest items), and causes all future items picked up to be removed as well.#{{ArrowUp}} The familiar gains +50% damage and +20% fire rate for every item consumed in this way.", "Envy")
+    EID:addCollectible(WRATH_ITEM, "{{Arrowup}} Gain +1 damage for every boss enemy killed during the run.", "Wrath")
 
 end
 
@@ -5918,6 +5922,39 @@ function Mod:HandleUpdateEnvy(familiar)
 end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdateEnvy, FAMILIAR_VARIANT_ENVY)
+
+function Mod:OnBossKillWrath(entity)
+    if entity:IsBoss() then
+        for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+
+            -- ✅ Ensure player has the item
+            if player:HasCollectible(WRATH_ITEM) then
+                local data = player:GetData()
+                data.bossKillCount = (data.bossKillCount or 0) + 1 -- ✅ Track bosses killed
+
+                -- ✅ Apply a damage boost after each boss kill
+                player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+                player:EvaluateItems()
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.OnBossKillWrath)
+
+function Mod:ApplyBossKillBoost(player, cacheFlag)
+    local data = player:GetData()
+
+    if cacheFlag == CacheFlag.CACHE_DAMAGE and data.bossKillCount then
+        -- ✅ Increase damage by 1 per boss killed
+        player.Damage = player.Damage + (data.bossKillCount * 1)
+
+        print(player:GetName(), "received a damage boost! Current damage:", player.Damage)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyBossKillBoost)
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 
