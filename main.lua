@@ -1459,6 +1459,7 @@ if EID then
     EID:addCollectible(PRIDE_ITEM, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.", "Pride")
     EID:addCollectible(ENVY_ITEM, "Gain a familiar which copies your tear effects.#{{Warning}} Picking up this item immediately removes all of your items (excluding quest items), and causes all future items picked up to be removed as well.#{{ArrowUp}} The familiar gains +50% damage and +20% fire rate for every item consumed in this way.", "Envy")
     EID:addCollectible(WRATH_ITEM, "{{Arrowup}} Gain +1 damage for every boss enemy killed during the run.", "Wrath")
+    EID:addCollectible(SLOTH_ITEM, "All enemies take constant damage.#{{Warning}} Isaac becomes unable to shoot.", "Sloth")
 
 end
 
@@ -5955,6 +5956,46 @@ function Mod:ApplyBossKillBoost(player, cacheFlag)
 end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyBossKillBoost)
+
+function Mod:DisablePlayerShootingSloth(player)
+    if player:HasCollectible(SLOTH_ITEM) then
+        player.FireDelay = math.huge -- ✅ Prevents the player from shooting
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.DisablePlayerShootingSloth)
+
+function Mod:ApplyPassiveEnemyDamageSloth()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(SLOTH_ITEM) then
+    
+            for _, entity in ipairs(Isaac.GetRoomEntities()) do
+                if entity:IsEnemy() and entity:IsActiveEnemy() then
+                    entity:TakeDamage(0.1, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(nil), 1) -- ✅ Deal passive damage
+                end
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.ApplyPassiveEnemyDamageSloth)
+
+function Mod:ResetPlayerFireDelay(player)
+    local data = player:GetData()
+
+    if not player:HasCollectible(SLOTH_ITEM) and data.fireDelayBlocked then
+        -- ✅ Restore normal fire delay
+        player.FireDelay = player.MaxFireDelay
+        data.fireDelayBlocked = false
+    elseif player:HasCollectible(SLOTH_ITEM) then
+        -- ✅ Ensure shooting is still blocked
+        player.FireDelay = math.huge
+        data.fireDelayBlocked = true
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.ResetPlayerFireDelay)
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 
