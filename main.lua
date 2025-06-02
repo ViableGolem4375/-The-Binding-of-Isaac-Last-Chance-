@@ -141,6 +141,7 @@ FAMILIAR_VARIANT_ENVY = Isaac.GetEntityVariantByName("Envy")
 
 WRATH_ITEM = Isaac.GetItemIdByName("Wrath")
 CHARITY_ITEM = Isaac.GetItemIdByName("Charity")
+HUMILITY_ITEM = Isaac.GetItemIdByName("Humility")
 
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
@@ -1462,6 +1463,7 @@ if EID then
     EID:addCollectible(WRATH_ITEM, "{{Arrowup}} Gain +1 damage for every boss enemy killed during the run.", "Wrath")
     EID:addCollectible(SLOTH_ITEM, "All enemies take constant damage.#{{Warning}} Isaac becomes unable to shoot.", "Sloth")
     EID:addCollectible(CHARITY_ITEM, "Gain 1/2 of a soul heart for every 5 coins spent.", "Charity")
+    EID:addCollectible(HUMILITY_ITEM, "{{ArrowUp}} Gain 2x damage.#{{ArrowDown}} The bonus is lost if Isaac holds any quality 4 items.", "Humility")
 
 end
 
@@ -6027,6 +6029,34 @@ function Mod:TrackMoneySpentCharity(player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.TrackMoneySpentCharity)
+
+function Mod:ApplyHumility(player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_DAMAGE and player:HasCollectible(HUMILITY_ITEM) then
+        local config = Isaac.GetItemConfig()
+        local hasQuality4Item = false
+
+        -- ✅ Loop through the player's collectibles
+        for i = 1, 5000 do
+            if player:GetCollectibleNum(i) > 0 then
+                local itemConfig = config:GetCollectible(i)
+
+                -- ✅ Check if the item has quality 4
+                if itemConfig and itemConfig.Quality == 4 then
+                    hasQuality4Item = true
+                    break -- ✅ Exit early if a quality 4 item is found
+                end
+            end
+        end
+
+        -- ✅ Apply damage boost ONLY if no quality 4 items are present
+        if not hasQuality4Item then
+            player.Damage = player.Damage * 2
+            
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyHumility)
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 

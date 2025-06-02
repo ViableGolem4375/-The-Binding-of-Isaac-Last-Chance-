@@ -1,8 +1,8 @@
 <AnimatedActor>
-	<Info CreatedBy="robot" CreatedOn="6/2/2025 4:55:34 PM" Version="107" Fps="30"/>
+	<Info CreatedBy="robot" CreatedOn="6/2/2025 4:59:27 PM" Version="107" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="costumes\charity.png" Id="0"/>
+			<Spritesheet Path="costumes\humility.png" Id="0"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="head4" Id="0" SpritesheetId="0"/>
