@@ -42,6 +42,7 @@
         <Item Name="Lil' Uriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lil' Gabriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Charity" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="secret">
@@ -158,6 +159,7 @@
         <Item Name="Lil' Uriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lil' Gabriel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Charity" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedSecret">

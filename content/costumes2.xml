@@ -39,5 +39,6 @@
     <costume id="85" anm2path="greed.anm2" type="passive" priority="0" />
     <costume id="85" anm2path="lust.anm2" type="passive" priority="0" />
     <costume id="88" anm2path="envy.anm2" type="passive" priority="0" />
+    <costume id="90" anm2path="charity.anm2" type="passive" priority="0" />
 
 </costumes>
