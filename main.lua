@@ -133,6 +133,7 @@ GLUTTONY_ITEM = Isaac.GetItemIdByName("Gluttony")
 GREED_ITEM = Isaac.GetItemIdByName("Greed")
 LUST_ITEM = Isaac.GetItemIdByName("Lust")
 PRIDE_ITEM = Isaac.GetItemIdByName("Pride")
+SLOTH_ITEM = Isaac.GetItemIdByName("Sloth")
 
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
@@ -5796,13 +5797,10 @@ function Mod:UsePrideItem(item, rng, player)
                 end
             end
 
-            print(player:GetName(), "used the item—wiped out all enemies!")
             SFXManager():Play(SoundEffect.SOUND_SATAN_APPEAR)
         else
             -- ✅ Instantly kill the player
             player:Kill()
-
-            print(player:GetName(), "used the item—instantly perished!")
             SFXManager():Play(SoundEffect.SOUND_DEATH_CARD)
         end
 
@@ -5811,6 +5809,8 @@ function Mod:UsePrideItem(item, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UsePrideItem, PRIDE_ITEM)
+
+
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 

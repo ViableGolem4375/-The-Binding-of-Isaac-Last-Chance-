@@ -35,5 +35,8 @@
     <costume id="68" anm2path="angel2VFXredo.anm2" type="passive" priority="10" isFlying="true" />
     <costume id="66" anm2path="angel1VFX.anm2" type="passive" priority="0" />
     <costume id="76" anm2path="abraham_essence.anm2" type="passive" priority="0" />
+    <costume id="83" anm2path="gluttony.anm2" type="passive" priority="0" />
+    <costume id="85" anm2path="greed.anm2" type="passive" priority="0" />
+    <costume id="85" anm2path="lust.anm2" type="passive" priority="0" />
 
 </costumes>
