@@ -142,6 +142,7 @@ FAMILIAR_VARIANT_ENVY = Isaac.GetEntityVariantByName("Envy")
 WRATH_ITEM = Isaac.GetItemIdByName("Wrath")
 CHARITY_ITEM = Isaac.GetItemIdByName("Charity")
 HUMILITY_ITEM = Isaac.GetItemIdByName("Humility")
+LOVE_ITEM = Isaac.GetItemIdByName("Love")
 
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
@@ -1464,6 +1465,7 @@ if EID then
     EID:addCollectible(SLOTH_ITEM, "All enemies take constant damage.#{{Warning}} Isaac becomes unable to shoot.", "Sloth")
     EID:addCollectible(CHARITY_ITEM, "Gain 1/2 of a soul heart for every 5 coins spent.", "Charity")
     EID:addCollectible(HUMILITY_ITEM, "{{ArrowUp}} Gain 2x damage.#{{ArrowDown}} The bonus is lost if Isaac holds any quality 4 items.", "Humility")
+    EID:addCollectible(LOVE_ITEM, "Issac's tears heal enemies which have been turned friendly.#{{Warning}} Does not work on enemies with the charmed status effect.", "Love")
 
 end
 
@@ -6057,6 +6059,28 @@ function Mod:ApplyHumility(player, cacheFlag)
 end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyHumility)
+
+function Mod:HealOnTearHit(tear, collider)
+    local player = tear.SpawnerEntity and tear.SpawnerEntity:ToPlayer()
+    if player:HasCollectible(LOVE_ITEM) then
+        if collider and collider:IsEnemy() and collider:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) then
+            local data = collider:GetData()
+
+            -- ✅ Heal the friendly entity based on tear damage
+            local healAmount = math.floor(tear.CollisionDamage)
+            collider.HitPoints = math.min(collider.HitPoints + healAmount, collider.MaxHitPoints)
+
+            game:SpawnParticles(collider.Position, EffectVariant.HEART, 3, 2, Color(0, 1, 0, 1, 0, 1, 0))
+
+
+
+            return false -- ✅ Prevents tear from dealing damage
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_PRE_TEAR_COLLISION, Mod.HealOnTearHit)
+
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 
