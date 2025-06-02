@@ -135,6 +135,9 @@ LUST_ITEM = Isaac.GetItemIdByName("Lust")
 PRIDE_ITEM = Isaac.GetItemIdByName("Pride")
 SLOTH_ITEM = Isaac.GetItemIdByName("Sloth")
 
+ENVY_ITEM = Isaac.GetItemIdByName("Envy")
+CONFIG_ENVY = itemConfig:GetCollectible(ENVY_ITEM)
+FAMILIAR_VARIANT_ENVY = Isaac.GetEntityVariantByName("Envy")
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Pontius")
@@ -1451,6 +1454,7 @@ if EID then
     EID:addCollectible(GREED_ITEM, "{{ArrowUp}} Gain 5x damage.#{{Warning}} This item will be removed from Isaac's inventory if any money is lost or spent.", "Greed")
     EID:addCollectible(LUST_ITEM, "Enemies that touch Isaac become charmed for 10 seconds.", "Lust")
     EID:addCollectible(PRIDE_ITEM, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.", "Pride")
+    EID:addCollectible(ENVY_ITEM, "Gain a familiar which copies your tear effects.#{{Warning}} Picking up this item immediately removes all of your items (excluding quest items), and causes all future items picked up to be removed as well.#{{ArrowUp}} The familiar gains +50% damage and +20% fire rate for every item consumed in this way.", "Envy")
 
 end
 
@@ -1957,7 +1961,7 @@ function Mod:HandleInite(familiar)
     familiar:AddToFollowers()
 end
 
-Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.HandleInit, FAMILIAR_VARIANT_FAIL)
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.HandleInite, FAMILIAR_VARIANT_FAIL)
 
 ---@param familiar EntityFamiliar
 function Mod:HandleUpdatee(familiar)
@@ -5810,7 +5814,110 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UsePrideItem, PRIDE_ITEM)
 
+function Mod:RemovePlayerItems(player)
+    if player:HasCollectible(ENVY_ITEM) then
+        local data = player:GetData()
+        data.lostItemCount = data.lostItemCount or 0 -- ✅ Keep track of sacrificed items
 
+        for i = 1, 5000 do
+            local itemCount = player:GetCollectibleNum(i)
+
+            if itemCount > 0 and i ~= ENVY_ITEM and i ~= 327 and i ~= 328 and i ~= 668 and i ~= 626 and i ~= 627 and i ~= 550 and i ~= 551 and i ~= 552 then
+                player:RemoveCollectible(i) -- ✅ Remove item from player
+                data.lostItemCount = data.lostItemCount + 1 -- ✅ Increase lost item count
+            end
+        end
+
+        -- ✅ Ensure future items are removed instantly
+        player:GetData().autoRemoveItems = true
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.RemovePlayerItems)
+
+---@param player EntityPlayer
+function Mod:EvaluateCacheEnvy(player)
+    local effects = player:GetEffects()
+    local count = effects:GetCollectibleEffectNum(ENVY_ITEM) + player:GetCollectibleNum(ENVY_ITEM)
+    local rng = RNG()
+    local seed = math.max(Random(), 1)
+    rng:SetSeed(seed, RNG_SHIFT_INDEX_FAIL)
+
+    player:CheckFamiliar(FAMILIAR_VARIANT_ENVY, count, rng, CONFIG_ENVY)
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.EvaluateCacheEnvy, CacheFlag.CACHE_FAMILIARS)
+
+---@param familiar EntityFamiliar
+function Mod:HandleInitEnvy(familiar)
+    familiar:AddToFollowers()
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.HandleInitEnvy, FAMILIAR_VARIANT_ENVY)
+
+---@param familiar EntityFamiliar
+function Mod:HandleUpdateEnvy(familiar)
+    local sprite = familiar:GetSprite()
+    local player = familiar.Player
+    local data = player:GetData()
+
+    local fireDirection = player:GetFireDirection()
+    local direction
+    local shootAnim
+    local doFlip = false
+
+    if fireDirection == Direction.LEFT then
+        direction = Vector(-1, 0)
+        shootAnim = "FloatShootSide"
+        doFlip = true
+    elseif fireDirection == Direction.RIGHT then
+        direction = Vector(1, 0)
+        shootAnim = "FloatShootSide"
+    elseif fireDirection == Direction.DOWN then
+        direction = Vector(0, 1)
+        shootAnim = "FloatShootDown"
+    elseif fireDirection == Direction.UP then
+        direction = Vector(0, -1)
+        shootAnim = "FloatShootUp"
+    end
+
+    if direction ~= nil and familiar.FireCooldown == 0 then
+        local velocity = direction * 10 + player:GetTearMovementInheritance(direction)
+        local tear = Isaac.Spawn(
+            EntityType.ENTITY_TEAR,
+            TearVariant.BLOOD,
+            0,
+            familiar.Position,
+            velocity,
+            familiar
+        ):ToTear()
+
+        
+        tear.Scale = 1.5
+        tear.CollisionDamage = 3.5
+        familiar.FireCooldown = 20
+        tear.TearFlags = player.TearFlags
+        if data.lostItemCount then
+            local newCooldown = 20 * (1 - (data.lostItemCount * 0.2))
+            -- ✅ Increase the familiar’s damage based on sacrificed items
+            tear.CollisionDamage = 3.5 * (1 + (data.lostItemCount * 0.5))
+            familiar.FireCooldown = math.max(math.floor(newCooldown), 2)
+
+        end
+
+        sprite.FlipX = doFlip
+        sprite:Play(shootAnim, true)
+    end
+
+    if sprite:IsFinished() then
+        sprite:Play("FloatDown")
+    end
+
+    familiar:FollowParent()
+    familiar.FireCooldown = math.max(familiar.FireCooldown - 1, 0)
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdateEnvy, FAMILIAR_VARIANT_ENVY)
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 

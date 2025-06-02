@@ -92,5 +92,6 @@
     <passive id="85" name="Lust" gfx="lust.png" description="Love at first touch" quality="1" tags="nocantrip nolostbr" />
     <active id="86" name="Pride" gfx="pride.png" description="Don't fly too close to the sun" quality="2" maxcharges="1" chargetype="normal" tags="offensive nocantrip" />
     <active id="87" name="Sloth" gfx="sloth.png" description="Laziness incarnate" quality="2" charge="0" tags="offensive nocantrip" />
+    <passive id="88" name="Envy" gfx="envy.png" description="Mine" quality="1" tags="offensive nocantrip" />
 
 </items>
