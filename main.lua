@@ -140,6 +140,7 @@ CONFIG_ENVY = itemConfig:GetCollectible(ENVY_ITEM)
 FAMILIAR_VARIANT_ENVY = Isaac.GetEntityVariantByName("Envy")
 
 WRATH_ITEM = Isaac.GetItemIdByName("Wrath")
+CHARITY_ITEM = Isaac.GetItemIdByName("Charity")
 
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
@@ -1460,6 +1461,7 @@ if EID then
     EID:addCollectible(ENVY_ITEM, "Gain a familiar which copies your tear effects.#{{Warning}} Picking up this item immediately removes all of your items (excluding quest items), and causes all future items picked up to be removed as well.#{{ArrowUp}} The familiar gains +50% damage and +20% fire rate for every item consumed in this way.", "Envy")
     EID:addCollectible(WRATH_ITEM, "{{Arrowup}} Gain +1 damage for every boss enemy killed during the run.", "Wrath")
     EID:addCollectible(SLOTH_ITEM, "All enemies take constant damage.#{{Warning}} Isaac becomes unable to shoot.", "Sloth")
+    EID:addCollectible(CHARITY_ITEM, "Gain 1/2 of a soul heart for every 5 coins spent.", "Charity")
 
 end
 
@@ -5771,8 +5773,6 @@ function Mod:CheckMoneySpent(player)
 
         -- ✅ Store current coin count for next frame comparison
         data.lastCoinCount = currentCoins
-        print(data.lastCoinCount)
-        print(currentCoins)
     end
 end
 
@@ -5996,6 +5996,37 @@ function Mod:ResetPlayerFireDelay(player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.ResetPlayerFireDelay)
+
+function IsInteger(value)
+    return type(value) == "number" and value % 1 == 0
+end
+
+function Mod:TrackMoneySpentCharity(player)
+    if player:HasCollectible(CHARITY_ITEM) then
+        local data = player:GetData()
+        data.prevCoins = data.prevCoins or player:GetNumCoins()
+        data.soulHeartProgress = data.soulHeartProgress or 0 -- ✅ Store progress toward next heart
+
+        local currentCoins = player:GetNumCoins()
+
+        if currentCoins < data.prevCoins then
+            local lostAmount = data.prevCoins - currentCoins
+            data.soulHeartProgress = data.soulHeartProgress + lostAmount / 5 -- ✅ Store partial progress
+
+            -- ✅ Grant soul hearts ONLY when progress reaches 1 full heart
+            local fullSoulHearts = math.floor(data.soulHeartProgress) -- ✅ Round down to whole number
+            if fullSoulHearts > 0 then
+                player:AddSoulHearts(fullSoulHearts) -- ✅ Apply only full hearts
+                data.soulHeartProgress = data.soulHeartProgress - fullSoulHearts -- ✅ Remove applied amount
+                SFXManager():Play(SoundEffect.SOUND_HOLY)
+            end
+        end
+
+        data.prevCoins = currentCoins -- ✅ Update stored coin count
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.TrackMoneySpentCharity)
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 

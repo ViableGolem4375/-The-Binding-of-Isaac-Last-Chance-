@@ -94,5 +94,6 @@
     <passive id="89" name="Sloth" gfx="sloth.png" description="Laziness incarnate" quality="3" tags="offensive nocantrip" />
     <passive id="88" name="Envy" gfx="envy.png" description="Mine" quality="1" tags="offensive nocantrip" cache="damage" />
     <passive id="89" name="Wrath" gfx="wrath.png" description="Death = power" quality="3" tags="offensive nocantrip" cache="damage" />
+    <passive id="90" name="Charity" gfx="charity.png" description="The spirit of giving" quality="3" tags="offensive nocantrip" />
 
 </items>
