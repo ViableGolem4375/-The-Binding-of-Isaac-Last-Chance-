@@ -2472,7 +2472,7 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.HuhUse, HUH_ITEM)
 -- Function to count quality 0 items in player's inventory
 local function CountQuality0Items(player)
     local count = 0
-    for itemID = 1, Isaac.GetItemIdByName("Death Certificate") do -- Loops through all items
+    for itemID = 1, 5000 do -- Loops through all items
         if player:HasCollectible(itemID) then
             local config = Isaac.GetItemConfig():GetCollectible(itemID)
             if config and config.Quality == 0 then
