@@ -6062,7 +6062,7 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyHumility)
 
 function Mod:HealOnTearHit(tear, collider)
     local player = tear.SpawnerEntity and tear.SpawnerEntity:ToPlayer()
-    if player:HasCollectible(LOVE_ITEM) then
+    if player and player:HasCollectible(LOVE_ITEM) then
         if collider and collider:IsEnemy() and collider:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) then
             local data = collider:GetData()
 
