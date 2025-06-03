@@ -1,7 +1,7 @@
 <items gfxroot="gfx/items/" version="1">
     <active id="1" name="Lucky Coin" gfx="dice.png" description="Take control of your destiny" quality="4" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
     <active id="2" name="Dull Coin" gfx="dice2.png" description="Reroll your destiny?" quality="4" charge="0" hidden="true" tags="quest noeden nocantrip"/>
-    <passive id="3" name="Unholy Mantle" gfx="unholymantle.png" description="Revel in Their Pain" quality="2" tags="devil nocantrip"/>
+    <passive id="3" name="Unholy Mantle" gfx="unholymantle.png" description="Revel in Their Pain" quality="4" tags="devil nocantrip"/>
     <familiar name="Lil' Uriel" gfx="uriel.png" description="Angelic friend" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel nocantrip" />
     <familiar name="Lil' Gabriel" gfx="gabriel.png" description="Eternal friend" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel nocantrip" />
     <active id="4" name="Catalyst Character Sheet" gfx="catalyst_character_sheet.png" description="It's in my head IT'S IN MY HEAD AAAAAAAAAAA" quality="3" maxcharges="4" chargetype="normal" tags="offensive nocantrip"/>
@@ -100,5 +100,6 @@
     <passive id="93" name="Generosity" gfx="generosity.png" description="Giving = power" quality="3" tags="angel offensive nocantrip" cache="damage" />
     <passive id="94" name="Temperance" gfx="temperance.png" description="Tempered spirit" quality="3" tags="angel offensive nocantrip" cache="firedelay" />
     <passive id="95" name="Zeal" gfx="zeal.png" description="Zealous companion" quality="4" tags="angel offensive nocantrip summonable monstermanual baby" cache="familiars" />
+    <passive id="96" name="Kindness" gfx="kindness.png" description="Zealous companion" quality="4" tags="angel offensive nocantrip" />
 
 </items>

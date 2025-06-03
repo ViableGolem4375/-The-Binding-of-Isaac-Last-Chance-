@@ -150,6 +150,8 @@ ZEAL_ITEM = Isaac.GetItemIdByName("Zeal")
 CONFIG_ZEAL = itemConfig:GetCollectible(ZEAL_ITEM)
 FAMILIAR_VARIANT_ZEAL = Isaac.GetEntityVariantByName("Zeal")
 
+KINDNESS_ITEM = Isaac.GetItemIdByName("Kindness")
+
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Pontius")
@@ -1361,7 +1363,7 @@ if EID then
 
     EID:addCollectible(LUCKY_DICE_ID, "Reroll all item pedestals in the current room.#{{Warning}} Items rerolled will be chosen from a special item pool consisting of luck/chance based items.", "Lucky Coin")
     EID:addCollectible(DULL_COIN_ID, "Rerolls all item pedestals in the room.#{{Warning}} Items will always be rerolled into an item of 1 lower quality than the original item.#Using Dull Coin with no item pedestals in the room containing items with a quality above 1 will remove a random quality 0 item from Isaac's inventory and trigger the Berserk! state.#Triggering the Berserk! state in this way charges Isaac's active item by 12 bars.", "Dull Coin")
-    EID:addCollectible(HATRED_ITEM, "{{ArrowDown}} Gives the player 11 broken hearts.#{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} Become invulnerable briefly upon damaging an enemy.", "Unholy Mantle")
+    EID:addCollectible(HATRED_ITEM, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} 25% chance to become invulnerable briefly upon damaging an enemy.", "Unholy Mantle")
     EID:addCollectible(URIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires a holy light beam forward.#Scales with Isaac's damage.", "Lil' Uriel")
     EID:addCollectible(GABRIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires 4 holy light beams in an 'X' pattern.#Scales with Isaac's damage.", "Lil' Gabriel")
     EID:addCollectible(CATALYST_SHEET_ITEM, "No no no NO NO NO nO no AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "Catalyst Character Sheet")
@@ -1672,7 +1674,7 @@ end
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.DullCoinUse, DULL_COIN_ID)
 
 
-function Mod:ApplyBrokenHearts(player)
+--[[ function Mod:ApplyBrokenHearts(player)
     if player:HasCollectible(HATRED_ITEM) then
         local brokenHeartCount = player:GetBrokenHearts()
 
@@ -1687,15 +1689,19 @@ function Mod:ApplyBrokenHearts(player)
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.ApplyBrokenHearts)
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.ApplyBrokenHearts) ]]
 
 function Mod:GrantInvulnerabilityOnHit(entity, amount, flags, source, countdown)
     for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i) -- ✅ Loop through all players
 
         if player:HasCollectible(HATRED_ITEM) and source and source.Entity then
-            player:SetMinDamageCooldown(60) -- ✅ Apply 1 second (30 frames) of invulnerability
-            print(player:GetName(), "activated invulnerability!")
+            local rng = player:GetCollectibleRNG(HATRED_ITEM)
+
+            if rng:RandomFloat() <= 0.25 then -- ✅ 25% chance to activate invulnerability
+                player:SetMinDamageCooldown(60) -- ✅ Grants ~3 seconds of invulnerability
+            end
+
         end
     end
 end
