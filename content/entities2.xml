@@ -24,6 +24,6 @@
     <entity anm2path="orbiting_moon.anm2" baseHP="0" champion="0" collisionDamage="5" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Deep Orbit" numGridCollisionPoints="12" shadowSize="10" stageHP="0" variant="586307008" />
     <entity anm2path="flux_capacitor.anm2" baseHP="0" champion="0" collisionDamage="20" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Broken Flux Capacitor" numGridCollisionPoints="12" shadowSize="10" stageHP="0" variant="5863070089" />
     <entity name="Envy" id="3" anm2path="envy_familiar.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
-    <entity name="Zeal" id="3" anm2path="envy_familiar.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
+    <entity name="Zeal" id="3" anm2path="zeal_familiar.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
 
 </entities>
