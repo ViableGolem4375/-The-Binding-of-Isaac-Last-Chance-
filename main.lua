@@ -144,6 +144,7 @@ CHARITY_ITEM = Isaac.GetItemIdByName("Charity")
 HUMILITY_ITEM = Isaac.GetItemIdByName("Humility")
 LOVE_ITEM = Isaac.GetItemIdByName("Love")
 GENEROSITY_ITEM = Isaac.GetItemIdByName("Generosity")
+TEMPERANCE_ITEM = Isaac.GetItemIdByName("Temperance")
 
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
@@ -1468,6 +1469,7 @@ if EID then
     EID:addCollectible(HUMILITY_ITEM, "{{ArrowUp}} Gain 2x damage.#{{ArrowDown}} The bonus is lost if Isaac holds any quality 4 items.", "Humility")
     EID:addCollectible(LOVE_ITEM, "Issac's tears heal enemies which have been turned friendly.#{{Warning}} Does not work on enemies with the charmed status effect.", "Love")
     EID:addCollectible(GENEROSITY_ITEM, "{{ArrowUp}} Gain +0.1 damage for every coin given to the donation machine in the current run.", "Generosity")
+    EID:addCollectible(TEMPERANCE_ITEM, "{{ArrowUp}} Gain -20% fire delay while below full red health.#Does not work on characters without red health.", "Temperance")
 
 end
 
@@ -6097,6 +6099,20 @@ function Mod:ApplyGenerosityDamageBoost(player, cacheFlag)
 end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyGenerosityDamageBoost)
+
+function Mod:ApplyTemperanceBoost(player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_FIREDELAY and player:HasCollectible(TEMPERANCE_ITEM) then
+        local currentHealth = player:GetHearts() + player:GetSoulHearts()
+        local maxHealth = player:GetMaxHearts() + player:GetSoulHearts()
+
+        if currentHealth < maxHealth then
+            -- ✅ Reduce fire delay to boost fire rate
+            player.MaxFireDelay = math.max(player.MaxFireDelay * 0.8, 2) -- 🔥 20% faster fire rate
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyTemperanceBoost)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

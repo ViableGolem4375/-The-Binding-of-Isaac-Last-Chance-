@@ -45,6 +45,8 @@
         <Item Name="Charity" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Humility" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Love" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Generosity" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Temperance" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="secret">
@@ -164,7 +166,9 @@
         <Item Name="Charity" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Humility" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Love" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-
+        <Item Name="Generosity" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Temperance" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        
     </Pool>
     <Pool Name="greedSecret">
         <Item Name="Eternal Bond" Weight="1" DecreaseBy="1" RemoveOn="0.1" />

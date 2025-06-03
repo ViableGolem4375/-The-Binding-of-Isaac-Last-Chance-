@@ -42,5 +42,7 @@
     <costume id="90" anm2path="charity.anm2" type="passive" priority="0" />
     <costume id="91" anm2path="humility.anm2" type="passive" priority="0" />
     <costume id="92" anm2path="love.anm2" type="passive" priority="0" />
+    <costume id="93" anm2path="generosity.anm2" type="passive" priority="0" />
+    <costume id="94" anm2path="temperance.anm2" type="passive" priority="0" />
 
 </costumes>
