@@ -44,5 +44,6 @@
     <costume id="92" anm2path="love.anm2" type="passive" priority="0" />
     <costume id="93" anm2path="generosity.anm2" type="passive" priority="0" />
     <costume id="94" anm2path="temperance.anm2" type="passive" priority="0" />
-    <costume id="95" anm2path="zeal.anm2" type="passive" priority="0" />
+    <costume id="95" anm2path="kindness.anm2" type="active" priority="0" />
+
 </costumes>
