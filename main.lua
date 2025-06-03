@@ -5327,7 +5327,7 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.Neutral)
 function Mod:ApplyChoiceEffects(player)
     local data = player:GetData()
     if data.ChoiceCounter == 0 then
-        if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) == true and player:HasCollectible(NEUTRAL_ITEM) == false then
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) == true and player:HasCollectible(NEUTRAL_ITEM) == false and player:GetPlayerType() == abrahamType then
             player:AddCollectible(NEUTRAL_ITEM)
         end
         player:RemoveCollectible(ANGEL_ONE_ITEM)

@@ -9,6 +9,7 @@
 - Sack of lucky pennies might me bugged.
 - Stat up items need stacking behavior.
 - Maybe fix the issue with omega tech where it activates both both J+E if they both have it.
+- Birthrights are givine neutrality.
 
 Here's this code bc its always necessary:
 for i = 0, Game():GetNumPlayers() - 1 do
@@ -24,4 +25,4 @@ Trinket Ideas:
 
 
 
-Win streak: 6
+Win streak: 8
