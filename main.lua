@@ -76,7 +76,7 @@ KEEPER_ESSENCE = Isaac.GetItemIdByName("Essence of Keeper")
 APOLLYON_ESSENCE = Isaac.GetItemIdByName("Essence of Apollyon")
 APOLLYON_ESSENCE_VFX = Isaac.GetItemIdByName("Essence of Apollyon VFX")
 BETHANY_ESSENCE = Isaac.GetItemIdByName("Essence of Bethany")
-MATT_ESSENCE = Isaac.GetItemIdByName("Essence of Matt")
+DOMINO_ESSENCE = Isaac.GetItemIdByName("Essence of Domino")
 PONTIUS_ESSENCE = Isaac.GetItemIdByName("Essence of Pontius")
 LOST_ESSENCE = Isaac.GetItemIdByName("Essence of The Lost")
 JACOB_AND_ESAU_ESSENCE = Isaac.GetItemIdByName("Essence of Jacob and Esau")
@@ -153,13 +153,13 @@ FAMILIAR_VARIANT_ZEAL = Isaac.GetEntityVariantByName("Zeal")
 KINDNESS_ITEM = Isaac.GetItemIdByName("Kindness")
 
 
-SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
+SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Pontius")
 SOUL_ABRAHAM = Isaac.GetCardIdByName("Soul of Abraham")
 RELIQUARY_CARD = Isaac.GetCardIdByName("Essence Card")
 
 ----------------------------------------------------------------------------------------
--- Character code for Matt below.
+-- Character code for Domino below.
 
 local Template = { -- shown below are default values, as shown on Isaac, for you to change around
     SPEED = 1.00,
@@ -223,7 +223,7 @@ end
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Template.onCache)
 
 ----------------------------------------------------------------------------------------
--- Code for the tainted version of Matt below
+-- Code for the tainted version of Domino below
 
 local TAINTED_TEMPLATE_TYPE = Isaac.GetPlayerTypeByName("Template", true)
 
@@ -1398,7 +1398,7 @@ if EID then
     EID:addCollectible(KEEPER_ESSENCE, "Grants 99 cents on pickup.#Infinite money for the current floor.", "Essence of Keeper")
     EID:addCollectible(APOLLYON_ESSENCE, "For 8 seconds gain:#{{ArrowUp}} Invincibility#{{ArrowUp}} 40 contact damage to enemies.#For every enemy killed during Essence of Apollyon's effect, permanently gain +0.05 damage.", "Essence of Apollyon")
     EID:addCollectible(BETHANY_ESSENCE, "Grants a random Book of Virtues wisp when entering a new room.", "Essence of Bethany")
-    EID:addCollectible(MATT_ESSENCE, "{{ArrowUp}} +3 luck.#Grants 2 items from the Lucky Coin item pool.", "Essence of Matt")
+    EID:addCollectible(DOMINO_ESSENCE, "{{ArrowUp}} +3 luck.#Grants 2 items from the Lucky Coin item pool.", "Essence of Domino")
     EID:addCollectible(PONTIUS_ESSENCE, "Throw one of Pontius' spears in the current attack direction.#Spears deal 10x Isaac's damage.", "Essence of Pontius")
     EID:addCollectible(LOST_ESSENCE, "For the current room:#{{Warning}} Become the lost.#{{ArrowUp}} +20 damage.", "Essence of The Lost")
     EID:addCollectible(JACOB_AND_ESAU_ESSENCE, "Summon Esau as a helper for the current room.", "Essence of Jacob and Esau")
@@ -1449,7 +1449,7 @@ if EID then
     EID:addCollectible(ABRAHAM_ESSENCE_ITEM, "Grants 3 soul hearts when entering an angel room for the first time.#Grants 3 black hearts when entering a devil room for the first time.#Essence of Abraham can be triggered once per floor.", "Essence of Abraham")
     EID:addCollectible(OMEGA_ITEM, "Rapidly fire a barrage of lasers for 4 seconds.#The lasers deal 0.5x Isaac's damage.", "Technology Omega")
     EID:addTrinket(TECH_TRINKET, "10% chance to fire a technology laser instead of a normal tear.#{{Luck}} +5% chance to trigger per point of luck.#{{Collectible202}} +10% chance to trigger per point of luck when golden.", "Bootleg Tech")
-    EID:addCard(SOUL_MATT, "{{Luck}} +10 luck for the current room.", "Soul of Matt")
+    EID:addCard(SOUL_DOMINO, "{{Luck}} +10 luck for the current room.", "Soul of Domino")
     EID:addCard(SOUL_PONTIUS, "Fire 8 spears in a circular pattern around yourself.#The spears deal 10x Isaac's damage.", "Soul of Pontius")
     EID:addCard(SOUL_ABRAHAM, "Removes all devil room chances and converts the into angel room chances for the floor.#{{Warning}} Taking red heart damage after activation can still reduce your chances of seeing an angel room.", "Soul of Abraham")
     EID:addCollectible(JUBILEES_ITEM, "Isaac takes damage equal to half of his total health and is sent to an angel room.#Prioritizes red health.#The Keepers take one coin heart of damage.#This damage does not reduce normal devil/angel room chances.", "Book of Jubilees")
@@ -1457,7 +1457,7 @@ if EID then
     EID:addCollectible(ANGEL_BLAST_ITEM, "Fire a holy light beam which deals Isaac's damage.", "Angel Blast")
     EID:addTrinket(NOISEMAKER_TRINKET, "{{ArrowUp}} +0.25 speed.#{{ArrowUp}} -1 fire delay.#{{ArrowUp}} +1 damage.#{{ArrowUp}} +25% damage multiplier.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +0.3 shot speed.#{{ArrowUp}} +1 luck.#{{Warning}} While The Devil's Noisemaker is held random sound effects will be repeatedly played at an extremely high volume.#{{Collectible202}} When golden, all stat ups except for the damage multiplier are doubled and the volume of the sound effects is doubled.", "The Devil's Noisemaker")
     EID:addEntity(6, 249376971, -1, "Essence Collector", "{{Warning}} Removes 1/2 soul heart or black heart when touched.#{{ArrowUp}} Has a 10% chance to pay out with an essence item every use.#Spawns random pickups when destroyed.")
-    EID:addCharacterInfo(templateType, "{{ArrowUp}} High luck stat.#Starts with Lucky Coin as a pocket active item.", "Matt")
+    EID:addCharacterInfo(templateType, "{{ArrowUp}} High luck stat.#Starts with Lucky Coin as a pocket active item.", "Domino")
     EID:addCharacterInfo(TAINTED_TEMPLATE_TYPE, "{{ArrowDown}} Items above quality 2 are automatically rerolled into lower quality items.#{{Warning}} These rerolls are chosen from random item pools.#{{ArrowUp}} Picking up quality 0 items has a chance to spawn another item pedestal containing a quality 0 item.#Starts with Dull Coin as a pocket active item.", "The Jinxed")
     EID:addCharacterInfo(pontiusType, "Throws spears instead of firing normal tears.#{{ArrowUp}} Spears pierce enemies and deal 5x normal damage.#{{ArrowDown}} Spears are unaffected by tears stat and do not interact with most special tear effects.", "Pontius")
     EID:addCharacterInfo(TAINTED_PONTIUS_TYPE, "Flight.#{{ArrowUp}} A Soul of The Lost spawns after defeating a boss.#{{ArrowUp}} Becomes invulnerable for 1 second when damaging an enemy.#{{Warning}} Dies if he takes damage.#Starts with Spirit Sword, a Holy Card, and Crack the Sky as a pocket active item.#{{Warning}} Spirit Sword cannot be rerolled.", "The Awoken")
@@ -3427,13 +3427,13 @@ Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoomBethEssence)
 
 local mattTrigger = false
 
-function Mod:OnNewGameMatt(isContinued)
+function Mod:OnNewGameDomino(isContinued)
     if not isContinued then -- Ensures it only resets for fresh runs, not continues
         mattTrigger = false
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameMatt) -- Reset flag between runs
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameDomino) -- Reset flag between runs
 
 -- ✅ Define a list of possible items to grant
 local predefinedItemList = {
@@ -3501,8 +3501,8 @@ local predefinedItemList = {
 function Mod:OnPickupRewardItem(_, player)
     for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
-        if player:HasCollectible(MATT_ESSENCE) and mattTrigger == false then
-            local nummatt = player:GetCollectibleNum(MATT_ESSENCE) * 3
+        if player:HasCollectible(DOMINO_ESSENCE) and mattTrigger == false then
+            local nummatt = player:GetCollectibleNum(DOMINO_ESSENCE) * 3
 
             -- Select two random items from the list
             local chosenItems = {}
@@ -3534,17 +3534,17 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupRewardItem)
 
 -- ✅ Ensure luck boost applies properly
-function Mod:onCacheMattEssence(player, cacheFlag)
+function Mod:onCacheDominoEssence(player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_LUCK then
         local data = player:GetData()
 
-        if player:HasCollectible(MATT_ESSENCE) then
-            player.Luck = player.Luck + player:GetCollectibleNum(MATT_ESSENCE) * 3 -- ✅ Apply luck boost individually
+        if player:HasCollectible(DOMINO_ESSENCE) then
+            player.Luck = player.Luck + player:GetCollectibleNum(DOMINO_ESSENCE) * 3 -- ✅ Apply luck boost individually
         end
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCacheMattEssence)
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCacheDominoEssence)
 
 local spearCooldown = 0 -- Shared cooldown for all characters
 
@@ -6242,7 +6242,7 @@ Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, Mod.ConvertEnemiesToFriendly)
 
 
 function Mod:UseSoulStone(card, player)
-    if card == SOUL_MATT then
+    if card == SOUL_DOMINO then
         local data = player:GetData()
         
         -- ✅ If no existing boost, initialize it
@@ -6258,7 +6258,7 @@ function Mod:UseSoulStone(card, player)
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseSoulStone, SOUL_MATT)
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseSoulStone, SOUL_DOMINO)
 
 function Mod:ResetLuckOnRoomExit()
     for i = 0, Game():GetNumPlayers() - 1 do
@@ -6460,7 +6460,7 @@ function EssenceCollector:onUpdateCollector()
             elseif slotRNG2 < 85 then
                 Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, JACOB_AND_ESAU_ESSENCE, player.Position + Vector(32,32), Vector(0,0), nil)
             elseif slotRNG2 < 90 then
-                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, MATT_ESSENCE, player.Position + Vector(32,32), Vector(0,0), nil)
+                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, DOMINO_ESSENCE, player.Position + Vector(32,32), Vector(0,0), nil)
             elseif slotRNG2 < 95 then
                 Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, PONTIUS_ESSENCE, player.Position + Vector(32,32), Vector(0,0), nil)
             else
@@ -6876,7 +6876,7 @@ local RELIQUARY_POOL = {
     KEEPER_ESSENCE,
     APOLLYON_ESSENCE,
     BETHANY_ESSENCE,
-    MATT_ESSENCE,
+    DOMINO_ESSENCE,
     PONTIUS_ESSENCE,
     LOST_ESSENCE,
     JACOB_AND_ESAU_ESSENCE,
