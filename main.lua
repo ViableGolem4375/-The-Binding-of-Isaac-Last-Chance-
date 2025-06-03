@@ -1477,6 +1477,7 @@ if EID then
     EID:addCollectible(GENEROSITY_ITEM, "{{ArrowUp}} Gain +0.1 damage for every coin given to the donation machine in the current run.", "Generosity")
     EID:addCollectible(TEMPERANCE_ITEM, "{{ArrowUp}} Gain -20% fire delay while below full red health.#Does not work on characters without red health.", "Temperance")
     EID:addCollectible(ZEAL_ITEM, "Gain a familiar which fires godhead tears that scales with your damage and fire rate.", "Zeal")
+    EID:addCollectible(KINDNESS_ITEM, "Creates an extermely brief aura around Isaac which turns enemies friendly.", "Kindness")
 
 end
 
@@ -6200,6 +6201,41 @@ function Mod:HandleUpdateZeal(familiar)
 end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdateZeal, FAMILIAR_VARIANT_ZEAL)
+
+function Mod:ActivateFriendAura(_, _, player)
+    local game = Game()
+
+    -- ✅ Spawn a visible aura effect
+    local aura = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.HALO, 0, player.Position, Vector(0,0), player):ToEffect()
+    if aura then
+        aura.SpriteScale = Vector(3,3) -- ✅ Set aura size
+        
+        aura:GetData().expiration = game:GetFrameCount() + 600 -- ✅ 5-second duration
+        aura:GetData().sourcePlayer = player -- ✅ Store player reference
+        aura.Position = player.Position + Vector(0,30)
+        SFXManager():Play(SoundEffect.SOUND_HOLY)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.ActivateFriendAura, KINDNESS_ITEM)
+
+function Mod:ConvertEnemiesToFriendly(npc)
+    local game = Game()
+    local currentFrame = game:GetFrameCount()
+    
+    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.HALO)) do
+        if effect:GetData().expiration and currentFrame <= effect:GetData().expiration then
+            local distance = npc.Position:Distance(effect.Position)
+            if distance < 125 and not npc:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) then
+                npc:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+                npc:AddEntityFlags(EntityFlag.FLAG_CHARM)
+                npc:AddEntityFlags(EntityFlag.FLAG_PERSISTENT)
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, Mod.ConvertEnemiesToFriendly)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
