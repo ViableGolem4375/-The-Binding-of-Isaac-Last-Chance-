@@ -146,6 +146,10 @@ LOVE_ITEM = Isaac.GetItemIdByName("Love")
 GENEROSITY_ITEM = Isaac.GetItemIdByName("Generosity")
 TEMPERANCE_ITEM = Isaac.GetItemIdByName("Temperance")
 
+ZEAL_ITEM = Isaac.GetItemIdByName("Zeal")
+CONFIG_ZEAL = itemConfig:GetCollectible(ZEAL_ITEM)
+FAMILIAR_VARIANT_ZEAL = Isaac.GetEntityVariantByName("Zeal")
+
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Pontius")
@@ -1470,6 +1474,7 @@ if EID then
     EID:addCollectible(LOVE_ITEM, "Issac's tears heal enemies which have been turned friendly.#{{Warning}} Does not work on enemies with the charmed status effect.", "Love")
     EID:addCollectible(GENEROSITY_ITEM, "{{ArrowUp}} Gain +0.1 damage for every coin given to the donation machine in the current run.", "Generosity")
     EID:addCollectible(TEMPERANCE_ITEM, "{{ArrowUp}} Gain -20% fire delay while below full red health.#Does not work on characters without red health.", "Temperance")
+    EID:addCollectible(ZEAL_ITEM, "Gain a familiar which fires godhead tears that scales with your damage and fire rate.", "Zeal")
 
 end
 
@@ -6113,6 +6118,82 @@ function Mod:ApplyTemperanceBoost(player, cacheFlag)
 end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyTemperanceBoost)
+
+---@param player EntityPlayer
+function Mod:EvaluateCacheZeal(player)
+    local effects = player:GetEffects()
+    local count = effects:GetCollectibleEffectNum(ZEAL_ITEM) + player:GetCollectibleNum(ZEAL_ITEM)
+    local rng = RNG()
+    local seed = math.max(Random(), 1)
+    rng:SetSeed(seed, 35)
+
+    player:CheckFamiliar(FAMILIAR_VARIANT_ZEAL, count, rng, CONFIG_ZEAL)
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.EvaluateCacheZeal, CacheFlag.CACHE_FAMILIARS)
+
+---@param familiar EntityFamiliar
+function Mod:HandleInitZeal(familiar)
+    familiar:AddToFollowers()
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.HandleInitZeal, FAMILIAR_VARIANT_ZEAL)
+
+---@param familiar EntityFamiliar
+function Mod:HandleUpdateZeal(familiar)
+    local sprite = familiar:GetSprite()
+    local player = familiar.Player
+
+    local fireDirection = player:GetFireDirection()
+    local direction
+    local shootAnim
+    local doFlip = false
+
+    if fireDirection == Direction.LEFT then
+        direction = Vector(-1, 0)
+        shootAnim = "FloatShootSide"
+        doFlip = true
+    elseif fireDirection == Direction.RIGHT then
+        direction = Vector(1, 0)
+        shootAnim = "FloatShootSide"
+    elseif fireDirection == Direction.DOWN then
+        direction = Vector(0, 1)
+        shootAnim = "FloatShootDown"
+    elseif fireDirection == Direction.UP then
+        direction = Vector(0, -1)
+        shootAnim = "FloatShootUp"
+    end
+
+    if direction ~= nil and familiar.FireCooldown == 0 then
+        local velocity = direction * 10 + player:GetTearMovementInheritance(direction)
+        local tear = Isaac.Spawn(
+            EntityType.ENTITY_TEAR,
+            TearVariant.BLUE,
+            0,
+            familiar.Position,
+            velocity,
+            familiar
+        ):ToTear()
+
+        
+        tear.Scale = 1.3
+        tear.CollisionDamage = player.Damage + 3
+        tear.TearFlags = TearFlags.TEAR_GLOW | TearFlags.TEAR_HOMING
+        familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay, 1))
+
+        sprite.FlipX = doFlip
+        sprite:Play(shootAnim, true)
+    end
+
+    if sprite:IsFinished() then
+        sprite:Play("FloatDown")
+    end
+
+    familiar:FollowParent()
+    familiar.FireCooldown = math.max(familiar.FireCooldown - 1, 0)
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdateZeal, FAMILIAR_VARIANT_ZEAL)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

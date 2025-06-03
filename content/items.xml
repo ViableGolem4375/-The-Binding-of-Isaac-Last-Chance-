@@ -2,8 +2,8 @@
     <active id="1" name="Lucky Coin" gfx="dice.png" description="Take control of your destiny" quality="4" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
     <active id="2" name="Dull Coin" gfx="dice2.png" description="Reroll your destiny?" quality="4" charge="0" hidden="true" tags="quest noeden nocantrip"/>
     <passive id="3" name="Unholy Mantle" gfx="unholymantle.png" description="Revel in Their Pain" quality="2" tags="devil nocantrip"/>
-    <familiar name="Lil' Uriel" gfx="uriel.png" description="Angelic friend" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel" />
-    <familiar name="Lil' Gabriel" gfx="gabriel.png" description="Eternal friend" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel" />
+    <familiar name="Lil' Uriel" gfx="uriel.png" description="Angelic friend" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel nocantrip" />
+    <familiar name="Lil' Gabriel" gfx="gabriel.png" description="Eternal friend" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel nocantrip" />
     <active id="4" name="Catalyst Character Sheet" gfx="catalyst_character_sheet.png" description="It's in my head IT'S IN MY HEAD AAAAAAAAAAA" quality="3" maxcharges="4" chargetype="normal" tags="offensive nocantrip"/>
     <familiar name="Failed Abortion" gfx="failed_abortion.png" description="It's still breathing!" quality="2" cache="familiars" tags="baby offensive summonable monstermanual" />
     <active id="5" name="Final Judgement" gfx="finaljudgement.png" description="Be Afraid" quality="4" maxcharges="12" chargetype="normal" hidden="true" tags="quest noeden nocantrip"/>
@@ -87,17 +87,18 @@
     <active id="80" name="Book of Jubilees" gfx="jubilees.png" description="Deliver me unto salvation" quality="4" maxcharges="12" chargetype="normal" tags="offensive book nocantrip" />
     <active id="81" name="Angel Blast" gfx="finaljudgement.png" description="Be Afraid" quality="4" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip"/>
     <trinket id="82" name="The Devil's Noisemaker" gfx="noisemaker.png" description="All stats up + annoyance up!" cache="all" />
-    <passive id="83" name="Gluttony" gfx="gluttony.png" description="All consuming" quality="3" tags="nocantrip offensive" cache="all" />
-    <passive id="84" name="Greed" gfx="greed.png" description="Hoard your wealth" quality="2" tags="nocantrip offensive" cache="damage" />
-    <passive id="85" name="Lust" gfx="lust.png" description="Love at first touch" quality="1" tags="nocantrip nolostbr" />
-    <active id="86" name="Pride" gfx="pride.png" description="Don't fly too close to the sun" quality="2" maxcharges="1" chargetype="normal" tags="offensive nocantrip" />
-    <passive id="87" name="Sloth" gfx="sloth.png" description="Laziness incarnate" quality="3" tags="offensive nocantrip" />
-    <passive id="88" name="Envy" gfx="envy.png" description="Mine" quality="1" tags="offensive nocantrip" cache="damage" />
-    <passive id="89" name="Wrath" gfx="wrath.png" description="Death = power" quality="3" tags="offensive nocantrip" cache="damage" />
-    <passive id="90" name="Charity" gfx="charity.png" description="The spirit of giving" quality="3" tags="offensive nocantrip" />
-    <passive id="91" name="Humility" gfx="humility.png" description="Humbleness" quality="3" tags="offensive nocantrip" cache="damage" />
-    <passive id="92" name="Love" gfx="love.png" description="Love thy neighbor" quality="0" tags="offensive nocantrip" />
-    <passive id="93" name="Generosity" gfx="generosity.png" description="Giving = power" quality="3" tags="offensive nocantrip" cache="damage" />
-    <passive id="94" name="Temperance" gfx="temperance.png" description="Tempered spirit" quality="3" tags="offensive nocantrip" cache="firedelay" />
+    <passive id="83" name="Gluttony" gfx="gluttony.png" description="All consuming" quality="3" tags="devil nocantrip offensive" cache="all" />
+    <passive id="84" name="Greed" gfx="greed.png" description="Hoard your wealth" quality="2" tags="devil nocantrip offensive" cache="damage" />
+    <passive id="85" name="Lust" gfx="lust.png" description="Love at first touch" quality="1" tags="devil nocantrip nolostbr" />
+    <active id="86" name="Pride" gfx="pride.png" description="Don't fly too close to the sun" quality="2" maxcharges="1" chargetype="normal" tags="devil offensive nocantrip" />
+    <passive id="87" name="Sloth" gfx="sloth.png" description="Laziness incarnate" quality="3" tags="devil offensive nocantrip" />
+    <passive id="88" name="Envy" gfx="envy.png" description="Mine" quality="1" tags="devil offensive nocantrip baby" cache="damage familiars" />
+    <passive id="89" name="Wrath" gfx="wrath.png" description="Death = power" quality="3" tags="devil offensive nocantrip" cache="damage" />
+    <passive id="90" name="Charity" gfx="charity.png" description="The spirit of giving" quality="3" tags="angel offensive nocantrip" />
+    <passive id="91" name="Humility" gfx="humility.png" description="Humbleness" quality="3" tags="angel offensive nocantrip" cache="damage" />
+    <passive id="92" name="Love" gfx="love.png" description="Love thy neighbor" quality="0" tags="angel offensive nocantrip" />
+    <passive id="93" name="Generosity" gfx="generosity.png" description="Giving = power" quality="3" tags="angel offensive nocantrip" cache="damage" />
+    <passive id="94" name="Temperance" gfx="temperance.png" description="Tempered spirit" quality="3" tags="angel offensive nocantrip" cache="firedelay" />
+    <passive id="95" name="Zeal" gfx="zeal.png" description="Zealous companion" quality="4" tags="angel offensive nocantrip summonable monstermanual baby" cache="familiars" />
 
 </items>

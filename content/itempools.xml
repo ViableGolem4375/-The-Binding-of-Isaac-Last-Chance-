@@ -47,6 +47,7 @@
         <Item Name="Love" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Generosity" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Temperance" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Zeal" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="secret">
@@ -168,7 +169,8 @@
         <Item Name="Love" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Generosity" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Temperance" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        
+        <Item Name="Zeal" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
     </Pool>
     <Pool Name="greedSecret">
         <Item Name="Eternal Bond" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
