@@ -143,6 +143,7 @@ WRATH_ITEM = Isaac.GetItemIdByName("Wrath")
 CHARITY_ITEM = Isaac.GetItemIdByName("Charity")
 HUMILITY_ITEM = Isaac.GetItemIdByName("Humility")
 LOVE_ITEM = Isaac.GetItemIdByName("Love")
+GENEROSITY_ITEM = Isaac.GetItemIdByName("Generosity")
 
 
 SOUL_MATT = Isaac.GetCardIdByName("Soul of Matt")
@@ -1466,6 +1467,7 @@ if EID then
     EID:addCollectible(CHARITY_ITEM, "Gain 1/2 of a soul heart for every 5 coins spent.", "Charity")
     EID:addCollectible(HUMILITY_ITEM, "{{ArrowUp}} Gain 2x damage.#{{ArrowDown}} The bonus is lost if Isaac holds any quality 4 items.", "Humility")
     EID:addCollectible(LOVE_ITEM, "Issac's tears heal enemies which have been turned friendly.#{{Warning}} Does not work on enemies with the charmed status effect.", "Love")
+    EID:addCollectible(GENEROSITY_ITEM, "{{ArrowUp}} Gain +0.1 damage for every coin given to the donation machine in the current run.", "Generosity")
 
 end
 
@@ -6080,6 +6082,21 @@ function Mod:HealOnTearHit(tear, collider)
 end
 
 Mod:AddCallback(ModCallbacks.MC_PRE_TEAR_COLLISION, Mod.HealOnTearHit)
+
+function Mod:ApplyGenerosityDamageBoost(player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_DAMAGE and player:HasCollectible(GENEROSITY_ITEM) then
+        local donationCount = Game():GetDonationModAngel() -- ✅ Retrieve Angel Machine coins
+
+        local totalDonationMoney = donationCount-- ✅ Combine both sources
+        local damageBoost = totalDonationMoney / 10 -- ✅ Calculate boost (1/10 of total donations)
+
+        player.Damage = player.Damage + damageBoost -- ✅ Apply scaling damage boost
+        print(player:GetName(), "gained", damageBoost, "extra damage from donations!")
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyGenerosityDamageBoost)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

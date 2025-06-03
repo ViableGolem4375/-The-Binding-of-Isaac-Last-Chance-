@@ -97,5 +97,6 @@
     <passive id="90" name="Charity" gfx="charity.png" description="The spirit of giving" quality="3" tags="offensive nocantrip" />
     <passive id="91" name="Humility" gfx="humility.png" description="Humbleness" quality="3" tags="offensive nocantrip" cache="damage" />
     <passive id="92" name="Love" gfx="love.png" description="Love thy neighbor" quality="0" tags="offensive nocantrip" />
+    <passive id="93" name="Generosity" gfx="generosity.png" description="Giving = power" quality="3" tags="offensive nocantrip" cache="damage" />
 
 </items>
