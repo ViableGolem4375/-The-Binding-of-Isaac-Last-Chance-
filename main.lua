@@ -6664,7 +6664,7 @@ function Mod:OnCoinPickup(pickup, collider)
                     chance = 0.05
                 elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
                     chance = 0.10
-                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
+                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType then
                     chance = 0.25
                 elseif pickup.SubType == CoinSubType.COIN_DIME then
                     chance = 0.37
@@ -6701,7 +6701,7 @@ function Mod:OnCoinPickupBone(pickup, collider)
                     chance = 0.025
                 elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
                     chance = 0.05
-                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
+                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType then
                     chance = 0.125
                 elseif pickup.SubType == CoinSubType.COIN_DIME then
                     chance = 0.185
@@ -6738,7 +6738,7 @@ function Mod:OnCoinPickupRot(pickup, collider)
                     chance = 0.05
                 elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
                     chance = 0.10
-                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
+                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType then
                     chance = 0.25
                 elseif pickup.SubType == CoinSubType.COIN_DIME then
                     chance = 0.37
