@@ -4,6 +4,7 @@
 - Forgotten essence effect is kind of a placeholder, need something more interesting.
 - Sack of lucky pennies might me bugged.
 - Maybe fix the issue with omega tech where it activates both both J+E if they both have it.
+- Amp damage item is staying if you leave the room while in the AoE.
 
 Here's this code bc its always necessary:
 for i = 0, Game():GetNumPlayers() - 1 do
@@ -16,4 +17,4 @@ Trinket Ideas:
 
 
 
-Win streak: 12
+Win streak: 15

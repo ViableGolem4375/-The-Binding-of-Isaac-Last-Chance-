@@ -2440,6 +2440,10 @@ function Mod:RemoveAmpFamiliarsOnNewRoom()
             
             -- ✅ Remove familiar on room change
             familiar:Remove()
+            for i = 0, Game():GetNumPlayers() - 1 do
+                local player = Game():GetPlayer(i)
+                player:RemoveCollectible(AMP_DMG_ITEM)
+            end
         end
     end
 
@@ -2448,6 +2452,31 @@ function Mod:RemoveAmpFamiliarsOnNewRoom()
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.RemoveAmpFamiliarsOnNewRoom)
+
+function Mod:RemoveAmpFamiliarsOnNewFloor()
+    for _, familiar in ipairs(activeAmpFamiliars) do
+        if familiar and familiar:Exists() then
+            -- ✅ Remove area indicator before familiar disappears
+            local data = familiar:GetData()
+            if data.AreaIndicator and data.AreaIndicator:Exists() then
+                data.AreaIndicator:Remove()
+                data.AreaIndicator = nil
+            end
+            
+            -- ✅ Remove familiar on room change
+            familiar:Remove()
+            for i = 0, Game():GetNumPlayers() - 1 do
+                local player = Game():GetPlayer(i)
+                player:RemoveCollectible(AMP_DMG_ITEM)
+            end
+        end
+    end
+
+    -- ✅ Clear tracking table after removal
+    activeAmpFamiliars = {}
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.RemoveAmpFamiliarsOnNewFloor)
 
 function Mod:HuhUse(item, rng, player, flags)
     player:AnimateCollectible(HUH_ITEM, "UseItem", "PlayerPickupSparkle")
