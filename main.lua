@@ -4046,6 +4046,7 @@ function Mod:TrackMoneySpent(player)
 
         -- ✅ Store last known coin count for next check
         player:GetData().lastCoins = currentCoins
+        print(player:GetData().moneySpent)
     end
 end
 
@@ -4070,7 +4071,7 @@ function Mod:UseRefundItem(_, item, rng, player)
             player:AnimateCollectible(MONEY_ITEM, "UseItem", "PlayerPickupSparkle")
 
             local refundAmount = player:GetData().moneySpent or 0
-
+            print(refundAmount)
             if refundAmount > 0 then
 
                 -- ✅ Give the stored money back to the player
@@ -5792,7 +5793,7 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.UpdateStatsByCachedItemsGlut
 
 function Mod:ApplyMoneyDamageBoost(player, cacheFlag)
     local data = player:GetData()
-    data.moneySpent = false
+    data.moneySpentGreed = false
 
     if player:HasCollectible(GREED_ITEM) then
         -- ✅ Grant +10 damage only if they haven't spent money
@@ -5809,19 +5810,19 @@ function Mod:CheckMoneySpent(player)
     local data = player:GetData()
 
     if player:HasCollectible(GREED_ITEM) then
-        local currentCoins = player:GetNumCoins()
+        local currentCoins2 = player:GetNumCoins()
 
 
         -- ✅ If player spends money, remove the boost and refresh stats
-        if data.lastCoinCount and currentCoins < data.lastCoinCount then
-            data.moneySpent = true
+        if data.lastCoinCount and currentCoins2 < data.lastCoinCount then
+            data.moneySpentGreed = true
             player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
             player:EvaluateItems()
             player:RemoveCollectible(GREED_ITEM)
         end
 
         -- ✅ Store current coin count for next frame comparison
-        data.lastCoinCount = currentCoins
+        data.lastCoinCount = currentCoins2
     end
 end
 
@@ -6056,10 +6057,10 @@ function Mod:TrackMoneySpentCharity(player)
         data.prevCoins = data.prevCoins or player:GetNumCoins()
         data.soulHeartProgress = data.soulHeartProgress or 0 -- ✅ Store progress toward next heart
 
-        local currentCoins = player:GetNumCoins()
+        local currentCoins3 = player:GetNumCoins()
 
-        if currentCoins < data.prevCoins then
-            local lostAmount = data.prevCoins - currentCoins
+        if currentCoins3 < data.prevCoins then
+            local lostAmount = data.prevCoins - currentCoins3
             data.soulHeartProgress = data.soulHeartProgress + lostAmount / 5 -- ✅ Store partial progress
 
             -- ✅ Grant soul hearts ONLY when progress reaches 1 full heart
@@ -6071,7 +6072,7 @@ function Mod:TrackMoneySpentCharity(player)
             end
         end
 
-        data.prevCoins = currentCoins -- ✅ Update stored coin count
+        data.prevCoins = currentCoins3 -- ✅ Update stored coin count
     end
 end
 
