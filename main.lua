@@ -3860,7 +3860,7 @@ function Mod:OnPickupAppetizer()
             local healthGain = (currentCount - data.AppetizerCount) * 2
 
             player:AddMaxHearts(healthGain)
-            player:AddHearts(healthGain)
+            player:AddHearts(healthGain * 2)
 
             print("Appetizer applied to:", player:GetName(), "Total health increase:", healthGain)
         end
@@ -3885,7 +3885,7 @@ function Mod:OnPickupMorningSnack()
             local healthGain = (currentCount - data.SnackCount) * 2
 
             player:AddMaxHearts(healthGain)
-            player:AddHearts(healthGain)
+            player:AddHearts(healthGain * 2)
 
         end
 
@@ -4046,7 +4046,6 @@ function Mod:TrackMoneySpent(player)
 
         -- ✅ Store last known coin count for next check
         player:GetData().lastCoins = currentCoins
-        print(player:GetData().moneySpent)
     end
 end
 
@@ -4099,7 +4098,6 @@ function Mod:UseGoldSprayPaint(_, item, rng, player)
             -- ✅ Get the player's first held trinket
             local heldTrinket = player:GetTrinket(0)
             local goldTrinket
-            print(heldTrinket)
 
             if heldTrinket ~= TrinketType.TRINKET_NULL then
                 goldTrinket = heldTrinket + 32768
