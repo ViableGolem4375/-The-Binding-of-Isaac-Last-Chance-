@@ -1160,8 +1160,16 @@ function Mod:UpdateDeathTimer(player)
         local timersfx = SFXManager()
         local data = player:GetData()
        if not data.DeathTimer then 
-            data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600 -- ✅ 60 sec with Birthright, 30 sec default
+            --data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600 -- ✅ 60 sec with Birthright, 30 sec default
+            local savedData = Isaac.LoadModData(Mod) -- Load persistent data
+            if savedData ~= "" then
+                data.DeathTimer = tonumber(savedData) or (player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600)
+            else
+                data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600
+            end
+
         end
+        print(data.DeathTimer)
 
 
         data.DeathTimer = math.max(0, data.DeathTimer - 1) -- ✅ Reduce timer every frame
@@ -1175,6 +1183,7 @@ function Mod:UpdateDeathTimer(player)
             --print("Death Timer expired! Player died.")
         end
         print(data.DeathTimer)
+        Isaac.SaveModData(Mod, tostring(data.DeathTimer))
     end
 end
 
@@ -1188,6 +1197,7 @@ function Mod:ResetTimerOnDamage(entity, amount, flag, source, countdown)
             local data = player:GetData()
             data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600 -- ✅ Resets to 60 sec with Birthright, 30 sec otherwise
             --print("Damage dealt! Timer reset to:", data.DeathTimer)
+            Isaac.SaveModData(Mod, tostring(data.DeathTimer))
 
         end
     end
@@ -2471,7 +2481,7 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.RemoveAmpFamiliarsOnStart)
 
-function Mod:RemoveAmpFamiliarsOnNewFloor()
+--[[ function Mod:RemoveAmpFamiliarsOnNewFloor()
     for _, familiar in ipairs(activeAmpFamiliars) do
         if familiar and familiar:Exists() then
             -- ✅ Remove area indicator before familiar disappears
@@ -2494,7 +2504,7 @@ function Mod:RemoveAmpFamiliarsOnNewFloor()
     activeAmpFamiliars = {}
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.RemoveAmpFamiliarsOnNewFloor)
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.RemoveAmpFamiliarsOnNewFloor) ]]
 
 function Mod:HuhUse(item, rng, player, flags)
     player:AnimateCollectible(HUH_ITEM, "UseItem", "PlayerPickupSparkle")
