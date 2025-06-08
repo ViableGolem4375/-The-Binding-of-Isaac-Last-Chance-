@@ -151,6 +151,7 @@ CONFIG_ZEAL = itemConfig:GetCollectible(ZEAL_ITEM)
 FAMILIAR_VARIANT_ZEAL = Isaac.GetEntityVariantByName("Zeal")
 
 KINDNESS_ITEM = Isaac.GetItemIdByName("Kindness")
+HEART_ITEM = Isaac.GetItemIdByName("Glass Heart")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2351,7 +2352,7 @@ function Mod:OnAmpItemUse(item, rng, player, flags)
         -- Set data so it applies the aura effect
         familiar:GetData().IsAmpFamiliar = true
         -- ✅ Add familiar to tracking table
-        table.insert(activeAmpFamiliars, familiar)
+        table.insert(activeAmpFamiliars, familiar.InitSeed)
 
     end
 end
@@ -2428,7 +2429,7 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.OnFamiliarUpdate)
 
-function Mod:RemoveAmpFamiliarsOnNewRoom()
+--[[ function Mod:RemoveAmpFamiliarsOnNewRoom()
     for _, familiar in ipairs(activeAmpFamiliars) do
         if familiar and familiar:Exists() then
             -- ✅ Remove area indicator before familiar disappears
@@ -2451,7 +2452,24 @@ function Mod:RemoveAmpFamiliarsOnNewRoom()
     activeAmpFamiliars = {}
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.RemoveAmpFamiliarsOnNewRoom)
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.RemoveAmpFamiliarsOnNewRoom) ]]
+
+function Mod:RemoveAmpFamiliarsOnStart()
+    local room = Game():GetRoom()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        player:RemoveCollectible(AMP_DMG_ITEM)
+    end
+
+    for _, familiar in ipairs(Isaac.FindByType(EntityType.ENTITY_FAMILIAR, FAMILIAR_VARIANT_AMP)) do
+        if familiar and familiar:Exists() then
+            familiar:Remove() -- ✅ Instantly removes existing familiars on start
+            print("Removed misplaced familiar from previous session!")
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.RemoveAmpFamiliarsOnStart)
 
 function Mod:RemoveAmpFamiliarsOnNewFloor()
     for _, familiar in ipairs(activeAmpFamiliars) do
@@ -6264,6 +6282,72 @@ function Mod:ConvertEnemiesToFriendly(npc)
 end
 
 Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, Mod.ConvertEnemiesToFriendly)
+
+--[[ local json = require("json") -- ✅ Import JSON functionality
+
+
+function Mod:SaveTemporaryHealth()
+    local jsonString = json.encode(Mod.SaveData) -- ✅ Convert table to JSON
+    Isaac.SaveModData(Mod, jsonString) -- ✅ Store JSON string instead of a table
+    print("Saved temporary health:", jsonString)
+end
+
+function Mod:LoadTemporaryHealth()
+    local savedString = Isaac.LoadModData(Mod) -- ✅ Retrieve saved JSON data
+
+    if savedString ~= "" then
+        Mod.SaveData = json.decode(savedString) -- ✅ Convert JSON string back into a table
+        print("Loaded temporary health:", savedString)
+    else
+        Mod.SaveData = {} -- ✅ Initialize fresh data if nothing was stored
+    end
+end
+
+function Mod:OnGameStart(isContinued)
+    if isContinued then
+        Mod:LoadTemporaryHealth() -- ✅ Ensure saved data is correctly loaded
+    else
+        Mod.SaveData = {} -- ✅ Fresh table for new runs
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnGameStart)
+
+
+
+function Mod:GrantTemporaryHealth(_, _, player)
+    player:AnimateCollectible(HEART_ITEM, "UseItem", "PlayerPickupSparkle")
+
+    if not Mod.SaveData.tempHealth then
+        Mod.SaveData.tempHealth = 0 -- ✅ Initialize tracking
+    end
+
+    -- ✅ Grant a temporary red heart container
+    player:AddMaxHearts(2) -- (1 heart container)
+    player:AddHearts(2) -- ✅ Fills the heart instantly
+    Mod.SaveData.tempHealth = Mod.SaveData.tempHealth + 2 -- ✅ Track temporary health given
+
+    Mod:SaveTemporaryHealth()
+    SFXManager():Play(SoundEffect.SOUND_VAMP_DOUBLE)
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.GrantTemporaryHealth, HEART_ITEM)
+
+function Mod:RemoveTemporaryHealth()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+
+        if Mod.SaveData.tempHealth and Mod.SaveData.tempHealth > 0 then
+            player:AddMaxHearts(-Mod.SaveData.tempHealth) -- ✅ Remove temporary heart containers
+            Mod.SaveData.tempHealth = nil -- ✅ Reset tracking
+            Mod:SaveTemporaryHealth()
+
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.RemoveTemporaryHealth)
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Mod.RemoveTemporaryHealth) ]]
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

@@ -1,12 +1,11 @@
 - Fix some visuals.
-- Final Judgement visual bug fix.
 - Fix d4 effects on tainted character maybe?
 - Forgotten essence effect is kind of a placeholder, need something more interesting.
-- Sack of lucky pennies might me bugged.
+- Sack of lucky pennies might be bugged.
 - Maybe fix the issue with omega tech where it activates both both J+E if they both have it.
 - Check if kindness/lilith essence charm story bosses.
 - Essence items can give copies, maybe fix that or make sure they all stack.
-- Need to make Hp ups heal the heart.
+- Need to test reloading game w/ items
 
 Here's this code bc its always necessary:
 for i = 0, Game():GetNumPlayers() - 1 do
@@ -15,10 +14,12 @@ for i = 0, Game():GetNumPlayers() - 1 do
 Item Ideas to Add:
 
 the bibble
+communist manifesto
 reverse soul stones?
+reusable HP up
 
 Trinket Ideas:
 
 
 
-Win streak: 6
+Win streak: 7
