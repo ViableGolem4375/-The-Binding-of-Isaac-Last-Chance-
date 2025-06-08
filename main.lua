@@ -152,6 +152,7 @@ FAMILIAR_VARIANT_ZEAL = Isaac.GetEntityVariantByName("Zeal")
 
 KINDNESS_ITEM = Isaac.GetItemIdByName("Kindness")
 HEART_ITEM = Isaac.GetItemIdByName("Glass Heart")
+LEGION_ITEM = Isaac.GetItemIdByName("Legion Charge")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -677,7 +678,7 @@ local Pontiusb = { -- shown below are default values, as shown on Isaac, for you
     FLYING = true
 }
 
-function Pontiusb:onPlayerInitPontiusb(player)
+--[[ function Pontiusb:onPlayerInitPontiusb(player)
     if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
         player:SetPocketActiveItem(CollectibleType.COLLECTIBLE_CRACK_THE_SKY, ActiveSlot.SLOT_POCKET, true)
         local pool = game:GetItemPool()
@@ -685,7 +686,7 @@ function Pontiusb:onPlayerInitPontiusb(player)
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Pontiusb.onPlayerInitPontiusb)
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Pontiusb.onPlayerInitPontiusb) ]]
 
 
 function Pontiusb:onCachePontiusb(player, cacheFlag)
@@ -725,7 +726,7 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Pontiusb.onCachePontiusb)
 
-Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, function(_, player)
+--[[ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, function(_, player)
     if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
         -- If the player has lost Spirit Sword, restore it
         if not player:HasCollectible(CollectibleType.COLLECTIBLE_SPIRIT_SWORD) then
@@ -747,17 +748,206 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, function(_, player)
             end
         end
     end
-end)
+end) ]]
 
-Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, function(_, entity, amount, damageFlags, source, countdown)
+PontiusMelee = {}
+
+function PontiusMelee:onUpdatePontiusMelee(player)
+    local PlayerData = player:GetData()
+    if PlayerData.PontiusFrame == nil then PlayerData.PontiusFrame = 0 end
+    if PlayerData.PontiusCool == nil then PlayerData.PontiusCool = 0 end
+    if PlayerData.LastFireDirectionPontius == nil then PlayerData.LastFireDirectionPontius = Direction.NO_DIRECTION end -- ✅ Track last fire direction
+
+    if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+        player.FireDelay = player.MaxFireDelay
+        
+        if player:GetFireDirection() > -1 and PlayerData.PontiusCool == 0 then
+            PlayerData.LastFireDirectionPontius = player:GetFireDirection()
+            PlayerData.PontiusFrame = math.min(player.MaxFireDelay * 2, PlayerData.PontiusFrame + 1)
+            if PlayerData.PontiusFrame == player.MaxFireDelay * 2 then
+                player:SetColor(Color(1,0,0,0.8,0, 0, 0), 1, 0, false, false)
+            end
+        elseif game:GetRoom():GetFrameCount() > 1 then
+            if PlayerData.PontiusFrame == player.MaxFireDelay * 2 then
+                player:UseActiveItem(LEGION_ITEM, false, false)
+                --PontiusMelee:MeleeWeaponSwing(player)
+                
+            else
+                --Dud
+            end
+            PlayerData.PontiusFrame = 0
+        end
+        PlayerData.PontiusCool = math.max(0,PlayerData.PontiusCool - 1)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, PontiusMelee.onUpdatePontiusMelee)
+
+function Mod:RenderPontiusHUD()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+            local data = player:GetData()
+            local timerValue = data.PontiusFrame or 0
+            local maxCharge = player.MaxFireDelay * 2
+            local chargePercentage = math.floor((timerValue / maxCharge) * 100)
+            local scale = Vector(0.75, 0.75)
+
+            local screenPos = Vector(50, 100) -- ✅ Adjust position to fit HUD layout
+            local color = timerValue <= 300 and KColor(1, 0, 0, 1) or KColor(1, 1, 1, 1) -- ✅ Red near expiration
+
+            Isaac.RenderScaledText("Legion Charge: " .. chargePercentage .. "%", screenPos.X, screenPos.Y, scale.X, scale.Y, 1, 1, 1, 1)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_RENDER, Mod.RenderPontiusHUD)
+
+PontiusFullCharge = {}
+
+function PontiusMelee:onUpdatePontiusFullCharge(player)
+    local PlayerData = player:GetData()
+    local crackID = CollectibleType.COLLECTIBLE_CRACK_THE_SKY
+    if PlayerData.PontiusFrame2 == nil then PlayerData.PontiusFrame2 = 0 end
+    if PlayerData.PontiusCool2 == nil then PlayerData.PontiusCool2 = 0 end
+    if PlayerData.LastFireDirectionPontius2 == nil then PlayerData.LastFireDirectionPontius2 = Direction.NO_DIRECTION end -- ✅ Track last fire direction
+
+    if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+        player.FireDelay = player.MaxFireDelay
+        
+        if player:GetFireDirection() > -1 and PlayerData.PontiusCool2 == 0 then
+            PlayerData.LastFireDirectionPontius2 = player:GetFireDirection()
+            PlayerData.PontiusFrame2 = math.min(player.MaxFireDelay * 4, PlayerData.PontiusFrame2 + 1)
+            if PlayerData.PontiusFrame2 == player.MaxFireDelay * 4 then
+                player:SetColor(Color(1,0,0,0.8,0, 0, 0), 1, 0, false, false)
+            end
+        elseif game:GetRoom():GetFrameCount() > 1 then
+            if PlayerData.PontiusFrame2 == player.MaxFireDelay * 4 then
+                player:UseActiveItem(crackID, false, false)
+                --PontiusMelee:MeleeWeaponSwing(player)
+                
+            else
+                --Dud
+            end
+            PlayerData.PontiusFrame2 = 0
+        end
+        PlayerData.PontiusCool2 = math.max(0,PlayerData.PontiusCool2 - 1)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, PontiusMelee.onUpdatePontiusFullCharge)
+
+function Mod:RenderPontiusFullChargeHUD()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+            local data = player:GetData()
+            local timerValue = data.PontiusFrame2 or 0
+            local maxCharge = player.MaxFireDelay * 2
+            local chargePercentage = math.floor((timerValue / maxCharge) * 100)
+            local scale = Vector(0.75, 0.75)
+
+            local screenPos = Vector(50, 120) -- ✅ Adjust position to fit HUD layout
+            local color = timerValue <= 300 and KColor(1, 0, 0, 1) or KColor(1, 1, 1, 1) -- ✅ Red near expiration
+
+            Isaac.RenderScaledText("Holy Light: " .. chargePercentage .. "%", screenPos.X, screenPos.Y, scale.X, scale.Y, 1, 1, 1, 1)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_RENDER, Mod.RenderPontiusFullChargeHUD)
+
+function PontiusMelee:MeleeWeaponSwing(player)
+    local PlayerData = player:GetData()
+    local chargeLevel = PlayerData.PontiusFrame or 0 -- ✅ Get charge level
+
+    local direction = Vector(0, 0) -- ✅ Default: No movement
+    
+    -- ✅ Detect firing direction
+    if Input.IsActionTriggered(ButtonAction.ACTION_SHOOTLEFT, player.ControllerIndex) then
+        direction = Vector(-1, 0)
+    elseif Input.IsActionTriggered(ButtonAction.ACTION_SHOOTRIGHT, player.ControllerIndex) then
+        direction = Vector(1, 0)
+    elseif Input.IsActionTriggered(ButtonAction.ACTION_SHOOTUP, player.ControllerIndex) then
+        direction = Vector(0, -1)
+    elseif Input.IsActionTriggered(ButtonAction.ACTION_SHOOTDOWN, player.ControllerIndex) then
+        direction = Vector(0, 1)
+    end
+
+    -- ✅ Spawn melee hitbox in correct direction
+    if direction.X ~= 0 or direction.Y ~= 0 then
+        local meleeHitbox = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, player.Position + direction * 20, Vector(0,0), player)
+        meleeHitbox:GetData().IsMeleeHitbox = true
+        meleeHitbox:GetData().ChargeLevel = chargeLevel
+        meleeHitbox:GetData().DestroyNextFrame = true
+        meleeHitbox:GetSprite():Play("Appear")
+        SFXManager():Play(SoundEffect.SOUND_SWORD_SPIN) -- ✅ Sword swing sound
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, PontiusMelee.MeleeWeaponSwing)
+
+function PontiusMelee:RemoveMeleeEffects()
+    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.POOF01)) do
+        if effect:GetData().DestroyNextFrame then
+            effect:Remove() -- ✅ Instantly deletes the effect after one frame
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, PontiusMelee.RemoveMeleeEffects)
+
+local recentHits = {} -- ✅ Tracks enemies hit this swing
+
+function PontiusMelee:CheckMeleeHitbox(npc)
+    local data = npc:GetData()
+    
+    if not data.LastMeleeHitFrame then
+        data.LastMeleeHitFrame = -1 -- ✅ Initialize tracking
+    end
+
+    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.POOF01)) do
+        if effect:GetData().IsMeleeHitbox then
+            local distance = npc.Position:Distance(effect.Position)
+            
+            -- ✅ Only allow one hit per enemy per attack cycle
+            if distance < 35 and Game():GetFrameCount() > data.LastMeleeHitFrame + 5 and not recentHits[npc.InitSeed] then
+               local player = effect.SpawnerEntity and effect.SpawnerEntity:ToPlayer()
+                if player then
+                    local damageMultiplier = 2.5 -- ✅ Adjust as needed
+                    local scaledDamage = player.Damage * damageMultiplier -- ✅ Scale with player’s damage
+                    
+                    npc:TakeDamage(scaledDamage, DamageFlag.DAMAGE_CRUSH | DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(effect), 0)
+                    Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, npc.Position, Vector(0,0), npc)
+
+                    data.LastMeleeHitFrame = Game():GetFrameCount()
+                    print("Melee hit applied! Damage:", scaledDamage)
+                end
+
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, PontiusMelee.CheckMeleeHitbox)
+
+function Mod:ClearHitTracking()
+    recentHits = {} -- ✅ Reset tracking after each attack cycle
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.ClearHitTracking)
+
+
+
+--[[ Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, function(_, entity, amount, damageFlags, source, countdown)
     local player = entity:ToPlayer()
     if player and player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
         -- Force player death instantly
         player:Die()
     end
-end, EntityType.ENTITY_PLAYER)
+end, EntityType.ENTITY_PLAYER) ]]
 
-function Mod:GrantInvulnerabilityOnHitPontius(entity, amount, flags, source, countdown)
+--[[ function Mod:GrantInvulnerabilityOnHitPontius(entity, amount, flags, source, countdown)
     local player = Isaac.GetPlayer(0)
 
     if player:GetPlayerType() == TAINTED_PONTIUS_TYPE and source and source.Entity and not player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
@@ -796,7 +986,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, function()
     if bossRoomSoulSpawned and room:GetType() ~= RoomType.ROOM_BOSS then
         bossRoomSoulSpawned = false -- Allow spawning again in the next boss fight
     end
-end)
+end) ]]
 
 ----------------------------------------------------------------------------------------
 -- Character code for Glitch below.
@@ -1205,12 +1395,10 @@ function Mod:UpdateDeathTimer(player)
         end
 
         
-        print(data.DeathTimer)
         -- ✅ If timer reaches zero, kill player & reset stored timer
         if data.DeathTimer == 0 then
             player:Kill()
             Isaac.SaveModData(Mod, "600") -- ✅ Reset stored timer upon death
-            print("Player died—resetting timer for next run.")
         else
             -- ✅ Save updated timer for continuity
             Isaac.SaveModData(Mod, tostring(data.DeathTimer))
@@ -1242,7 +1430,6 @@ function Mod:ResetTimerOnDamage(entity, amount, flag, source, countdown)
         local data = player:GetData()
         data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600
         Isaac.SaveModData(Mod, tostring(data.DeathTimer))
-        print("Damage dealt! Timer reset to:", data.DeathTimer)
     end
 end
 
@@ -4330,6 +4517,26 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, ProtoTech.onUpdateTech)
 
+function Mod:RenderProtoTechHUD()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(PROTO_ITEM) then
+            local data = player:GetData()
+            local timerValue = data.TechFrame or 0
+            local maxCharge = player.MaxFireDelay * 2
+            local chargePercentage = math.floor((timerValue / maxCharge) * 100)
+            local scale = Vector(0.75, 0.75)
+
+            local screenPos = Vector(50, 100) -- ✅ Adjust position to fit HUD layout
+            local color = timerValue <= 300 and KColor(1, 0, 0, 1) or KColor(1, 1, 1, 1) -- ✅ Red near expiration
+
+            Isaac.RenderScaledText("Laser Charge: " .. chargePercentage .. "%", screenPos.X, screenPos.Y, scale.X, scale.Y, 1, 1, 1, 1)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_RENDER, Mod.RenderProtoTechHUD)
+
 local gaperSpawned = false
 
 -- Reset the flag when starting a new run
@@ -6418,6 +6625,81 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.RemoveTemporaryHealth)
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Mod.RemoveTemporaryHealth) ]]
+
+local lastMoveVec2 = {} -- Store last movement direction for each player
+local dashingPlayers2 = {} -- Tracks players who are dashing
+
+function Mod:OnUseRomanDash(_, _, player, tear)
+    local abesfx = SFXManager()
+    if not dashingPlayers2[player.Index] then
+        dashingPlayers2[player.Index] = {dashTimer = DASH_DURATION_2, cooldown = DASH_COOLDOWN, chargeRefreshCount = 0, chargeTimer = 0, chargeExpireTimer = 0, enemiesHit = {}, dashSource = LEGION_ITEM } -- ✅ Store which dash is active
+        player:SetMinDamageCooldown(25) -- Proper invulnerability effect
+        abesfx:Play(SoundEffect.SOUND_KNIFE_PULL, 1, 0, false, 1.2)
+        -- Immediately trigger first dash update to bypass animation delay
+        Mod:OnUpdateRomanDash()
+
+    end
+    --return true
+end
+
+function Mod:OnUpdateRomanDash()
+    --local game = Game()
+    for i = 0, game:GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(i)
+        local dashData = dashingPlayers2[player.Index]
+
+        if dashData then
+            if dashData.dashTimer > 0 then
+
+                -- Detect player's held direction
+                local moveVec = Vector(0, 0)
+
+                if Input.IsActionPressed(ButtonAction.ACTION_LEFT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_RIGHT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X + 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_UP, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_DOWN, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y + 1
+                end
+
+                -- If the player is actively moving, update lastMoveVec
+                if moveVec:Length() > 0 then
+                    lastMoveVec2[player.Index] = moveVec:Normalized() * DASH_SPEED_2
+                end
+
+                -- Use last movement direction if no input is given
+                local finalMoveVec = lastMoveVec2[player.Index] or Vector(DASH_SPEED_2, 0)
+                
+                -- Apply movement
+                player.Velocity = finalMoveVec
+                -- ✅ Scale dash damage using player damage stat
+                local damageMultiplier = 2.0 -- Adjust as needed
+                local scaledDamage = (player.Damage * 2) + 20
+
+                -- Store enemies hit during the dash
+                for _, entity in ipairs(Isaac.FindInRadius(player.Position, 50, EntityPartition.ENEMY)) do
+                    if entity:IsVulnerableEnemy() and not dashData.enemiesHit[entity.InitSeed] then
+                        entity:TakeDamage(scaledDamage, DamageFlag.DAMAGE_NO_MODIFIERS, EntityRef(player), 0)
+                    end
+                end
+
+
+                dashData.dashTimer = dashData.dashTimer - 1
+            else
+                dashingPlayers2[player.Index] = nil
+                player:SetMinDamageCooldown(0)
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseRomanDash, LEGION_ITEM)
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.OnUpdateRomanDash)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

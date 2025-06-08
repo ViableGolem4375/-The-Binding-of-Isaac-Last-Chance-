@@ -102,5 +102,6 @@
     <familiar name="Zeal" gfx="zeal.png" description="Zealous companion" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel nocantrip" />
     <active id="95" name="Kindness" gfx="kindness.png" description="Kill them with kindness" quality="3" maxcharges="6" chargetype="normal" tags="angel offensive nocantrip" />
     <active id="96" name="Glass Heart" gfx="kindness.png" description="Reusable heart container" quality="2" maxcharges="4" chargetype="normal" tags="offensive nocantrip" />
+    <active id="97" name="Legion Charge" gfx="phalanx.png" description="Roma Invictus" quality="4" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
 
 </items>
