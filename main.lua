@@ -1204,28 +1204,45 @@ function Mod:UpdateDeathTimer(player)
             timersfx:Play(SoundEffect.SOUND_DOGMA_APPEAR_SCREAM, 1.5, 0, false, 1)
         end
 
-        if data.DeathTimer == 0 then
-            player:Kill() -- ✅ Player dies if timer runs out
-            --print("Death Timer expired! Player died.")
-        end
+        
         print(data.DeathTimer)
-        Isaac.SaveModData(Mod, tostring(data.DeathTimer))
+        -- ✅ If timer reaches zero, kill player & reset stored timer
+        if data.DeathTimer == 0 then
+            player:Kill()
+            Isaac.SaveModData(Mod, "600") -- ✅ Reset stored timer upon death
+            print("Player died—resetting timer for next run.")
+        else
+            -- ✅ Save updated timer for continuity
+            Isaac.SaveModData(Mod, tostring(data.DeathTimer))
+        end
+
     end
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.UpdateDeathTimer)
 
 function Mod:ResetTimerOnDamage(entity, amount, flag, source, countdown)
+    local player = nil
+
+    -- ✅ Check if source is directly the player
     if source and source.Entity and source.Entity:ToPlayer() then
-        local player = source.Entity:ToPlayer()
+        player = source.Entity:ToPlayer()
+    end
 
-        if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
-            local data = player:GetData()
-            data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600 -- ✅ Resets to 60 sec with Birthright, 30 sec otherwise
-            --print("Damage dealt! Timer reset to:", data.DeathTimer)
-            Isaac.SaveModData(Mod, tostring(data.DeathTimer))
-
+    -- ✅ Check if damage was caused by a tear, bomb, laser, or familiar belonging to the player
+    if not player and source and source.Entity then
+        local entity = source.Entity
+        if entity:ToTear() or entity:ToBomb() or entity:ToLaser() or entity:ToFamiliar() then
+            player = entity.SpawnerEntity and entity.SpawnerEntity:ToPlayer()
         end
+    end
+
+    -- ✅ If a valid player caused the damage, reset their timer
+    if player and player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
+        local data = player:GetData()
+        data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600
+        Isaac.SaveModData(Mod, tostring(data.DeathTimer))
+        print("Damage dealt! Timer reset to:", data.DeathTimer)
     end
 end
 
@@ -1253,20 +1270,21 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.DealContactDamage)
 
 
---[[ function Mod:RenderDeathTimerHUD()
+function Mod:RenderDeathTimerHUD()
     local player = Isaac.GetPlayer(0)
     if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
         local data = player:GetData()
         local timerValue = data.DeathTimer or 0
+        local scale = Vector(0.75, 0.75)
 
-        local screenPos = Vector(50, 30) -- ✅ Adjust position to fit HUD layout
+        local screenPos = Vector(50, 50) -- ✅ Adjust position to fit HUD layout
         local color = timerValue <= 300 and KColor(1, 0, 0, 1) or KColor(1, 1, 1, 1) -- ✅ Red near expiration
 
-        Isaac.RenderText("Death Timer: " .. timerValue, screenPos.X, screenPos.Y, color.R, color.G, color.B, color.A)
+        Isaac.RenderScaledText("Time Left: " .. timerValue, screenPos.X, screenPos.Y, scale.X, scale.Y, 1, 1, 1, 1)
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_RENDER, Mod.RenderDeathTimerHUD) ]]
+Mod:AddCallback(ModCallbacks.MC_POST_RENDER, Mod.RenderDeathTimerHUD)
 
 
 ----------------------------------------------------------------------------------------
