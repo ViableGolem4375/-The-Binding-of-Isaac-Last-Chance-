@@ -1145,6 +1145,30 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Abrahamb.onCache)
 
+function Mod:ResetDeathTimerOnGameStart(isContinued)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+
+        if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
+            local data = player:GetData()
+
+            -- ✅ If the run is fresh (not continued), set a new timer
+            if not isContinued then
+                data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600
+                Isaac.SaveModData(Mod, tostring(data.DeathTimer))
+                print("New game detected—Death Timer reset to:", data.DeathTimer)
+            else
+                -- ✅ Load timer from save if continuing a previous run
+                local savedTimer = Isaac.LoadModData(Mod)
+                data.DeathTimer = (savedTimer ~= "" and tonumber(savedTimer)) or 600
+                print("Continuing previous run—Death Timer restored:", data.DeathTimer)
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.ResetDeathTimerOnGameStart)
+
 function Mod:PreventDamage(entity, amount, flag, source, countdown)
     local player = entity:ToPlayer()
     
@@ -1162,11 +1186,13 @@ function Mod:UpdateDeathTimer(player)
        if not data.DeathTimer then 
             --data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600 -- ✅ 60 sec with Birthright, 30 sec default
             local savedData = Isaac.LoadModData(Mod) -- Load persistent data
-            if savedData ~= "" then
+            --[[ if savedData ~= "" then
                 data.DeathTimer = tonumber(savedData) or (player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600)
             else
                 data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600
-            end
+            end ]]
+            data.DeathTimer = (savedData ~= "" and tonumber(savedData)) or 600
+
 
         end
         print(data.DeathTimer)
@@ -1225,6 +1251,22 @@ function Mod:DealContactDamage(player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.DealContactDamage)
+
+
+--[[ function Mod:RenderDeathTimerHUD()
+    local player = Isaac.GetPlayer(0)
+    if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
+        local data = player:GetData()
+        local timerValue = data.DeathTimer or 0
+
+        local screenPos = Vector(50, 30) -- ✅ Adjust position to fit HUD layout
+        local color = timerValue <= 300 and KColor(1, 0, 0, 1) or KColor(1, 1, 1, 1) -- ✅ Red near expiration
+
+        Isaac.RenderText("Death Timer: " .. timerValue, screenPos.X, screenPos.Y, color.R, color.G, color.B, color.A)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_RENDER, Mod.RenderDeathTimerHUD) ]]
 
 
 ----------------------------------------------------------------------------------------
