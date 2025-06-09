@@ -6,8 +6,7 @@
 - Check if kindness/lilith essence charm story bosses.
 - Essence items can give copies, maybe fix that or make sure they all stack.
 - Need to test reloading game w/ items
-- Continue work on tainted pontius rework.
-- Make pontius damage affected by fire rate.
+- T abraham needs a way to get knife piece 2
 
 Here's this code bc its always necessary:
 for i = 0, Game():GetNumPlayers() - 1 do

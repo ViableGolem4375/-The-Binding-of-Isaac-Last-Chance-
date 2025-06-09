@@ -1679,6 +1679,16 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_RENDER, Mod.RenderDeathTimerHUD)
 
+function Mod:OnItemPickupKnife(player)
+    if player:GetPlayerType() == TAINTED_ABRAHAM_TYPE then
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_KNIFE_PIECE_1) and not player:HasCollectible(CollectibleType.COLLECTIBLE_KNIFE_PIECE_2) then
+            player:AddCollectible(CollectibleType.COLLECTIBLE_KNIFE_PIECE_2)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnItemPickupKnife)
+
 
 ----------------------------------------------------------------------------------------
 -- Birthright code below.
@@ -1926,7 +1936,7 @@ if EID then
     EID:addCharacterInfo(pontiusType, "Throws spears instead of firing normal tears.#{{ArrowUp}} Spears pierce enemies and deal 5x normal damage.#{{ArrowDown}} Spears are unaffected by tears stat and do not interact with most special tear effects.#Tears up/down effects grant small increases/decreases to damage.", "Pontius")
     EID:addCharacterInfo(TAINTED_PONTIUS_TYPE, "Cannot fire normal tears.#Attacks using a melee weapon.#Melee weapon can be charged up by holding the attack button, this will trigger increasingly strong effects depending on how long the button is held.", "The Awoken")
     EID:addCharacterInfo(abrahamType, "Starts with Duae Viae as a pocket active item.", "Abraham")
-    EID:addCharacterInfo(TAINTED_ABRAHAM_TYPE, "{{ArrowUp}} Extremely high stats.#{{ArrowUp}} The Heretic cannot take damage.#{{Warning}} The Heretic is on a 10 second timer, if it runs out he dies.#The timer can be reset by dealing damage to an enemy.#Starts with Rend as a pocket active item.", "The Heretic")
+    EID:addCharacterInfo(TAINTED_ABRAHAM_TYPE, "{{ArrowUp}} Extremely high stats.#{{ArrowUp}} The Heretic cannot take damage.#{{Warning}} The Heretic is on a 10 second timer, if it runs out he dies.#The timer can be reset by dealing damage to an enemy.#Collecting Knife Piece 1 will automatically grant Knife Piece 2.#Starts with Rend as a pocket active item.", "The Heretic")
     EID:addCollectible(DUAE_ITEM, "Spawns two item pedestals in the room, one containing Path of Salvation and the other containing Path of Temptation.#Picking up these items will grant 1 stack towards their respective path and remove 1 stack from the other path.#Stacks grant special effects depending on how many you have and culminate in an incredibly powerful effect at 4 stacks which resets the stack counter on activation.", "Duae Viae")
     EID:addCollectible(GLUTTONY_ITEM, "{{ArrowUp}} Gain a small all stats up which increases depending on how many items are held.", "Gluttony")
     EID:addCollectible(GREED_ITEM, "{{ArrowUp}} Gain 5x damage.#{{Warning}} This item will be removed from Isaac's inventory if any money is lost or spent.", "Greed")
