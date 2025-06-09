@@ -6,7 +6,6 @@
 - Check if kindness/lilith essence charm story bosses.
 - Essence items can give copies, maybe fix that or make sure they all stack.
 - Need to test reloading game w/ items
-- T abraham needs a way to get knife piece 2
 
 Here's this code bc its always necessary:
 for i = 0, Game():GetNumPlayers() - 1 do
@@ -29,4 +28,4 @@ Trinket Ideas:
 
 
 
-Win streak: 7
+Win streak: 8

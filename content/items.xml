@@ -34,7 +34,7 @@
     <active id="30" name="Essence of Eden" gfx="eden_essence.png" description="Change into something better" quality="4" charge="0" tags="offensive nocantrip"/>
     <passive id="31" name="Essence of Keeper" gfx="keeper_essence.png" description="Infinite wealth" quality="3" tags="offensive nocantrip"/>
     <active id="32" name="Essence of Apollyon" gfx="apollyon_essence.png" description="Void" quality="3" maxcharges="6" chargetype="normal" tags="offensive nocantrip" cache="damage"/>
-    <passive id="33" name="Essence of Apollyon VFX" gfx="apollyon_essence.png" description="I exist to make essence of apollyon visuals work!" quality="4" tags="nocantrip noeden quest"/>
+    <passive id="33" name="Essence of Apollyon VFX" gfx="apollyon_essence.png" description="I exist to make essence of apollyon visuals work!" quality="4" hidden="true" tags="nocantrip nolostbr noeden quest"/>
     <passive id="34" name="Essence of Bethany" gfx="beth_essence.png" description="Army of eternal flame" quality="3" tags="offensive nocantrip"/>
     <passive id="35" name="Essence of Domino" gfx="matt_essence.png" description="Luck up + power through chance" quality="3" tags="offensive nocantrip" cache="luck"/>
     <active id="36" name="Essence of Pontius" gfx="pontius_essence.png" description="Spear thrower" quality="2" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage"/>
@@ -47,7 +47,7 @@
     <passive id="43" name="Early Morning Snack" gfx="midnight_snack.png" description="Health up" quality="1" tags="nocantrip nolostbr" />
     <passive id="44" name="Kingslayer" gfx="kingslayer.png" description="Boss killer" quality="2" tags="nocantrip offensive" cache="damage" />
     <passive id="45" name="Defense Tech" gfx="defense_tech.png" description="Automated laser defense" quality="2" tags="nocantrip offensive" />
-    <active id="46" name="Phalanx" gfx="phalanx.png" description="Unbreakable guard" quality="4" maxcharges="300" chargetype="timed" tags="quest noeden nolostbr nocantrip"/>
+    <active id="46" name="Phalanx" gfx="phalanx.png" description="Unbreakable guard" quality="4" maxcharges="300" chargetype="timed" hidden="true" tags="quest noeden nolostbr nocantrip"/>
     <passive id="47" name="Necromancy" gfx="necromancy.png" description="Raise the dead!" quality="3" tags="nocantrip offensive" />
     <active id="48" name="Become Back My Money" gfx="become_back_my_money.png" description="Trash Isaac" quality="2" charge="0" tags="nocantrip offensive" />
     <active id="49" name="Gold Spray Paint" gfx="gold_paint.png" description="All that glitters is gold" quality="2" maxcharges="6" chargetype="normal" tags="nocantrip offensive" />
