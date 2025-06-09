@@ -7148,7 +7148,8 @@ function EssenceCollector:onUpdateCollector()
                 Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ABRAHAM_ESSENCE_ITEM, player.Position + Vector(32,32), Vector(0,0), nil)
             end
 			local explosion = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_EXPLOSION, 0, slot.Position, Vector(0, 0), nil)
-            explosion:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- Prevents explos	
+            explosion:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- Prevents explos
+            slot:Remove()
 		end
 
         if slotSprite:IsFinished("Initiate") then
@@ -7168,12 +7169,15 @@ function EssenceCollector:onUpdateCollector()
 		end
 
         if slotSprite:IsPlaying("Broken") == false then
-			EssenceCollector:StopExplosionHack(slot,slotData.CardToGive,slotData.ReturnedRune)
+			EssenceCollector:StopExplosionHack(slot)
 		end
     end
 end
 
-function EssenceCollector:StopExplosionHack(machine,runeIndex,ReturnedRune)
+
+
+
+function EssenceCollector:StopExplosionHack(machine)
     local asploded = machine.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND
     if not asploded then return end
 	
@@ -7202,6 +7206,8 @@ function EssenceCollector:onNewRoom()
 		end
     end
 end
+
+
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM,EssenceCollector.onNewRoom)
 Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, EssenceCollector.onPlayerCollide)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, EssenceCollector.onUpdateCollector)
