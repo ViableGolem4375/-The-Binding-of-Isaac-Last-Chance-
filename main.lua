@@ -153,6 +153,7 @@ FAMILIAR_VARIANT_ZEAL = Isaac.GetEntityVariantByName("Zeal")
 KINDNESS_ITEM = Isaac.GetItemIdByName("Kindness")
 HEART_ITEM = Isaac.GetItemIdByName("Glass Heart")
 LEGION_ITEM = Isaac.GetItemIdByName("Legion Charge")
+PUGIO_ITEM = Isaac.GetItemIdByName("Pugio")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -568,7 +569,9 @@ function Pontius:onCachePontius(player, cacheFlag)
             player.MaxFireDelay = player.MaxFireDelay - 10 + Pontius.FIREDELAY
         end
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            player.Damage = player.Damage - 3.5 + Pontius.DAMAGE
+            local baseDamage = Pontius.DAMAGE
+            local fireRateFactor = math.max(1, 10 / player.MaxFireDelay)
+            player.Damage = player.Damage - 3.5 + baseDamage + fireRateFactor
         end
         if cacheFlag == CacheFlag.CACHE_RANGE then
             player.TearRange = player.TearRange - 260 + Pontius.RANGE
@@ -665,17 +668,17 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdatePontius)
 -- Code for the tainted version of Pontius below
 
 local Pontiusb = { -- shown below are default values, as shown on Isaac, for you to change around
-    SPEED = 2.0,
-    FIREDELAY = 5, -- your tears stat is "30/(FIREDELAY+1)"
-    DAMAGE = 10.0, -- is only the damage stat, not damage multiplier
-    RANGE = 300, -- your range stat is "40*RANGE"
+    SPEED = 1.2,
+    FIREDELAY = 10, -- your tears stat is "30/(FIREDELAY+1)"
+    DAMAGE = 3.5, -- is only the damage stat, not damage multiplier
+    RANGE = 260, -- your range stat is "40*RANGE"
     SHOTSPEED = 1.00,
     LUCK = 0.00,
     TEARHEIGHT = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
     TEARFALLINGSPEED = 0.00, -- these are non default values, instead being additive to the default value because I do not know what the default is
     TEARFLAG = 0, -- Determines some behaviors of your tears, https://wofsauge.github.io/IsaacDocs/rep/enums/TearFlags.html
     TEARCOLOR = Color(1.0, 1.0, 1.0, 1.0, 0, 0, 0), -- r1.0 g1.0 b1.0 a1.0 0r 0g 0b (the last three are offsets)
-    FLYING = true
+    FLYING = false
 }
 
 --[[ function Pontiusb:onPlayerInitPontiusb(player)
@@ -753,22 +756,27 @@ end) ]]
 PontiusMelee = {}
 
 function PontiusMelee:onUpdatePontiusMelee(player)
+
     local PlayerData = player:GetData()
     if PlayerData.PontiusFrame == nil then PlayerData.PontiusFrame = 0 end
     if PlayerData.PontiusCool == nil then PlayerData.PontiusCool = 0 end
     if PlayerData.LastFireDirectionPontius == nil then PlayerData.LastFireDirectionPontius = Direction.NO_DIRECTION end -- ✅ Track last fire direction
+    if PlayerData.ChargeSoundPlayed == nil then PlayerData.ChargeSoundPlayed = false end -- ✅ Track if sound has played
 
     if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
         player.FireDelay = player.MaxFireDelay
         
         if player:GetFireDirection() > -1 and PlayerData.PontiusCool == 0 then
             PlayerData.LastFireDirectionPontius = player:GetFireDirection()
-            PlayerData.PontiusFrame = math.min(player.MaxFireDelay * 2, PlayerData.PontiusFrame + 1)
-            if PlayerData.PontiusFrame == player.MaxFireDelay * 2 then
-                player:SetColor(Color(1,0,0,0.8,0, 0, 0), 1, 0, false, false)
+            PlayerData.PontiusFrame = math.min(player.MaxFireDelay * 4, PlayerData.PontiusFrame + 1)
+            if PlayerData.PontiusFrame == player.MaxFireDelay * 4 and not PlayerData.ChargeSoundPlayed then
+                --player:SetColor(Color(1,0,0,0.8,0, 0, 0), 1, 0, false, false)
+                SFXManager():Play(SoundEffect.SOUND_SOUL_PICKUP, 1, 2, false, 1, 0)
+                PlayerData.ChargeSoundPlayed = true -- ✅ Mark sound as played
+
             end
         elseif game:GetRoom():GetFrameCount() > 1 then
-            if PlayerData.PontiusFrame == player.MaxFireDelay * 2 then
+            if PlayerData.PontiusFrame == player.MaxFireDelay * 4 then
                 player:UseActiveItem(LEGION_ITEM, false, false)
                 --PontiusMelee:MeleeWeaponSwing(player)
                 
@@ -776,6 +784,8 @@ function PontiusMelee:onUpdatePontiusMelee(player)
                 --Dud
             end
             PlayerData.PontiusFrame = 0
+            PlayerData.ChargeSoundPlayed = false
+
         end
         PlayerData.PontiusCool = math.max(0,PlayerData.PontiusCool - 1)
     end
@@ -789,11 +799,11 @@ function Mod:RenderPontiusHUD()
         if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
             local data = player:GetData()
             local timerValue = data.PontiusFrame or 0
-            local maxCharge = player.MaxFireDelay * 2
+            local maxCharge = player.MaxFireDelay * 4
             local chargePercentage = math.floor((timerValue / maxCharge) * 100)
             local scale = Vector(0.75, 0.75)
 
-            local screenPos = Vector(50, 100) -- ✅ Adjust position to fit HUD layout
+            local screenPos = Vector(55, 100) -- ✅ Adjust position to fit HUD layout
             local color = timerValue <= 300 and KColor(1, 0, 0, 1) or KColor(1, 1, 1, 1) -- ✅ Red near expiration
 
             Isaac.RenderScaledText("Legion Charge: " .. chargePercentage .. "%", screenPos.X, screenPos.Y, scale.X, scale.Y, 1, 1, 1, 1)
@@ -811,18 +821,22 @@ function PontiusMelee:onUpdatePontiusFullCharge(player)
     if PlayerData.PontiusFrame2 == nil then PlayerData.PontiusFrame2 = 0 end
     if PlayerData.PontiusCool2 == nil then PlayerData.PontiusCool2 = 0 end
     if PlayerData.LastFireDirectionPontius2 == nil then PlayerData.LastFireDirectionPontius2 = Direction.NO_DIRECTION end -- ✅ Track last fire direction
+    if PlayerData.ChargeSoundPlayedb == nil then PlayerData.ChargeSoundPlayedb = false end -- ✅ Track if sound has played
 
     if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
         player.FireDelay = player.MaxFireDelay
         
         if player:GetFireDirection() > -1 and PlayerData.PontiusCool2 == 0 then
             PlayerData.LastFireDirectionPontius2 = player:GetFireDirection()
-            PlayerData.PontiusFrame2 = math.min(player.MaxFireDelay * 4, PlayerData.PontiusFrame2 + 1)
-            if PlayerData.PontiusFrame2 == player.MaxFireDelay * 4 then
-                player:SetColor(Color(1,0,0,0.8,0, 0, 0), 1, 0, false, false)
+            PlayerData.PontiusFrame2 = math.min(player.MaxFireDelay * 6, PlayerData.PontiusFrame2 + 1)
+            if PlayerData.PontiusFrame2 == player.MaxFireDelay * 6 and not PlayerData.ChargeSoundPlayedb then
+                --player:SetColor(Color(1,0,0,0.8,0, 0, 0), 1, 0, false, false)
+                SFXManager():Play(SoundEffect.SOUND_SOUL_PICKUP, 1, 2, false, 1.5, 0)
+                PlayerData.ChargeSoundPlayedb = true -- ✅ Mark sound as played
+
             end
         elseif game:GetRoom():GetFrameCount() > 1 then
-            if PlayerData.PontiusFrame2 == player.MaxFireDelay * 4 then
+            if PlayerData.PontiusFrame2 == player.MaxFireDelay * 6 then
                 player:UseActiveItem(crackID, false, false)
                 --PontiusMelee:MeleeWeaponSwing(player)
                 
@@ -830,6 +844,7 @@ function PontiusMelee:onUpdatePontiusFullCharge(player)
                 --Dud
             end
             PlayerData.PontiusFrame2 = 0
+            PlayerData.ChargeSoundPlayedb = false
         end
         PlayerData.PontiusCool2 = math.max(0,PlayerData.PontiusCool2 - 1)
     end
@@ -843,11 +858,11 @@ function Mod:RenderPontiusFullChargeHUD()
         if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
             local data = player:GetData()
             local timerValue = data.PontiusFrame2 or 0
-            local maxCharge = player.MaxFireDelay * 2
+            local maxCharge = player.MaxFireDelay * 6
             local chargePercentage = math.floor((timerValue / maxCharge) * 100)
             local scale = Vector(0.75, 0.75)
 
-            local screenPos = Vector(50, 120) -- ✅ Adjust position to fit HUD layout
+            local screenPos = Vector(55, 110) -- ✅ Adjust position to fit HUD layout
             local color = timerValue <= 300 and KColor(1, 0, 0, 1) or KColor(1, 1, 1, 1) -- ✅ Red near expiration
 
             Isaac.RenderScaledText("Holy Light: " .. chargePercentage .. "%", screenPos.X, screenPos.Y, scale.X, scale.Y, 1, 1, 1, 1)
@@ -857,35 +872,126 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_RENDER, Mod.RenderPontiusFullChargeHUD)
 
-function PontiusMelee:MeleeWeaponSwing(player)
+PontiusFullCharge = {}
+
+function PontiusMelee:onUpdatePontiusFullChargePlus(player)
     local PlayerData = player:GetData()
-    local chargeLevel = PlayerData.PontiusFrame or 0 -- ✅ Get charge level
+    if PlayerData.PontiusFrame3 == nil then PlayerData.PontiusFrame3 = 0 end
+    if PlayerData.PontiusCool3 == nil then PlayerData.PontiusCool3 = 0 end
+    if PlayerData.LastFireDirectionPontius3 == nil then PlayerData.LastFireDirectionPontius3 = Direction.NO_DIRECTION end -- ✅ Track last fire direction
+    if PlayerData.ChargeSoundPlayedc == nil then PlayerData.ChargeSoundPlayedc = false end -- ✅ Track if sound has played
 
-    local direction = Vector(0, 0) -- ✅ Default: No movement
-    
-    -- ✅ Detect firing direction
-    if Input.IsActionTriggered(ButtonAction.ACTION_SHOOTLEFT, player.ControllerIndex) then
-        direction = Vector(-1, 0)
-    elseif Input.IsActionTriggered(ButtonAction.ACTION_SHOOTRIGHT, player.ControllerIndex) then
-        direction = Vector(1, 0)
-    elseif Input.IsActionTriggered(ButtonAction.ACTION_SHOOTUP, player.ControllerIndex) then
-        direction = Vector(0, -1)
-    elseif Input.IsActionTriggered(ButtonAction.ACTION_SHOOTDOWN, player.ControllerIndex) then
-        direction = Vector(0, 1)
+    if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+        player.FireDelay = player.MaxFireDelay
+        
+        if player:GetFireDirection() > -1 and PlayerData.PontiusCool2 == 0 then
+            PlayerData.LastFireDirectionPontius3 = player:GetFireDirection()
+            PlayerData.PontiusFrame3 = math.min(player.MaxFireDelay * 8, PlayerData.PontiusFrame3 + 1)
+            if PlayerData.PontiusFrame3 == player.MaxFireDelay * 8 and not PlayerData.ChargeSoundPlayedc then
+                --player:SetColor(Color(1,0,0,0.8,0, 0, 0), 1, 0, false, false)
+                SFXManager():Play(SoundEffect.SOUND_SOUL_PICKUP, 1, 2, false, 2, 0)
+                PlayerData.ChargeSoundPlayedc = true -- ✅ Mark sound as played
+
+            end
+        elseif game:GetRoom():GetFrameCount() > 1 then
+            if PlayerData.PontiusFrame3 == player.MaxFireDelay * 8 then
+                --player:UseActiveItem(crackID, false, false)
+                --PontiusMelee:MeleeWeaponSwing(player)
+                player:UseCard(SOUL_PONTIUS, UseFlag.USE_NOANIM)
+                
+            else
+                --Dud
+            end
+            PlayerData.PontiusFrame3 = 0
+            PlayerData.ChargeSoundPlayedc = false
+        end
+        PlayerData.PontiusCool3 = math.max(0,PlayerData.PontiusCool3 - 1)
     end
+end
 
-    -- ✅ Spawn melee hitbox in correct direction
-    if direction.X ~= 0 or direction.Y ~= 0 then
-        local meleeHitbox = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, player.Position + direction * 20, Vector(0,0), player)
-        meleeHitbox:GetData().IsMeleeHitbox = true
-        meleeHitbox:GetData().ChargeLevel = chargeLevel
-        meleeHitbox:GetData().DestroyNextFrame = true
-        meleeHitbox:GetSprite():Play("Appear")
-        SFXManager():Play(SoundEffect.SOUND_SWORD_SPIN) -- ✅ Sword swing sound
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, PontiusMelee.onUpdatePontiusFullChargePlus)
+
+function Mod:RenderPontiusFullChargePlusHUD()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+            local data = player:GetData()
+            local timerValue = data.PontiusFrame3 or 0
+            local maxCharge = player.MaxFireDelay * 8
+            local chargePercentage = math.floor((timerValue / maxCharge) * 100)
+            local scale = Vector(0.75, 0.75)
+
+            local screenPos = Vector(55, 120) -- ✅ Adjust position to fit HUD layout
+            local color = timerValue <= 300 and KColor(1, 0, 0, 1) or KColor(1, 1, 1, 1) -- ✅ Red near expiration
+
+            Isaac.RenderScaledText("Spear Throw: " .. chargePercentage .. "%", screenPos.X, screenPos.Y, scale.X, scale.Y, 1, 1, 1, 1)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_RENDER, Mod.RenderPontiusFullChargePlusHUD)
+
+function PontiusMelee:MeleeWeaponSwing(player)
+    if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+        local PlayerData = player:GetData()
+        local chargeLevel = PlayerData.PontiusFrame or 0 -- ✅ Get charge level
+
+        local direction = Vector(0, 0) -- ✅ Default: No movement
+    
+        -- ✅ Detect firing direction
+        if Input.IsActionTriggered(ButtonAction.ACTION_SHOOTLEFT, player.ControllerIndex) then
+            direction = Vector(-1, 0)
+        elseif Input.IsActionTriggered(ButtonAction.ACTION_SHOOTRIGHT, player.ControllerIndex) then
+            direction = Vector(1, 0)
+        elseif Input.IsActionTriggered(ButtonAction.ACTION_SHOOTUP, player.ControllerIndex) then
+            direction = Vector(0, -1)
+        elseif Input.IsActionTriggered(ButtonAction.ACTION_SHOOTDOWN, player.ControllerIndex) then
+            direction = Vector(0, 1)
+        end
+
+        -- ✅ Spawn melee hitbox in correct direction
+        if direction.X ~= 0 or direction.Y ~= 0 then
+            local meleeHitbox = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, player.Position + direction * 40, Vector(0,0), player)
+            if meleeHitbox then
+                local sprite = meleeHitbox:GetSprite()
+                sprite:Load("gfx/gladius.anm2", true) -- Load your custom animation
+                sprite:Play("Swing", true) -- Ensure correct animation plays
+                -- ✅ Adjust sprite orientation based on attack direction
+                if direction.X < 0 then
+                    sprite.FlipX = true -- ✅ Flip horizontally for left attacks
+                    sprite.Rotation = 0 -- ✅ Keep default rotation
+                elseif direction.X > 0 then
+                    sprite.FlipX = false -- ✅ Keep normal for right attacks
+                    sprite.Rotation = 0 -- ✅ Keep default rotation
+                elseif direction.Y < 0 then
+                    sprite.Rotation = -90 -- ✅ Rotate for upward attacks
+                elseif direction.Y > 0 then
+                    sprite.Rotation = 90 -- ✅ Rotate for downward attacks
+                end
+                -- ✅ Persist rotation until animation ends
+                meleeHitbox:GetData().PersistRotation = sprite.Rotation
+
+            end
+            meleeHitbox:GetData().IsMeleeHitbox = true
+            meleeHitbox:GetData().ChargeLevel = chargeLevel
+            meleeHitbox:GetData().DestroyNextFrame = true
+            meleeHitbox:GetSprite():Play("Appear")
+            SFXManager():Play(SoundEffect.SOUND_SWORD_SPIN) -- ✅ Sword swing sound
+        end
     end
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, PontiusMelee.MeleeWeaponSwing)
+
+function Mod:FixSpriteRotation()
+    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.POOF01)) do
+        if effect:GetData().PersistRotation then
+            effect:GetSprite().Rotation = effect:GetData().PersistRotation
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.FixSpriteRotation)
 
 function PontiusMelee:RemoveMeleeEffects()
     for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.POOF01)) do
@@ -937,7 +1043,98 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.ClearHitTracking)
 
+function Mod:UsePugio(item, rng, player)
+    --local player = Isaac.GetPlayer(0)
+    if player:HasCollectible(PUGIO_ITEM) then
 
+        local data = player:GetData()
+        local playerDamage = player.Damage
+        local fireDirectionPugio = player:GetFireDirection()
+        local directionPugio
+
+        -- Set correct spear direction
+        if fireDirectionPugio == Direction.LEFT then
+            directionPugio = Vector(-1, 0)
+        elseif fireDirectionPugio == Direction.RIGHT then
+            directionPugio = Vector(1, 0)
+        elseif fireDirectionPugio == Direction.DOWN then
+            directionPugio = Vector(0, 1)
+        elseif fireDirectionPugio == Direction.UP then
+            directionPugio = Vector(0, -1)
+        elseif fireDirectionPugio == Direction.NO_DIRECTION then
+            directionPugio = Vector(0, 1)
+        end
+
+        -- ✅ Apply random angle variation within 75 degrees
+        --local angleVariation = (math.random() * 150) - 75 -- Random value between -75 and +75 degrees
+        --local randomDirection = directiongun:Rotated(angleVariation)
+
+        -- ✅ Spawn the high-damage tear
+        local tear = player:FireTear(player.Position, directionPugio * 12, false, false, false, player, 1)
+
+        if tear then
+            
+            tear.CollisionDamage = player.Damage -- ✅ Apply extreme damage boost
+
+            tear.TearFlags = TearFlags.TEAR_FREEZE
+            -- ✅ Load custom tear sprite (if desired)
+            local sprite = tear:GetSprite()
+            sprite:Load("gfx/gladius.anm2", true)
+            sprite:Play("Throw", true)
+
+            -- ✅ Apply rotation to the tear itself
+            tear:GetData().ProjectileRotation = tear.Velocity:GetAngleDegrees()
+
+            -- ✅ Play sound effect
+            local sfx = SFXManager()
+            sfx:Play(SoundEffect.SOUND_SWORD_SPIN, 1, 2, false, 1, 0) -- Replace with desired sound effect
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UsePugio, PUGIO_ITEM)
+
+function Mod:FixTearRotation(tear)
+    if tear:GetData().ProjectileRotation then
+        tear:GetSprite().Rotation = tear:GetData().ProjectileRotation -- ✅ Forces rotation to persist
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, Mod.FixTearRotation)
+
+local pontiusHasPugio = false
+
+-- Reset the flag when starting a new run
+function Mod:OnNewGamePontiusBirthrightb(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        pontiusHasPugio = false
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGamePontiusBirthrightb) -- Reset flag between runs
+
+function Mod:ApplyBirthrightPontiusb(player)
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
+        -- **Check if player is the normal or tainted variant**
+        if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+            if not player:GetData().hasPocketItem and pontiusHasPugio == false then
+                player:SetPocketActiveItem(PUGIO_ITEM, ActiveSlot.SLOT_POCKET, true)
+                local pool = game:GetItemPool()
+                pool:RemoveCollectible(PUGIO_ITEM)
+                pontiusHasPugio = true
+            end
+
+
+        --elseif player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+
+        end
+
+    end
+
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.ApplyBirthrightPontiusb)
 
 --[[ Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, function(_, entity, amount, damageFlags, source, countdown)
     local player = entity:ToPlayer()
@@ -1668,7 +1865,7 @@ if EID then
     EID:addCollectible(KINGSLAYER_ITEM, "{{ArrowUp}} Gain +50% damage when in an uncleared boss room.", "Kingslayer")
     EID:addBirthright(pontiusType, "Grants Phalanx as a pocket active item.#Phalanx grants Isaac 1 second of invulnerability on use and has a 5 second cooldown.")
     EID:addCollectible(PHALANX_ITEM, "Grants Isaac 1 second of invulnerability on use and has a 5 second cooldown.", "Phalanx")
-    EID:addBirthright(TAINTED_PONTIUS_TYPE, "Extends the post-hit invulnerability effect to 2 seconds.")
+    EID:addBirthright(TAINTED_PONTIUS_TYPE, "Grants Pugio as a pocket active item.#Pugio allows Isaac to throw a projectile which petrifies enemies it hits.")
     EID:addCollectible(DEFENSE_TECH_ITEM, "Spawns a laser ring around Isaac that deals 25% of his damage every tick.", "Defense Tech")
     EID:addCollectible(NECROMANCY_ITEM, "Killed enemies have a 10% chance to be revived as friendlies which last for the current room.#{{Luck}} 75% chance at 18 luck.", "Necromancy")
     EID:addCollectible(MONEY_ITEM, "One time use active item that gives Isaac coins equal to the amount of money spent throughout the run.", "Become Back My Money")
@@ -1718,7 +1915,7 @@ if EID then
     EID:addCharacterInfo(templateType, "{{ArrowUp}} High luck stat.#Starts with Lucky Coin as a pocket active item.", "Domino")
     EID:addCharacterInfo(TAINTED_TEMPLATE_TYPE, "{{ArrowDown}} Items above quality 2 are automatically rerolled into lower quality items.#{{Warning}} These rerolls are chosen from random item pools.#{{ArrowUp}} Picking up quality 0 items has a chance to spawn another item pedestal containing a quality 0 item.#Starts with Dull Coin as a pocket active item.", "The Jinxed")
     EID:addCharacterInfo(pontiusType, "Throws spears instead of firing normal tears.#{{ArrowUp}} Spears pierce enemies and deal 5x normal damage.#{{ArrowDown}} Spears are unaffected by tears stat and do not interact with most special tear effects.", "Pontius")
-    EID:addCharacterInfo(TAINTED_PONTIUS_TYPE, "Flight.#{{ArrowUp}} A Soul of The Lost spawns after defeating a boss.#{{ArrowUp}} Becomes invulnerable for 1 second when damaging an enemy.#{{Warning}} Dies if he takes damage.#Starts with Spirit Sword, a Holy Card, and Crack the Sky as a pocket active item.#{{Warning}} Spirit Sword cannot be rerolled.", "The Awoken")
+    EID:addCharacterInfo(TAINTED_PONTIUS_TYPE, "Cannot fire normal tears.#Attacks using a melee weapon.#Melee weapon can be charged up by holding the attack button, this will trigger increasingly strong effects depending on how long the button is held.", "The Awoken")
     EID:addCharacterInfo(abrahamType, "Starts with Duae Viae as a pocket active item.", "Abraham")
     EID:addCharacterInfo(TAINTED_ABRAHAM_TYPE, "{{ArrowUp}} Extremely high stats.#{{ArrowUp}} The Heretic cannot take damage.#{{Warning}} The Heretic is on a 10 second timer, if it runs out he dies.#The timer can be reset by dealing damage to an enemy.#Starts with Rend as a pocket active item.", "The Heretic")
     EID:addCollectible(DUAE_ITEM, "Spawns two item pedestals in the room, one containing Path of Salvation and the other containing Path of Temptation.#Picking up these items will grant 1 stack towards their respective path and remove 1 stack from the other path.#Stacks grant special effects depending on how many you have and culminate in an incredibly powerful effect at 4 stacks which resets the stack counter on activation.", "Duae Viae")
@@ -1736,6 +1933,7 @@ if EID then
     EID:addCollectible(TEMPERANCE_ITEM, "{{ArrowUp}} Gain -20% fire delay while below full red health.#Does not work on characters without red health.", "Temperance")
     EID:addCollectible(ZEAL_ITEM, "Gain a familiar which fires godhead tears that scales with your damage and fire rate.", "Zeal")
     EID:addCollectible(KINDNESS_ITEM, "Creates an extermely brief aura around Isaac which turns enemies friendly.", "Kindness")
+    EID:addCollectible(PUGIO_ITEM, "Throw a projectile that petrifies any enemies it makes contact with.", "Pugio")
 
 end
 
@@ -6632,7 +6830,7 @@ local dashingPlayers2 = {} -- Tracks players who are dashing
 function Mod:OnUseRomanDash(_, _, player, tear)
     local abesfx = SFXManager()
     if not dashingPlayers2[player.Index] then
-        dashingPlayers2[player.Index] = {dashTimer = DASH_DURATION_2, cooldown = DASH_COOLDOWN, chargeRefreshCount = 0, chargeTimer = 0, chargeExpireTimer = 0, enemiesHit = {}, dashSource = LEGION_ITEM } -- ✅ Store which dash is active
+        dashingPlayers2[player.Index] = {dashTimer = 5, cooldown = DASH_COOLDOWN, chargeRefreshCount = 0, chargeTimer = 0, chargeExpireTimer = 0, enemiesHit = {}, dashSource = LEGION_ITEM } -- ✅ Store which dash is active
         player:SetMinDamageCooldown(25) -- Proper invulnerability effect
         abesfx:Play(SoundEffect.SOUND_KNIFE_PULL, 1, 0, false, 1.2)
         -- Immediately trigger first dash update to bypass animation delay
@@ -6669,11 +6867,11 @@ function Mod:OnUpdateRomanDash()
 
                 -- If the player is actively moving, update lastMoveVec
                 if moveVec:Length() > 0 then
-                    lastMoveVec2[player.Index] = moveVec:Normalized() * DASH_SPEED_2
+                    lastMoveVec2[player.Index] = moveVec:Normalized() * 20
                 end
 
                 -- Use last movement direction if no input is given
-                local finalMoveVec = lastMoveVec2[player.Index] or Vector(DASH_SPEED_2, 0)
+                local finalMoveVec = lastMoveVec2[player.Index] or Vector(20, 0)
                 
                 -- Apply movement
                 player.Velocity = finalMoveVec

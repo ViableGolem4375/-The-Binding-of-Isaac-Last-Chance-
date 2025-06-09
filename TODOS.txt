@@ -6,10 +6,18 @@
 - Check if kindness/lilith essence charm story bosses.
 - Essence items can give copies, maybe fix that or make sure they all stack.
 - Need to test reloading game w/ items
+- Continue work on tainted pontius rework.
+- Make pontius damage affected by fire rate.
 
 Here's this code bc its always necessary:
 for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
+
+if spear then
+            local sprite = spear:GetSprite()
+            sprite:Load("gfx/pontius_spear_throw.anm2", true) -- Load your custom animation
+            sprite:Play("LargeRedLaser", true) -- Ensure correct animation plays
+        end
 
 Item Ideas to Add:
 
