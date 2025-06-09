@@ -1079,7 +1079,7 @@ function Mod:UsePugio(item, rng, player)
         --local randomDirection = directiongun:Rotated(angleVariation)
 
         -- ✅ Spawn the high-damage tear
-        local tear = player:FireTear(player.Position, directionPugio * 12, false, false, false, player, 1)
+        local tear = player:FireTear(player.Position, directionPugio * 50, false, false, false, player, 1)
 
         if tear then
             
