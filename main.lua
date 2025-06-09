@@ -935,6 +935,15 @@ function PontiusMelee:MeleeWeaponSwing(player)
     if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
         local PlayerData = player:GetData()
         local chargeLevel = PlayerData.PontiusFrame or 0 -- ✅ Get charge level
+        -- ✅ Ensure cooldown tracking exists
+        if PlayerData.LastAttackFrame == nil then PlayerData.LastAttackFrame = 0 end
+        local attackCooldown = 10 -- ✅ Adjust cooldown duration (frames)
+
+        -- ✅ Prevent attacking too fast
+        if Game():GetFrameCount() < PlayerData.LastAttackFrame + attackCooldown then
+            return -- ✅ Exit function if still on cooldown
+        end
+
 
         local direction = Vector(0, 0) -- ✅ Default: No movement
     
