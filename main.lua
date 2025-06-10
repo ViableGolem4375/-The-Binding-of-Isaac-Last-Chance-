@@ -154,6 +154,8 @@ KINDNESS_ITEM = Isaac.GetItemIdByName("Kindness")
 HEART_ITEM = Isaac.GetItemIdByName("Glass Heart")
 LEGION_ITEM = Isaac.GetItemIdByName("Legion Charge")
 PUGIO_ITEM = Isaac.GetItemIdByName("Pugio")
+KING_TRINKET = Isaac.GetTrinketIdByName("King Penny")
+
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -1953,6 +1955,7 @@ if EID then
     EID:addCollectible(ZEAL_ITEM, "Gain a familiar which fires godhead tears that scales with your damage and fire rate.", "Zeal")
     EID:addCollectible(KINDNESS_ITEM, "Creates an extermely brief aura around Isaac which turns enemies friendly.", "Kindness")
     EID:addCollectible(PUGIO_ITEM, "Throw a projectile that petrifies any enemies it makes contact with.", "Pugio")
+    EID:addTrinket(KING_TRINKET, "Extremely small chance for a pedestal item to drop when picking up a coin.#Higher value coins have a higher chance to trigger this effect.#This trinket is destroyed after triggering.#{{Collectible202}} Chances are doubled when golden.", "King Penny")
 
 end
 
@@ -7545,6 +7548,43 @@ function Mod:RandomLoudSounds(player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.RandomLoudSounds)
+
+function Mod:OnCoinPickupKing(pickup, collider)
+    if collider:ToPlayer() then -- ✅ Ensure the colliding entity is a player
+        for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+
+            if player:HasTrinket(KING_TRINKET) then
+                local rng = player:GetCollectibleRNG(KING_TRINKET) -- ✅ Use individual RNG per player
+                local chance = 0
+
+                -- ✅ Set chance based on coin type
+                if pickup.SubType == CoinSubType.COIN_PENNY or pickup.SubType == CoinSubType.COIN_LUCKYPENNY or pickup.SubType == CoinSubType.COIN_GOLDEN then
+                    chance = 0.001
+                elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
+                    chance = 0.002
+                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType then
+                    chance = 0.005
+                elseif pickup.SubType == CoinSubType.COIN_DIME then
+                    chance = 0.01
+                end
+
+                -- ✅ Apply golden trinket multiplier
+                if player:HasTrinket(KING_TRINKET + 32768) then
+                    chance = math.min(1, chance * 2) -- ✅ Doubles chance, caps at 100%
+                end
+
+                -- ✅ Roll RNG for bone heart drop
+                if rng:RandomFloat() < chance then
+                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, 0, pickup.Position, Vector(0,0), nil)
+                    player:TryRemoveTrinket(KING_TRINKET)
+                end
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.OnCoinPickupKing, PickupVariant.PICKUP_COIN)
 ----------------------------------------------------------------------------------------
 --- Room Code For Essence Reliquary Below.
 

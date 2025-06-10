@@ -6,8 +6,8 @@
 - Check if kindness/lilith essence charm story bosses.
 - Essence items can give copies, maybe fix that or make sure they all stack.
 - Need to test reloading game w/ items
-- Maybe add some sound effectsa to items.
-- Essence collectors respawning after a payout?
+- Maybe add some sound effects to items.
+- The fix for respawning essence collectors isnt very elegant, maybe improve this. Maybe deal damage to it?
 
 Here's this code bc its always necessary:
 for i = 0, Game():GetNumPlayers() - 1 do
@@ -28,9 +28,6 @@ reusable HP up
 
 Trinket Ideas:
 
+penny trinket that drope an item
 
-
-Win streak: 9
-
-GC4V
-4ZGH
+Win streak: 10
