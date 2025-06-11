@@ -637,10 +637,15 @@ function Mod:OnPlayerUpdatePontius(player)
         ):ToLaser()
 
         -- Apply custom visual effect
-        if spear then
+        if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_TECHNOLOGY) then
+            local sprite = spear:GetSprite()
+            sprite:Load("gfx/pontius_spear_throw_tech.anm2", true) -- Load your custom animation
+            sprite:Play("LargeRedLaser", true) -- Ensure correct animation plays
+        elseif spear then
             local sprite = spear:GetSprite()
             sprite:Load("gfx/pontius_spear_throw.anm2", true) -- Load your custom animation
             sprite:Play("LargeRedLaser", true) -- Ensure correct animation plays
+
         end
 
         -- Stop the default Holy Light sound (ID: 153)
@@ -652,13 +657,39 @@ function Mod:OnPlayerUpdatePontius(player)
         local sfx = SFXManager()
         sfx:Play(SoundEffect.SOUND_SWORD_SPIN) -- Replace with your custom sound ID
 
+        local spearDamage = 5
+        if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_20_20) then
+            spearDamage = spearDamage * 1.2
+        end
+        if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_INNER_EYE) then
+            spearDamage = spearDamage * 1.3
+        end
+        if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_MUTANT_SPIDER) then
+            spearDamage = spearDamage * 1.4
+        end
+        if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
+            spearDamage = spearDamage * 1.4
+        end
+        if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_EYE_SORE) then
+            spearDamage = spearDamage * math.random(1, 1.3)
+        end
+        if spear and player:HasPlayerForm(PlayerForm.PLAYERFORM_BABY) then
+            spearDamage = spearDamage * 1.2
+        end
+
 
         spear.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
         spear.TearFlags = player.TearFlags
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_DR_FETUS) or player:HasCollectible(CollectibleType.COLLECTIBLE_EPIC_FETUS) then
+            spear.TearFlags = TearFlags.TEAR_EXPLOSIVE | player.TearFlags
+        end
         spear.AngleDegrees = directionspear:GetAngleDegrees() -- Rotate laser to match direction
         spear.Parent = player -- Attach the laser to the player
         spear.Timeout = 1 -- Set duration (adjust as needed)
-        spear.CollisionDamage = playerDamage * 5
+        spear.CollisionDamage = playerDamage * spearDamage
+        if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_TECHNOLOGY) then
+            spear.CollisionDamage = (playerDamage * spearDamage) + 1
+        end
         spearCooldown = spearFireRate -- Reset cooldown
     end
 end
@@ -1672,7 +1703,7 @@ function Mod:RenderDeathTimerHUD()
         local timerValue = data.DeathTimer or 0
         local scale = Vector(0.75, 0.75)
 
-        local screenPos = Vector(50, 50) -- ✅ Adjust position to fit HUD layout
+        local screenPos = Vector(55, 50) -- ✅ Adjust position to fit HUD layout
         local color = timerValue <= 300 and KColor(1, 0, 0, 1) or KColor(1, 1, 1, 1) -- ✅ Red near expiration
 
         Isaac.RenderScaledText("Time Left: " .. timerValue, screenPos.X, screenPos.Y, scale.X, scale.Y, 1, 1, 1, 1)
@@ -4106,10 +4137,15 @@ function Mod:UseSpearAttack(_, item, rng, player)
                 ):ToLaser()
 
                 -- Apply custom animation
-                if spear then
+                if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_TECHNOLOGY) then
                     local sprite = spear:GetSprite()
-                    sprite:Load("gfx/pontius_spear_throw.anm2", true)
-                    sprite:Play("LargeRedLaser", true)
+                    sprite:Load("gfx/pontius_spear_throw_tech.anm2", true) -- Load your custom animation
+                    sprite:Play("LargeRedLaser", true) -- Ensure correct animation plays
+                elseif spear then
+                    local sprite = spear:GetSprite()
+                    sprite:Load("gfx/pontius_spear_throw.anm2", true) -- Load your custom animation
+                    sprite:Play("LargeRedLaser", true) -- Ensure correct animation plays
+
                 end
 
                 -- Stop default sound and play custom effect
@@ -4117,12 +4153,38 @@ function Mod:UseSpearAttack(_, item, rng, player)
                 sfx:Stop(SoundEffect.SOUND_ANGEL_BEAM)
                 sfx:Play(SoundEffect.SOUND_SWORD_SPIN) -- Replace with your custom sound ID
 
+                local spearDamage = 10
+                if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_20_20) then
+                    spearDamage = spearDamage * 1.2
+                end
+                if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_INNER_EYE) then
+                    spearDamage = spearDamage * 1.3
+                end
+                if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_MUTANT_SPIDER) then
+                    spearDamage = spearDamage * 1.4
+                end
+                if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
+                    spearDamage = spearDamage * 1.4
+                end
+                if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_EYE_SORE) then
+                    spearDamage = spearDamage * math.random(1, 1.3)
+                end
+                if spear and player:HasPlayerForm(PlayerForm.PLAYERFORM_BABY) then
+                    spearDamage = spearDamage * 1.2
+                end
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_DR_FETUS) or player:HasCollectible(CollectibleType.COLLECTIBLE_EPIC_FETUS) then
+                    spear.TearFlags = TearFlags.TEAR_EXPLOSIVE | player.TearFlags
+                end
                 spear.PositionOffset = Vector(0, -10)
                 spear.TearFlags = player.TearFlags
                 spear.AngleDegrees = directionspear:GetAngleDegrees()
                 spear.Parent = player
                 spear.Timeout = 1
-                spear.CollisionDamage = playerDamage * 10
+                
+                spear.CollisionDamage = playerDamage * spearDamage
+                if spear and player:HasCollectible(CollectibleType.COLLECTIBLE_TECHNOLOGY) then
+                    spear.CollisionDamage = (playerDamage * spearDamage) + 1
+                end
 
                 spearCooldown = 30 -- Set a cooldown (adjust as needed)
             end
@@ -4714,11 +4776,37 @@ function ProtoTech:onUpdateTech(player)
                     sprite:Load("gfx/prototech.anm2", true)
                     sprite:Play("LargeRedLaser", true)
                 end
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_DR_FETUS) or player:HasCollectible(CollectibleType.COLLECTIBLE_EPIC_FETUS) then
+                    ProtoTechLaser.TearFlags = TearFlags.TEAR_EXPLOSIVE | player.TearFlags
+                end
+                local laserDamage = 10
+                if ProtoTechLaser and player:HasCollectible(CollectibleType.COLLECTIBLE_20_20) then
+                    laserDamage = laserDamage * 1.2
+                end
+                if ProtoTechLaser and player:HasCollectible(CollectibleType.COLLECTIBLE_INNER_EYE) then
+                    laserDamage = laserDamage * 1.3
+                end
+                if ProtoTechLaser and player:HasCollectible(CollectibleType.COLLECTIBLE_MUTANT_SPIDER) then
+                    laserDamage = laserDamage * 1.4
+                end
+                if ProtoTechLaser and player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
+                    laserDamage = laserDamage * 1.4
+                end
+                if ProtoTechLaser and player:HasCollectible(CollectibleType.COLLECTIBLE_EYE_SORE) then
+                    laserDamage = laserDamage * math.random(1, 1.3)
+                end
+                if ProtoTechLaser and player:HasPlayerForm(PlayerForm.PLAYERFORM_BABY) then
+                    laserDamage = laserDamage * 1.2
+                end
+
                 local protosfx = SFXManager()
                 protosfx:Play(SoundEffect.SOUND_LASERRING_STRONG)
                 ProtoTechLaser.TearFlags = player.TearFlags
                 ProtoTechLaser.AngleDegrees = directiontech:GetAngleDegrees()
-                ProtoTechLaser.CollisionDamage = player.Damage * 10
+                ProtoTechLaser.CollisionDamage = player.Damage * laserDamage
+                if ProtoTechLaser and player:HasCollectible(CollectibleType.COLLECTIBLE_TECHNOLOGY) then
+                    ProtoTechLaser.CollisionDamage = (player.Damage * laserDamage) + 1
+                end
                 ProtoTechLaser.PositionOffset = Vector(0, -25)
                 ProtoTechLaser.Timeout = 1
                 ProtoTechLaser.Parent = player
@@ -4747,7 +4835,7 @@ function Mod:RenderProtoTechHUD()
             local chargePercentage = math.floor((timerValue / maxCharge) * 100)
             local scale = Vector(0.75, 0.75)
 
-            local screenPos = Vector(50, 100) -- ✅ Adjust position to fit HUD layout
+            local screenPos = Vector(55, 90) -- ✅ Adjust position to fit HUD layout
             local color = timerValue <= 300 and KColor(1, 0, 0, 1) or KColor(1, 1, 1, 1) -- ✅ Red near expiration
 
             Isaac.RenderScaledText("Laser Charge: " .. chargePercentage .. "%", screenPos.X, screenPos.Y, scale.X, scale.Y, 1, 1, 1, 1)
@@ -6996,18 +7084,49 @@ function Mod:UseSoulStonePontius(card, player)
                 Vector.Zero,
                 player
             ):ToLaser()
-            if laser then
+            if laser and player:HasCollectible(CollectibleType.COLLECTIBLE_TECHNOLOGY) then
                 local sprite = laser:GetSprite()
-                sprite:Load("gfx/pontius_spear_throw.anm2", true)
-                sprite:Play("LargeRedLaser", true)
-            end
+                sprite:Load("gfx/pontius_spear_throw_tech.anm2", true) -- Load your custom animation
+                sprite:Play("LargeRedLaser", true) -- Ensure correct animation plays
+            elseif laser then
+                local sprite = laser:GetSprite()
+                sprite:Load("gfx/pontius_spear_throw.anm2", true) -- Load your custom animation
+                sprite:Play("LargeRedLaser", true) -- Ensure correct animation plays
+
+        end
 
             if laser then
+                local spearDamage = 10
+                if laser and player:HasCollectible(CollectibleType.COLLECTIBLE_20_20) then
+                    spearDamage = spearDamage * 1.2
+                end
+                if laser and player:HasCollectible(CollectibleType.COLLECTIBLE_INNER_EYE) then
+                    spearDamage = spearDamage * 1.3
+                end
+                if laser and player:HasCollectible(CollectibleType.COLLECTIBLE_MUTANT_SPIDER) then
+                    spearDamage = spearDamage * 1.4
+                end
+                if laser and player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
+                    spearDamage = spearDamage * 1.4
+                end
+                if laser and player:HasCollectible(CollectibleType.COLLECTIBLE_EYE_SORE) then
+                    spearDamage = spearDamage * math.random(1, 1.3)
+                end
+                if laser and player:HasPlayerForm(PlayerForm.PLAYERFORM_BABY) then
+                    spearDamage = spearDamage * 1.2
+                end
+                laser.TearFlags = player.TearFlags
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_DR_FETUS) or player:HasCollectible(CollectibleType.COLLECTIBLE_EPIC_FETUS) then
+                    laser.TearFlags = TearFlags.TEAR_EXPLOSIVE | player.TearFlags
+                end
                 laser.AngleDegrees = laserDirection:GetAngleDegrees() -- Set correct angle
                 laser.PositionOffset = laserDirection * 10 -- Adjust for proper visuals
                 laser.Parent = player
                 laser.Timeout = 1 -- Set duration (adjust as needed)
-                laser.CollisionDamage = playerDamage * 10 -- Apply high damage
+                laser.CollisionDamage = playerDamage * spearDamage -- Apply high damage
+                if laser and player:HasCollectible(CollectibleType.COLLECTIBLE_TECHNOLOGY) then
+                    laser.CollisionDamage = (playerDamage * spearDamage) + 1
+                end
             end
         end
     end
