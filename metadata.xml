@@ -1,15 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
-    <name>[The Binding of Isaac -  Last Chance]</name>
-    <directory>[the binding of isaac -  last chance]</directory>
-    <id>0</id>
+    <name>[The Binding of Isaac - Last Chance]</name>
+    <directory>[the binding of isaac - last chance]</directory>
+    <id>3497260060</id>
     <description>
 
+    [h1][b]Overview[/b][/h1]
+    
+    Welcome to The Binding of Isaac - Last Chance, an expansion pack mod for The Binding of Isaac which adds a whole host of new content including new characters, items, trinkets, pickups, rooms, and more.
 
+    [h1][b]Features[/b][/h1]
 
-</description>
-    <version>1.9</version>
-    <visibility>Public</visibility>
+    So what exactly does this mod add?
+
+    [list]
+    [*] 3 new characters: Domino, Pontius, and Abraham along with their tainted variants.
+    [*] Over 75 new items added to various item pools with widely varying effects.
+    [*] 10+ new trinkets.
+    [*] 3 new soul stones.
+    [*] 1 new card.
+    [*] 1 new slot machine variant.
+    [*] 1 new special room with its own unique item pool.
+    [*] 100s of new rooms added to various floors, including new special room types.
+    [/list]
+
+    [h1][b]Domino[/b][/h1]
+
+    Play as Domino, a luck stat based character who revolves around using his high luck stat to trigger various luck based effects at a much higher rate than other characters.
+
+    Domino starts off with a new item called Lucky coin which allows him to reroll potentially useless items into more useful luck/chance based items to synergize with his naturally high luck stat.
+
+    [h1][b]The Jinxed[/b][/h1]
+
+    On the flip side of Domino exists his tainted version, The Jinxed. The Jinxed lacks Domino's high luck stat and naturally cannot find any items above quality 2, however, he's not without his own advantages.
+    
+    The Jinxed naturally has a chance to duplicate any quality 0 items he picks up into more quality 0 items and using his active item, Dull Coin, he can choose to de-level item pedestals into lower quality items, or if there's nothing to reroll, he can sacrifice parts of his junk hoard to go berserk!
+
+    [h1][b]Pontius[/b][/h1]
+
+    Pontius is a character with a unique method of attack, instead of firing normal tears, he throws spears which can pierce both enemies and terrain while dealing massive damage.
+
+    Be warned though as while his damage is quite high, he lacks the ability to increase his fire rate beyond its very low starting value and does not benefit from many of the typical run winning synergies which others benefit from.
+
+    [h1][b]The Awoken[/b][/h1]
+
+    Roma Invictus!
+
+    The tainted version of Pontius, The Awoken, has tossed his spears aside in favor of using a Gladius instead! The Awoken attacks enemies with a melee weapon instead of ranged attacks like other characters. He deals largely increased damage at the cost of needing to get up close and personal.
+
+    The Awoken can also charge up his sword for a more devastating effect, triggering more and more powerful effects the longer the button is held.
+
+    [h1][b]Abraham[/b][/h1]
+
+    Leverage the powers of angels and demons with Abraham. Abraham features a unique gameplay style of using his active item Duae Viae to generate &quot;stacks&quot; toward one of two paths: The Path of Salvation, or The Path of Temptation. Depending on which route you choose to follow you will be granted increasingly powerful angelic or demonic abilities culminating in an extremely powerful effect which will bring you back to neutral.
+
+    [h1][b]The Heretic[/b][/h1]
+
+    Run for your life, literally, as the Heretic. Unlike normal characters, The Heretic is immune to normal damage, however he's got bigger things to worry about. The devil has come to collect his dues and in order to fend him off, you'll need sacrifices.
+
+    As The Heretic you cannot take damage normally, instead you start on a timer of 10 seconds which can be reset by dealing damage to an enemy. Beware however as if this timer runs out, you will be killed immediately.
+
+    [h1][b]Compatability[/b][/h1]
+
+    Last Chance features full EID support!
+
+    Check out that mod on the workshop here:
+    [url]https://steamcommunity.com/sharedfiles/filedetails/?id=836319872[/url]
+
+    This mod has been fully developed for Repentance+ and [b]has not[/b] been tested with any previous versions, so try at your own risk.
+
+    There has also been no testing done for multiplayer, however I can confirm things do work correctly (mostly) while playing as Jacob and Esau, though there may still be bugs in true multiplayer.
+
+    There's also probably [strike]definitely[/strike] bugs as this was made by someone with 0 prior modding experience and the IQ of a McChicken. Anything that pops up I'll do my best to get fixed though.
+
+    [h1][b]Special Thanks[/b][/h1]
+
+    [b]FrostbitFox: [/b]For their character template mod which I've linked below that gave me a good starting point for this project.
+
+    [b]hehoo: [/b] For their card recycler mod (also linked below) showing me how on earth slot machines work.
+
+    [b]Copilot AI: [/b] For being a real one.
+
+    [url]https://steamcommunity.com/sharedfiles/filedetails/?id=3221854570[/url]
+    [url]https://steamcommunity.com/sharedfiles/filedetails/?id=3477101779[/url]
+
+    </description>
+    <version>1.15</version>
+    <visibility>Private</visibility>
     <tag id="Lua"/>
+    <tag id="Items"/>
+    <tag id="Active Items"/>
+    <tag id="Trinkets"/>
+    <tag id="Pills"/>
+    <tag id="Cards"/>
+    <tag id="Pickups"/>
     <tag id="Player Characters"/>
+    <tag id="Familiars"/>
+    <tag id="Babies"/>
+    <tag id="Rooms"/>
 </metadata>

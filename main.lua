@@ -169,7 +169,7 @@ RELIQUARY_CARD = Isaac.GetCardIdByName("Essence Card")
 local Template = { -- shown below are default values, as shown on Isaac, for you to change around
     SPEED = 1.00,
     FIREDELAY = 7, -- your tears stat is "30/(FIREDELAY+1)"
-    DAMAGE = 2.75, -- is only the damage stat, not damage multiplier
+    DAMAGE = 3.5, -- is only the damage stat, not damage multiplier
     RANGE = 260, -- your range stat is "40*RANGE"
     SHOTSPEED = 1.00,
     LUCK = 10.00,
@@ -199,7 +199,7 @@ function Template:onCache(player, cacheFlag)
             player.MaxFireDelay = player.MaxFireDelay - 10 + Template.FIREDELAY
         end
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            player.Damage = player.Damage - 3.5 + Template.DAMAGE
+            player.Damage = player.Damage - 3.5 + (Template.DAMAGE * 0.9)
         end
         if cacheFlag == CacheFlag.CACHE_RANGE then
             player.TearRange = player.TearRange - 260 + Template.RANGE
@@ -701,7 +701,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdatePontius)
 -- Code for the tainted version of Pontius below
 
 local Pontiusb = { -- shown below are default values, as shown on Isaac, for you to change around
-    SPEED = 1.2,
+    SPEED = 1.3,
     FIREDELAY = 10, -- your tears stat is "30/(FIREDELAY+1)"
     DAMAGE = 3.5, -- is only the damage stat, not damage multiplier
     RANGE = 260, -- your range stat is "40*RANGE"

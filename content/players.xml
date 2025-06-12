@@ -38,7 +38,7 @@
         nameimage="playername_pontius.png" 
         portrait="playerportrait_pontius.png"
         birthright="Unbreakable guard" 
-        hp="8" 
+        hp="6" 
         coins="0" 
         keys="1" 
         bombs="5" 
