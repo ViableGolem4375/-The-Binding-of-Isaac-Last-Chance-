@@ -26,7 +26,7 @@
     <passive id="22" name="Essence of Cain" gfx="essence_of_cain.png" description="Abundance" quality="4" tags="offensive nocantrip"/>
     <passive id="23" name="Essence of Judas" gfx="judas_essence.png" description="Risk = Power" quality="3" tags="offensive nocantrip" cache="damage"/>
     <passive id="24" name="Essence of ???" gfx="blue_baby_essence.png" description="Swarm of friends" quality="3" tags="offensive nocantrip fly" cache="familiars"/>
-    <passive id="25" name="Essence of Eve" gfx="eve_essence.png" description="Power through desperation" quality="2" tags="offensive nocantrip nolostbr" cache="damage"/>
+    <passive id="25" name="Essence of Eve" gfx="eve_essence.png" description="Power through desperation" quality="2" tags="offensive nocantrip" cache="damage"/>
     <active id="26" name="Essence of Samson" gfx="samson_essence.png" description="Rage incarnate" quality="3" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage"/>
     <passive id="27" name="Essence of Azazel" gfx="azazel_essence.png" description="Brimstone unleashed" quality="4" tags="offensive nocantrip" cache="damage luck"/>
     <passive id="28" name="Essence of Lazarus" gfx="laz_essence.png" description="Strength through rebirth" quality="2" tags="offensive nocantrip" cache="all"/>

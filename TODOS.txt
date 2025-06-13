@@ -8,7 +8,7 @@
 - Need to test reloading and losing/regaining game w/ items, problems found here:
 
  - Essence of eve appears totally bugged if the run is closed and reopened, maybe rework this item.
- - Envy resets between runs.
+ - check samson and apollyon essences to see if the damage ups stick around
 
 - Maybe add some sound effects to items.
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:

@@ -3421,7 +3421,7 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoomBlueBabyEssence) -- Trigger flies on room entry
 
-local eveEssencetriggered = false
+--[[ local eveEssencetriggered = false
 local eveEssencetriggered2 = false
 
 -- Reset the flag when starting a new run
@@ -3472,7 +3472,30 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameEve) -- Reset flag between runs
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloorEve) -- Reactivate effect at the start of 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateEveEssence)
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoom) -- Reset damage boost when the player leaves the room.
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoom) -- Reset damage boost when the player leaves the room. ]]
+
+
+
+function Mod:OnCacheUpdateEveEssence(player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_DAMAGE then
+        if player:HasCollectible(EVE_ESSENCE) then
+            local evenum = player:GetCollectibleNum(EVE_ESSENCE) * 5
+            -- Base bonus: +1 damage
+            local damageBonus = 1
+            
+            -- Calculate total hearts (Red, Soul, Bone converted to half-hearts)
+            local totalHearts = player:GetHearts() + player:GetSoulHearts() + player:GetBlackHearts() + player:GetRottenHearts() + (player:GetBoneHearts() * 2)
+
+            -- Apply 2.5x multiplier if total health is 3 hearts (6 half-hearts) or less
+            if totalHearts <= 1 then
+                player.Damage = player.Damage * evenum
+            end
+            
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateEveEssence)
 
 local DASH_SPEED_2 = 10 -- Adjust dash speed
 local DASH_DURATION_2 = 10 -- Frames per dash
