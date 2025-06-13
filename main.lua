@@ -4618,6 +4618,45 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.TrackMoneySpent)
 
 local moneyTriggered = false
 
+function Mod:SaveMoneyData()
+    local savedData = ""
+
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local playerID = tostring(player.ControllerIndex) -- Unique key per player
+        local moneySpent = player:GetData().moneySpent or 0
+
+        savedData = savedData .. playerID .. ":" .. tostring(moneySpent) .. ";" -- ✅ Format key-value pairs
+    end
+
+    Isaac.SaveModData(Mod, savedData) -- ✅ Store money spent persistently
+end
+
+Mod:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, Mod.SaveMoneyData)
+
+function Mod:LoadMoneyData(isContinued)
+    if not isContinued then
+        Isaac.SaveModData(Mod, "") -- ✅ Clears stored data for fresh runs
+        return
+    end
+
+    local loadedData = Isaac.LoadModData(Mod)
+
+    if loadedData ~= "" then
+        for keyValue in string.gmatch(loadedData, "([^;]+)") do
+            local playerID, moneySpent = string.match(keyValue, "(%d+):(%d+)")
+            if playerID and moneySpent then
+                local player = Isaac.GetPlayer(tonumber(playerID))
+                if player then
+                    player:GetData().moneySpent = tonumber(moneySpent) -- ✅ Restore money tracking
+                end
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.LoadMoneyData)
+
 function Mod:OnNewGameMoney(isContinued)
     if not isContinued then -- Ensures it only resets for fresh runs, not continues
         moneyTriggered = false
