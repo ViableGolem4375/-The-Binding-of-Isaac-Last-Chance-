@@ -51,7 +51,7 @@
         skin="character_pontius_b_real.png" 
         bSkinParent="Pontius"
         nameimage="playername_pontius_b.png" 
-        portrait="playerportrait_pontius_b.png"
+        portrait="playerportrait_pontius_b_real.png"
         birthright="Gladius throw"
         hp="6"
         coins="0" 

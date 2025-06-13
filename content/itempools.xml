@@ -193,7 +193,13 @@
         <Item Name="Huh?" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Defense Tech" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Fred The Friendly Gaper" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-
+        <Item Name="Gluttony" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Greed" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Lust" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Pride" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Envy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Wrath" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Sloth" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="library">
