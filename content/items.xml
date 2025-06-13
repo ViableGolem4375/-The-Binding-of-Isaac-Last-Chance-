@@ -43,8 +43,8 @@
     <active id="39" name="Essence of The Forgotten" gfx="forgotten_essence.png" description="A helping skeleton" quality="3" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="40" name="Yamika" gfx="star_of_david.png" description="Mazeltov!" quality="3" tags="offensive nocantrip" cache="damage luck"/>
     <active id="41" name="A Gun" gfx="gun.png" description="You'll shoot your eye out!" quality="1" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage shotspeed"/>
-    <passive id="42" name="Appetizer" gfx="brunch.png" description="Health up" quality="1" tags="nocantrip nolostbr" />
-    <passive id="43" name="Early Morning Snack" gfx="midnight_snack.png" description="Health up" quality="1" tags="nocantrip nolostbr" />
+    <passive id="42" name="Appetizer" gfx="brunch.png" description="Health up" quality="1" tags="nocantrip nolostbr" maxhearts="2" hearts="4"/>
+    <passive id="43" name="Early Morning Snack" gfx="midnight_snack.png" description="Health up" quality="1" tags="nocantrip nolostbr" maxhearts="2" hearts="4"/>
     <passive id="44" name="Kingslayer" gfx="kingslayer.png" description="Boss killer" quality="2" tags="nocantrip offensive" cache="damage" />
     <passive id="45" name="Defense Tech" gfx="defense_tech.png" description="Automated laser defense" quality="2" tags="nocantrip offensive" />
     <active id="46" name="Phalanx" gfx="phalanx.png" description="Unbreakable guard" quality="4" maxcharges="300" chargetype="timed" hidden="true" tags="quest noeden nolostbr nocantrip"/>

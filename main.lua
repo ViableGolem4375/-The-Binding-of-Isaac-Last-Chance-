@@ -4404,7 +4404,7 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseGun, GUN_ITEM)
 
-function Mod:OnPickupAppetizer()
+--[[ function Mod:OnPickupAppetizer()
     for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
         local data = player:GetData()
@@ -4419,7 +4419,6 @@ function Mod:OnPickupAppetizer()
             player:AddMaxHearts(healthGain)
             player:AddHearts(healthGain * 2)
 
-            print("Appetizer applied to:", player:GetName(), "Total health increase:", healthGain)
         end
 
         data.AppetizerCount = currentCount
@@ -4451,7 +4450,7 @@ function Mod:OnPickupMorningSnack()
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPickupMorningSnack)
-
+ ]]
 local BOSS_ROOM_DAMAGE_BOOST = 1.5 -- 50% extra damage
 
 function Mod:UpdateBossRoomDamage(player)
