@@ -3253,6 +3253,7 @@ local pedestalsSpawned = false -- Tracks whether pedestals have been spawned
 function Mod:OnNewGameIsaacEssence(isContinued)
     if not isContinued then -- Ensures it only resets for fresh runs, not continues
         pedestalsSpawned = false
+
     end
 end
 
@@ -3270,9 +3271,17 @@ function Mod:OnPickupIsaacEssence(_, player)
                 local safePos = GetSafePedestalPosition(pos)
                 local itemID = GetQuality4Item() -- Get a Quality 4 item
                 --local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
-                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, safePos, Vector.Zero, player)
-                pedestal:GetData().elitePedestal = true -- Mark as part of selection
-                pedestal:GetData().spawnTime = Isaac.GetFrameCount()
+                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, safePos, Vector.Zero, player):ToPickup()
+        
+
+                if pedestal then
+                    pedestal.OptionsPickupIndex = 1 -- ✅ Assigns OptionsPickupIndex correctly
+                    pedestal:GetData().elitePedestal = true -- Mark as part of selection
+                    pedestal:GetData().spawnTime = Isaac.GetFrameCount()
+                end
+
+                --[[ pedestal:GetData().elitePedestal = true -- Mark as part of selection
+                pedestal:GetData().spawnTime = Isaac.GetFrameCount() ]]
                 table.insert(pedestals, pedestal)
             end
         end
@@ -5723,19 +5732,32 @@ function Mod:UseDuaeitem(item, rng, player, flags)
                 local safePos = GetSafePedestalPosition(pos)
                 local itemID = GetLight()
                 --local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
-                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, safePos, Vector.Zero, player)
+                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, safePos, Vector.Zero, player):ToPickup()
                 --pedestal:GetData().spawnTime = Isaac.GetFrameCount()
-                pedestal:GetData().elitePedestal = true -- Mark as part of selection
-                pedestal:GetData().spawnTime = Isaac.GetFrameCount()
+                if pedestal then
+                    pedestal.OptionsPickupIndex = 2 -- ✅ Assigns OptionsPickupIndex correctly
+                    pedestal:GetData().elitePedestal2 = true -- Mark as part of selection
+                    pedestal:GetData().spawnTime = Isaac.GetFrameCount()
+                end
+                --pedestal:GetData().elitePedestal2 = true -- Mark as part of selection
+                --pedestal:GetData().spawnTime = Isaac.GetFrameCount()
                 table.insert(pedestals, pedestal)
             end
             for _, pos in ipairs(pedestalPositionsAbe2) do
                 local safePos = GetSafePedestalPosition(pos)
                 local itemID = GetDark()
                 --local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, pos, Vector.Zero, player)
-                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, safePos, Vector.Zero, player)
-                pedestal:GetData().elitePedestal = true -- ✅ Mark as part of selection
-                pedestal:GetData().spawnTime = Isaac.GetFrameCount()
+                local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, safePos, Vector.Zero, player):ToPickup()
+                --local pedestal = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemID, safePos, Vector.Zero, player):ToPickup()
+        
+
+                if pedestal then
+                    pedestal.OptionsPickupIndex = 2 -- ✅ Assigns OptionsPickupIndex correctly
+                    pedestal:GetData().elitePedestal2 = true -- Mark as part of selection
+                    pedestal:GetData().spawnTime = Isaac.GetFrameCount()
+                end
+                --pedestal:GetData().elitePedestal2 = true -- ✅ Mark as part of selection
+                --pedestal:GetData().spawnTime = Isaac.GetFrameCount()
                 table.insert(pedestals, pedestal)
             end
 
@@ -5748,7 +5770,7 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseDuaeitem, DUAE_ITEM)
 
 function Mod:AbeItemSelection(pickup, collider)
     local player = collider:ToPlayer() -- Ensure collider is a player
-    if player and pickup:GetData().elitePedestal then
+    if player and pickup:GetData().elitePedestal2 then
         local spawnTime = pickup:GetData().spawnTime or 0
         local currentFrame = Isaac.GetFrameCount()
 
@@ -7810,3 +7832,7 @@ function OnNewRoom()
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, OnNewRoom)
+
+----------------------------------------------------------------------------------------
+--- Room Code For Essence of Isaac Below.
+
