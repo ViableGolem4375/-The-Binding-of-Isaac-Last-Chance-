@@ -7,9 +7,6 @@
 - Essence items can give copies, maybe fix that or make sure they all stack.
 - Need to test reloading game w/ items
 - Maybe add some sound effects to items.
-- The fix for respawning essence collectors isnt very elegant, maybe improve this. Maybe deal damage to it?
-- remember to add those devil items to ultra secret pool.
-- Amplifier damage GFX are overriding pentagram, rename files.
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech

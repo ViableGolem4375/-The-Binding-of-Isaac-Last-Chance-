@@ -6857,7 +6857,7 @@ function Mod:ConvertEnemiesToFriendly(npc)
     for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.HALO)) do
         if effect:GetData().expiration and currentFrame <= effect:GetData().expiration then
             local distance = npc.Position:Distance(effect.Position)
-            if distance < 125 and not npc:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) then
+            if distance < 125 and not npc:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) and not npc:IsBoss() then
                 npc:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
                 npc:AddEntityFlags(EntityFlag.FLAG_CHARM)
                 npc:AddEntityFlags(EntityFlag.FLAG_PERSISTENT)
