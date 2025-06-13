@@ -92,7 +92,7 @@
     <passive id="85" name="Lust" gfx="lust.png" description="Love at first touch" quality="1" tags="devil nocantrip nolostbr" />
     <active id="86" name="Pride" gfx="pride.png" description="Don't fly too close to the sun" quality="2" maxcharges="1" chargetype="normal" tags="devil offensive nocantrip" />
     <passive id="87" name="Sloth" gfx="sloth.png" description="Laziness incarnate" quality="3" tags="devil offensive nocantrip" />
-    <passive id="88" name="Envy" gfx="envy.png" description="Mine" quality="1" tags="devil offensive nocantrip baby" cache="damage familiars" />
+    <passive id="88" name="Envy" gfx="envy.png" description="Mine" quality="1" tags="devil offensive nocantrip baby" cache="quest damage familiars" />
     <passive id="89" name="Wrath" gfx="wrath.png" description="Death = power" quality="3" tags="devil offensive nocantrip" cache="damage" />
     <passive id="90" name="Charity" gfx="charity.png" description="The spirit of giving" quality="3" tags="angel offensive nocantrip" />
     <passive id="91" name="Humility" gfx="humility.png" description="Humbleness" quality="3" tags="angel offensive nocantrip" cache="damage" />
@@ -105,6 +105,7 @@
     <active id="97" name="Legion Charge" gfx="phalanx.png" description="Roma Invictus" quality="4" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
     <active id="98" name="Pugio" gfx="gladius.png" description="Roma Invictus" quality="4" maxcharges="300" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
     <trinket id="99" name="King Penny" gfx="king_penny.png" description="Wealth of items" />
-    <passive id="100" name="Boss Trophy" gfx="wrath.png" description="A memento of your anger" quality="3" hidden="true" tags="nocantrip quest noeden" cache="damage" />
+    <passive id="100" name="Boss Trophy" gfx="boss_trophy.png" description="A memento of your anger" quality="3" hidden="true" tags="nocantrip quest noeden" cache="damage" />
+    <passive id="101" name="Envious Rage" gfx="envious_rage.png" description="What's yours will be mine" quality="3" hidden="true" tags="nocantrip quest noeden" />
 
 </items>

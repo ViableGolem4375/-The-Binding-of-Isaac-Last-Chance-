@@ -9,7 +9,6 @@
 
  - Essence of eve appears totally bugged if the run is closed and reopened, maybe rework this item.
  - Envy resets between runs.
- - Wrath isn't persisting between run resets and the damage boost stays if the item is removed.
 
 - Maybe add some sound effects to items.
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:

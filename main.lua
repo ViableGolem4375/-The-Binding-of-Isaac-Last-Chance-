@@ -156,6 +156,7 @@ LEGION_ITEM = Isaac.GetItemIdByName("Legion Charge")
 PUGIO_ITEM = Isaac.GetItemIdByName("Pugio")
 KING_TRINKET = Isaac.GetTrinketIdByName("King Penny")
 TROPHY_ITEM = Isaac.GetItemIdByName("Boss Trophy")
+ENVIOUS_RAGE_ITEM = Isaac.GetItemIdByName("Envious Rage")
 
 
 
@@ -1976,8 +1977,8 @@ if EID then
     EID:addCollectible(GREED_ITEM, "{{ArrowUp}} Gain 5x damage.#{{Warning}} This item will be removed from Isaac's inventory if any money is lost or spent.", "Greed")
     EID:addCollectible(LUST_ITEM, "Enemies that touch Isaac become charmed for 10 seconds.", "Lust")
     EID:addCollectible(PRIDE_ITEM, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.", "Pride")
-    EID:addCollectible(ENVY_ITEM, "Gain a familiar which copies your tear effects.#{{Warning}} Picking up this item immediately removes all of your items (excluding quest items), and causes all future items picked up to be removed as well.#{{ArrowUp}} The familiar gains +50% damage and +20% fire rate for every item consumed in this way.", "Envy")
-    EID:addCollectible(WRATH_ITEM, "{{Arrowup}} Gain +1 damage for every boss enemy killed during the run.", "Wrath")
+    EID:addCollectible(ENVY_ITEM, "Gain a familiar which copies your tear effects.#{{Warning}} Picking up this item replaces all of your non quest items (and itself) with envious rage.#{{ArrowUp}} The familiar gains +50% damage and +20% fire rate for every copy of envious rage you posess.#{{Warning}} Once picked up, Envy cannot be removed or rerolled.", "Envy")
+    EID:addCollectible(WRATH_ITEM, "{{Arrowup}} Killing bosses gives a trophy which grants +1 damage.", "Wrath")
     EID:addCollectible(SLOTH_ITEM, "All enemies take constant damage.#{{Warning}} Isaac becomes unable to shoot.", "Sloth")
     EID:addCollectible(CHARITY_ITEM, "Gain 1/2 of a soul heart for every 5 coins spent.", "Charity")
     EID:addCollectible(HUMILITY_ITEM, "{{ArrowUp}} Gain 2x damage.#{{ArrowDown}} The bonus is lost if Isaac holds any quality 4 items.", "Humility")
@@ -6539,9 +6540,10 @@ function Mod:RemovePlayerItems(player)
         for i = 1, 5000 do
             local itemCount = player:GetCollectibleNum(i)
 
-            if itemCount > 0 and i ~= ENVY_ITEM and i ~= 327 and i ~= 328 and i ~= 668 and i ~= 626 and i ~= 627 and i ~= 550 and i ~= 551 and i ~= 552 then
+            if itemCount > 0 and i ~= ENVIOUS_RAGE_ITEM and i ~= ENVY_ITEM and i ~= 327 and i ~= 328 and i ~= 668 and i ~= 626 and i ~= 627 and i ~= 550 and i ~= 551 and i ~= 552 then
                 player:RemoveCollectible(i) -- ✅ Remove item from player
                 data.lostItemCount = data.lostItemCount + 1 -- ✅ Increase lost item count
+                player:AddCollectible(ENVIOUS_RAGE_ITEM)
             end
         end
 
@@ -6551,6 +6553,40 @@ function Mod:RemovePlayerItems(player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.RemovePlayerItems)
+--[[ 
+local envyItemGiven = false
+
+function Mod:OnNewGameEnvyItemGive(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        envyItemGiven = false
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameEnvyItemGive)
+
+function Mod:envyItemGive(entity)
+    if entity:IsBoss() then
+        
+        for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+
+            -- ✅ Ensure player has the item
+            if player:HasCollectible(WRATH_ITEM) and not trophyGiven then
+                player:AddCollectible(TROPHY_ITEM)
+                trophyGiven = true
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.envyItemGive)
+
+function Mod:ResetEnvyItemGive()
+    envyItemGiven = false
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.ResetTrophyGiven) ]]
 
 ---@param player EntityPlayer
 function Mod:EvaluateCacheEnvy(player)
@@ -6614,13 +6650,14 @@ function Mod:HandleUpdateEnvy(familiar)
         tear.CollisionDamage = 3.5
         familiar.FireCooldown = 20
         tear.TearFlags = player.TearFlags
-        if data.lostItemCount then
-            local newCooldown = 20 * (1 - (data.lostItemCount * 0.2))
-            -- ✅ Increase the familiar’s damage based on sacrificed items
-            tear.CollisionDamage = 3.5 * (1 + (data.lostItemCount * 0.5))
-            familiar.FireCooldown = math.max(math.floor(newCooldown), 2)
+        local envynum = player:GetCollectibleNum(ENVIOUS_RAGE_ITEM)
+        --if data.lostItemCount then
+        local newCooldown = 20 * (1 - (envynum * 0.2))
+        -- ✅ Increase the familiar’s damage based on sacrificed items
+        tear.CollisionDamage = 3.5 * (1 + (envynum * 0.5))
+        familiar.FireCooldown = math.max(math.floor(newCooldown), 2)
 
-        end
+        --end
 
         sprite.FlipX = doFlip
         sprite:Play(shootAnim, true)
