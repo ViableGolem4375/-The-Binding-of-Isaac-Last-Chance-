@@ -155,6 +155,7 @@ HEART_ITEM = Isaac.GetItemIdByName("Glass Heart")
 LEGION_ITEM = Isaac.GetItemIdByName("Legion Charge")
 PUGIO_ITEM = Isaac.GetItemIdByName("Pugio")
 KING_TRINKET = Isaac.GetTrinketIdByName("King Penny")
+TROPHY_ITEM = Isaac.GetItemIdByName("Boss Trophy")
 
 
 
@@ -6635,19 +6636,39 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdateEnvy, FAMILIAR_VARIANT_ENVY)
 
+local trophyGiven = false
+
+function Mod:OnNewGameBossTrophy(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        trophyGiven = false
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameBossTrophy)
+
+function Mod:bossTrophyPickup(player, cacheFlag)
+    if player:HasCollectible(TROPHY_ITEM) then
+        local numtrophy = player:GetCollectibleNum(TROPHY_ITEM)
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = (player.Damage + STAT_BOOST.DAMAGE) + (1 * numtrophy)
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.bossTrophyPickup)
+
 function Mod:OnBossKillWrath(entity)
     if entity:IsBoss() then
+        
         for i = 0, Game():GetNumPlayers() - 1 do
             local player = Game():GetPlayer(i)
 
             -- ✅ Ensure player has the item
-            if player:HasCollectible(WRATH_ITEM) then
-                local data = player:GetData()
-                data.bossKillCount = (data.bossKillCount or 0) + 1 -- ✅ Track bosses killed
-
-                -- ✅ Apply a damage boost after each boss kill
-                player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
-                player:EvaluateItems()
+            if player:HasCollectible(WRATH_ITEM) and not trophyGiven then
+                player:AddCollectible(TROPHY_ITEM)
+                trophyGiven = true
             end
         end
     end
@@ -6655,7 +6676,14 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.OnBossKillWrath)
 
-function Mod:ApplyBossKillBoost(player, cacheFlag)
+function Mod:ResetTrophyGiven()
+    trophyGiven = false
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.ResetTrophyGiven)
+
+
+--[[ function Mod:ApplyBossKillBoost(player, cacheFlag)
     local data = player:GetData()
 
     if cacheFlag == CacheFlag.CACHE_DAMAGE and data.bossKillCount then
@@ -6666,7 +6694,7 @@ function Mod:ApplyBossKillBoost(player, cacheFlag)
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyBossKillBoost)
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyBossKillBoost) ]]
 
 function Mod:DisablePlayerShootingSloth(player)
     if player:HasCollectible(SLOTH_ITEM) then

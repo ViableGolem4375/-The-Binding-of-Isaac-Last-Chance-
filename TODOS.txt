@@ -7,9 +7,7 @@
 - lower shot speed bonus for a lot of stat items.
 - Need to test reloading and losing/regaining game w/ items, problems found here:
 
- - Essence of isaac pedestals can all be taken if the run is closed and reopened, happens for Abraham as well.
  - Essence of eve appears totally bugged if the run is closed and reopened, maybe rework this item.
- - Become back my money doesn't track money spent if the run is closed. - Note, generosity works, look at this and copy it.
  - Envy resets between runs.
  - Wrath isn't persisting between run resets and the damage boost stays if the item is removed.
 

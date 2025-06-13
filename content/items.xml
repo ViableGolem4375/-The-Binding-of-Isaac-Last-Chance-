@@ -105,5 +105,6 @@
     <active id="97" name="Legion Charge" gfx="phalanx.png" description="Roma Invictus" quality="4" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
     <active id="98" name="Pugio" gfx="gladius.png" description="Roma Invictus" quality="4" maxcharges="300" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
     <trinket id="99" name="King Penny" gfx="king_penny.png" description="Wealth of items" />
+    <passive id="100" name="Boss Trophy" gfx="wrath.png" description="A memento of your anger" quality="3" hidden="true" tags="nocantrip quest noeden" cache="damage" />
 
 </items>
