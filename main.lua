@@ -1900,7 +1900,7 @@ if EID then
     EID:addCollectible(JUDAS_ESSENCE, "{{ArrowUp}} Gives +1 damage.#{{ArrowUp}} Grants a 2.5x damage multiplier when Isaac has 3 total hearts (of any type) or less.", "Essence of Judas")
     EID:addCollectible(BLUE_BABY_ESSENCE, "Entering a new room spawns 10 blue flies.", "Essence of ???")
     EID:addCollectible(EVE_ESSENCE, "{{ArrowUp}} Grants +30 damage for the current room upon reaching 1 total heart or less.#This effect can trigger once per floor.", "Essence of Eve")
-    EID:addCollectible(SAMSON_ESSENCE, "Dash forward becoming invulnerable.#The dash deals 10 damage to enemies.#{{ArrowUp}} The dash gains +0.4 damage for every enemy it kills.", "Essence of Samson")
+    EID:addCollectible(SAMSON_ESSENCE, "Dash forward becoming invulnerable.#The dash deals Isaac's damage + 10 to enemies.#{{ArrowUp}} The dash damage increases depending on how many enemies are hit.", "Essence of Samson")
     EID:addCollectible(AZAZEL_ESSENCE, "5% chance to fire a tear that causes Isaac to fire a large brimstone beam on contact with something.#{{Luck}} 100% chance at 19 luck.", "Essence of Azazel")
     EID:addCollectible(LAZARUS_ESSENCE, "{{ArrowUp}} Grants +1 damage, a +50% damage multiplier, -1 tear delay, +0.5 speed, +3.75 range, +1 shot speed, and +2 luck upon dying and being revived.#{{Warning}} Essence of Lazarus can only trigger once.#{{Warning}} This item will NOT revive you, it is not an extra life.", "Essence of Lazarus")
     EID:addCollectible(LAZARUS_ESSENCE_UNLOCKED, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} -1 tear delay.#{{ArrowUp}} +0.5 speed.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +1 shot speed.#{{ArrowUp}} +2 luck.", "Unlocked Essence of Lazarus")
@@ -3498,10 +3498,23 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateEveEssence)
 
+function Mod:rampagePickup(player, cacheFlag)
+    if player:HasCollectible(CHARGE_DAMAGE_ITEM) then
+        local numtrophy = player:GetCollectibleNum(CHARGE_DAMAGE_ITEM)
+        local numplayers = Game():GetNumPlayers()
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = player.Damage + ((0.05 / numplayers) * numtrophy)
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.rampagePickup)
+
 local DASH_SPEED_2 = 10 -- Adjust dash speed
 local DASH_DURATION_2 = 10 -- Frames per dash
 local DASH_DAMAGE = 10 -- Damage dealt by dash
-local DAMAGE_GAIN_ON_KILL = 0.4 -- Small permanent damage boost per kill
+local DAMAGE_GAIN_ON_KILL = 10 -- Small permanent damage boost per kill
 
 
 local lastMoveVec = {} -- Store last movement direction for each player
@@ -3562,7 +3575,7 @@ function Mod:OnUpdateSamsonEssence()
                 -- Store enemies hit during the dash
                 for _, entity in ipairs(Isaac.FindInRadius(player.Position, 50, EntityPartition.ENEMY)) do
                     if entity:IsVulnerableEnemy() and not dashData.enemiesHit[entity.InitSeed] then
-                        entity:TakeDamage(DASH_DAMAGE, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(player), 0)
+                        entity:TakeDamage(DASH_DAMAGE + player.Damage, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(player), 0)
                         dashData.enemiesHit[entity.InitSeed] = true -- Track enemy hit
                     end
                 end
@@ -3581,7 +3594,6 @@ function Mod:OnEnemyKilled(entity)
     local player = Isaac.GetPlayer(0)
 
     if player:HasCollectible(SAMSON_ESSENCE) and dashingPlayers[player.Index] and dashingPlayers[player.Index].enemiesHit[entity.InitSeed] then
-        print("Enemy killed during dash!")
 
         -- Ensure the bonus is stored correctly
         samsonEssenceBonus[player.Index] = (samsonEssenceBonus[player.Index] or 0) + DAMAGE_GAIN_ON_KILL
@@ -3596,12 +3608,9 @@ end
 -- Apply stored damage bonus through CACHE_DAMAGE
 function Mod:ApplySamsonEssenceEffect(_, player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_DAMAGE then
-        print("samson essence3")
         if player:HasCollectible(SAMSON_ESSENCE) then
-            print("samson essence4")
             local playerID = player:GetCollectibleRNG(SAMSON_ESSENCE)
             --if samsonEssenceBonus[player.Index] then
-            print("samson essence5") -- Now this should print
             player.Damage = player.Damage + samsonEssenceBonus[player.Index]
             --end            
         end
