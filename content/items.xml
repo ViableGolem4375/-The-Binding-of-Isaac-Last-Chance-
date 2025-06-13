@@ -107,5 +107,7 @@
     <trinket id="99" name="King Penny" gfx="king_penny.png" description="Wealth of items" />
     <passive id="100" name="Boss Trophy" gfx="boss_trophy.png" description="A memento of your anger" quality="3" hidden="true" tags="nocantrip quest noeden" cache="damage" />
     <passive id="101" name="Envious Rage" gfx="envious_rage.png" description="What's yours will be mine" quality="3" hidden="true" tags="nocantrip quest noeden" />
+    <passive id="102" name="Void Energy" gfx="blank.png" description="Void" quality="3" hidden="true" tags="nocantrip quest noeden" cache="damage" />
+    <passive id="103" name="Rampaging Rage" gfx="phalanx.png" description="Die" quality="3" hidden="true" tags="nocantrip quest noeden" cache="damage" />
 
 </items>

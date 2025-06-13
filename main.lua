@@ -157,7 +157,8 @@ PUGIO_ITEM = Isaac.GetItemIdByName("Pugio")
 KING_TRINKET = Isaac.GetTrinketIdByName("King Penny")
 TROPHY_ITEM = Isaac.GetItemIdByName("Boss Trophy")
 ENVIOUS_RAGE_ITEM = Isaac.GetItemIdByName("Envious Rage")
-
+VOID_DAMAGE_ITEM = Isaac.GetItemIdByName("Void Energy")
+CHARGE_DAMAGE_ITEM = Isaac.GetItemIdByName("Rampaging Rage")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -3879,6 +3880,19 @@ Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameKeeperEssence) -
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupKeeperEssence) -- Detect item pickup
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloorKeeperEssence) -- Spawn golden items at the start of each floor
 
+function Mod:voidEnergyPickup(player, cacheFlag)
+    if player:HasCollectible(VOID_DAMAGE_ITEM) then
+        local numtrophy = player:GetCollectibleNum(VOID_DAMAGE_ITEM)
+        local numplayers = Game():GetNumPlayers()
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = player.Damage + ((0.05 / numplayers) * numtrophy)
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.voidEnergyPickup)
+
 local rampageActive = false
 local rampageEndTime = 0
 local killCount = 0
@@ -3930,6 +3944,7 @@ function Mod:OnPlayerUpdateApollyon(player)
             if Isaac.GetFrameCount() >= rampageEndTime then
                 for i = 0, Game():GetNumPlayers() - 1 do
                     local player = Game():GetPlayer(i)
+                    local numplayers = Game():GetNumPlayers()
                     player:SetMinDamageCooldown(30)
                     player:RemoveCollectible(APOLLYON_ESSENCE_VFX)
                     rampageActive = false
@@ -3939,6 +3954,11 @@ function Mod:OnPlayerUpdateApollyon(player)
                     player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
                     player:GetData().temporaryDamageBoost = killCount * 0.05
                     player:EvaluateItems()
+                    for i = 1, killCount do
+                        if player:HasCollectible(APOLLYON_ESSENCE) then
+                            player:AddCollectible(VOID_DAMAGE_ITEM)
+                        end
+                    end
                 end
             end
         end
@@ -3947,20 +3967,20 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdateApollyon)
 
-function Mod:onCacheApollyonEssence(player, cacheFlag)
+--[[ function Mod:onCacheApollyonEssence(player, cacheFlag)
     for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
         if cacheFlag == CacheFlag.CACHE_DAMAGE and player:GetData().temporaryDamageBoost and player:HasCollectible(APOLLYON_ESSENCE) then
             player.Damage = player.Damage + player:GetData().temporaryDamageBoost
         end
-    end
+    end ]]
 
     --[[ f cacheFlag == CacheFlag.CACHE_DAMAGE then
         player.Damage = player.Damage - 3.5 + Template.DAMAGE
     end ]]
-end
+--[[ end
 
-Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCacheApollyonEssence)
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCacheApollyonEssence) ]]
 
 local visitedRoomsBethEssence = {}
 
