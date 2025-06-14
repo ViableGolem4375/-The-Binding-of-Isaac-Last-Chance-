@@ -1,14 +1,11 @@
 - Fix some visuals.
 - Fix d4 effects on tainted character maybe?
-- Forgotten essence effect is kind of a placeholder, need something more interesting.
+- Forgotten and eve essence effects are kind of placeholders, need something more interesting.
 - Essence items can give copies, maybe fix that or make sure they all stack.
 - Sloth needs to delete invulnerable enemies.
 - Nerf zeal.
 - lower shot speed bonus for a lot of stat items.
-- Need to test reloading and losing/regaining game w/ items, problems found here:
-
- - Essence of eve appears totally bugged if the run is closed and reopened, maybe rework this item.
- - check samson and apollyon essences to see if the damage ups stick around
+- Slot machines are turning into essence collectors by re-entering rooms possibly.
 
 - Maybe add some sound effects to items.
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
@@ -67,4 +64,4 @@ Trinket Ideas:
 
 
 
-Win streak: 12
+Win streak: 15

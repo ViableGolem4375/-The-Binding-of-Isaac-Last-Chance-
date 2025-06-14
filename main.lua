@@ -3721,7 +3721,7 @@ local STAT_BOOST = {
     FIREDELAY = -1, 
     DAMAGE = 1, 
     RANGE = 150, 
-    SHOTSPEED = 1.00,
+    SHOTSPEED = 0.3,
     LUCK = 2.00,
 }
 
@@ -6499,7 +6499,7 @@ function Mod:UpdateStatsByCachedItemsGluttony(player, cacheFlag)
             player.Luck = player.Luck + statBoost
         end
         if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
-            player.ShotSpeed = player.ShotSpeed + statBoost
+            player.ShotSpeed = player.ShotSpeed + (statBoost / 10)
         end
     end
 end
@@ -6992,7 +6992,7 @@ function Mod:HandleUpdateZeal(familiar)
 
         
         tear.Scale = 1.3
-        tear.CollisionDamage = player.Damage + 3
+        tear.CollisionDamage = (player.Damage / 2)
         tear.TearFlags = TearFlags.TEAR_GLOW | TearFlags.TEAR_HOMING
         familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay, 1))
 
