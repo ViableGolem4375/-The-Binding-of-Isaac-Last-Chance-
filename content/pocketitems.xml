@@ -12,5 +12,9 @@
     <card type="tarot" mimiccharge="12" name="Misprinted Lovers" hud="Misprinted Lovers" description="May you prosper and be in good wealth" pickup="895"/>
     <card type="tarot" mimiccharge="12" name="Misprinted Chariot" hud="Misprinted Chariot" description="Get out of my way" pickup="896"/>
     <card type="tarot" mimiccharge="12" name="Misprinted Justice" hud="Misprinted Justice" description="May your future be entropic" pickup="897"/>
-    <card type="tarot" mimiccharge="12" name="Misprinted Hermit" hud="Misprinted Hermit" description="May you see what life has to take" pickup="898"/>
+    <card type="tarot" mimiccharge="4" name="Misprinted Hermit" hud="Misprinted Hermit" description="May you see what life has to take" pickup="898"/>
+    <card type="tarot" mimiccharge="2" name="Misprinted Wheel of Fortune" hud="Misprinted Wheel of Fortune" description="Feeling lucky?" pickup="899"/>
+    <card type="tarot" mimiccharge="6" name="Misprinted Strength" hud="Misprinted Strength" description="May your lack of power bring persistence" pickup="900"/>
+    <card type="tarot" mimiccharge="4" name="Misprinted Hanged Man" hud="Misprinted Hanged Man" description="May you have no head to hang from" pickup="901"/>
+    <card type="tarot" mimiccharge="6" name="Misprinted Death" hud="Misprinted Death" description="May you have no head to hang from" pickup="902"/>
 </pocketitems>

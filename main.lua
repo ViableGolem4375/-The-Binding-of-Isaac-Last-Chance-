@@ -175,6 +175,10 @@ LOVERS_CARD = Isaac.GetCardIdByName("Misprinted Lovers")
 CHARIOT_CARD = Isaac.GetCardIdByName("Misprinted Chariot")
 JUSTICE_CARD = Isaac.GetCardIdByName("Misprinted Justice")
 HERMIT_CARD = Isaac.GetCardIdByName("Misprinted Hermit")
+WHEEL_CARD = Isaac.GetCardIdByName("Misprinted Wheel of Fortune")
+STRENGTH_CARD = Isaac.GetCardIdByName("Misprinted Strength")
+HANGED_CARD = Isaac.GetCardIdByName("Misprinted Hanged Man")
+DEATH_CARD = Isaac.GetCardIdByName("Misprinted Death")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Domino below.
@@ -2009,6 +2013,10 @@ if EID then
     EID:addCard(LOVERS_CARD, "Spawns 2 golden hearts.#Spawns 4 golden hearts when holding tarot cloth.", "Misprinted Lovers")
     EID:addCard(CHARIOT_CARD, "Charge in the current movement direction dealing 100 damage to all enemies you collide with.", "Misprinted Chariot")
     EID:addCard(JUSTICE_CARD, "Spawns 4 random pickups.#The pickups are doubled when holding tarot cloth.", "Misprinted Justice")
+    EID:addCard(HERMIT_CARD, "Activates the effect of Keeper's Box.#Activates the effect twice and spawns a nickel when holding tarot cloth.", "Misprinted Hermit")
+    EID:addCard(WHEEL_CARD, "Activates the effect of a random item for the room.#Activates the effects of two random items for the room when holding tarot cloth.", "Misprinted Wheel of Fortune")
+    EID:addCard(STRENGTH_CARD, "Gain 1/2 of a soul heart.#For the room gain:#{{ArrowUp}} +0.1 speed#{{ArrowUp}} +0.03 tears#{{ArrowUp}} +0.2 damage#{{ArrowUp}} +11.25 range#{{ArrowUp}} +3 shot speed#{{ArrowUp}} +1 luck.#Gives a full soul heart and doubled stat bonuses when holding tarot cloth.", "Misprinted Strength")
+    EID:addCard(HANGED_CARD, "Gain the effect of The Pinking Shears for the current room.#Activated twice when holding tarot cloth.", "Misprinted Hanged Man")
 
 end
 
@@ -7588,49 +7596,6 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseChariotMisprint, CHARIOT_CARD)
 
-local function GetRandomPickup()
-    local pickupVariants = {
-        PickupVariant.PICKUP_HEART,
-        PickupVariant.PICKUP_COIN,
-        PickupVariant.PICKUP_BOMB,
-        PickupVariant.PICKUP_KEY,
-        PickupVariant.PICKUP_PILL,
-        PickupVariant.PICKUP_TAROTCARD,
-        PickupVariant.PICKUP_LIL_BATTERY,
-        PickupVariant.PICKUP_TRINKET,
-        PickupVariant.PICKUP_CHEST,
-        PickupVariant.PICKUP_CHEST,
-        PickupVariant.PICKUP_BOMBCHEST,
-        PickupVariant.PICKUP_SPIKEDCHEST,
-        PickupVariant.PICKUP_ETERNALCHEST,
-        PickupVariant.PICKUP_MIMICCHEST,
-        PickupVariant.PICKUP_OLDCHEST,
-        PickupVariant.PICKUP_WOODENCHEST,
-        PickupVariant.PICKUP_MEGACHEST,
-        PickupVariant.PICKUP_HAUNTEDCHEST,
-        PickupVariant.PICKUP_LOCKEDCHEST,
-        PickupVariant.PICKUP_GRAB_BAG,
-        PickupVariant.PICKUP_REDCHEST
-    }
-
-    local randomVariant = pickupVariants[math.random(#pickupVariants)]
-    local randomSubType = 0 -- Default subtype, game will randomize it if set to 0
-
-    -- Some pickups have extra subtypes (like golden hearts, lucky pennies, etc.)
-    --[[ if randomVariant == PickupVariant.PICKUP_HEART then
-        randomSubType = math.random(HeartSubType.NUM_SUBTYPES - 1)
-    elseif randomVariant == PickupVariant.PICKUP_COIN then
-        randomSubType = math.random(CoinSubType.NUM_SUBTYPES - 1)
-    elseif randomVariant == PickupVariant.PICKUP_BOMB then
-        randomSubType = math.random(BombSubType.NUM_SUBTYPES - 1)
-    elseif randomVariant == PickupVariant.PICKUP_KEY then
-        randomSubType = math.random(KeySubType.NUM_SUBTYPES - 1)
-    end ]]
-
-    return randomVariant
-end
-
-
 function Mod:UseJusticeMisprint(card, player)
     local pickupVariants = {
         PickupVariant.PICKUP_HEART,
@@ -7674,6 +7639,163 @@ function Mod:UseJusticeMisprint(card, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseJusticeMisprint, JUSTICE_CARD)
+
+function Mod:UseHermitMisprint(card,player)
+    if card == HERMIT_CARD then
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_NICKEL, player.Position + Vector(10,10), Vector(0,0), nil)
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_KEEPERS_BOX, UseFlag.USE_NOANIM)
+        else
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_KEEPERS_BOX, UseFlag.USE_NOANIM)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseHermitMisprint, HERMIT_CARD)
+
+function Mod:UseWheelMisprint(card,player)
+    if card == WHEEL_CARD then
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_METRONOME, UseFlag.USE_NOANIM)
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_METRONOME, UseFlag.USE_NOANIM)
+        else
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_METRONOME, UseFlag.USE_NOANIM)
+        end
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseWheelMisprint, WHEEL_CARD)
+
+function Mod:UseStrengthMisprint(card, player)
+    if card == STRENGTH_CARD then
+        player:AddSoulHearts(1)
+        local data = player:GetData()
+        
+        -- ✅ If no existing boost, initialize it
+        if not data.TempDamageBoost then data.TempDamageBoost = 0 end
+        if not data.TempRangeBoost then data.TempRangeBoost = 0 end
+        if not data.TempTearsBoost then data.TempTearsBoost = 0 end
+        if not data.TempShotspeedBoost then data.TempShotspeedBoost = 0 end
+        if not data.TempSpeedBoost then data.TempSpeedBoost = 0 end
+        if not data.TempLuckBoost then data.TempLuckBoost = 0 end
+
+        local dmgBoost  = 0.2
+        local rngBoost   = 450
+        local tearsBoost = -0.1
+        local shotspeedBoost = 3
+        local luckBoost = 1
+        local speedBoost = 0.1
+
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
+            local dmgBoost  = 0.2
+            local rngBoost   = 450
+            local tearsBoost = -0.1
+            local shotspeedBoost = 3
+            local luckBoost = 1
+            local speedBoost = 0.1
+        end
+
+
+        
+        data.TempDamageBoost = data.TempDamageBoost + dmgBoost
+        data.TempRangeBoost = data.TempRangeBoost + rngBoost
+        data.TempTearsBoost = data.TempTearsBoost + tearsBoost
+        data.TempShotspeedBoost = data.TempShotspeedBoost + shotspeedBoost
+        data.TempSpeedBoost = data.TempSpeedBoost + speedBoost
+        data.TempLuckBoost = data.TempLuckBoost + luckBoost
+
+        player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+        player:AddCacheFlags(CacheFlag.CACHE_RANGE)
+        player:AddCacheFlags(CacheFlag.CACHE_FIREDELAY)
+        player:AddCacheFlags(CacheFlag.CACHE_SHOTSPEED)
+        player:AddCacheFlags(CacheFlag.CACHE_SPEED)
+        player:AddCacheFlags(CacheFlag.CACHE_LUCK)
+        player:EvaluateItems()
+
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseStrengthMisprint, STRENGTH_CARD)
+
+function Mod:ResetStrengthOnRoomExit()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local data = player:GetData()
+
+        if data.TempDamageBoost and data.TempDamageBoost > 0 then
+            data.TempDamageBoost = nil -- ✅ Reset all stacked boosts
+            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+            player:EvaluateItems()
+        end
+        if data.TempRangeBoost and data.TempRangeBoost > 0 then
+            data.TempRangeBoost = nil -- ✅ Reset all stacked boosts
+            player:AddCacheFlags(CacheFlag.CACHE_RANGE)
+            player:EvaluateItems()
+        end
+        if data.TempTearsBoost and data.TempTearsBoost > 0 then
+            data.TempTearsBoost = nil -- ✅ Reset all stacked boosts
+            player:AddCacheFlags(CacheFlag.CACHE_FIREDELAY)
+            player:EvaluateItems()
+        end
+        if data.TempShotspeedBoost and data.TempShotspeedBoost > 0 then
+            data.TempShotspeedBoost = nil -- ✅ Reset all stacked boosts
+            player:AddCacheFlags(CacheFlag.CACHE_SHOTSPEED)
+            player:EvaluateItems()
+        end
+        if data.TempSpeedBoost and data.TempSpeedBoost > 0 then
+            data.TempSpeedBoost = nil -- ✅ Reset all stacked boosts
+            player:AddCacheFlags(CacheFlag.CACHE_SPEED)
+            player:EvaluateItems()
+        end
+        if data.TempLuckBoost and data.TempLuckBoost > 0 then
+            data.TempLuckBoost = nil -- ✅ Reset all stacked boosts
+            player:AddCacheFlags(CacheFlag.CACHE_LUCK)
+            player:EvaluateItems()
+        end
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.ResetStrengthOnRoomExit)
+
+function Mod:ApplyStrengthBoost(player, cacheFlag)
+    local data = player:GetData()
+
+    if cacheFlag == CacheFlag.CACHE_DAMAGE and data.TempDamageBoost then
+        player.Damage = player.Damage + data.TempDamageBoost -- ✅ Properly apply temporary Luck boost
+    end
+    if cacheFlag == CacheFlag.CACHE_RANGE and data.TempRangeBoost then
+        player.TearRange = player.TearRange + data.TempRangeBoost -- ✅ Properly apply temporary Luck boost
+    end
+    if cacheFlag == CacheFlag.CACHE_FIREDELAY and data.TempTearsBoost then
+        player.FireDelay = player.FireDelay + data.TempTearsBoost -- ✅ Properly apply temporary Luck boost
+    end
+    if cacheFlag == CacheFlag.CACHE_SHOTSPEED and data.TempShotspeedBoost then
+        player.ShotSpeed = player.ShotSpeed + data.TempShotspeedBoost -- ✅ Properly apply temporary Luck boost
+    end
+    if cacheFlag == CacheFlag.CACHE_SPEED and data.TempSpeedBoost then
+        player.MoveSpeed = player.MoveSpeed + data.TempSpeedBoost -- ✅ Properly apply temporary Luck boost
+    end
+    if cacheFlag == CacheFlag.CACHE_LUCK and data.TempLuckBoost then
+        player.Luck = player.Luck + data.TempLuckBoost -- ✅ Properly apply temporary Luck boost
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyStrengthBoost)
+
+function Mod:UseHangedMisprint(card,player)
+    if card == HANGED_CARD then
+
+        player:UseActiveItem(CollectibleType.COLLECTIBLE_PINKING_SHEARS, UseFlag.USE_NOANIM)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseHangedMisprint, HANGED_CARD)
+
+
 
 ----------------------------------------------------------------------------------------
 --- Machine code below.
