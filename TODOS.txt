@@ -3,11 +3,11 @@
 - Forgotten and eve essence effects are kind of placeholders, need something more interesting.
 - Essence items can give copies, maybe fix that or make sure they all stack.
 - Sloth needs to delete invulnerable enemies.
-- Nerf zeal.
-- lower shot speed bonus for a lot of stat items.
 - Slot machines are turning into essence collectors by re-entering rooms possibly.
-
 - Maybe add some sound effects to items.
+- Maybe necromancy shouldnt res bosses.
+- Add a visual effect to necromancy summons.: check this in game.
+- Maybe have a unique synergy between both mantles.
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -59,9 +59,11 @@ the bibble
 communist manifesto
 reverse soul stones?
 reusable HP up
+active item like birthright
+loads of proc effects for a room
 
 Trinket Ideas:
 
 
 
-Win streak: 15
+Win streak: 19

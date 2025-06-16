@@ -1753,7 +1753,6 @@ function Mod:ApplyBirthrightEffect(player)
                     GABRIEL_ITEM,
                     AZAZEL_ESSENCE,
                     CAIN_ESSENCE,
-                    FINAL_JUDGMENT_ITEM,
                     -- Vanilla items.
                     330,  -- Sacred Heart
                     169,  -- Polyphemus
@@ -2613,7 +2612,7 @@ end
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseAngelBlast, ANGEL_BLAST_ITEM)
 
 
-local STAT_BOOST_DURATION = 900 -- 30 seconds (30 * 30 frames)
+local STAT_BOOST_DURATION = 600 -- 30 seconds (30 * 30 frames)
 local SFX = SFXManager()
 
 ---@param itemUsed CollectibleType
@@ -4638,6 +4637,7 @@ function Mod:OnEnemyDeath(entity)
                 ally:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
                 -- **Apply permanent charmed effect (adds the hearts visual)**
                 ally:AddEntityFlags(EntityFlag.FLAG_CHARM)
+                ally:SetColor(Color(1.0, 0.2, 1.0, 1.0, 0, 0, 0), 99999, 1, false, false)
             end
         end
     end
