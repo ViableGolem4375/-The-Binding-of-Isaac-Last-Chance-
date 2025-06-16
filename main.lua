@@ -1992,6 +1992,8 @@ if EID then
     EID:addCollectible(PUGIO_ITEM, "Throw a projectile that petrifies any enemies it makes contact with.", "Pugio")
     EID:addTrinket(KING_TRINKET, "Extremely small chance for a pedestal item to drop when picking up a coin.#Higher value coins have a higher chance to trigger this effect.#This trinket is destroyed after triggering.#{{Collectible202}} Chances are doubled when golden.", "King Penny")
     EID:addCollectible(CONCOCTION_ITEM, "For the room your tears apply:# Poison# Bait# Fear# Slowness# Concussed# Charm# Burning# Shrinking# Magnetism", "Mysterious Concoction")
+    EID:addCard(FOOL_CARD, "Activates the effect of Teleport 2.0.", "Misprinted Fool")
+    EID:addCard(MAGICIAN_CARD, "For the room gain:#{{ArrowUp}} +10 damage.#{{ArrowDown}} 0.25x range.", "Misprinted Magician")
 
 end
 

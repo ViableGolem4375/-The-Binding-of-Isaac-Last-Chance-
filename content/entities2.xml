@@ -25,10 +25,10 @@
     <entity anm2path="flux_capacitor.anm2" baseHP="0" champion="0" collisionDamage="20" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Broken Flux Capacitor" numGridCollisionPoints="12" shadowSize="10" stageHP="0" variant="5863070089" />
     <entity name="Envy" id="3" anm2path="envy_familiar.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
     <entity name="Zeal" id="3" anm2path="zeal_familiar.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Fool" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="888">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Fool" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="889">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Magician" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="888">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Magician" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="890">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
 </entities>
