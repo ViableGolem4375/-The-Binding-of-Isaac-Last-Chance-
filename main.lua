@@ -171,6 +171,10 @@ PRIESTESS_CARD = Isaac.GetCardIdByName("Misprinted High Priestess")
 EMPRESS_CARD = Isaac.GetCardIdByName("Misprinted Empress")
 EMPEROR_CARD = Isaac.GetCardIdByName("Misprinted Emperor")
 HIEROPHANT_CARD = Isaac.GetCardIdByName("Misprinted Hierophant")
+LOVERS_CARD = Isaac.GetCardIdByName("Misprinted Lovers")
+CHARIOT_CARD = Isaac.GetCardIdByName("Misprinted Chariot")
+JUSTICE_CARD = Isaac.GetCardIdByName("Misprinted Justice")
+HERMIT_CARD = Isaac.GetCardIdByName("Misprinted Hermit")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Domino below.
@@ -2000,7 +2004,11 @@ if EID then
     EID:addCard(MAGICIAN_CARD, "For the room gain:#{{ArrowUp}} +10 damage.#{{ArrowDown}} 0.25x range.#Damage bonus and range down are doubled when holding tarot cloth.", "Misprinted Magician")
     EID:addCard(PRIESTESS_CARD, "Activates the effect of Doctor's Remote.#Also activates the effect of Crack the Sky when holding tarot cloth.", "Misprinted High Priestess")
     EID:addCard(EMPRESS_CARD, "Activates the effect of Gello.#Also activates the effect of Box of Friends twice when holding tarot cloth.", "Misprinted Empress")
-    EID:addCard(EMPEROR_CARD, "Spawns a friendly Monstro to fight alongside you.#Spawns Monstro 2 when holding tarot cloth.", "Misprinted Emperor")
+    EID:addCard(EMPEROR_CARD, "Spawns a friendly Monstro to fight alongside you.#Spawns Monstro 2 when holding tarot cloth.#{{Warning}} The summoned Monstros have a chance to be champion variants.", "Misprinted Emperor")
+    EID:addCard(HIEROPHANT_CARD, "Spawns 2 black hearts.#Spawns 4 black hearts when holding tarot cloth.", "Misprinted Hierophant")
+    EID:addCard(LOVERS_CARD, "Spawns 2 golden hearts.#Spawns 4 golden hearts when holding tarot cloth.", "Misprinted Lovers")
+    EID:addCard(CHARIOT_CARD, "Charge in the current movement direction dealing 100 damage to all enemies you collide with.", "Misprinted Chariot")
+    EID:addCard(JUSTICE_CARD, "Spawns 4 random pickups.#The pickups are doubled when holding tarot cloth.", "Misprinted Justice")
 
 end
 
@@ -7542,6 +7550,130 @@ function Mod:UseEmperorMisprint(card, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseEmperorMisprint, EMPEROR_CARD)
+
+function Mod:UseHierophantMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == HIEROPHANT_CARD then
+        for i = 1, 2 do
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_BLACK, player.Position + Vector(10 * i,10 * i), Vector(0,0), nil)
+        end
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseHierophantMisprint, HIEROPHANT_CARD)
+
+function Mod:UseLoversMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == LOVERS_CARD then
+        for i = 1, 2 do
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_GOLDEN, player.Position + Vector(10 * i,10 * i), Vector(0,0), nil)
+        end
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseLoversMisprint, LOVERS_CARD)
+
+function Mod:UseChariotMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == CHARIOT_CARD then
+        player:UseActiveItem(DEMON_DASH_ITEM, UseFlag.USE_NOANIM)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseChariotMisprint, CHARIOT_CARD)
+
+local function GetRandomPickup()
+    local pickupVariants = {
+        PickupVariant.PICKUP_HEART,
+        PickupVariant.PICKUP_COIN,
+        PickupVariant.PICKUP_BOMB,
+        PickupVariant.PICKUP_KEY,
+        PickupVariant.PICKUP_PILL,
+        PickupVariant.PICKUP_TAROTCARD,
+        PickupVariant.PICKUP_LIL_BATTERY,
+        PickupVariant.PICKUP_TRINKET,
+        PickupVariant.PICKUP_CHEST,
+        PickupVariant.PICKUP_CHEST,
+        PickupVariant.PICKUP_BOMBCHEST,
+        PickupVariant.PICKUP_SPIKEDCHEST,
+        PickupVariant.PICKUP_ETERNALCHEST,
+        PickupVariant.PICKUP_MIMICCHEST,
+        PickupVariant.PICKUP_OLDCHEST,
+        PickupVariant.PICKUP_WOODENCHEST,
+        PickupVariant.PICKUP_MEGACHEST,
+        PickupVariant.PICKUP_HAUNTEDCHEST,
+        PickupVariant.PICKUP_LOCKEDCHEST,
+        PickupVariant.PICKUP_GRAB_BAG,
+        PickupVariant.PICKUP_REDCHEST
+    }
+
+    local randomVariant = pickupVariants[math.random(#pickupVariants)]
+    local randomSubType = 0 -- Default subtype, game will randomize it if set to 0
+
+    -- Some pickups have extra subtypes (like golden hearts, lucky pennies, etc.)
+    --[[ if randomVariant == PickupVariant.PICKUP_HEART then
+        randomSubType = math.random(HeartSubType.NUM_SUBTYPES - 1)
+    elseif randomVariant == PickupVariant.PICKUP_COIN then
+        randomSubType = math.random(CoinSubType.NUM_SUBTYPES - 1)
+    elseif randomVariant == PickupVariant.PICKUP_BOMB then
+        randomSubType = math.random(BombSubType.NUM_SUBTYPES - 1)
+    elseif randomVariant == PickupVariant.PICKUP_KEY then
+        randomSubType = math.random(KeySubType.NUM_SUBTYPES - 1)
+    end ]]
+
+    return randomVariant
+end
+
+
+function Mod:UseJusticeMisprint(card, player)
+    local pickupVariants = {
+        PickupVariant.PICKUP_HEART,
+        PickupVariant.PICKUP_COIN,
+        PickupVariant.PICKUP_BOMB,
+        PickupVariant.PICKUP_KEY,
+        PickupVariant.PICKUP_PILL,
+        PickupVariant.PICKUP_TAROTCARD,
+        PickupVariant.PICKUP_LIL_BATTERY,
+        PickupVariant.PICKUP_TRINKET,
+        PickupVariant.PICKUP_CHEST,
+        PickupVariant.PICKUP_CHEST,
+        PickupVariant.PICKUP_BOMBCHEST,
+        PickupVariant.PICKUP_SPIKEDCHEST,
+        PickupVariant.PICKUP_ETERNALCHEST,
+        PickupVariant.PICKUP_MIMICCHEST,
+        PickupVariant.PICKUP_OLDCHEST,
+        PickupVariant.PICKUP_WOODENCHEST,
+        PickupVariant.PICKUP_MEGACHEST,
+        PickupVariant.PICKUP_HAUNTEDCHEST,
+        PickupVariant.PICKUP_LOCKEDCHEST,
+        PickupVariant.PICKUP_GRAB_BAG,
+        PickupVariant.PICKUP_REDCHEST
+    }
+
+    local randomVariant = pickupVariants[math.random(#pickupVariants)]
+    local randomVariant2 = pickupVariants[math.random(#pickupVariants)]
+    local randomVariant3 = pickupVariants[math.random(#pickupVariants)]
+    local randomVariant4 = pickupVariants[math.random(#pickupVariants)]
+
+    if card == JUSTICE_CARD then
+        --for i = 1, 4 do
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, randomVariant, 0, player.Position + Vector(10,10), Vector(0,0), nil)
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, randomVariant2, 0, player.Position + Vector(20,20), Vector(0,0), nil)
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, randomVariant3, 0, player.Position + Vector(30,30), Vector(0,0), nil)
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, randomVariant4, 0, player.Position + Vector(40,40), Vector(0,0), nil)
+
+        --end
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseJusticeMisprint, JUSTICE_CARD)
 
 ----------------------------------------------------------------------------------------
 --- Machine code below.

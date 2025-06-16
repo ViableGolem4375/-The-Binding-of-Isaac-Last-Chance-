@@ -43,4 +43,16 @@
     <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Hierophant" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="894">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Lovers" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="895">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
+    </entity>
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Chariot" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="896">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
+    </entity>
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Justice" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="897">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
+    </entity>
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Hermit" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="898">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
+    </entity>
 </entities>
