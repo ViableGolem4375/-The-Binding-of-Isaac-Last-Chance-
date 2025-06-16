@@ -31,4 +31,16 @@
     <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Magician" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="890">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted High Priestess" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="891">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
+    </entity>
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Empress" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="892">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
+    </entity>
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Emperor" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="893">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
+    </entity>
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Hierophant" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="894">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
+    </entity>
 </entities>

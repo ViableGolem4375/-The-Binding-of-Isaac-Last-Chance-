@@ -4,6 +4,10 @@
     <rune type="rune" mimiccharge="6" name="Soul of Abraham" hud="Soul of Abraham" description="Salvation" pickup="887"/>
     <card type="tarot" mimiccharge="12" name="Essence Card" hud="Essence Card" description="Essence Summoner" pickup="888"/>
     <card type="tarot" mimiccharge="4" name="Misprinted Fool" hud="Misprinted Fool" description="Where journey wishes to be" pickup="889"/>
-    <card type="tarot" mimiccharge="4" name="Misprinted Magician" hud="Misprinted Magician" description="May you strike with fury and intensity" pickup="890"/>
+    <card type="tarot" mimiccharge="6" name="Misprinted Magician" hud="Misprinted Magician" description="May you strike with fury and intensity" pickup="890"/>
+    <card type="tarot" mimiccharge="2" name="Misprinted High Priestess" hud="Misprinted High Priestess" description="Help from above" pickup="891"/>
+    <card type="tarot" mimiccharge="4" name="Misprinted Empress" hud="Misprinted Empress" description="May your friends bring help" pickup="892"/>
+    <card type="tarot" mimiccharge="12" name="Misprinted Emperor" hud="Misprinted Emperor" description="Rule above all" pickup="893"/>
+    <card type="tarot" mimiccharge="12" name="Misprinted Hierophant" hud="Misprinted Hierophant" description="Two prayers for the damned" pickup="894"/>
 
 </pocketitems>

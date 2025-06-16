@@ -167,6 +167,10 @@ SOUL_ABRAHAM = Isaac.GetCardIdByName("Soul of Abraham")
 RELIQUARY_CARD = Isaac.GetCardIdByName("Essence Card")
 FOOL_CARD = Isaac.GetCardIdByName("Misprinted Fool")
 MAGICIAN_CARD = Isaac.GetCardIdByName("Misprinted Magician")
+PRIESTESS_CARD = Isaac.GetCardIdByName("Misprinted High Priestess")
+EMPRESS_CARD = Isaac.GetCardIdByName("Misprinted Empress")
+EMPEROR_CARD = Isaac.GetCardIdByName("Misprinted Emperor")
+HIEROPHANT_CARD = Isaac.GetCardIdByName("Misprinted Hierophant")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Domino below.
@@ -1993,7 +1997,10 @@ if EID then
     EID:addTrinket(KING_TRINKET, "Extremely small chance for a pedestal item to drop when picking up a coin.#Higher value coins have a higher chance to trigger this effect.#This trinket is destroyed after triggering.#{{Collectible202}} Chances are doubled when golden.", "King Penny")
     EID:addCollectible(CONCOCTION_ITEM, "For the room your tears apply:# Poison# Bait# Fear# Slowness# Concussed# Charm# Burning# Shrinking# Magnetism", "Mysterious Concoction")
     EID:addCard(FOOL_CARD, "Activates the effect of Teleport 2.0.", "Misprinted Fool")
-    EID:addCard(MAGICIAN_CARD, "For the room gain:#{{ArrowUp}} +10 damage.#{{ArrowDown}} 0.25x range.", "Misprinted Magician")
+    EID:addCard(MAGICIAN_CARD, "For the room gain:#{{ArrowUp}} +10 damage.#{{ArrowDown}} 0.25x range.#Damage bonus and range down are doubled when holding tarot cloth.", "Misprinted Magician")
+    EID:addCard(PRIESTESS_CARD, "Activates the effect of Doctor's Remote.#Also activates the effect of Crack the Sky when holding tarot cloth.", "Misprinted High Priestess")
+    EID:addCard(EMPRESS_CARD, "Activates the effect of Gello.#Also activates the effect of Box of Friends twice when holding tarot cloth.", "Misprinted Empress")
+    EID:addCard(EMPEROR_CARD, "Spawns a friendly Monstro to fight alongside you.#Spawns Monstro 2 when holding tarot cloth.", "Misprinted Emperor")
 
 end
 
@@ -7421,10 +7428,19 @@ function Mod:UseMagicianMisprint(card, player)
         -- ✅ If no existing boost, initialize it
         if not data.TempDamageBoost then data.TempDamageBoost = 0 end
         if not data.TempRangeDown then data.TempRangeDown = 0 end
-        
-        data.TempDamageBoost = data.TempDamageBoost + 10
+        local dmgBoost  = 10
+        local rngDown   = 4
 
-        data.TempRangeDown = data.TempRangeDown + 4
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
+            dmgBoost = 10
+            rngDown = 4
+        end
+
+
+        
+        data.TempDamageBoost = data.TempDamageBoost + dmgBoost
+
+        data.TempRangeDown = data.TempRangeDown + rngDown
 
         player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
         player:AddCacheFlags(CacheFlag.CACHE_RANGE)
@@ -7469,6 +7485,64 @@ function Mod:ApplyMagicianBoost(player, cacheFlag)
 end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyMagicianBoost)
+
+function Mod:UsePriestessMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == PRIESTESS_CARD then
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_DOCTORS_REMOTE, UseFlag.USE_NOANIM)
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_CRACK_THE_SKY, UseFlag.USE_NOANIM)
+        else
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_DOCTORS_REMOTE, UseFlag.USE_NOANIM)
+        end
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UsePriestessMisprint, PRIESTESS_CARD)
+
+function Mod:UseEmpressMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == EMPRESS_CARD then
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_BOX_OF_FRIENDS, UseFlag.USE_NOANIM)
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_GELLO, UseFlag.USE_NOANIM)
+        else
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_GELLO, UseFlag.USE_NOANIM)
+        end
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseEmpressMisprint, EMPRESS_CARD)
+
+function Mod:UseEmperorMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == EMPEROR_CARD then
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
+            local monstro2 = Isaac.Spawn(EntityType.ENTITY_MONSTRO2, 0, 0, player.Position, Vector(0,0), player)
+            monstro2:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- ✅ Makes it friendly
+            monstro2:AddEntityFlags(EntityFlag.FLAG_PERSISTENT) -- ✅ Makes it friendly
+
+            -- **Apply permanent charmed effect (adds the hearts visual)**
+            monstro2:AddEntityFlags(EntityFlag.FLAG_CHARM)
+        else
+            local monstro = Isaac.Spawn(EntityType.ENTITY_MONSTRO, 0, 0, player.Position, Vector(0,0), player)
+            monstro:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- ✅ Makes it friendly
+            monstro:AddEntityFlags(EntityFlag.FLAG_PERSISTENT) -- ✅ Makes it friendly
+
+            -- **Apply permanent charmed effect (adds the hearts visual)**
+            monstro:AddEntityFlags(EntityFlag.FLAG_CHARM)
+        end
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseEmperorMisprint, EMPEROR_CARD)
+
 ----------------------------------------------------------------------------------------
 --- Machine code below.
 
