@@ -165,6 +165,8 @@ SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Pontius")
 SOUL_ABRAHAM = Isaac.GetCardIdByName("Soul of Abraham")
 RELIQUARY_CARD = Isaac.GetCardIdByName("Essence Card")
+FOOL_CARD = Isaac.GetCardIdByName("Misprinted Fool")
+MAGICIAN_CARD = Isaac.GetCardIdByName("Misprinted Magician")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Domino below.
@@ -7399,6 +7401,72 @@ function Mod:UseEssenceCard(card, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseEssenceCard, RELIQUARY_CARD)
+
+function Mod:UseFoolMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == FOOL_CARD then
+        player:UseActiveItem(CollectibleType.COLLECTIBLE_TELEPORT_2)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseFoolMisprint, FOOL_CARD)
+
+function Mod:UseMagicianMisprint(card, player)
+    if card == MAGICIAN_CARD then
+        local data = player:GetData()
+        
+        -- ✅ If no existing boost, initialize it
+        if not data.TempDamageBoost then data.TempDamageBoost = 0 end
+        if not data.TempRangeDown then data.TempRangeDown = 0 end
+        
+        data.TempDamageBoost = data.TempDamageBoost + 10
+
+        data.TempRangeDown = data.TempRangeDown + 4
+
+        player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+        player:AddCacheFlags(CacheFlag.CACHE_RANGE)
+        player:EvaluateItems()
+
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseMagicianMisprint, MAGICIAN_CARD)
+
+function Mod:ResetMagicianOnRoomExit()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local data = player:GetData()
+
+        if data.TempDamageBoost and data.TempDamageBoost > 0 then
+            data.TempDamageBoost = nil -- ✅ Reset all stacked boosts
+            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+            player:EvaluateItems()
+        end
+        if data.TempRangeDown and data.TempRangeDown > 0 then
+            data.TempRangeDown = nil -- ✅ Reset all stacked boosts
+            player:AddCacheFlags(CacheFlag.CACHE_RANGE)
+            player:EvaluateItems()
+        end
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.ResetMagicianOnRoomExit)
+
+function Mod:ApplyMagicianBoost(player, cacheFlag)
+    local data = player:GetData()
+
+    if cacheFlag == CacheFlag.CACHE_DAMAGE and data.TempDamageBoost then
+        player.Damage = player.Damage + data.TempDamageBoost -- ✅ Properly apply temporary Luck boost
+    end
+    if cacheFlag == CacheFlag.CACHE_RANGE and data.TempRangeDown then
+        player.TearRange = player.TearRange / data.TempRangeDown -- ✅ Properly apply temporary Luck boost
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyMagicianBoost)
 ----------------------------------------------------------------------------------------
 --- Machine code below.
 
