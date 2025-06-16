@@ -22,6 +22,7 @@
         <Item Name="Broken Flux Capacitor" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Technology Omega" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Mysterious Concoction" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="devil">
@@ -103,7 +104,7 @@
         <Item Name="Broken Flux Capacitor" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Technology Omega" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-
+        <Item Name="Mysterious Concoction" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
     </Pool>
     <Pool Name="greedBoss">
         <Item Name="The Compensator" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
@@ -140,6 +141,7 @@
         <Item Name="Broken Flux Capacitor" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Technology Omega" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Mysterious Concoction" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
