@@ -18,4 +18,6 @@
     <card type="tarot" mimiccharge="4" name="Misprinted Hanged Man" hud="Misprinted Hanged Man" description="May you have no head to hang from" pickup="901"/>
     <card type="tarot" mimiccharge="1" name="Misprinted Death" hud="Misprinted Death" description="Like life" pickup="902"/>
     <card type="tarot" mimiccharge="6" name="Misprinted Temperance" hud="Misprinted Temperance" description="May you be pure in spirit" pickup="903"/>
+    <card type="tarot" mimiccharge="6" name="Misprinted Devil" hud="Misprinted Devil" description="Submit to the might of Lucifer" pickup="904"/>
+    <card type="tarot" mimiccharge="6" name="Misprinted Tower" hud="Misprinted Tower" description="Submit to the might of Lucifer" pickup="905"/>
 </pocketitems>

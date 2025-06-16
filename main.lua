@@ -180,6 +180,8 @@ STRENGTH_CARD = Isaac.GetCardIdByName("Misprinted Strength")
 HANGED_CARD = Isaac.GetCardIdByName("Misprinted Hanged Man")
 DEATH_CARD = Isaac.GetCardIdByName("Misprinted Death")
 TEMPERANCE_CARD = Isaac.GetCardIdByName("Misprinted Temperance")
+DEVIL_CARD = Isaac.GetCardIdByName("Misprinted Devil")
+TOWER_CARD = Isaac.GetCardIdByName("Misprinted Tower")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Domino below.
@@ -2020,6 +2022,7 @@ if EID then
     EID:addCard(HANGED_CARD, "Gain the effect of The Pinking Shears for the current room.#Activated twice when holding tarot cloth.", "Misprinted Hanged Man")
     EID:addCard(DEATH_CARD, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.#{{Warning}}Activated twice when holding tarot cloth, this is guaranteed to kill Isaac.", "Misprinted Death")
     EID:addCard(TEMPERANCE_CARD, "Spawns a confessional.#Spawns 2 confessionals while holding tarot cloth.", "Misprinted Temperance")
+    EID:addCard(DEVIL_CARD, "Activates the effect of Satanic Bible..#Activates the effect twice while holding tarot cloth.", "Misprinted Devil")
 
 end
 
@@ -7831,6 +7834,17 @@ function Mod:UseTemperanceMisprint(card, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseTemperanceMisprint, TEMPERANCE_CARD)
+
+function Mod:UseDevilMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == DEVIL_CARD then
+        player:UseActiveItem(CollectibleType.COLLECTIBLE_SATANIC_BIBLE, UseFlag.USE_NOANIM)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseDevilMisprint, DEVIL_CARD)
 
 ----------------------------------------------------------------------------------------
 --- Machine code below.

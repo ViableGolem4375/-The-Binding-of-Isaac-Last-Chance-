@@ -70,4 +70,10 @@
     <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Temperance" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="903">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Devil" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="904">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
+    </entity>
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Tower" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="905">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
+    </entity>
 </entities>
