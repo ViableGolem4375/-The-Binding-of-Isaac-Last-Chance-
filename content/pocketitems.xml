@@ -16,5 +16,6 @@
     <card type="tarot" mimiccharge="2" name="Misprinted Wheel of Fortune" hud="Misprinted Wheel of Fortune" description="Feeling lucky?" pickup="899"/>
     <card type="tarot" mimiccharge="6" name="Misprinted Strength" hud="Misprinted Strength" description="May your lack of power bring persistence" pickup="900"/>
     <card type="tarot" mimiccharge="4" name="Misprinted Hanged Man" hud="Misprinted Hanged Man" description="May you have no head to hang from" pickup="901"/>
-    <card type="tarot" mimiccharge="6" name="Misprinted Death" hud="Misprinted Death" description="May you have no head to hang from" pickup="902"/>
+    <card type="tarot" mimiccharge="1" name="Misprinted Death" hud="Misprinted Death" description="Like life" pickup="902"/>
+    <card type="tarot" mimiccharge="6" name="Misprinted Temperance" hud="Misprinted Temperance" description="May you be pure in spirit" pickup="903"/>
 </pocketitems>

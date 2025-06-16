@@ -179,6 +179,7 @@ WHEEL_CARD = Isaac.GetCardIdByName("Misprinted Wheel of Fortune")
 STRENGTH_CARD = Isaac.GetCardIdByName("Misprinted Strength")
 HANGED_CARD = Isaac.GetCardIdByName("Misprinted Hanged Man")
 DEATH_CARD = Isaac.GetCardIdByName("Misprinted Death")
+TEMPERANCE_CARD = Isaac.GetCardIdByName("Misprinted Temperance")
 
 ----------------------------------------------------------------------------------------
 -- Character code for Domino below.
@@ -2017,6 +2018,8 @@ if EID then
     EID:addCard(WHEEL_CARD, "Activates the effect of a random item for the room.#Activates the effects of two random items for the room when holding tarot cloth.", "Misprinted Wheel of Fortune")
     EID:addCard(STRENGTH_CARD, "Gain 1/2 of a soul heart.#For the room gain:#{{ArrowUp}} +0.1 speed#{{ArrowUp}} +0.03 tears#{{ArrowUp}} +0.2 damage#{{ArrowUp}} +11.25 range#{{ArrowUp}} +3 shot speed#{{ArrowUp}} +1 luck.#Gives a full soul heart and doubled stat bonuses when holding tarot cloth.", "Misprinted Strength")
     EID:addCard(HANGED_CARD, "Gain the effect of The Pinking Shears for the current room.#Activated twice when holding tarot cloth.", "Misprinted Hanged Man")
+    EID:addCard(DEATH_CARD, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.#{{Warning}}Activated twice when holding tarot cloth, this is guaranteed to kill Isaac.", "Misprinted Death")
+    EID:addCard(TEMPERANCE_CARD, "Spawns a confessional.#Spawns 2 confessionals while holding tarot cloth.", "Misprinted Temperance")
 
 end
 
@@ -7411,7 +7414,9 @@ function Mod:UseEssenceCard(card, player)
         --local player = Game():GetPlayer(i)
     if card == RELIQUARY_CARD then
         --Isaac.ExecuteCommand("spawn essence collector")
-        local spawnPosition = player.Position + Vector(40, 40) -- ✅ Adjusts offset (40 pixels to the right)
+        local room = Game():GetRoom()
+        local position =  room:FindFreeTilePosition(player.Position, 100)
+        local spawnPosition = position + Vector(40, 40) -- ✅ Adjusts offset (40 pixels to the right)
 
         -- ✅ Spawn the custom slot machine near the player
         Isaac.Spawn(EntityType.ENTITY_SLOT, 249376971, 0, spawnPosition, Vector.Zero, player)
@@ -7563,8 +7568,10 @@ function Mod:UseHierophantMisprint(card, player)
     --for i = 0, Game():GetNumPlayers() - 1 do
         --local player = Game():GetPlayer(i)
     if card == HIEROPHANT_CARD then
+        local room = Game():GetRoom()
+        local position =  room:FindFreeTilePosition(player.Position, 100)
         for i = 1, 2 do
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_BLACK, player.Position + Vector(10 * i,10 * i), Vector(0,0), nil)
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_BLACK, position + Vector(10 * i,10 * i), Vector(0,0), nil)
         end
 
     end
@@ -7576,8 +7583,10 @@ function Mod:UseLoversMisprint(card, player)
     --for i = 0, Game():GetNumPlayers() - 1 do
         --local player = Game():GetPlayer(i)
     if card == LOVERS_CARD then
+        local room = Game():GetRoom()
+        local position =  room:FindFreeTilePosition(player.Position, 100)
         for i = 1, 2 do
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_GOLDEN, player.Position + Vector(10 * i,10 * i), Vector(0,0), nil)
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_GOLDEN, position + Vector(10 * i,10 * i), Vector(0,0), nil)
         end
 
     end
@@ -7625,13 +7634,15 @@ function Mod:UseJusticeMisprint(card, player)
     local randomVariant2 = pickupVariants[math.random(#pickupVariants)]
     local randomVariant3 = pickupVariants[math.random(#pickupVariants)]
     local randomVariant4 = pickupVariants[math.random(#pickupVariants)]
+    local room = Game():GetRoom()
+    local position =  room:FindFreeTilePosition(player.Position, 100)
 
     if card == JUSTICE_CARD then
         --for i = 1, 4 do
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, randomVariant, 0, player.Position + Vector(10,10), Vector(0,0), nil)
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, randomVariant2, 0, player.Position + Vector(20,20), Vector(0,0), nil)
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, randomVariant3, 0, player.Position + Vector(30,30), Vector(0,0), nil)
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, randomVariant4, 0, player.Position + Vector(40,40), Vector(0,0), nil)
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, randomVariant, 0, position + Vector(10,10), Vector(0,0), nil)
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, randomVariant2, 0, position + Vector(20,20), Vector(0,0), nil)
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, randomVariant3, 0, position + Vector(30,30), Vector(0,0), nil)
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, randomVariant4, 0, position + Vector(40,40), Vector(0,0), nil)
 
         --end
 
@@ -7642,8 +7653,10 @@ Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseJusticeMisprint, JUSTICE_CARD)
 
 function Mod:UseHermitMisprint(card,player)
     if card == HERMIT_CARD then
+        local room = Game():GetRoom()
+        local position =  room:FindFreeTilePosition(player.Position, 100)
         if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_NICKEL, player.Position + Vector(10,10), Vector(0,0), nil)
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_NICKEL, position + Vector(30,30), Vector(0,0), nil)
             player:UseActiveItem(CollectibleType.COLLECTIBLE_KEEPERS_BOX, UseFlag.USE_NOANIM)
         else
             player:UseActiveItem(CollectibleType.COLLECTIBLE_KEEPERS_BOX, UseFlag.USE_NOANIM)
@@ -7795,7 +7808,29 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseHangedMisprint, HANGED_CARD)
 
+function Mod:UseDeathMisprint(card,player)
+    if card == DEATH_CARD then
 
+        player:UseActiveItem(PRIDE_ITEM, UseFlag.USE_NOANIM)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseDeathMisprint, DEATH_CARD)
+
+function Mod:UseTemperanceMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == TEMPERANCE_CARD then
+        local room = Game():GetRoom()
+        local position =  room:FindFreeTilePosition(player.Position, 100)
+
+        Isaac.Spawn(EntityType.ENTITY_SLOT, 17, 0, position + Vector(30,30), Vector(0,0), nil)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseTemperanceMisprint, TEMPERANCE_CARD)
 
 ----------------------------------------------------------------------------------------
 --- Machine code below.
