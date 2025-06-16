@@ -19,5 +19,7 @@
     <card type="tarot" mimiccharge="1" name="Misprinted Death" hud="Misprinted Death" description="Like life" pickup="902"/>
     <card type="tarot" mimiccharge="6" name="Misprinted Temperance" hud="Misprinted Temperance" description="May you be pure in spirit" pickup="903"/>
     <card type="tarot" mimiccharge="6" name="Misprinted Devil" hud="Misprinted Devil" description="Submit to the might of Lucifer" pickup="904"/>
-    <card type="tarot" mimiccharge="6" name="Misprinted Tower" hud="Misprinted Tower" description="Submit to the might of Lucifer" pickup="905"/>
+    <card type="tarot" mimiccharge="6" name="Misprinted Tower" hud="Misprinted Tower" description="Destruction brings destruction" pickup="905"/>
+    <card type="tarot" mimiccharge="1" name="Misprinted Stars" hud="Misprinted Stars" description="ire May yfind wha ou des" pickup="906"/>
+    <card type="tarot" mimiccharge="1" name="Misprinted Moon" hud="Misprinted Moon" description="May you lose all you have found" pickup="907"/>
 </pocketitems>

@@ -182,6 +182,9 @@ DEATH_CARD = Isaac.GetCardIdByName("Misprinted Death")
 TEMPERANCE_CARD = Isaac.GetCardIdByName("Misprinted Temperance")
 DEVIL_CARD = Isaac.GetCardIdByName("Misprinted Devil")
 TOWER_CARD = Isaac.GetCardIdByName("Misprinted Tower")
+STARS_CARD = Isaac.GetCardIdByName("Misprinted Stars")
+MOON_CARD = Isaac.GetCardIdByName("Misprinted Moon")
+
 
 ----------------------------------------------------------------------------------------
 -- Character code for Domino below.
@@ -2022,7 +2025,9 @@ if EID then
     EID:addCard(HANGED_CARD, "Gain the effect of The Pinking Shears for the current room.#Activated twice when holding tarot cloth.", "Misprinted Hanged Man")
     EID:addCard(DEATH_CARD, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.#{{Warning}}Activated twice when holding tarot cloth, this is guaranteed to kill Isaac.", "Misprinted Death")
     EID:addCard(TEMPERANCE_CARD, "Spawns a confessional.#Spawns 2 confessionals while holding tarot cloth.", "Misprinted Temperance")
-    EID:addCard(DEVIL_CARD, "Activates the effect of Satanic Bible..#Activates the effect twice while holding tarot cloth.", "Misprinted Devil")
+    EID:addCard(DEVIL_CARD, "Activates the effect of Satanic Bible.#Activates the effect twice while holding tarot cloth.", "Misprinted Devil")
+    EID:addCard(TOWER_CARD, "Spawns a giga bomb pickup.#Spawns two giga bomb pickups while holding tarot cloth.", "Misprinted Tower")
+    EID:addCard(STARS_CARD, "Rerolls all item pedestals in the room into TMTRAINER items.", "Misprinted Stars")
 
 end
 
@@ -7845,6 +7850,52 @@ function Mod:UseDevilMisprint(card, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseDevilMisprint, DEVIL_CARD)
+
+function Mod:UseTowerMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == TOWER_CARD then
+        local room = Game():GetRoom()
+        local position =  room:FindFreeTilePosition(player.Position, 100)
+
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_BOMB, 7, position + Vector(30,30), Vector(0,0), nil)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseTowerMisprint, TOWER_CARD)
+
+function Mod:UseStarsMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == STARS_CARD then
+        local pedestals = Mod:FindItemPedestalsGlitchEssence()
+
+            if #pedestals == 0 then
+
+                return
+            end
+
+            player:AddCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
+
+            for _, pedestal in ipairs(pedestals) do
+
+                pedestal:Remove() -- ✅ Remove original pedestal
+
+                -- ✅ Spawn a TMTRAINER glitched item in its place
+                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_TMTRAINER, pedestal.Position, Vector(0,0), player)
+            end
+
+            -- ✅ Play effects for clarity
+            SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
+            player:RemoveCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseStarsMisprint, STARS_CARD)
+
+
 
 ----------------------------------------------------------------------------------------
 --- Machine code below.
