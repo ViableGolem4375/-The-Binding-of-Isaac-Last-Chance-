@@ -109,5 +109,6 @@
     <passive id="101" name="Envious Rage" gfx="envious_rage.png" description="What's yours will be mine" quality="3" hidden="true" tags="nocantrip quest noeden" />
     <passive id="102" name="Void Energy" gfx="blank.png" description="Void" quality="3" hidden="true" tags="nocantrip quest noeden" cache="damage" />
     <passive id="103" name="Rampaging Rage" gfx="phalanx.png" description="Die" quality="3" hidden="true" tags="nocantrip quest noeden" cache="damage" />
+    <active id="104" name="Mysterious Concoction" gfx="concoction.png" description="It tastes awful" quality="2" maxcharges="4" chargetype="normal" tags="offensive nocantrip" cache="tearflag" />
 
 </items>

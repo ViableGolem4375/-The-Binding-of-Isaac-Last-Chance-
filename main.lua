@@ -41,7 +41,6 @@ FINAL_JUDGMENT_ITEM = Isaac.GetItemIdByName("Final Judgement") -- Change name as
 FINAL_JUDGMENT_ITEM_VFX = Isaac.GetItemIdByName("Final Judgement VFX") -- Change name as needed
 LILITH_ESSENCE = Isaac.GetItemIdByName("Essence of Lilith")
 RELIQUARY_TRINKET = Isaac.GetTrinketIdByName("Reliquary Access Card")
---local COSTUME_FINAL_JUDGMENT = Isaac.GetCostumeIdByPath("gfx/characters/judgement.anm2")
 
 AMP_ITEM = Isaac.GetItemIdByName("Amplifier")
 FAMILIAR_VARIANT_AMP = Isaac.GetEntityVariantByName("Amplifier")
@@ -159,6 +158,7 @@ TROPHY_ITEM = Isaac.GetItemIdByName("Boss Trophy")
 ENVIOUS_RAGE_ITEM = Isaac.GetItemIdByName("Envious Rage")
 VOID_DAMAGE_ITEM = Isaac.GetItemIdByName("Void Energy")
 CHARGE_DAMAGE_ITEM = Isaac.GetItemIdByName("Rampaging Rage")
+CONCOCTION_ITEM = Isaac.GetItemIdByName("Mysterious Concoction")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -1989,6 +1989,7 @@ if EID then
     EID:addCollectible(KINDNESS_ITEM, "Creates an extermely brief aura around Isaac which turns enemies friendly.", "Kindness")
     EID:addCollectible(PUGIO_ITEM, "Throw a projectile that petrifies any enemies it makes contact with.", "Pugio")
     EID:addTrinket(KING_TRINKET, "Extremely small chance for a pedestal item to drop when picking up a coin.#Higher value coins have a higher chance to trigger this effect.#This trinket is destroyed after triggering.#{{Collectible202}} Chances are doubled when golden.", "King Penny")
+    EID:addCollectible(CONCOCTION_ITEM, "For the room your tears apply:# Poison# Bait# Fear# Slowness# Concussed# Charm# Burning# Shrinking# Magnetism", "Mysterious Concoction")
 
 end
 
@@ -7185,6 +7186,57 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseRomanDash, LEGION_ITEM)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.OnUpdateRomanDash)
+
+local statusEffects = {
+    TearFlags.TEAR_POISON,        -- Poison shots
+    TearFlags.TEAR_BAIT,          -- Burning tears
+    TearFlags.TEAR_FEAR,          -- Fear effect
+    TearFlags.TEAR_SLOW,          -- Slowing shots
+    TearFlags.TEAR_CONFUSION,     -- Confusion effect
+    TearFlags.TEAR_CHARM,         -- Charm enemies
+    TearFlags.TEAR_BURN,
+    TearFlags.TEAR_GODS_FLESH,
+    TearFlags.TEAR_MAGNETIZE
+}
+
+function Mod:UseStatusItem(_, item, rng, player)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(CONCOCTION_ITEM) then
+            player:AnimateCollectible(CONCOCTION_ITEM, "UseItem", "PlayerPickupSparkle")
+            -- ✅ Apply multiple tear effects
+            local effectFlag = 0
+            for _, flag in ipairs(statusEffects) do
+                effectFlag = effectFlag | flag
+            end
+
+            player:GetData().TemporaryStatusFlag = effectFlag -- ✅ Store effects temporarily
+            player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
+            player:EvaluateItems()
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseStatusItem, CONCOCTION_ITEM)
+
+function Mod:ResetStatusEffects(player)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+
+        if player:GetData().TemporaryStatusFlag then
+            player:GetData().TemporaryStatusFlag = nil -- ✅ Remove temporary effect after room change
+            player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
+            player:EvaluateItems()
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.ResetStatusEffects)
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, function(_, player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_TEARFLAG and player:GetData().TemporaryStatusFlag then
+        player.TearFlags = player.TearFlags | player:GetData().TemporaryStatusFlag -- ✅ Apply temporary effects
+    end
+end)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

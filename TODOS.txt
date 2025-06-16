@@ -2,11 +2,9 @@
 - Fix d4 effects on tainted character maybe?
 - Forgotten and eve essence effects are kind of placeholders, need something more interesting.
 - Essence items can give copies, maybe fix that or make sure they all stack.
-- Sloth needs to delete invulnerable enemies.
 - Slot machines are turning into essence collectors by re-entering rooms possibly.
 - Maybe add some sound effects to items.
 - Maybe necromancy shouldnt res bosses.
-- Add a visual effect to necromancy summons.: check this in game.
 - Maybe have a unique synergy between both mantles.
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
