@@ -184,6 +184,9 @@ DEVIL_CARD = Isaac.GetCardIdByName("Misprinted Devil")
 TOWER_CARD = Isaac.GetCardIdByName("Misprinted Tower")
 STARS_CARD = Isaac.GetCardIdByName("Misprinted Stars")
 MOON_CARD = Isaac.GetCardIdByName("Misprinted Moon")
+SUN_CARD = Isaac.GetCardIdByName("Misprinted Sun")
+JUDGEMENT_CARD = Isaac.GetCardIdByName("Misprinted Judgement")
+WORLD_CARD = Isaac.GetCardIdByName("Misprinted World")
 
 
 ----------------------------------------------------------------------------------------
@@ -2028,6 +2031,10 @@ if EID then
     EID:addCard(DEVIL_CARD, "Activates the effect of Satanic Bible.#Activates the effect twice while holding tarot cloth.", "Misprinted Devil")
     EID:addCard(TOWER_CARD, "Spawns a giga bomb pickup.#Spawns two giga bomb pickups while holding tarot cloth.", "Misprinted Tower")
     EID:addCard(STARS_CARD, "Rerolls all item pedestals in the room into TMTRAINER items.", "Misprinted Stars")
+    EID:addCard(MOON_CARD, "Teleports Isaac to a black market.#This black market is separate from the one spawned on the floor, multiple uses of Misprinted Moon will send Isaac to multiple different black markets.#Grants The Fool to leave.#Spawns an extra fool card while holding tarot cloth.", "Misprinted Moon")
+    EID:addCard(SUN_CARD, "Activates the effect of Book of Jubilees.#Tarot cloth reduces the damage taken by 1 heart.", "Misprinted Sun")
+    EID:addCard(JUDGEMENT_CARD, "Spawns a donation machine.#Spawns 2 donation machines while holding tarot cloth.", "Misprinted Judgement")
+    EID:addCard(WORLD_CARD, "Adds curse of the lost for the floor and removes any other active curses.#Removes all curses for the floor while holding tarot cloth.", "Misprinted World")
 
 end
 
@@ -7895,7 +7902,88 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseStarsMisprint, STARS_CARD)
 
+function Mod:UseMoonMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == MOON_CARD then
+        Isaac.ExecuteCommand("goto s.blackmarket.0")
+        player:AddCard(1)
 
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseMoonMisprint, MOON_CARD)
+
+function Mod:UseSunMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == SUN_CARD then
+        local redhealth = player:GetEffectiveMaxHearts()
+        local soulhealth = player:GetSoulHearts()
+        local blackhealth = player:GetBlackHearts()
+        local bonehealth = player:GetBoneHearts()
+        local rothealth = player:GetRottenHearts()
+        local damage = (redhealth + soulhealth + blackhealth + bonehealth + rothealth) / 2
+
+        
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
+            player:TakeDamage(damage - 2, DamageFlag.DAMAGE_RED_HEARTS, EntityRef(player), 0)
+        else
+            player:TakeDamage(damage, DamageFlag.DAMAGE_RED_HEARTS, EntityRef(player), 0)
+        end
+
+
+        Isaac.ExecuteCommand("goto s.angel")
+
+        local sfx = SFXManager()
+        sfx:Play(SoundEffect.SOUND_HOLY) -- Use a fitting sound effect
+
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseSunMisprint, SUN_CARD)
+
+function Mod:UseJudgementMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == JUDGEMENT_CARD then
+        local room = Game():GetRoom()
+        local position =  room:FindFreeTilePosition(player.Position, 100)
+
+        Isaac.Spawn(EntityType.ENTITY_SLOT, 8, 0, position + Vector(30,30), Vector(0,0), nil)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseJudgementMisprint, JUDGEMENT_CARD)
+
+function Mod:UseWorldMisprint(card, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+    if card == WORLD_CARD then
+        Game():GetLevel():RemoveCurses(LevelCurse.CURSE_OF_DARKNESS)
+        Game():GetLevel():RemoveCurses(LevelCurse.CURSE_OF_BLIND)
+        Game():GetLevel():RemoveCurses(LevelCurse.CURSE_OF_THE_UNKNOWN)
+        Game():GetLevel():RemoveCurses(LevelCurse.CURSE_OF_MAZE)
+        Game():GetLevel():AddCurse(LevelCurse.CURSE_OF_THE_LOST, true)
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
+            Game():GetLevel():RemoveCurses(LevelCurse.CURSE_OF_DARKNESS)
+            Game():GetLevel():RemoveCurses(LevelCurse.CURSE_OF_BLIND)
+            Game():GetLevel():RemoveCurses(LevelCurse.CURSE_OF_THE_UNKNOWN)
+            Game():GetLevel():RemoveCurses(LevelCurse.CURSE_OF_MAZE)
+            Game():GetLevel():RemoveCurses(LevelCurse.CURSE_OF_THE_LOST)
+        else
+            Game():GetLevel():RemoveCurses(LevelCurse.CURSE_OF_DARKNESS)
+            Game():GetLevel():RemoveCurses(LevelCurse.CURSE_OF_BLIND)
+            Game():GetLevel():RemoveCurses(LevelCurse.CURSE_OF_THE_UNKNOWN)
+            Game():GetLevel():RemoveCurses(LevelCurse.CURSE_OF_MAZE)
+            Game():GetLevel():AddCurse(LevelCurse.CURSE_OF_THE_LOST, true)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseWorldMisprint, WORLD_CARD)
 
 ----------------------------------------------------------------------------------------
 --- Machine code below.

@@ -21,5 +21,8 @@
     <card type="tarot" mimiccharge="6" name="Misprinted Devil" hud="Misprinted Devil" description="Submit to the might of Lucifer" pickup="904"/>
     <card type="tarot" mimiccharge="6" name="Misprinted Tower" hud="Misprinted Tower" description="Destruction brings destruction" pickup="905"/>
     <card type="tarot" mimiccharge="1" name="Misprinted Stars" hud="Misprinted Stars" description="ire May yfind wha ou des" pickup="906"/>
-    <card type="tarot" mimiccharge="1" name="Misprinted Moon" hud="Misprinted Moon" description="May you lose all you have found" pickup="907"/>
+    <card type="tarot" mimiccharge="12" name="Misprinted Moon" hud="Misprinted Moon" description="May you lose all you have found" pickup="907"/>
+    <card type="tarot" mimiccharge="12" name="Misprinted Sun" hud="Misprinted Sun" description="May the light cleanse your soul" pickup="908"/>
+    <card type="tarot" mimiccharge="1" name="Misprinted Judgement" hud="Misprinted Judgement" description="Judge not" pickup="909"/>
+    <card type="tarot" mimiccharge="12" name="Misprinted World" hud="Misprinted World" description="Close your eyes and let go" pickup="910"/>
 </pocketitems>
