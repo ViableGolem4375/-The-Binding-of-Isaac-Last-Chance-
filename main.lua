@@ -54,7 +54,12 @@ CLOVER_TRINKET = Isaac.GetTrinketIdByName("Four Leaf Clover")
 ORB_TRINKET = Isaac.GetTrinketIdByName("Orb Shard")
 PHOTO_TRINKET = Isaac.GetTrinketIdByName("Stitched Photo")
 CANDLE_TRINKET = Isaac.GetTrinketIdByName("Black Candle Wick")
-BOND_ITEM = Isaac.GetItemIdByName("Eternal Bond")
+BOND_ITEM = Isaac.GetItemIdByName("Eternal Bond 4")
+BOND_ITEM2 = Isaac.GetItemIdByName("Eternal Bond 3")
+BOND_ITEM3 = Isaac.GetItemIdByName("Eternal Bond 2")
+BOND_ITEM4 = Isaac.GetItemIdByName("Eternal Bond 1")
+BOND_ITEM_EMPTY = Isaac.GetItemIdByName("Empty Eternal Bond")
+
 FAMILIAR_VARIANT_BOND = Isaac.GetEntityVariantByName("Bond Orb")
 
 ANATOMY_ITEM = Isaac.GetItemIdByName("Anatomy Textbook")
@@ -1912,7 +1917,11 @@ if EID then
     EID:addTrinket(ORB_TRINKET, "Automatically rerolls quality 0 items.#{{Collectible202}} No effect if golden.", "Orb Shard")
     EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.#{{Collectible202}} No effect if golden.", "Stitched Photo")
     EID:addTrinket(CANDLE_TRINKET, "Grants 2 black hearts at the beginning of a floor if there is an active curse.#{{Collectible202}} Grants 4 black hearts if golden.", "Black Candle Wick")
-    EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond")
+    EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond 4")
+    EID:addCollectible(BOND_ITEM2, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond 3")
+    EID:addCollectible(BOND_ITEM3, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond 2")
+    EID:addCollectible(BOND_ITEM4, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond 1")
+    EID:addCollectible(BOND_ITEM_EMPTY, "Does nothing.#Activating the item will restore Eternal Bond back to 4 charges.", "Empty Eternal Bond")
     EID:addCollectible(COMP_ITEM, "{{ArrowUp}} Grants +1 damage for every quality 0 item Isaac holds.")
     EID:addCollectible(ANATOMY_ITEM, "Grants 1 bone heart on use.")
     EID:addCollectible(BLANK_SLATE_ITEM, "Counts as an item for every transformation in the game.#Doesn't have any effect on its own.", "Blank Slate")
@@ -3227,19 +3236,26 @@ function Mod:OnUpdateBond()
                     activeWisps[player.Index] = nil
                 end
 
+                
+                --player:SetActiveCharge(12)
+
 
 
                 if MAX_CHAIN_DASHES > 0 and DASH_COOLDOWN >= 0 and MAX_CHAIN_DASHES > 0 then
-                    player:SetActiveCharge(12)
-                    MAX_CHAIN_DASHES = MAX_CHAIN_DASHES - 1
-                    print(DASH_COOLDOWN)
-                    print(MAX_CHAIN_DASHES)
-                elseif DASH_COOLDOWN == 0 or MAX_CHAIN_DASHES == 0 then
+                    --player:SetActiveCharge(12)
+                    --player:RemoveCollectible(BOND_ITEM)
+                    --player:AddCollectible(BOND_ITEM2)
+                    --player:SetActiveCharge(12)
+                    --MAX_CHAIN_DASHES = MAX_CHAIN_DASHES - 1
+                --[[ elseif DASH_COOLDOWN == 0 or MAX_CHAIN_DASHES == 0 then
                     player:SetActiveCharge(0)
-                    MAX_CHAIN_DASHES = 3
+                    MAX_CHAIN_DASHES = 3 ]]
                 end
                 dashingPlayers[player.Index] = nil
                 player:SetMinDamageCooldown(0)
+                player:RemoveCollectible(BOND_ITEM)
+                player:AddCollectible(BOND_ITEM2)
+                --player:SetActiveCharge(12)
             end
         end
     end
@@ -3263,6 +3279,482 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Mod.OnCreepUpdate, EffectVariant.PLAYER_CREEP_RED)
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseBond, BOND_ITEM)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.OnUpdateBond)
+
+local DASH_COOLDOWN2 = 60 -- Cooldown between dashes
+local dashingPlayersBond2 = {} -- Tracks players who are dashing
+
+function Mod:OnUseBond2(_, _, player)
+    local bondsfx = SFXManager()
+    if not dashingPlayersBond2[player.Index] then
+        dashingPlayersBond2[player.Index] = { dashesLeft = NUM_DASHES, dashTimer2 = DASH_DURATION, cooldown = DASH_COOLDOWN2, chargeRefreshCount = 0, chargeTimer = 0, chargeExpireTimer = 0 }
+        player:SetMinDamageCooldown(25) -- Proper invulnerability effect
+        bondsfx:Play(SoundEffect.SOUND_SWORD_SPIN, 1.5, 0, false, 0.75)
+        -- Immediately trigger first dash update to bypass animation delay
+        Mod:OnUpdateBond2()
+
+    end
+    --return true
+end
+
+--[[ local orbSprite = Sprite()
+orbSprite:Load("gfx/bond_orb.anm2", true)
+--orbSprite:Play("Idle", true)
+local activeWisps = {} -- Track spawned wisps per player
+local activeFamiliars = {} -- Track spawned familiars per player
+
+local function SpawnOrbEffect(player)
+    local orb = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.WISP, 0, player.Position, Vector(0, 0), player)
+    orb.Color = Color(0.7, 0.0, 1.0, 1.0, -0.5, -0.5, -0.5) -- Dark purple
+    orb.SpriteScale = Vector(2, 2) -- Adjust size for visibility
+    orb:ToEffect():SetTimeout(7) -- Lasts for the duration of the dash
+    activeWisps[player.Index] = orb -- Store reference
+    
+    
+    return orb
+end ]]
+
+function Mod:OnUpdateBond2()
+    --local game = Game()
+    for i = 0, game:GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(i)
+        local dashData2 = dashingPlayersBond2[player.Index]
+
+        if dashData2 then
+            if dashData2.dashTimer2 > 0 then
+                -- Hide player's default sprite
+                player:GetSprite():SetFrame(1000) -- Forces an empty animation frame
+                player.SpriteScale = Vector(0, 0) -- Shrinks player to "invisible"
+
+                -- Spawn an orb effect
+                local orb = SpawnOrbEffect(player)
+
+                -- Spawn the Bond Orb if it hasn't been spawned yet
+                if not activeFamiliars[player.Index] then
+                    local orb = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FAMILIAR_VARIANT_BOND, 0, player.Position, Vector(0, 0), player)
+                    
+                    activeFamiliars[player.Index] = orb
+                end
+
+                -- Keep orb centered on the player
+                if activeFamiliars[player.Index] then
+                    activeFamiliars[player.Index].Position = player.Position
+                end
+
+                -- Detect player's held direction
+                local moveVec = Vector(0, 0)
+
+                if Input.IsActionPressed(ButtonAction.ACTION_LEFT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_RIGHT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X + 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_UP, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_DOWN, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y + 1
+                end
+
+                -- If the player is actively moving, update lastMoveVec
+                if moveVec:Length() > 0 then
+                    lastMoveVec[player.Index] = moveVec:Normalized() * DASH_SPEED
+                end
+
+                -- Use last movement direction if no input is given
+                local finalMoveVec = lastMoveVec[player.Index] or Vector(DASH_SPEED, 0)
+                
+                -- Apply movement
+                player.Velocity = finalMoveVec
+
+
+                dashData2.dashTimer2 = dashData2.dashTimer2 - 1
+
+                -- Spawn creep at player's position
+                local creep = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_RED, 0, player.Position, Vector(0, 0), player)
+                creep:GetData().IsHealingCreep = true -- ✅ Marks this creep as healing
+                creep:ToEffect():SetTimeout(CREEP_DURATION)
+                creep.Color = Color(1.0, 1.0, 1.0, 0.5, -0.2, -0,5, -0.6) -- RGB: (Red=1, Green=0, Blue=1), Al
+                -- Adjust creep size
+                creep.SpriteScale = Vector(2.5, 2.5) -- Increase size (1.0 is default)
+                -- Change creep color to purple
+            else
+                -- Restore player's normal sprite when dash ends
+                player:GetSprite():SetFrame(0)
+                player.SpriteScale = Vector(1, 1)
+                -- Remove the Bond Orb when the dash ends
+                if activeFamiliars[player.Index] then
+                    activeFamiliars[player.Index]:Remove()
+                    activeFamiliars[player.Index] = nil
+                end
+                if activeWisps[player.Index] then
+                    activeWisps[player.Index]:Remove()
+                    activeWisps[player.Index] = nil
+                end
+                
+                --player:SetActiveCharge(12)
+
+
+
+                if MAX_CHAIN_DASHES > 0 and DASH_COOLDOWN2 >= 0 and MAX_CHAIN_DASHES > 0 then
+                    --player:SetActiveCharge(12)
+                    --player:RemoveCollectible(BOND_ITEM2)
+                    --player:AddCollectible(BOND_ITEM3)
+                    --player:SetActiveCharge(12)
+                    --MAX_CHAIN_DASHES = MAX_CHAIN_DASHES - 1
+                --[[ elseif DASH_COOLDOWN == 0 or MAX_CHAIN_DASHES == 0 then
+                    player:SetActiveCharge(0)
+                    MAX_CHAIN_DASHES = 3 ]]
+                end
+                dashingPlayersBond2[player.Index] = nil
+                player:SetMinDamageCooldown(0)
+                player:RemoveCollectible(BOND_ITEM2)
+                player:AddCollectible(BOND_ITEM3)
+                --player:SetActiveCharge(12)
+            end
+        end
+    end
+end
+
+-- Make the creep heal friendly players on contact
+function Mod:OnCreepUpdate2(creep)
+    local player = Isaac.GetPlayer(0)
+    local data = creep:GetData()
+
+    if player:HasCollectible(BOND_ITEM2) and data.IsHealingCreep then
+        for _, entity in ipairs(Isaac.FindInRadius(creep.Position, 30, EntityPartition.PLAYER)) do
+            local player = entity:ToPlayer()
+            if player and not player:IsDead() and player:GetMaxHearts() > player:GetHearts() then
+                player:AddHearts(1) -- Grants healing
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Mod.OnCreepUpdate2, EffectVariant.PLAYER_CREEP_RED)
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseBond2, BOND_ITEM2)
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.OnUpdateBond2)
+
+local DASH_COOLDOWN3 = 60 -- Cooldown between dashes
+local dashingPlayersBond3 = {} -- Tracks players who are dashing
+
+function Mod:OnUseBond3(_, _, player)
+    local bondsfx = SFXManager()
+    if not dashingPlayersBond3[player.Index] then
+        dashingPlayersBond3[player.Index] = { dashesLeft = NUM_DASHES, dashTimer3 = DASH_DURATION, cooldown = DASH_COOLDOWN3, chargeRefreshCount = 0, chargeTimer = 0, chargeExpireTimer = 0 }
+        player:SetMinDamageCooldown(25) -- Proper invulnerability effect
+        bondsfx:Play(SoundEffect.SOUND_SWORD_SPIN, 1.5, 0, false, 0.75)
+        -- Immediately trigger first dash update to bypass animation delay
+        Mod:OnUpdateBond3()
+
+    end
+    --return true
+end
+
+--[[ local orbSprite = Sprite()
+orbSprite:Load("gfx/bond_orb.anm2", true)
+--orbSprite:Play("Idle", true)
+local activeWisps = {} -- Track spawned wisps per player
+local activeFamiliars = {} -- Track spawned familiars per player ]]
+
+--[[ local function SpawnOrbEffect(player)
+    local orb = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.WISP, 0, player.Position, Vector(0, 0), player)
+    orb.Color = Color(0.7, 0.0, 1.0, 1.0, -0.5, -0.5, -0.5) -- Dark purple
+    orb.SpriteScale = Vector(2, 2) -- Adjust size for visibility
+    orb:ToEffect():SetTimeout(7) -- Lasts for the duration of the dash
+    activeWisps[player.Index] = orb -- Store reference
+    
+    
+    return orb
+end ]]
+
+function Mod:OnUpdateBond3()
+    --local game = Game()
+    for i = 0, game:GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(i)
+        local dashData3 = dashingPlayersBond3[player.Index]
+
+        if dashData3 then
+            if dashData3.dashTimer3 > 0 then
+                -- Hide player's default sprite
+                player:GetSprite():SetFrame(1000) -- Forces an empty animation frame
+                player.SpriteScale = Vector(0, 0) -- Shrinks player to "invisible"
+
+                -- Spawn an orb effect
+                local orb = SpawnOrbEffect(player)
+
+                -- Spawn the Bond Orb if it hasn't been spawned yet
+                if not activeFamiliars[player.Index] then
+                    local orb = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FAMILIAR_VARIANT_BOND, 0, player.Position, Vector(0, 0), player)
+                    
+                    activeFamiliars[player.Index] = orb
+                end
+
+                -- Keep orb centered on the player
+                if activeFamiliars[player.Index] then
+                    activeFamiliars[player.Index].Position = player.Position
+                end
+
+                -- Detect player's held direction
+                local moveVec = Vector(0, 0)
+
+                if Input.IsActionPressed(ButtonAction.ACTION_LEFT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_RIGHT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X + 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_UP, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_DOWN, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y + 1
+                end
+
+                -- If the player is actively moving, update lastMoveVec
+                if moveVec:Length() > 0 then
+                    lastMoveVec[player.Index] = moveVec:Normalized() * DASH_SPEED
+                end
+
+                -- Use last movement direction if no input is given
+                local finalMoveVec = lastMoveVec[player.Index] or Vector(DASH_SPEED, 0)
+                
+                -- Apply movement
+                player.Velocity = finalMoveVec
+
+
+                dashData3.dashTimer3 = dashData3.dashTimer3 - 1
+
+                -- Spawn creep at player's position
+                local creep = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_RED, 0, player.Position, Vector(0, 0), player)
+                creep:GetData().IsHealingCreep = true -- ✅ Marks this creep as healing
+                creep:ToEffect():SetTimeout(CREEP_DURATION)
+                creep.Color = Color(1.0, 1.0, 1.0, 0.5, -0.2, -0,5, -0.6) -- RGB: (Red=1, Green=0, Blue=1), Al
+                -- Adjust creep size
+                creep.SpriteScale = Vector(2.5, 2.5) -- Increase size (1.0 is default)
+                -- Change creep color to purple
+            else
+                -- Restore player's normal sprite when dash ends
+                player:GetSprite():SetFrame(0)
+                player.SpriteScale = Vector(1, 1)
+                -- Remove the Bond Orb when the dash ends
+                if activeFamiliars[player.Index] then
+                    activeFamiliars[player.Index]:Remove()
+                    activeFamiliars[player.Index] = nil
+                end
+                if activeWisps[player.Index] then
+                    activeWisps[player.Index]:Remove()
+                    activeWisps[player.Index] = nil
+                end
+                --player:SetActiveCharge(12)
+
+
+
+                if MAX_CHAIN_DASHES > 0 and DASH_COOLDOWN3 >= 0 and MAX_CHAIN_DASHES > 0 then
+                    --player:SetActiveCharge(12)
+                    --player:RemoveCollectible(BOND_ITEM3)
+                    --player:AddCollectible(BOND_ITEM4)
+                    --player:SetActiveCharge(12)
+                    --MAX_CHAIN_DASHES = MAX_CHAIN_DASHES - 1
+                --[[ elseif DASH_COOLDOWN == 0 or MAX_CHAIN_DASHES == 0 then
+                    player:SetActiveCharge(0)
+                    MAX_CHAIN_DASHES = 3 ]]
+                end
+                dashingPlayersBond3[player.Index] = nil
+                player:SetMinDamageCooldown(0)
+                player:RemoveCollectible(BOND_ITEM3)
+                player:AddCollectible(BOND_ITEM4)
+                --player:SetActiveCharge(12)
+            end
+        end
+    end
+end
+
+-- Make the creep heal friendly players on contact
+function Mod:OnCreepUpdate3(creep)
+    local player = Isaac.GetPlayer(0)
+    local data = creep:GetData()
+
+    if player:HasCollectible(BOND_ITEM3) and data.IsHealingCreep then
+        for _, entity in ipairs(Isaac.FindInRadius(creep.Position, 30, EntityPartition.PLAYER)) do
+            local player = entity:ToPlayer()
+            if player and not player:IsDead() and player:GetMaxHearts() > player:GetHearts() then
+                player:AddHearts(1) -- Grants healing
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Mod.OnCreepUpdate3, EffectVariant.PLAYER_CREEP_RED)
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseBond3, BOND_ITEM3)
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.OnUpdateBond3)
+
+local DASH_COOLDOWN4 = 60 -- Cooldown between dashes
+local dashingPlayersBond4 = {} -- Tracks players who are dashing
+
+function Mod:OnUseBond4(_, _, player)
+    local bondsfx = SFXManager()
+    if not dashingPlayersBond4[player.Index] then
+        dashingPlayersBond4[player.Index] = { dashesLeft = NUM_DASHES, dashTimer4 = DASH_DURATION, cooldown = DASH_COOLDOWN4, chargeRefreshCount = 0, chargeTimer = 0, chargeExpireTimer = 0 }
+        player:SetMinDamageCooldown(25) -- Proper invulnerability effect
+        bondsfx:Play(SoundEffect.SOUND_SWORD_SPIN, 1.5, 0, false, 0.75)
+        -- Immediately trigger first dash update to bypass animation delay
+        Mod:OnUpdateBond4()
+
+    end
+    --return true
+end
+
+--[[ local orbSprite = Sprite()
+orbSprite:Load("gfx/bond_orb.anm2", true)
+--orbSprite:Play("Idle", true)
+local activeWisps = {} -- Track spawned wisps per player
+local activeFamiliars = {} -- Track spawned familiars per player ]]
+
+--[[ local function SpawnOrbEffect(player)
+    local orb = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.WISP, 0, player.Position, Vector(0, 0), player)
+    orb.Color = Color(0.7, 0.0, 1.0, 1.0, -0.5, -0.5, -0.5) -- Dark purple
+    orb.SpriteScale = Vector(2, 2) -- Adjust size for visibility
+    orb:ToEffect():SetTimeout(7) -- Lasts for the duration of the dash
+    activeWisps[player.Index] = orb -- Store reference
+    
+    
+    return orb
+end ]]
+
+function Mod:OnUpdateBond4()
+    --local game = Game()
+    for i = 0, game:GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(i)
+        local dashData4 = dashingPlayersBond4[player.Index]
+
+        if dashData4 then
+            if dashData4.dashTimer4 > 0 then
+                -- Hide player's default sprite
+                player:GetSprite():SetFrame(1000) -- Forces an empty animation frame
+                player.SpriteScale = Vector(0, 0) -- Shrinks player to "invisible"
+
+                -- Spawn an orb effect
+                local orb = SpawnOrbEffect(player)
+
+                -- Spawn the Bond Orb if it hasn't been spawned yet
+                if not activeFamiliars[player.Index] then
+                    local orb = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FAMILIAR_VARIANT_BOND, 0, player.Position, Vector(0, 0), player)
+                    
+                    activeFamiliars[player.Index] = orb
+                end
+
+                -- Keep orb centered on the player
+                if activeFamiliars[player.Index] then
+                    activeFamiliars[player.Index].Position = player.Position
+                end
+
+                -- Detect player's held direction
+                local moveVec = Vector(0, 0)
+
+                if Input.IsActionPressed(ButtonAction.ACTION_LEFT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_RIGHT, player.ControllerIndex) then
+                    moveVec.X = moveVec.X + 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_UP, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y - 1
+                end
+                if Input.IsActionPressed(ButtonAction.ACTION_DOWN, player.ControllerIndex) then
+                    moveVec.Y = moveVec.Y + 1
+                end
+
+                -- If the player is actively moving, update lastMoveVec
+                if moveVec:Length() > 0 then
+                    lastMoveVec[player.Index] = moveVec:Normalized() * DASH_SPEED
+                end
+
+                -- Use last movement direction if no input is given
+                local finalMoveVec = lastMoveVec[player.Index] or Vector(DASH_SPEED, 0)
+                
+                -- Apply movement
+                player.Velocity = finalMoveVec
+
+
+                dashData4.dashTimer4 = dashData4.dashTimer4 - 1
+
+                -- Spawn creep at player's position
+                local creep = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_RED, 0, player.Position, Vector(0, 0), player)
+                creep:GetData().IsHealingCreep = true -- ✅ Marks this creep as healing
+                creep:ToEffect():SetTimeout(CREEP_DURATION)
+                creep.Color = Color(1.0, 1.0, 1.0, 0.5, -0.2, -0,5, -0.6) -- RGB: (Red=1, Green=0, Blue=1), Al
+                -- Adjust creep size
+                creep.SpriteScale = Vector(2.5, 2.5) -- Increase size (1.0 is default)
+                -- Change creep color to purple
+            else
+                -- Restore player's normal sprite when dash ends
+                player:GetSprite():SetFrame(0)
+                player.SpriteScale = Vector(1, 1)
+                -- Remove the Bond Orb when the dash ends
+                if activeFamiliars[player.Index] then
+                    activeFamiliars[player.Index]:Remove()
+                    activeFamiliars[player.Index] = nil
+                end
+                if activeWisps[player.Index] then
+                    activeWisps[player.Index]:Remove()
+                    activeWisps[player.Index] = nil
+                end
+
+                
+
+
+
+                if MAX_CHAIN_DASHES > 0 and DASH_COOLDOWN4 >= 0 and MAX_CHAIN_DASHES > 0 then
+                    --player:SetActiveCharge(12)
+                    --player:RemoveCollectible(BOND_ITEM4)
+                    --player:AddCollectible(BOND_ITEM_EMPTY)
+                    --MAX_CHAIN_DASHES = MAX_CHAIN_DASHES - 1
+                --[[ elseif DASH_COOLDOWN == 0 or MAX_CHAIN_DASHES == 0 then
+                    player:SetActiveCharge(0)
+                    MAX_CHAIN_DASHES = 3 ]]
+                end
+                dashingPlayersBond4[player.Index] = nil
+                player:SetMinDamageCooldown(0)
+                player:RemoveCollectible(BOND_ITEM4)
+                player:AddCollectible(BOND_ITEM_EMPTY)
+            end
+        end
+    end
+end
+
+-- Make the creep heal friendly players on contact
+function Mod:OnCreepUpdate4(creep)
+    local player = Isaac.GetPlayer(0)
+    local data = creep:GetData()
+
+    if player:HasCollectible(BOND_ITEM4) and data.IsHealingCreep then
+        for _, entity in ipairs(Isaac.FindInRadius(creep.Position, 30, EntityPartition.PLAYER)) do
+            local player = entity:ToPlayer()
+            if player and not player:IsDead() and player:GetMaxHearts() > player:GetHearts() then
+                player:AddHearts(1) -- Grants healing
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Mod.OnCreepUpdate4, EffectVariant.PLAYER_CREEP_RED)
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseBond4, BOND_ITEM4)
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.OnUpdateBond4)
+
+function Mod:EmptyBondUse(item, rng, player, flags)
+    --player:AnimateCollectible(BOND_ITEM_EMPTY, "UseItem", "PlayerPickupSparkle")
+    -- Grant the player a Bone Heart
+    --player:SetActiveCharge(12)
+    player:RemoveCollectible(BOND_ITEM_EMPTY)
+    --player:SetActiveCharge(12)
+    player:AddCollectible(BOND_ITEM)
+    --player:SetActiveCharge(12)
+        --player:SetActiveCharge(12)
+    return true -- Prevents extra effects from triggering                  
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.EmptyBondUse, BOND_ITEM_EMPTY) 
 
 function Mod:AnatomyBookUse(item, rng, player, flags)
     player:AnimateCollectible(ANATOMY_ITEM, "UseItem", "PlayerPickupSparkle")

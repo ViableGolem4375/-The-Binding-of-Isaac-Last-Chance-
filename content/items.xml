@@ -18,7 +18,7 @@
     <trinket id="14" name="Orb Shard" gfx="orb.png" description="Destined for greatness?"/>
     <trinket id="15" name="Stitched Photo" gfx="photo.png" description="Fate chosen?"/>
     <trinket id="16" name="Black Candle Wick" gfx="candlewick.png" description="Curse resistance"/>
-    <active id="17" name="Eternal Bond" gfx="bond2.png" description="Us against the world!" quality="4" craftquality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
+    <active id="17" name="Eternal Bond 4" gfx="bond2.png" description="Us against the world!" quality="4" craftquality="4" charge="0" tags="offensive nocantrip"/>
     <active id="18" name="Anatomy Textbook" gfx="anatomy_textbook.png" description="Reusable bone protection." quality="3" craftquality="3" maxcharges="6" chargetype="normal" tags="nolostbr nocantrip book"/>
     <passive id="19" name="Blank Slate" gfx="blank_slate.png" description="Transform yourself" quality="1" craftquality="1" tags="offensive nocantrip angel baby battery bob book devil fly guppy mom mushroom poop spider syringe"/>
     <passive id="20" name="Essence of Isaac" gfx="essence_of_isaac.png" description="Options!" quality="4" craftquality="4" tags="offensive nocantrip"/>
@@ -110,5 +110,9 @@
     <passive id="102" name="Void Energy" gfx="blank.png" description="Void" quality="3" craftquality="-1" hidden="true" tags="nocantrip quest noeden" cache="damage" />
     <passive id="103" name="Rampaging Rage" gfx="phalanx.png" description="Die" quality="3" craftquality="-1" hidden="true" tags="nocantrip quest noeden" cache="damage" />
     <active id="104" name="Mysterious Concoction" gfx="concoction.png" description="It tastes awful" quality="2" craftquality="2" maxcharges="4" chargetype="normal" tags="offensive nocantrip" cache="tearflag" />
+    <active id="105" name="Eternal Bond 3" gfx="bond2-3.png" description="Us against the world!" quality="4" craftquality="-1" charge="0" hidden="true" tags="quest noeden nocantrip"/>
+    <active id="106" name="Eternal Bond 2" gfx="bond2-2.png" description="Us against the world!" quality="4" craftquality="-1" charge="0" hidden="true" tags="quest noeden nocantrip"/>
+    <active id="107" name="Eternal Bond 1" gfx="bond2-1.png" description="Us against the world!" quality="4" craftquality="-1" charge="0" hidden="true" tags="quest noeden nocantrip"/>
+    <active id="108" name="Empty Eternal Bond" gfx="bond2empty.png" description="Needs more charge..." quality="4" craftquality="-1" maxcharges="12" chargetype="normal" hidden="true" tags="quest noeden nocantrip"/>
 
 </items>
