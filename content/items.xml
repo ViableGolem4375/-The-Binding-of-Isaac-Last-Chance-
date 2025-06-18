@@ -1,114 +1,114 @@
 <items gfxroot="gfx/items/" version="1">
-    <active id="1" name="Lucky Coin" gfx="dice.png" description="Take control of your destiny" quality="4" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
-    <active id="2" name="Dull Coin" gfx="dice2.png" description="Reroll your destiny?" quality="4" charge="0" hidden="true" tags="quest noeden nocantrip"/>
-    <passive id="3" name="Unholy Mantle" gfx="unholymantle.png" description="Revel in Their Pain" quality="4" tags="devil nocantrip"/>
-    <familiar name="Lil' Uriel" gfx="uriel.png" description="Angelic friend" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel nocantrip" />
-    <familiar name="Lil' Gabriel" gfx="gabriel.png" description="Eternal friend" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel nocantrip" />
-    <active id="4" name="Catalyst Character Sheet" gfx="catalyst_character_sheet.png" description="It's in my head IT'S IN MY HEAD AAAAAAAAAAA" quality="3" maxcharges="4" chargetype="normal" tags="offensive nocantrip"/>
-    <familiar name="Failed Abortion" gfx="failed_abortion.png" description="It's still breathing!" quality="2" cache="familiars" tags="baby offensive summonable monstermanual" />
-    <active id="5" name="Final Judgement" gfx="finaljudgement.png" description="Be Afraid" quality="4" maxcharges="12" chargetype="normal" hidden="true" tags="quest noeden nocantrip"/>
-    <passive id="6" name="Final Judgement VFX" gfx="finaljudgement.png" description="I exist to make the Final Judgement VFX work!" quality="4" hidden="true" tags="nocantrip quest noeden"/>
-    <active id="7" name="Essence of Lilith" gfx="essence_of_lilith.png" description="To me my children" quality="2" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
+    <active id="1" name="Lucky Coin" gfx="dice.png" description="Take control of your destiny" quality="4" craftquality="4" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
+    <active id="2" name="Dull Coin" gfx="dice2.png" description="Reroll your destiny?" quality="4" craftquality="-1" charge="0" hidden="true" tags="quest noeden nocantrip"/>
+    <passive id="3" name="Unholy Mantle" gfx="unholymantle.png" description="Revel in Their Pain" quality="4" craftquality="4" tags="devil nocantrip"/>
+    <familiar name="Lil' Uriel" gfx="uriel.png" description="Angelic friend" quality="4" craftquality="4" cache="familiars" tags="baby offensive summonable monstermanual angel nocantrip" />
+    <familiar name="Lil' Gabriel" gfx="gabriel.png" description="Eternal friend" quality="4" craftquality="4" cache="familiars" tags="baby offensive summonable monstermanual angel nocantrip" />
+    <active id="4" name="Catalyst Character Sheet" gfx="catalyst_character_sheet.png" description="It's in my head IT'S IN MY HEAD AAAAAAAAAAA" quality="3" craftquality="3" maxcharges="4" chargetype="normal" tags="offensive nocantrip"/>
+    <familiar name="Failed Abortion" gfx="failed_abortion.png" description="It's still breathing!" quality="2" craftquality="2" cache="familiars" tags="baby offensive summonable monstermanual" />
+    <active id="5" name="Final Judgement" gfx="finaljudgement.png" description="Be Afraid" quality="4" craftquality="-1" maxcharges="12" chargetype="normal" hidden="true" tags="quest noeden nocantrip"/>
+    <passive id="6" name="Final Judgement VFX" gfx="finaljudgement.png" description="I exist to make the Final Judgement VFX work!" quality="4" craftquality="-1" hidden="true" tags="nocantrip quest noeden"/>
+    <active id="7" name="Essence of Lilith" gfx="essence_of_lilith.png" description="To me my children" quality="2" craftquality="2" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
     <trinket id="8" name="Reliquary Access Card" gfx="reliquary_card.png" description="Access granted" />
-    <active id="9" name="Amplifier" gfx="amp2.png" description="Enjoy the amplifier!" quality="2" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
-    <passive id="10" name="Amp Damage" gfx="amp2.png" description="I exist to give amplifier's damage!" quality="4" hidden="true" tags="nocantrip quest noeden" cache="damage"/>
-    <active id="11" name="Huh?" gfx="huh.png" description="What happened to my D6?" quality="0" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
-    <passive id="12" name="The Compensator" gfx="compensator.png" description="Garbage = Power!" quality="3" tags="offensive nocantrip" cache="damage"/>
+    <active id="9" name="Amplifier" gfx="amp2.png" description="Enjoy the amplifier!" quality="2" craftquality="2" maxcharges="6" chargetype="normal" tags="offensive nocantrip"/>
+    <passive id="10" name="Amp Damage" gfx="amp2.png" description="I exist to give amplifier's damage!" quality="4" craftquality="-1" hidden="true" tags="nocantrip quest noeden" cache="damage"/>
+    <active id="11" name="Huh?" gfx="huh.png" description="What happened to my D6?" quality="0" craftquality="0" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
+    <passive id="12" name="The Compensator" gfx="compensator.png" description="Garbage = Power!" quality="3" craftquality="3" tags="offensive nocantrip" cache="damage"/>
     <trinket id="13" name="Four Leaf Clover" gfx="clover.png" description="Luck up!" cache="luck"/>
     <trinket id="14" name="Orb Shard" gfx="orb.png" description="Destined for greatness?"/>
     <trinket id="15" name="Stitched Photo" gfx="photo.png" description="Fate chosen?"/>
     <trinket id="16" name="Black Candle Wick" gfx="candlewick.png" description="Curse resistance"/>
-    <active id="17" name="Eternal Bond" gfx="bond2.png" description="Us against the world!" quality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
-    <active id="18" name="Anatomy Textbook" gfx="anatomy_textbook.png" description="Reusable bone protection." quality="3" maxcharges="6" chargetype="normal" tags="nolostbr nocantrip book"/>
-    <passive id="19" name="Blank Slate" gfx="blank_slate.png" description="Transform yourself" quality="1" tags="offensive nocantrip angel baby battery bob book devil fly guppy mom mushroom poop spider syringe"/>
-    <passive id="20" name="Essence of Isaac" gfx="essence_of_isaac.png" description="Options!" quality="4" tags="offensive nocantrip"/>
-    <active id="21" name="Essence of Magdalene" gfx="magdalene_essence.png" description="Full health!" quality="3" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
-    <passive id="22" name="Essence of Cain" gfx="essence_of_cain.png" description="Abundance" quality="4" tags="offensive nocantrip"/>
-    <passive id="23" name="Essence of Judas" gfx="judas_essence.png" description="Risk = Power" quality="3" tags="offensive nocantrip" cache="damage"/>
-    <passive id="24" name="Essence of ???" gfx="blue_baby_essence.png" description="Swarm of friends" quality="3" tags="offensive nocantrip fly" cache="familiars"/>
-    <passive id="25" name="Essence of Eve" gfx="eve_essence.png" description="Power through desperation" quality="2" tags="offensive nocantrip" cache="damage"/>
-    <active id="26" name="Essence of Samson" gfx="samson_essence.png" description="Rage incarnate" quality="3" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage"/>
-    <passive id="27" name="Essence of Azazel" gfx="azazel_essence.png" description="Brimstone unleashed" quality="4" tags="offensive nocantrip" cache="damage luck"/>
-    <passive id="28" name="Essence of Lazarus" gfx="laz_essence.png" description="Strength through rebirth" quality="2" tags="offensive nocantrip" cache="all"/>
-    <passive id="29" name="Unlocked Essence of Lazarus" gfx="laz_essence.png" description="Strength through rebirth" quality="4" tags="nocantrip noeden quest" hidden="true" cache="all"/>
-    <active id="30" name="Essence of Eden" gfx="eden_essence.png" description="Change into something better" quality="4" charge="0" tags="offensive nocantrip"/>
-    <passive id="31" name="Essence of Keeper" gfx="keeper_essence.png" description="Infinite wealth" quality="3" tags="offensive nocantrip"/>
-    <active id="32" name="Essence of Apollyon" gfx="apollyon_essence.png" description="Void" quality="3" maxcharges="6" chargetype="normal" tags="offensive nocantrip" cache="damage"/>
-    <passive id="33" name="Essence of Apollyon VFX" gfx="apollyon_essence.png" description="I exist to make essence of apollyon visuals work!" quality="4" hidden="true" tags="nocantrip nolostbr noeden quest"/>
-    <passive id="34" name="Essence of Bethany" gfx="beth_essence.png" description="Army of eternal flame" quality="3" tags="offensive nocantrip"/>
-    <passive id="35" name="Essence of Domino" gfx="matt_essence.png" description="Luck up + power through chance" quality="3" tags="offensive nocantrip" cache="luck"/>
-    <active id="36" name="Essence of Pontius" gfx="pontius_essence.png" description="Spear thrower" quality="2" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage"/>
-    <active id="37" name="Essence of The Lost" gfx="lost_essence.png" description="Glass cannon" quality="3" maxcharges="1" chargetype="normal" tags="nocantrip" cache="damage"/>
-    <active id="38" name="Essence of Jacob and Esau" gfx="JE_essence.png" description="Brotherly bond" quality="3" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
-    <active id="39" name="Essence of The Forgotten" gfx="forgotten_essence.png" description="A helping skeleton" quality="3" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
-    <passive id="40" name="Yamika" gfx="star_of_david.png" description="Mazeltov!" quality="3" tags="offensive nocantrip" cache="damage luck"/>
-    <active id="41" name="A Gun" gfx="gun.png" description="You'll shoot your eye out!" quality="1" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage shotspeed"/>
-    <passive id="42" name="Appetizer" gfx="brunch.png" description="Health up" quality="1" tags="nocantrip nolostbr" maxhearts="2" hearts="4"/>
-    <passive id="43" name="Early Morning Snack" gfx="midnight_snack.png" description="Health up" quality="1" tags="nocantrip nolostbr" maxhearts="2" hearts="4"/>
+    <active id="17" name="Eternal Bond" gfx="bond2.png" description="Us against the world!" quality="4" craftquality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
+    <active id="18" name="Anatomy Textbook" gfx="anatomy_textbook.png" description="Reusable bone protection." quality="3" craftquality="3" maxcharges="6" chargetype="normal" tags="nolostbr nocantrip book"/>
+    <passive id="19" name="Blank Slate" gfx="blank_slate.png" description="Transform yourself" quality="1" craftquality="1" tags="offensive nocantrip angel baby battery bob book devil fly guppy mom mushroom poop spider syringe"/>
+    <passive id="20" name="Essence of Isaac" gfx="essence_of_isaac.png" description="Options!" quality="4" craftquality="4" tags="offensive nocantrip"/>
+    <active id="21" name="Essence of Magdalene" gfx="magdalene_essence.png" description="Full health!" quality="3" craftquality="3" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
+    <passive id="22" name="Essence of Cain" gfx="essence_of_cain.png" description="Abundance" quality="4" craftquality="4" tags="offensive nocantrip"/>
+    <passive id="23" name="Essence of Judas" gfx="judas_essence.png" description="Risk = Power" quality="3" craftquality="3" tags="offensive nocantrip" cache="damage"/>
+    <passive id="24" name="Essence of ???" gfx="blue_baby_essence.png" description="Swarm of friends" quality="3" craftquality="3" tags="offensive nocantrip fly" cache="familiars"/>
+    <passive id="25" name="Essence of Eve" gfx="eve_essence.png" description="Power through desperation" quality="2" craftquality="2" tags="offensive nocantrip" cache="damage"/>
+    <active id="26" name="Essence of Samson" gfx="samson_essence.png" description="Rage incarnate" quality="3" craftquality="3" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage"/>
+    <passive id="27" name="Essence of Azazel" gfx="azazel_essence.png" description="Brimstone unleashed" quality="4" craftquality="4" tags="offensive nocantrip" cache="damage luck"/>
+    <passive id="28" name="Essence of Lazarus" gfx="laz_essence.png" description="Strength through rebirth" quality="2" craftquality="2" tags="offensive nocantrip" cache="all"/>
+    <passive id="29" name="Unlocked Essence of Lazarus" gfx="laz_essence.png" description="Strength through rebirth" quality="4" craftquality="-1" tags="nocantrip noeden quest" hidden="true" cache="all"/>
+    <active id="30" name="Essence of Eden" gfx="eden_essence.png" description="Change into something better" quality="4" craftquality="4" charge="0" tags="offensive nocantrip"/>
+    <passive id="31" name="Essence of Keeper" gfx="keeper_essence.png" description="Infinite wealth" quality="3" craftquality="3" tags="offensive nocantrip"/>
+    <active id="32" name="Essence of Apollyon" gfx="apollyon_essence.png" description="Void" quality="3" craftquality="3" maxcharges="6" chargetype="normal" tags="offensive nocantrip" cache="damage"/>
+    <passive id="33" name="Essence of Apollyon VFX" gfx="apollyon_essence.png" description="I exist to make essence of apollyon visuals work!" quality="4" craftquality="-1" hidden="true" tags="nocantrip nolostbr noeden quest"/>
+    <passive id="34" name="Essence of Bethany" gfx="beth_essence.png" description="Army of eternal flame" quality="3" craftquality="3" tags="offensive nocantrip"/>
+    <passive id="35" name="Essence of Domino" gfx="matt_essence.png" description="Luck up + power through chance" quality="3" craftquality="3" tags="offensive nocantrip" cache="luck"/>
+    <active id="36" name="Essence of Pontius" gfx="pontius_essence.png" description="Spear thrower" quality="2" craftquality="2" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage"/>
+    <active id="37" name="Essence of The Lost" gfx="lost_essence.png" description="Glass cannon" quality="3" craftquality="3" maxcharges="1" chargetype="normal" tags="nocantrip" cache="damage"/>
+    <active id="38" name="Essence of Jacob and Esau" gfx="JE_essence.png" description="Brotherly bond" quality="3" craftquality="3" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
+    <active id="39" name="Essence of The Forgotten" gfx="forgotten_essence.png" description="A helping skeleton" quality="3" craftquality="3" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
+    <passive id="40" name="Yamika" gfx="star_of_david.png" description="Mazeltov!" quality="3" craftquality="3" tags="offensive nocantrip" cache="damage luck"/>
+    <active id="41" name="A Gun" gfx="gun.png" description="You'll shoot your eye out!" quality="1" craftquality="1" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage shotspeed"/>
+    <passive id="42" name="Appetizer" gfx="brunch.png" description="Health up" quality="1" craftquality="1" tags="nocantrip nolostbr" maxhearts="2" hearts="4"/>
+    <passive id="43" name="Early Morning Snack" gfx="midnight_snack.png" description="Health up" quality="1" craftquality="1" tags="nocantrip nolostbr" maxhearts="2" hearts="4"/>
     <passive id="44" name="Kingslayer" gfx="kingslayer.png" description="Boss killer" quality="2" tags="nocantrip offensive" cache="damage" />
-    <passive id="45" name="Defense Tech" gfx="defense_tech.png" description="Automated laser defense" quality="2" tags="nocantrip offensive" />
-    <active id="46" name="Phalanx" gfx="phalanx.png" description="Unbreakable guard" quality="4" maxcharges="300" chargetype="timed" hidden="true" tags="quest noeden nolostbr nocantrip"/>
-    <passive id="47" name="Necromancy" gfx="necromancy.png" description="Raise the dead!" quality="4" tags="nocantrip offensive" />
-    <active id="48" name="Become Back My Money" gfx="become_back_my_money.png" description="Trash Isaac" quality="2" charge="0" tags="nocantrip offensive" />
-    <active id="49" name="Gold Spray Paint" gfx="gold_paint.png" description="All that glitters is gold" quality="2" maxcharges="6" chargetype="normal" tags="nocantrip offensive" />
-    <passive id="50" name="'/<<L7" gfx="glitch.png" description="aAa)))))" quality="1" tags="nocantrip offensive" />
-    <passive id="51" name="Proto-Tech" gfx="prototech.png" description="Destruction" quality="4" tags="nocantrip offensive" />
-    <passive id="52" name="Fred The Friendly Gaper" gfx="fred.png" description="A helping hand" quality="2" tags="nocantrip offensive" />
+    <passive id="45" name="Defense Tech" gfx="defense_tech.png" description="Automated laser defense" quality="2" craftquality="2" tags="nocantrip offensive" />
+    <active id="46" name="Phalanx" gfx="phalanx.png" description="Unbreakable guard" quality="4" craftquality="-1" maxcharges="300" chargetype="timed" hidden="true" tags="quest noeden nolostbr nocantrip"/>
+    <passive id="47" name="Necromancy" gfx="necromancy.png" description="Raise the dead!" quality="4" craftquality="4" tags="nocantrip offensive" />
+    <active id="48" name="Become Back My Money" gfx="become_back_my_money.png" description="Trash Isaac" quality="2" craftquality="2" charge="0" tags="nocantrip offensive" />
+    <active id="49" name="Gold Spray Paint" gfx="gold_paint.png" description="All that glitters is gold" quality="2" craftquality="2" maxcharges="6" chargetype="normal" tags="nocantrip offensive" />
+    <passive id="50" name="'/<<L7" gfx="glitch.png" description="aAa)))))" quality="1" craftquality="1" tags="nocantrip offensive" />
+    <passive id="51" name="Proto-Tech" gfx="prototech.png" description="Destruction" quality="4" craftquality="4" tags="nocantrip offensive" />
+    <passive id="52" name="Fred The Friendly Gaper" gfx="fred.png" description="A helping hand" quality="2" craftquality="2" tags="nocantrip offensive" />
     <trinket id="53" name="Sinful Penny" gfx="sin_penny.png" description="Wealth of sin" />
     <trinket id="53" name="Skele-Penny" gfx="bone_penny.png" description="Wealth of bones" />
     <trinket id="54" name="Yuck Penny" gfx="yuck_penny.png" description="Wealth of rot" />
-    <active id="55" name="Debug Console" gfx="debug.png" description="Debug" quality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
-    <passive id="56" name="Toast Sandwich" gfx="toast_sandwich.png" description="All stats up!" quality="1" tags="nocantrip offensive" cache="all" />
-    <active id="57" name="D-=777'L" gfx="glitch_dice.png" description="ur desReroll yotiny. ur" quality="4" maxcharges="6" chargetype="normal" hidden="true" tags="noeden quest nocantrip"/>
-    <active id="58" name=" D-=777'L " gfx="glitch_dice.png" description="ur desReroll yotiny. ur" quality="4" maxcharges="3" chargetype="normal" hidden="true" tags="noeden quest nocantrip"/>
-    <active id="59" name="64 36" gfx="glitch_essence.png" description="72 65 72 6F 6C 6C" quality="1" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
-    <passive id="60" name="Sack of Lucky Pennies" gfx="sack_of_lucky_pennies.png" description="Sold at your local souvenir shop for only 39.99!" quality="2" tags="nocantrip offensive" />
-    <passive id="61" name="Toolbelt" gfx="toolbelt.png" description="Pocket active" quality="3" tags="nocantrip offensive" />
-    <familiar name="Deep Orbit" gfx="orbiting_moons.png" description="One small step for man..." quality="3" cache="familiars" tags="offensive summonable monstermanual" />
-    <familiar name="Broken Flux Capacitor" gfx="flux_capacitor_2.png" description="Localized time distortion" quality="1" cache="familiars" tags="offensive summonable monstermanual" />
-    <active id="62" name="Duae Viae" gfx="duae.png" description="Make your choice" quality="4" maxcharges="6" chargetype="normal" hidden="true" tags="quest nocantrip book noeden" />
-    <passive id="63" name="Path of Salvation" gfx="angelpath.png" description="I am saved" quality="4" hidden="true" tags="quest noeden nocantrip" />
-    <passive id="64" name="Path of Temptation" gfx="devilpath.png" description="My life is yours" quality="4" hidden="true" tags="quest noeden nocantrip" />
-    <passive id="65" name="Devil's Path 1" gfx="devilpath1.png" description="Fire shot" quality="4" hidden="true" tags="quest noeden nocantrip" />
-    <passive id="66" name="Angel's Path 1" gfx="angelpath1.png" description="Soul protection" quality="4" hidden="true" tags="quest noeden nocantrip" />
-    <passive id="67" name="Devil's Path 2" gfx="devilpath2.png" description="Burning lava" quality="4" hidden="true" tags="quest noeden nocantrip" />
-    <passive id="68" name="Angel's Path 2" gfx="angelpath2.png" description="Flight of the angel" quality="4" hidden="true" tags="quest noeden nocantrip" cache="flying"/>
-    <passive id="69" name="Devil's Path 3" gfx="devilpath3.png" description="All stats up" quality="4" hidden="true" tags="quest noeden nocantrip" cache="all"/>
-    <passive id="70" name="Angel's Path 3" gfx="angelpath3.png" description="Smite" quality="4" hidden="true" tags="quest noeden nocantrip" />
-    <active id="71" name="Devil's Path 4" gfx="devilpath4.png" description="Be Afraid" quality="4" charge="0" hidden="true" tags="quest noeden nocantrip"/>
-    <passive id="72" name="Angel's Path 4" gfx="angelpath4.png" description="Burn in hell" quality="4" hidden="true" tags="quest noeden nocantrip" />
-    <passive id="73" name="Devil's Path 4 VFX" gfx="devilpath4.png" description="I exist to make devil path 4's visuals work!" hidden="true" quality="4" tags="quest noeden nocantrip" />
-    <active id="74" name="Rend" gfx="rend.png" description="Your soul is mine" quality="4" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
-    <passive id="75" name="Neutrality" gfx="neutrality.png" description="Take the road less travelled" quality="4" hidden="true" tags="quest noeden nocantrip" cache="damage" />
-    <passive id="76" name="Essence of Abraham" gfx="abraham_essence.png" description="Duality" quality="2" tags="offensive nocantrip" />
-    <passive id="77" name=" Toolbelt " gfx="toolbelt.png" description="Pocket active" quality="3" hidden="true" tags="nocantrip offensive" />
-    <active id="78" name="Technology Omega" gfx="omegatech.png" description="Technological advancement" quality="2" maxcharges="4" chargetype="normal" tags="quest nocantrip" />
+    <active id="55" name="Debug Console" gfx="debug.png" description="Debug" quality="4" craftquality="4" maxcharges="12" chargetype="normal" tags="offensive nocantrip"/>
+    <passive id="56" name="Toast Sandwich" gfx="toast_sandwich.png" description="All stats up!" quality="1" craftquality="1" tags="nocantrip offensive" cache="all" />
+    <active id="57" name="D-=777'L" gfx="glitch_dice.png" description="ur desReroll yotiny. ur" quality="4" craftquality="-1" maxcharges="6" chargetype="normal" hidden="true" tags="noeden quest nocantrip"/>
+    <active id="58" name=" D-=777'L " gfx="glitch_dice.png" description="ur desReroll yotiny. ur" quality="4" craftquality="-1" maxcharges="3" chargetype="normal" hidden="true" tags="noeden quest nocantrip"/>
+    <active id="59" name="64 36" gfx="glitch_essence.png" description="72 65 72 6F 6C 6C" quality="1" craftquality="1" maxcharges="1" chargetype="normal" tags="offensive nocantrip"/>
+    <passive id="60" name="Sack of Lucky Pennies" gfx="sack_of_lucky_pennies.png" description="Sold at your local souvenir shop for only 39.99!" quality="2" craftquality="2" tags="nocantrip offensive" />
+    <passive id="61" name="Toolbelt" gfx="toolbelt.png" description="Pocket active" quality="3" craftquality="3" tags="nocantrip offensive" />
+    <familiar name="Deep Orbit" gfx="orbiting_moons.png" description="One small step for man..." quality="3" craftquality="3" cache="familiars" tags="offensive summonable monstermanual" />
+    <familiar name="Broken Flux Capacitor" gfx="flux_capacitor_2.png" description="Localized time distortion" quality="1" craftquality="1" cache="familiars" tags="offensive summonable monstermanual" />
+    <active id="62" name="Duae Viae" gfx="duae.png" description="Make your choice" quality="4" craftquality="-1" maxcharges="6" chargetype="normal" hidden="true" tags="quest nocantrip book noeden" />
+    <passive id="63" name="Path of Salvation" gfx="angelpath.png" description="I am saved" quality="4" craftquality="-1" hidden="true" tags="quest noeden nocantrip" />
+    <passive id="64" name="Path of Temptation" gfx="devilpath.png" description="My life is yours" quality="4" craftquality="-1" hidden="true" tags="quest noeden nocantrip" />
+    <passive id="65" name="Devil's Path 1" gfx="devilpath1.png" description="Fire shot" quality="4" craftquality="-1" hidden="true" tags="quest noeden nocantrip" />
+    <passive id="66" name="Angel's Path 1" gfx="angelpath1.png" description="Soul protection" quality="4" craftquality="-1" hidden="true" tags="quest noeden nocantrip" />
+    <passive id="67" name="Devil's Path 2" gfx="devilpath2.png" description="Burning lava" quality="4" craftquality="-1" hidden="true" tags="quest noeden nocantrip" />
+    <passive id="68" name="Angel's Path 2" gfx="angelpath2.png" description="Flight of the angel" quality="4" craftquality="-1" hidden="true" tags="quest noeden nocantrip" cache="flying"/>
+    <passive id="69" name="Devil's Path 3" gfx="devilpath3.png" description="All stats up" quality="4" craftquality="-1" hidden="true" tags="quest noeden nocantrip" cache="all"/>
+    <passive id="70" name="Angel's Path 3" gfx="angelpath3.png" description="Smite" quality="4" craftquality="-1" hidden="true" tags="quest noeden nocantrip" />
+    <active id="71" name="Devil's Path 4" gfx="devilpath4.png" description="Be Afraid" quality="4" craftquality="-1" charge="0" hidden="true" tags="quest noeden nocantrip"/>
+    <passive id="72" name="Angel's Path 4" gfx="angelpath4.png" description="Burn in hell" craftquality="-1" quality="4" hidden="true" tags="quest noeden nocantrip" />
+    <passive id="73" name="Devil's Path 4 VFX" gfx="devilpath4.png" description="I exist to make devil path 4's visuals work!" hidden="true" quality="4" craftquality="-1" tags="quest noeden nocantrip" />
+    <active id="74" name="Rend" gfx="rend.png" description="Your soul is mine" quality="4" craftquality="-1" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
+    <passive id="75" name="Neutrality" gfx="neutrality.png" description="Take the road less travelled" quality="4" craftquality="-1" hidden="true" tags="quest noeden nocantrip" cache="damage" />
+    <passive id="76" name="Essence of Abraham" gfx="abraham_essence.png" description="Duality" quality="2" craftquality="2" tags="offensive nocantrip" />
+    <passive id="77" name=" Toolbelt " gfx="toolbelt.png" description="Pocket active" quality="3" craftquality="-1" hidden="true" tags="nocantrip offensive" />
+    <active id="78" name="Technology Omega" gfx="omegatech.png" description="Technological advancement" quality="2" craftquality="2" maxcharges="4" chargetype="normal" tags="quest nocantrip" />
     <trinket id="79" name="Bootleg Tech" gfx="bootleg.png" description="It sort of works" cache="luck" />
-    <active id="80" name="Book of Jubilees" gfx="jubilees.png" description="Deliver me unto salvation" quality="4" maxcharges="12" chargetype="normal" tags="offensive book nocantrip" />
-    <active id="81" name="Angel Blast" gfx="finaljudgement.png" description="Be Afraid" quality="4" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip"/>
+    <active id="80" name="Book of Jubilees" gfx="jubilees.png" description="Deliver me unto salvation" quality="4" craftquality="4" maxcharges="12" chargetype="normal" tags="offensive book nocantrip" />
+    <active id="81" name="Angel Blast" gfx="finaljudgement.png" description="Be Afraid" quality="4" craftquality="-1" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip"/>
     <trinket id="82" name="The Devil's Noisemaker" gfx="noisemaker.png" description="All stats up + annoyance up!" cache="all" />
-    <passive id="83" name="Gluttony" gfx="gluttony.png" description="All consuming" quality="3" tags="devil nocantrip offensive" cache="all" />
-    <passive id="84" name="Greed" gfx="greed.png" description="Hoard your wealth" quality="2" tags="devil nocantrip offensive" cache="damage" />
-    <passive id="85" name="Lust" gfx="lust.png" description="Love at first touch" quality="1" tags="devil nocantrip nolostbr" />
-    <active id="86" name="Pride" gfx="pride.png" description="Don't fly too close to the sun" quality="2" maxcharges="1" chargetype="normal" tags="devil offensive nocantrip" />
-    <passive id="87" name="Sloth" gfx="sloth.png" description="Laziness incarnate" quality="3" tags="devil offensive nocantrip" />
-    <passive id="88" name="Envy" gfx="envy.png" description="Mine" quality="1" tags="devil offensive nocantrip baby" cache="quest damage familiars" />
-    <passive id="89" name="Wrath" gfx="wrath.png" description="Death = power" quality="3" tags="devil offensive nocantrip" cache="damage" />
-    <passive id="90" name="Charity" gfx="charity.png" description="The spirit of giving" quality="3" tags="angel offensive nocantrip" />
-    <passive id="91" name="Humility" gfx="humility.png" description="Humbleness" quality="3" tags="angel offensive nocantrip" cache="damage" />
-    <passive id="92" name="Love" gfx="love.png" description="Love thy neighbor" quality="0" tags="angel offensive nocantrip" />
-    <passive id="93" name="Generosity" gfx="generosity.png" description="Giving = power" quality="3" tags="angel offensive nocantrip" cache="damage" />
-    <passive id="94" name="Temperance" gfx="temperance.png" description="Tempered spirit" quality="3" tags="angel offensive nocantrip" cache="firedelay" />
-    <familiar name="Zeal" gfx="zeal.png" description="Zealous companion" quality="4" cache="familiars" tags="baby offensive summonable monstermanual angel nocantrip" />
-    <active id="95" name="Kindness" gfx="kindness.png" description="Kill them with kindness" quality="3" maxcharges="6" chargetype="normal" tags="angel offensive nocantrip" />
-    <active id="96" name="Glass Heart" gfx="kindness.png" description="Reusable heart container" quality="2" maxcharges="4" chargetype="normal" tags="offensive nocantrip" />
-    <active id="97" name="Legion Charge" gfx="phalanx.png" description="Roma Invictus" quality="4" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
-    <active id="98" name="Pugio" gfx="gladius.png" description="Roma Invictus" quality="4" maxcharges="300" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
+    <passive id="83" name="Gluttony" gfx="gluttony.png" description="All consuming" quality="3" craftquality="3" tags="devil nocantrip offensive" cache="all" />
+    <passive id="84" name="Greed" gfx="greed.png" description="Hoard your wealth" quality="2" craftquality="3" tags="devil nocantrip offensive" cache="damage" />
+    <passive id="85" name="Lust" gfx="lust.png" description="Love at first touch" quality="1" craftquality="1" tags="devil nocantrip nolostbr" />
+    <active id="86" name="Pride" gfx="pride.png" description="Don't fly too close to the sun" quality="2" craftquality="2" maxcharges="1" chargetype="normal" tags="devil offensive nocantrip" />
+    <passive id="87" name="Sloth" gfx="sloth.png" description="Laziness incarnate" quality="3" craftquality="3" tags="devil offensive nocantrip" />
+    <passive id="88" name="Envy" gfx="envy.png" description="Mine" quality="1" craftquality="1" tags="devil offensive nocantrip baby" cache="quest damage familiars" />
+    <passive id="89" name="Wrath" gfx="wrath.png" description="Death = power" quality="3" craftquality="3" tags="devil offensive nocantrip" cache="damage" />
+    <passive id="90" name="Charity" gfx="charity.png" description="The spirit of giving" quality="3" craftquality="3" tags="angel offensive nocantrip" />
+    <passive id="91" name="Humility" gfx="humility.png" description="Humbleness" quality="3" craftquality="3" tags="angel offensive nocantrip" cache="damage" />
+    <passive id="92" name="Love" gfx="love.png" description="Love thy neighbor" quality="0" craftquality="0" tags="angel offensive nocantrip" />
+    <passive id="93" name="Generosity" gfx="generosity.png" description="Giving = power" quality="3" craftquality="3" tags="angel offensive nocantrip" cache="damage" />
+    <passive id="94" name="Temperance" gfx="temperance.png" description="Tempered spirit" quality="3" craftquality="3" tags="angel offensive nocantrip" cache="firedelay" />
+    <familiar name="Zeal" gfx="zeal.png" description="Zealous companion" quality="4" craftquality="4" cache="familiars" tags="baby offensive summonable monstermanual angel nocantrip" />
+    <active id="95" name="Kindness" gfx="kindness.png" description="Kill them with kindness" quality="3" craftquality="3" maxcharges="6" chargetype="normal" tags="angel offensive nocantrip" />
+    <active id="96" name="Glass Heart" gfx="kindness.png" description="Reusable heart container" quality="2" craftquality="2" maxcharges="4" chargetype="normal" tags="offensive nocantrip" />
+    <active id="97" name="Legion Charge" gfx="phalanx.png" description="Roma Invictus" quality="4" craftquality="-1" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
+    <active id="98" name="Pugio" gfx="gladius.png" description="Roma Invictus" quality="4" craftquality="-1" maxcharges="300" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
     <trinket id="99" name="King Penny" gfx="king_penny.png" description="Wealth of items" />
-    <passive id="100" name="Boss Trophy" gfx="boss_trophy.png" description="A memento of your anger" quality="3" hidden="true" tags="nocantrip quest noeden" cache="damage" />
-    <passive id="101" name="Envious Rage" gfx="envious_rage.png" description="What's yours will be mine" quality="3" hidden="true" tags="nocantrip quest noeden" />
-    <passive id="102" name="Void Energy" gfx="blank.png" description="Void" quality="3" hidden="true" tags="nocantrip quest noeden" cache="damage" />
-    <passive id="103" name="Rampaging Rage" gfx="phalanx.png" description="Die" quality="3" hidden="true" tags="nocantrip quest noeden" cache="damage" />
-    <active id="104" name="Mysterious Concoction" gfx="concoction.png" description="It tastes awful" quality="2" maxcharges="4" chargetype="normal" tags="offensive nocantrip" cache="tearflag" />
+    <passive id="100" name="Boss Trophy" gfx="boss_trophy.png" description="A memento of your anger" quality="3" craftquality="-1" hidden="true" tags="nocantrip quest noeden" cache="damage" />
+    <passive id="101" name="Envious Rage" gfx="envious_rage.png" description="What's yours will be mine" quality="3" craftquality="-1" hidden="true" tags="nocantrip quest noeden" />
+    <passive id="102" name="Void Energy" gfx="blank.png" description="Void" quality="3" craftquality="-1" hidden="true" tags="nocantrip quest noeden" cache="damage" />
+    <passive id="103" name="Rampaging Rage" gfx="phalanx.png" description="Die" quality="3" craftquality="-1" hidden="true" tags="nocantrip quest noeden" cache="damage" />
+    <active id="104" name="Mysterious Concoction" gfx="concoction.png" description="It tastes awful" quality="2" craftquality="2" maxcharges="4" chargetype="normal" tags="offensive nocantrip" cache="tearflag" />
 
 </items>

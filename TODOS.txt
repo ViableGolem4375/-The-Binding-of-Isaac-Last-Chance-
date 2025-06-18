@@ -6,7 +6,6 @@
 - Maybe add some sound effects to items.
 - Maybe necromancy shouldnt res bosses.
 - Maybe have a unique synergy between both mantles.
-- Mom's box synergy with trinkets.
 - Add devil deal prices.
 - Remove some stuff from bag of crafting.
 - Look into book of jubilees and bone hearts.
