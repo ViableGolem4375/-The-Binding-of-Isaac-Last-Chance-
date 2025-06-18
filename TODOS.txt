@@ -7,9 +7,7 @@
 - Maybe necromancy shouldnt res bosses.
 - Maybe have a unique synergy between both mantles.
 - Add devil deal prices.
-- Remove some stuff from bag of crafting.
 - Look into book of jubilees and bone hearts.
-- Orb shard can be cheesed by entering and reexiting a room its also affecting quest items.
 - Cards are huge on J+E HUD.
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
@@ -35,4 +33,4 @@ Trinket Ideas:
 
 
 
-Win streak: 24
+Win streak: 25
