@@ -1909,7 +1909,7 @@ if EID then
     EID:addCollectible(AMP_ITEM, "Spawn a familiar which projects a damage amplification area onto the ground.#{{ArrowUp}} Standing within this area will multiply Isaac's damage by 5.#{{Warning}} Familiar expires after 20 seconds.", "Amplifier")
     EID:addCollectible(HUH_ITEM, "Rerolls all item pedestals in the room into The Poop.", "Huh?")
     EID:addTrinket(CLOVER_TRINKET, "{{ArrowUp}} +2 luck.#{{Collectible202}} +4 luck if golden.", "Four Leaf Clover")
-    EID:addTrinket(ORB_TRINKET, "Grants a 25% chance for quality 0 items to be automatically rerolled once.#{{Collectible202}} 50% chance to reroll if golden.", "Orb Shard")
+    EID:addTrinket(ORB_TRINKET, "Automatically rerolls quality 0 items.#{{Collectible202}} No effect if golden.", "Orb Shard")
     EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.#{{Collectible202}} No effect if golden.", "Stitched Photo")
     EID:addTrinket(CANDLE_TRINKET, "Grants 2 black hearts at the beginning of a floor if there is an active curse.#{{Collectible202}} Grants 4 black hearts if golden.", "Black Candle Wick")
     EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond")
@@ -8183,7 +8183,7 @@ end
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateClover)
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnTrinketPickupClover)
 
-local REROLL_CHANCE = 0.25
+local REROLL_CHANCE = 1
 local GOLDEN_MULT = 2
 local rerolledPedestals = {} -- Table to track rerolled pedestals
 
@@ -8197,19 +8197,14 @@ function Mod:OnPickupInitOrb(pickup)
                 local player = Isaac.GetPlayer(i) -- Gets the player
                 if player:HasTrinket(ORB_TRINKET) then
                     local itemConfig = Isaac.GetItemConfig():GetCollectible(pickup.SubType)
-                    if itemConfig and itemConfig.Quality == 0 then
-                        local multiplier = player:GetTrinketMultiplier(ORB_TRINKET) > 1 and GOLDEN_MULT or 1
-                        if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
-                            multiplier = multiplier * 2
-                        end
-                        local finalChance = REROLL_CHANCE * multiplier
+                    if itemConfig and itemConfig.Quality == 0 and itemConfig.ID ~= 238 and itemConfig.ID ~= 239 and itemConfig.ID ~= 668 and itemConfig.ID ~= 626 and itemConfig.ID ~= 627 and itemConfig.ID ~= 550 and itemConfig.ID ~= 552 and itemConfig.ID ~= 328 and itemConfig.ID ~= 327 and itemConfig.ID ~= 551 and itemConfig.ID ~= 633 then
                         if math.random() < REROLL_CHANCE then
                             orbsfx:Play(SoundEffect.SOUND_EDEN_GLITCH) -- Play sound effect
                             --pickup:TryRemove() -- Removes the existing pedestal
                             pickup:Morph(pickup.Type, pickup.Variant, game:GetItemPool():GetCollectible(ItemPoolType.POOL_TREASURE, true, pickup.InitSeed), true, true) -- Rerolls item
                             rerolledPedestals[seed] = true -- Marks this pedestal as rerolled
                         end
-                    end
+                    end 
                 end
             end
         end
