@@ -9,6 +9,9 @@
 - Mom's box synergy with trinkets.
 - Add devil deal prices.
 - Remove some stuff from bag of crafting.
+- Look into book of jubilees and bone hearts.
+- Orb shard can be cheesed by entering and reexiting a room its also affecting quest items.
+- Cards are huge on J+E HUD.
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -26,7 +29,6 @@ Item Ideas to Add:
 the bibble
 communist manifesto
 reverse soul stones?
-misprinted cards?
 reusable HP up
 active item like birthright
 
@@ -34,4 +36,4 @@ Trinket Ideas:
 
 
 
-Win streak: 20
+Win streak: 24

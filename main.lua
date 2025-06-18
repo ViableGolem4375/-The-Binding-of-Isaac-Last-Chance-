@@ -8160,7 +8160,14 @@ function Mod:OnCacheUpdateClover(player, cacheFlag)
         if player:HasTrinket(CLOVER_TRINKET) then
             local luckBonus = 2
             if player:GetTrinketMultiplier(CLOVER_TRINKET) > 1 then
-                luckBonus = 4 -- Double Luck bonus for golden version
+                luckBonus = 4
+            end
+            if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+                print(luckBonus)
+                luckBonus = 4
+            end
+            if player:GetTrinketMultiplier(CLOVER_TRINKET) > 1 and player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+                luckBonus = 6
             end
             player.Luck = player.Luck + luckBonus
 
@@ -8192,6 +8199,9 @@ function Mod:OnPickupInitOrb(pickup)
                     local itemConfig = Isaac.GetItemConfig():GetCollectible(pickup.SubType)
                     if itemConfig and itemConfig.Quality == 0 then
                         local multiplier = player:GetTrinketMultiplier(ORB_TRINKET) > 1 and GOLDEN_MULT or 1
+                        if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+                            multiplier = multiplier * 2
+                        end
                         local finalChance = REROLL_CHANCE * multiplier
                         if math.random() < REROLL_CHANCE then
                             orbsfx:Play(SoundEffect.SOUND_EDEN_GLITCH) -- Play sound effect
@@ -8235,6 +8245,12 @@ function Mod:OnNewLevel()
             if player:GetTrinketMultiplier(CANDLE_TRINKET) > 1 then
                 numhearts = 8
             end
+            if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+                numhearts = 8
+            end
+            if player:GetTrinketMultiplier(CANDLE_TRINKET) > 1 and player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+                numhearts = 12
+            end
 
             if currentCurse ~= LevelCurse.CURSE_NONE then
                 player:AddBlackHearts(numhearts) -- ✅ Grants hearts to Jacob & Esau separately
@@ -8268,6 +8284,12 @@ function Mod:OnCoinPickup(pickup, collider)
                 -- ✅ Apply golden trinket multiplier
                 if player:HasTrinket(SIN_PENNY_TRINKET + 32768) then
                     chance = math.min(1, chance * 2) -- ✅ Doubles chance, caps at 100%
+                end
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+                    chance = math.min(1, chance * 2)
+                end
+                if player:HasTrinket(SIN_PENNY_TRINKET + 32768) and player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+                    chance = math.min(1, chance * 3)
                 end
 
                 -- ✅ Roll RNG for black heart drop
@@ -8306,6 +8328,12 @@ function Mod:OnCoinPickupBone(pickup, collider)
                 if player:HasTrinket(BONE_PENNY_TRINKET + 32768) then
                     chance = math.min(1, chance * 2) -- ✅ Doubles chance, caps at 100%
                 end
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+                    chance = math.min(1, chance * 2)
+                end
+                if player:HasTrinket(BONE_PENNY_TRINKET + 32768) and player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+                    chance = math.min(1, chance * 3)
+                end
 
                 -- ✅ Roll RNG for bone heart drop
                 if rng:RandomFloat() < chance then
@@ -8343,6 +8371,13 @@ function Mod:OnCoinPickupRot(pickup, collider)
                 if player:HasTrinket(YUCK_PENNY_TRINKET + 32768) then
                     chance = math.min(1, chance * 2) -- ✅ Doubles chance, caps at 100%
                 end
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+                    chance = math.min(1, chance * 2)
+                end
+                if player:HasTrinket(YUCK_PENNY_TRINKET + 32768) and player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+                    chance = math.min(1, chance * 3)
+
+                end
 
                 -- ✅ Roll RNG for Rotten Heart drop
                 if rng:RandomFloat() < chance then
@@ -8361,8 +8396,14 @@ function Mod:ReplaceTearWithLaser(tear)
     local player = tear.SpawnerEntity and tear.SpawnerEntity:ToPlayer()
 
     if player and player:HasTrinket(TECH_TRINKET) then
-        if player:GetTrinketMultiplier(CANDLE_TRINKET) > 1 then
+        if player:GetTrinketMultiplier(TECH_TRINKET) > 1 then
             laserchance = 0.1
+        end
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+            laserchance = 0.1
+        end
+        if player:HasTrinket(TECH_TRINKET + 32768) and player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+            laserchance = 0.15
         end
         local luck = player.Luck
         local chance = 0.1 + (luck * laserchance) -- ✅ Base 10% chance + 5% per luck point
@@ -8433,6 +8474,12 @@ function Mod:devilNoisemaker(player, cacheFlag)
         if player:GetTrinketMultiplier(NOISEMAKER_TRINKET) > 1 then
             mult = 2
         end
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+            mult = 2
+        end
+        if player:HasTrinket(NOISEMAKER_TRINKET + 32768) and player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+            mult = 3
+        end
         if cacheFlag == CacheFlag.CACHE_SPEED then
             player.MoveSpeed = player.MoveSpeed + (0.25 * mult)
         end
@@ -8465,6 +8512,12 @@ function Mod:RandomLoudSounds(player)
         local volume = 2.5
         if player:GetTrinketMultiplier(NOISEMAKER_TRINKET) > 1 then
             volume = 2
+        end
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+            volume = 2
+        end
+        if player:HasTrinket(KING_TRINKET + 32768) and player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+            volume = 3
         end
 
         if soundTimer <= 0 then
@@ -8506,6 +8559,12 @@ function Mod:OnCoinPickupKing(pickup, collider)
                 -- ✅ Apply golden trinket multiplier
                 if player:HasTrinket(KING_TRINKET + 32768) then
                     chance = math.min(1, chance * 2) -- ✅ Doubles chance, caps at 100%
+                end
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+                    chance = math.min(1, chance * 2)
+                end
+                if player:HasTrinket(KING_TRINKET + 32768) and player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+                    chance = math.min(1, chance * 3)
                 end
 
                 -- ✅ Roll RNG for bone heart drop
