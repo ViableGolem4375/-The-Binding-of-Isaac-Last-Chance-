@@ -7286,7 +7286,6 @@ end)
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
 
-
 function Mod:UseSoulStone(card, player)
     if card == SOUL_DOMINO then
         local data = player:GetData()
@@ -7299,6 +7298,13 @@ function Mod:UseSoulStone(card, player)
 
         player:AddCacheFlags(CacheFlag.CACHE_LUCK)
         player:EvaluateItems()
+
+        --[[ if player:GetPlayerType() == PlayerType.PLAYER_JACOB or player:GetPlayerType() == PlayerType.PLAYER_ESAU then
+            local sprite = card:GetSprite()
+            sprite:Load("content/gfx/ui_cardfronts.anm2", true) -- Load your custom animation
+            sprite:Play("Soul of Domino Small", true) -- Ensure correct animation plays
+        end ]]
+
 
 
     end
