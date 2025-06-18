@@ -66,7 +66,7 @@
     <passive id="61" name="Toolbelt" gfx="toolbelt.png" description="Pocket active" quality="3" craftquality="3" tags="nocantrip offensive" />
     <familiar name="Deep Orbit" gfx="orbiting_moons.png" description="One small step for man..." quality="3" craftquality="3" cache="familiars" tags="offensive summonable monstermanual" />
     <familiar name="Broken Flux Capacitor" gfx="flux_capacitor_2.png" description="Localized time distortion" quality="1" craftquality="1" cache="familiars" tags="offensive summonable monstermanual" />
-    <active id="62" name="Duae Viae" gfx="duae.png" description="Make your choice" quality="4" craftquality="-1" maxcharges="6" chargetype="normal" hidden="true" tags="quest nocantrip book noeden" />
+    <active id="62" name="Duae Viae" gfx="duae.png" description="Make your choice" quality="4" craftquality="-1" maxcharges="6" chargetype="normal" initcharge="0" hidden="true" tags="quest nocantrip book noeden" />
     <passive id="63" name="Path of Salvation" gfx="angelpath.png" description="I am saved" quality="4" craftquality="-1" hidden="true" tags="quest noeden nocantrip" />
     <passive id="64" name="Path of Temptation" gfx="devilpath.png" description="My life is yours" quality="4" craftquality="-1" hidden="true" tags="quest noeden nocantrip" />
     <passive id="65" name="Devil's Path 1" gfx="devilpath1.png" description="Fire shot" quality="4" craftquality="-1" hidden="true" tags="quest noeden nocantrip" />
