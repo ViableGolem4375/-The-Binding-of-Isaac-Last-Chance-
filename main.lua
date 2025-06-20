@@ -1911,7 +1911,7 @@ if EID then
     EID:addBirthright(templateType, "{{ArrowUp}} +10 luck#{{ArrowUp}} Gives a scaling damage up equal to 50% of Isaac's luck stat.")
     EID:addBirthright(TAINTED_TEMPLATE_TYPE, "Grants a random passive quality 4 item.")
     EID:addTrinket(RELIQUARY_TRINKET, "{{Warning}} Picking up this trinket will immediately teleport Isaac to a special Essence Reliquary room.#This room will contain an item from a unique item pool containing various items relating to character's gimmicks.", "Reliquary Access Card")
-    EID:addCollectible(AMP_ITEM, "Spawn a familiar which projects a damage amplification area onto the ground.#{{ArrowUp}} Standing within this area will multiply Isaac's damage by 5.#{{Warning}} Familiar expires after 20 seconds.", "Amplifier")
+    EID:addCollectible(AMP_ITEM, "Spawn a stationary familiar which projects a damage amplification area onto the ground.#{{ArrowUp}} Standing within this area will multiply Isaac's damage by 5.#Entering a new room will place the familiar at the door.#{{Warning}} Familiar expires after 20 seconds.", "Amplifier")
     EID:addCollectible(HUH_ITEM, "Rerolls all item pedestals in the room into The Poop.", "Huh?")
     EID:addTrinket(CLOVER_TRINKET, "{{ArrowUp}} +2 luck.#{{Collectible202}} +4 luck if golden.", "Four Leaf Clover")
     EID:addTrinket(ORB_TRINKET, "Automatically rerolls quality 0 items.#{{Collectible202}} No effect if golden.", "Orb Shard")
@@ -2899,6 +2899,38 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateAmp)
 
+local removethestupidfamiliar = false
+
+function Mod:NewRoomEnter()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        player:RemoveCollectible(AMP_DMG_ITEM)
+    end
+    removethestupidfamiliar = true
+    return true
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.NewRoomEnter)
+
+function Mod:NewFloorEnter()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        player:RemoveCollectible(AMP_DMG_ITEM)
+    end
+    removethestupidfamiliar = true
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.NewFloorEnter)
+
+function Mod:RemoveAmpDamage()
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        player:RemoveCollectible(AMP_DMG_ITEM)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.RemoveAmpDamage)
+
 local activeAmpFamiliars = {} -- ✅ Keeps track of spawned familiars
 
 function Mod:OnAmpItemUse(item, rng, player, flags)
@@ -2933,6 +2965,11 @@ function Mod:OnFamiliarUpdate(familiar)
          if not data.SpawnTime then
             data.SpawnTime = Game():GetFrameCount() -- Store the current frame count
         end
+        --removethestupidfamiliar = false
+        --[[ if Mod:NewRoomEnter() then
+            print("why")
+            data.SpawnTime = -600
+        end ]]
 
         -- Check if 20 seconds (600 frames) have passed
         if Game():GetFrameCount() - data.SpawnTime >= 600 then
@@ -2941,6 +2978,8 @@ function Mod:OnFamiliarUpdate(familiar)
                 data.AreaIndicator:Remove()
                 data.AreaIndicator = nil
             end
+
+            
             
 
             -- Reset all players' damage
@@ -2974,7 +3013,7 @@ function Mod:OnFamiliarUpdate(familiar)
         end
 
 
-        local players = Isaac.GetPlayer()
+        --local players = Isaac.GetPlayer()
         for i = 0, Game():GetNumPlayers() - 1 do
             local player = Game():GetPlayer(i)
             local distance = player.Position:Distance(familiar.Position)
@@ -2989,6 +3028,7 @@ function Mod:OnFamiliarUpdate(familiar)
                 --player.Damage = player:GetData().BaseDamage -- Restore base damage
             end
         end
+        removethestupidfamiliar = false
     end
 end
 
@@ -3003,13 +3043,11 @@ Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.OnFamiliarUpdate)
                 data.AreaIndicator:Remove()
                 data.AreaIndicator = nil
             end
+            data.SpawnTime = -600
             
             -- ✅ Remove familiar on room change
             familiar:Remove()
-            for i = 0, Game():GetNumPlayers() - 1 do
-                local player = Game():GetPlayer(i)
-                player:RemoveCollectible(AMP_DMG_ITEM)
-            end
+            
         end
     end
 
@@ -3045,13 +3083,11 @@ Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.RemoveAmpFamiliarsOnStart
                 data.AreaIndicator:Remove()
                 data.AreaIndicator = nil
             end
+            data.SpawnTime = -600
             
             -- ✅ Remove familiar on room change
             familiar:Remove()
-            for i = 0, Game():GetNumPlayers() - 1 do
-                local player = Game():GetPlayer(i)
-                player:RemoveCollectible(AMP_DMG_ITEM)
-            end
+            
         end
     end
 
@@ -8766,7 +8802,9 @@ function Mod:OnCoinPickup(pickup, collider)
                     chance = 0.05
                 elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
                     chance = 0.10
-                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType then
+                elseif pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
+                    chance = 0
+                elseif pickup.SubType == CoinSubType.COIN_NICKEL then
                     chance = 0.25
                 elseif pickup.SubType == CoinSubType.COIN_DIME then
                     chance = 0.37
@@ -8809,8 +8847,10 @@ function Mod:OnCoinPickupBone(pickup, collider)
                     chance = 0.025
                 elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
                     chance = 0.05
-                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType then
+                elseif pickup.SubType == CoinSubType.COIN_NICKEL then
                     chance = 0.125
+                elseif pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
+                    chance = 0
                 elseif pickup.SubType == CoinSubType.COIN_DIME then
                     chance = 0.185
                 end
@@ -8852,8 +8892,10 @@ function Mod:OnCoinPickupRot(pickup, collider)
                     chance = 0.05
                 elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
                     chance = 0.10
-                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType then
+                elseif pickup.SubType == CoinSubType.COIN_NICKEL then
                     chance = 0.25
+                elseif pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
+                    chance = 0
                 elseif pickup.SubType == CoinSubType.COIN_DIME then
                     chance = 0.37
                 end
@@ -9007,7 +9049,7 @@ function Mod:RandomLoudSounds(player)
         if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
             volume = 2
         end
-        if player:HasTrinket(KING_TRINKET + 32768) and player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
+        if player:HasTrinket(NOISEMAKER_TRINKET + 32768) and player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
             volume = 3
         end
 
@@ -9041,8 +9083,10 @@ function Mod:OnCoinPickupKing(pickup, collider)
                     chance = 0.001
                 elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
                     chance = 0.002
-                elseif pickup.SubType == CoinSubType.COIN_NICKEL or pickup.SubType then
+                elseif pickup.SubType == CoinSubType.COIN_NICKEL then
                     chance = 0.005
+                elseif pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
+                    chance = 0
                 elseif pickup.SubType == CoinSubType.COIN_DIME then
                     chance = 0.01
                 end
