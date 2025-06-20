@@ -6,7 +6,6 @@
 - Maybe add some sound effects to items.
 - Maybe necromancy shouldnt res bosses.
 - Maybe have a unique synergy between both mantles.
-- Add devil deal prices.
 - Look into book of jubilees and bone hearts.
 - Cards are huge on J+E HUD.
 - Generosity might be bugged, probably rework this anyways.
@@ -35,4 +34,4 @@ Trinket Ideas:
 
 
 
-Win streak: 34
+Win streak: 35

@@ -193,6 +193,9 @@ SUN_CARD = Isaac.GetCardIdByName("Misprinted Sun")
 JUDGEMENT_CARD = Isaac.GetCardIdByName("Misprinted Judgement")
 WORLD_CARD = Isaac.GetCardIdByName("Misprinted World")
 
+local Tithe = {}
+
+Tithe.SLOT_TITHE = 249376972
 
 ----------------------------------------------------------------------------------------
 -- Character code for Domino below.
@@ -7479,18 +7482,56 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_PRE_TEAR_COLLISION, Mod.HealOnTearHit)
 
-function Mod:ApplyGenerosityDamageBoost(player, cacheFlag)
-    if cacheFlag == CacheFlag.CACHE_DAMAGE and player:HasCollectible(GENEROSITY_ITEM) then
-        local donationCount = Game():GetDonationModAngel() -- ✅ Retrieve Angel Machine coins
+local titheSpawned = false
 
-        local totalDonationMoney = donationCount-- ✅ Combine both sources
-        local damageBoost = totalDonationMoney / 10 -- ✅ Calculate boost (1/10 of total donations)
-
-        player.Damage = player.Damage + damageBoost -- ✅ Apply scaling damage boost
+function Mod:OnNewGameTithe(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        titheSpawned = false
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyGenerosityDamageBoost)
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameTithe)
+
+function Mod:OnNewRoomTithe(isContinued)
+    titheSpawned = false
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoomTithe)
+
+function Mod:OnNewFloorTithe(isContinued)
+    titheSpawned = false
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloorTithe)
+
+
+
+function Mod:ApplyGenerosityDamageBoost(player, cacheFlag)
+    local room = Game():GetRoom()
+    local level = Game():GetLevel()
+    local roomType = level:GetCurrentRoomDesc().Data.Type
+    local entities = Isaac.GetRoomEntities()
+
+
+
+    if roomType == RoomType.ROOM_ANGEL then
+        for i = 1, Game():GetNumPlayers() do
+            local player = Game():GetPlayer(i - 1)
+            if player:HasCollectible(GENEROSITY_ITEM) and titheSpawned == false then
+                for _, entity in ipairs(entities) do
+                    if entity.Type == 1000 and entity.Variant == 5001 then
+                    entity:Remove()
+            Isaac.Spawn(EntityType.ENTITY_SLOT, Tithe.SLOT_TITHE, 0, entity.Position, Vector(0,0), nil)
+        end
+    end
+
+            end
+        end
+    end
+
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.ApplyGenerosityDamageBoost)
 
 function Mod:ApplyTemperanceBoost(player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_FIREDELAY and player:HasCollectible(TEMPERANCE_ITEM) then
@@ -8681,7 +8722,132 @@ Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM,EssenceCollector.onNewRoom)
 Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, EssenceCollector.onPlayerCollide)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, EssenceCollector.onUpdateCollector)
 
+--[[ local Tithe = {}
 
+Tithe.SLOT_TITHE = 249376972 ]]
+
+function Tithe:onPlayerCollideTithe(player,collider,_low)
+    if collider.Type == 6 and collider.Variant == Tithe.SLOT_TITHE then
+        local slotData = collider:GetData()
+			if slotData == nil then
+				return false
+			end
+	   
+			local slotSprite = collider:GetSprite()
+			
+			--If the machine isn't busy and the player can use it
+			if slotSprite:IsPlaying("Idle") and player:GetNumCoins() >= 1 then
+                player:AddCoins(-1)
+                slotSprite:Play("Prize")
+            end
+    end
+end
+
+function Tithe:onUpdateTithe()
+    local slotsTable = Isaac.FindByType(EntityType.ENTITY_SLOT,Tithe.SLOT_TITHE,-1,false,false)
+    local player = Isaac.GetPlayer(0)
+    for k in pairs(slotsTable) do
+        --print("working")
+        local slot = slotsTable[k]
+
+        local slotData = slot:GetData()
+		if slotData == nil then
+			return false
+		end
+
+        local slotSprite = slot:GetSprite()
+        if slotSprite:IsEventTriggered("Prize") then
+		    SFXManager():Play(SoundEffect.SOUND_DIVINE_INTERVENTION,1,0,false,1)
+	    end
+
+        local slotRNG = slot:GetDropRNG():RandomInt(100)
+        local slotRNG2 = slot:GetDropRNG():RandomInt(100)
+        local slotRNG3 = slot:GetDropRNG():RandomInt(100)
+
+
+        if slotSprite:IsEventTriggered("Prize") then
+            if slotRNG <= 34 then
+                if slotRNG2 < 10 then
+                    player:AddItemWisp(CollectibleType.COLLECTIBLE_HOLY_LIGHT, player.Position)
+                elseif slotRNG2 < 20 then
+                    player:AddSoulHearts(2)
+                elseif slotRNG < 30 then
+                    player:AddItemWisp(CollectibleType.COLLECTIBLE_CIRCLE_OF_PROTECTION, player.Position)
+                elseif slotRNG < 32 then
+                    player:AddItemWisp(CollectibleType.COLLECTIBLE_SACRED_HEART, player.Position)
+                elseif slotRNG < 34 then
+                    player:AddItemWisp(CollectibleType.COLLECTIBLE_REVELATION, player.Position)
+                elseif slotRNG < 45 then
+                    player:AddWisp(CollectibleType.COLLECTIBLE_BOOK_OF_REVELATIONS, player.Position)
+                elseif slotRNG < 55 then
+                    player:AddWisp(CollectibleType.COLLECTIBLE_HOLY_LIGHT, player.Position)
+                elseif slotRNG < 57 then
+                    player:AddItemWisp(CollectibleType.COLLECTIBLE_HOLY_MANTLE, player.Position)
+                elseif slotRNG < 67 then
+                    player:AddCollectible(CollectibleType.COLLECTIBLE_KEY_PIECE_1)
+                elseif slotRNG < 77 then
+                    player:AddCollectible(CollectibleType.COLLECTIBLE_KEY_PIECE_2)
+                elseif slotRNG < 87 then
+                    player:AddEternalHearts(1)
+                elseif slotRNG < 95 then
+                    player:AddMaxHearts(2)
+                else
+                    slotSprite:Play("Death")
+                end
+
+
+            end
+
+        end
+
+        if slotSprite:IsEventTriggered("Explosion") then
+            if slotRNG3 < 34 then
+                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, 0, player.Position + Vector(32,32), Vector(0,0), nil)
+            else
+                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_ETERNAL, player.Position + Vector(32,32), Vector(0,0), nil)
+            end
+			local explosion = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_EXPLOSION, 0, slot.Position, Vector(0, 0), nil)
+            explosion:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- Prevents explos
+            slot:TakeDamage(1, DamageFlag.DAMAGE_EXPLOSION, EntityRef(player), 0)
+		end
+
+        if slotSprite:IsFinished("Initiate") then
+			slotSprite:Play("Wiggle",true)
+		end
+			
+		if slotSprite:IsFinished("Wiggle") then
+			slotSprite:Play("Prize",true)				
+		end
+			
+		if slotSprite:IsFinished("Prize") then
+			slotSprite:Play("Idle",true)
+		end
+			
+		if slotSprite:IsFinished("Death") then
+			slotSprite:Play("Broken",true)
+		end
+
+        if slotSprite:IsPlaying("Broken") == false then
+			Tithe:StopExplosionHackTithe(slot)
+		end
+    end
+end
+
+function Tithe:StopExplosionHackTithe(machine)
+    local asploded = machine.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND
+    if not asploded then return end
+	
+	local machineSprite = machine:GetSprite()
+	
+	if machineSprite:GetAnimation() ~= "Death" then
+		machineSprite:Play("Broken",true)
+	end
+
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, Tithe.onPlayerCollideTithe)
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Tithe.onUpdateTithe)
 
 ----------------------------------------------------------------------------------------
 --- Trinket Code Below
