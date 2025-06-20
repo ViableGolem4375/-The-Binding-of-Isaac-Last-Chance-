@@ -7451,8 +7451,6 @@ function Mod:ApplyGenerosityDamageBoost(player, cacheFlag)
         local damageBoost = totalDonationMoney / 10 -- ✅ Calculate boost (1/10 of total donations)
 
         player.Damage = player.Damage + damageBoost -- ✅ Apply scaling damage boost
-        print(player:GetName(), "gained", damageBoost, "extra damage from donations!")
-
     end
 end
 

@@ -9,6 +9,7 @@
 - Add devil deal prices.
 - Look into book of jubilees and bone hearts.
 - Cards are huge on J+E HUD.
+- Generosity might be bugged, probably rework this anyways.
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -28,9 +29,10 @@ communist manifesto
 reverse soul stones?
 reusable HP up
 active item like birthright
+rapture
 
 Trinket Ideas:
 
 
 
-Win streak: 25
+Win streak: 29
