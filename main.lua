@@ -193,10 +193,6 @@ SUN_CARD = Isaac.GetCardIdByName("Misprinted Sun")
 JUDGEMENT_CARD = Isaac.GetCardIdByName("Misprinted Judgement")
 WORLD_CARD = Isaac.GetCardIdByName("Misprinted World")
 
-local Tithe = {}
-
-Tithe.SLOT_TITHE = 249376972
-
 ----------------------------------------------------------------------------------------
 -- Character code for Domino below.
 
@@ -2018,7 +2014,7 @@ if EID then
     EID:addCollectible(CHARITY_ITEM, "Gain 1/2 of a soul heart for every 5 coins spent.", "Charity")
     EID:addCollectible(HUMILITY_ITEM, "{{ArrowUp}} Gain 2x damage.#{{ArrowDown}} The bonus is lost if Isaac holds any quality 4 items.", "Humility")
     EID:addCollectible(LOVE_ITEM, "Issac's tears heal enemies which have been turned friendly.#{{Warning}} Does not work on enemies with the charmed status effect.", "Love")
-    EID:addCollectible(GENEROSITY_ITEM, "{{ArrowUp}} Gain +0.1 damage for every coin given to the donation machine in the current run.", "Generosity")
+    EID:addCollectible(GENEROSITY_ITEM, "Spawns a Tithe in angel rooms.#Tithes are a unique slot machine variant which has unique payouts.", "Generosity")
     EID:addCollectible(TEMPERANCE_ITEM, "{{ArrowUp}} Gain -20% fire delay while below full red health.#Does not work on characters without red health.", "Temperance")
     EID:addCollectible(ZEAL_ITEM, "Gain a familiar which fires godhead tears that scales with your damage and fire rate.", "Zeal")
     EID:addCollectible(KINDNESS_ITEM, "Creates an extermely brief aura around Isaac which turns enemies friendly.", "Kindness")
@@ -2047,7 +2043,7 @@ if EID then
     EID:addCard(SUN_CARD, "Activates the effect of Book of Jubilees.#Tarot cloth reduces the damage taken by 1 heart.", "Misprinted Sun")
     EID:addCard(JUDGEMENT_CARD, "Spawns a donation machine.#Spawns 2 donation machines while holding tarot cloth.", "Misprinted Judgement")
     EID:addCard(WORLD_CARD, "Adds curse of the lost for the floor and removes any other active curses.#Removes all curses for the floor while holding tarot cloth.", "Misprinted World")
-
+    EID:addEntity(6, 249376972, -1, "Tithe", "{{Warning}} Removes 1 coin when touched.#{{ArrowUp}} Has a chance to grant various payouts when destroyed including angel room item wisps, eternal hearts, Key Pieces, soul hearts, HP ups, and angel room items.#Spawns random pickups when destroyed.")
 end
 
 --Function to handle dice item rerolls.
@@ -2242,7 +2238,6 @@ function Mod:DullCoinUse(item, rng, player, flags)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.DullCoinUse, DULL_COIN_ID)
-
 
 --[[ function Mod:ApplyBrokenHearts(player)
     if player:HasCollectible(HATRED_ITEM) then
@@ -2891,7 +2886,6 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnUseEssenceOfLilithItem, LILITH_ESSENCE)
 
-
 function Mod:OnCacheUpdateAmp(player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_DAMAGE then
         if player:HasCollectible(AMP_DMG_ITEM) then
@@ -2902,14 +2896,11 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateAmp)
 
-local removethestupidfamiliar = false
-
-function Mod:NewRoomEnter()
+--[[ function Mod:NewRoomEnter()
     for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
         player:RemoveCollectible(AMP_DMG_ITEM)
     end
-    removethestupidfamiliar = true
     return true
 end
 
@@ -2920,10 +2911,9 @@ function Mod:NewFloorEnter()
         local player = Game():GetPlayer(i)
         player:RemoveCollectible(AMP_DMG_ITEM)
     end
-    removethestupidfamiliar = true
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.NewFloorEnter)
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.NewFloorEnter) ]]
 
 function Mod:RemoveAmpDamage()
     for i = 0, Game():GetNumPlayers() - 1 do
@@ -2958,7 +2948,6 @@ function Mod:OnAmpItemUse(item, rng, player, flags)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnAmpItemUse, AMP_ITEM)
-
 
 function Mod:OnFamiliarUpdate(familiar)
     local data = familiar:GetData()
@@ -3031,7 +3020,6 @@ function Mod:OnFamiliarUpdate(familiar)
                 --player.Damage = player:GetData().BaseDamage -- Restore base damage
             end
         end
-        removethestupidfamiliar = false
     end
 end
 
@@ -7053,6 +7041,7 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.UpdateGluttony)
 
+
 function Mod:UpdateStatsByCachedItemsGluttony(player, cacheFlag)
     if player:HasCollectible(GLUTTONY_ITEM) then
         local totalItems = player:GetData().statBoostItemCount or 0 -- ✅ Use cached item count
@@ -7482,31 +7471,9 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_PRE_TEAR_COLLISION, Mod.HealOnTearHit)
 
-local titheSpawned = false
-
-function Mod:OnNewGameTithe(isContinued)
-    if not isContinued then -- Ensures it only resets for fresh runs, not continues
-        titheSpawned = false
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameTithe)
-
-function Mod:OnNewRoomTithe(isContinued)
-    titheSpawned = false
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoomTithe)
-
-function Mod:OnNewFloorTithe(isContinued)
-    titheSpawned = false
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloorTithe)
 
 
-
-function Mod:ApplyGenerosityDamageBoost(player, cacheFlag)
+--[[ function Mod:GenerosityReplace()
     local room = Game():GetRoom()
     local level = Game():GetLevel()
     local roomType = level:GetCurrentRoomDesc().Data.Type
@@ -7514,24 +7481,27 @@ function Mod:ApplyGenerosityDamageBoost(player, cacheFlag)
 
 
 
-    if roomType == RoomType.ROOM_ANGEL then
-        for i = 1, Game():GetNumPlayers() do
-            local player = Game():GetPlayer(i - 1)
-            if player:HasCollectible(GENEROSITY_ITEM) and titheSpawned == false then
-                for _, entity in ipairs(entities) do
-                    if entity.Type == 1000 and entity.Variant == 5001 then
+    if roomType ~= RoomType.ROOM_ANGEL then return end
+
+    print("1")
+    for i = 1, Game():GetNumPlayers() do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(GENEROSITY_ITEM) and titheSpawned == false then
+            print("2")
+            for _, entity in ipairs(Isaac.GetRoomEntities()) do
+                if entity.Type == 1000 and entity.Variant == 5001 then
+                    print("3")
                     entity:Remove()
-            Isaac.Spawn(EntityType.ENTITY_SLOT, Tithe.SLOT_TITHE, 0, entity.Position, Vector(0,0), nil)
-        end
-    end
-
+                    Isaac.Spawn(EntityType.ENTITY_SLOT, Tithe.SLOT_TITHE, 0, entity.Position, Vector(0,0), nil)
+                    
+                end
             end
+
         end
     end
-
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.ApplyGenerosityDamageBoost)
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.GenerosityReplace) ]]
 
 function Mod:ApplyTemperanceBoost(player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_FIREDELAY and player:HasCollectible(TEMPERANCE_ITEM) then
@@ -7657,6 +7627,8 @@ function Mod:ConvertEnemiesToFriendly(npc)
 end
 
 Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, Mod.ConvertEnemiesToFriendly)
+
+
 
 --[[ local json = require("json") -- ✅ Import JSON functionality
 
@@ -7849,6 +7821,7 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, function(_, player, cacheFlag)
         player.TearFlags = player.TearFlags | player:GetData().TemporaryStatusFlag -- ✅ Apply temporary effects
     end
 end)
+
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
@@ -8722,9 +8695,9 @@ Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM,EssenceCollector.onNewRoom)
 Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, EssenceCollector.onPlayerCollide)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, EssenceCollector.onUpdateCollector)
 
---[[ local Tithe = {}
+local Tithe = {}
 
-Tithe.SLOT_TITHE = 249376972 ]]
+Tithe.SLOT_TITHE = 249376972
 
 function Tithe:onPlayerCollideTithe(player,collider,_low)
     if collider.Type == 6 and collider.Variant == Tithe.SLOT_TITHE then
@@ -8757,7 +8730,7 @@ function Tithe:onUpdateTithe()
 
         local slotSprite = slot:GetSprite()
         if slotSprite:IsEventTriggered("Prize") then
-		    SFXManager():Play(SoundEffect.SOUND_DIVINE_INTERVENTION,1,0,false,1)
+		    SFXManager():Play(SoundEffect.SOUND_COIN_SLOT,1,0,false,1)
 	    end
 
         local slotRNG = slot:GetDropRNG():RandomInt(100)
@@ -8845,7 +8818,34 @@ function Tithe:StopExplosionHackTithe(machine)
 
 end
 
+local currentRoomTithe = Game():GetRoom()
 
+function Tithe:onNewRoomTithe()
+    print("working")
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if currentRoomTithe:IsFirstVisit() == true and currentRoomTithe:GetType() == RoomType.ROOM_ANGEL and player:HasCollectible(GENEROSITY_ITEM) then
+            print("working2")
+            local pos = Game():GetRoom():FindFreeTilePosition(Vector(180,210), 100)
+            local donTable = Isaac.FindByType(EntityType.ENTITY_EFFECT,5001,-1,false,false)
+            Isaac.Spawn(EntityType.ENTITY_SLOT,Tithe.SLOT_TITHE,0,pos,Vector(0,0),nil)
+				
+		--[[ for k in pairs(donTable) do
+			local replaceChance = math.random(0,101)
+					
+			--Basic slot machines have a 5% chance to be replaced with essence collectors.
+			if replaceChance <= 100 then
+                --donTable[k]:Remove()
+				Isaac.Spawn(EntityType.ENTITY_SLOT,Tithe.SLOT_TITHE,0,Vector(0,0),Vector(0,0),nil)
+				
+			end
+		end ]]
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM,Tithe.onNewRoomTithe)
 Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, Tithe.onPlayerCollideTithe)
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Tithe.onUpdateTithe)
 
