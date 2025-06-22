@@ -165,6 +165,7 @@ VOID_DAMAGE_ITEM = Isaac.GetItemIdByName("Void Energy")
 CHARGE_DAMAGE_ITEM = Isaac.GetItemIdByName("Rampaging Rage")
 CONCOCTION_ITEM = Isaac.GetItemIdByName("Mysterious Concoction")
 PILL_ITEM = Isaac.GetItemIdByName("The Pill")
+BIBBLE_ITEM = Isaac.GetItemIdByName("The Bibble")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2046,6 +2047,7 @@ if EID then
     EID:addCard(WORLD_CARD, "Adds curse of the lost for the floor and removes any other active curses.#Removes all curses for the floor while holding tarot cloth.", "Misprinted World")
     EID:addEntity(6, 249376972, -1, "Tithe", "{{Warning}} Removes 1 coin when touched.#{{ArrowUp}} Has a chance to grant various payouts when destroyed including angel room item wisps, eternal hearts, Key Pieces, soul hearts, HP ups, and angel room items.#Spawns random pickups when destroyed.")
     EID:addCollectible(PILL_ITEM, "All pills spawn as horse pills.#Spawns a pill.", "The Pill")
+    EID:addCollectible(BIBBLE_ITEM, "Activates the effect of a random book item.#Will not activate the effects of Duae Viae or Book of Jubilees.", "The Bibble")
 
 end
 
@@ -7873,6 +7875,40 @@ function Mod:OnPlayerUpdate_PillSpawn(player)
 end
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdate_PillSpawn)
 
+local BOOKS = {
+    CollectibleType.COLLECTIBLE_BOOK_OF_BELIAL,
+    CollectibleType.COLLECTIBLE_BOOK_OF_SHADOWS,
+    CollectibleType.COLLECTIBLE_BOOK_OF_REVELATIONS,
+    CollectibleType.COLLECTIBLE_BOOK_OF_SIN,
+    CollectibleType.COLLECTIBLE_BOOK_OF_THE_DEAD,
+    CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES,
+    CollectibleType.COLLECTIBLE_BOOK_OF_SECRETS,
+    CollectibleType.COLLECTIBLE_SATANIC_BIBLE,
+    CollectibleType.COLLECTIBLE_ANARCHIST_COOKBOOK,
+    CollectibleType.COLLECTIBLE_NECRONOMICON,
+    CollectibleType.COLLECTIBLE_TELEPATHY_BOOK,
+    CollectibleType.COLLECTIBLE_MONSTER_MANUAL,
+    CollectibleType.COLLECTIBLE_THE_NAIL,
+    CollectibleType.COLLECTIBLE_BIBLE,
+    ANATOMY_ITEM
+}
+
+function Mod:UseBibbleItem(_, item, rng, player)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(BIBBLE_ITEM) then
+            player:AnimateCollectible(BIBBLE_ITEM, "UseItem", "PlayerPickupSparkle")
+            local rng = RNG()
+            rng:SetSeed(Random(), 0xB00C)
+
+            local bookID = BOOKS[rng:RandomInt(#BOOKS) + 1]
+            player:UseActiveItem(bookID, UseFlag.USE_NOANIM | UseFlag.USE_NOHUD, -1)
+
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseBibbleItem, BIBBLE_ITEM)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
