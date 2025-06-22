@@ -116,5 +116,6 @@
     <active id="108" name="Empty Eternal Bond" gfx="bond2empty.png" description="Needs more charge..." quality="4" craftquality="-1" maxcharges="12" devilprice="2" chargetype="normal" hidden="true" tags="quest noeden nocantrip"/>
     <passive id="109" name="The Pill" gfx="the_pill.png" description="Pills up" quality="1" craftquality="1" devilprice="1" tags="nocantrip offensive" />
     <active id="110" name="The Bibble" gfx="bibble.png" description="You dare question the word of the mighty jimmy!" quality="2" craftquality="2" devilprice="1" maxcharges="4" chargetype="normal" tags="offensive nocantrip book" />
+    <active id="111" name="The Communist Manifesto" gfx="communism.png" description="Sharing is caring" quality="2" craftquality="2" devilprice="1" maxcharges="6" chargetype="normal" tags="offensive nocantrip book" />
 
 </items>

@@ -24,6 +24,7 @@
         <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Mysterious Concoction" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Bibble" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="The Communist Manifesto" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="devil">
@@ -109,6 +110,7 @@
         <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Mysterious Concoction" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Bibble" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="The Communist Manifesto" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -149,6 +151,7 @@
         <Item Name="Mysterious Concoction" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Pill" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Bibble" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="The Communist Manifesto" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
@@ -216,6 +219,7 @@
         <Item Name="Anatomy Textbook" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Bibble" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="The Communist Manifesto" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>

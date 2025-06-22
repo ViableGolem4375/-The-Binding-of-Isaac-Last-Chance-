@@ -166,6 +166,7 @@ CHARGE_DAMAGE_ITEM = Isaac.GetItemIdByName("Rampaging Rage")
 CONCOCTION_ITEM = Isaac.GetItemIdByName("Mysterious Concoction")
 PILL_ITEM = Isaac.GetItemIdByName("The Pill")
 BIBBLE_ITEM = Isaac.GetItemIdByName("The Bibble")
+COMMUNISM_ITEM = Isaac.GetItemIdByName("The Communist Manifesto")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2048,6 +2049,7 @@ if EID then
     EID:addEntity(6, 249376972, -1, "Tithe", "{{Warning}} Removes 1 coin when touched.#{{ArrowUp}} Has a chance to grant various payouts when destroyed including angel room item wisps, eternal hearts, Key Pieces, soul hearts, HP ups, and angel room items.#Spawns random pickups when destroyed.")
     EID:addCollectible(PILL_ITEM, "All pills spawn as horse pills.#Spawns a pill.", "The Pill")
     EID:addCollectible(BIBBLE_ITEM, "Activates the effect of a random book item.#Will not activate the effects of Duae Viae or Book of Jubilees.", "The Bibble")
+    EID:addCollectible(COMMUNISM_ITEM, "Evenly distributes Isaac's coins, keys, and bombs.#As Tainted Blue Baby this effect only evenly distributes coins and keys.", "The Communist Manifesto")
 
 end
 
@@ -7890,7 +7892,8 @@ local BOOKS = {
     CollectibleType.COLLECTIBLE_MONSTER_MANUAL,
     CollectibleType.COLLECTIBLE_THE_NAIL,
     CollectibleType.COLLECTIBLE_BIBLE,
-    ANATOMY_ITEM
+    ANATOMY_ITEM,
+    COMMUNISM_ITEM
 }
 
 function Mod:UseBibbleItem(_, item, rng, player)
@@ -7909,6 +7912,42 @@ function Mod:UseBibbleItem(_, item, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseBibbleItem, BIBBLE_ITEM)
+
+function Mod:UseCommunismItem(_, item, rng, player)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(COMMUNISM_ITEM) then
+            player:AnimateCollectible(COMMUNISM_ITEM, "UseItem", "PlayerPickupSparkle")
+            if player:GetPlayerType() == PlayerType.PLAYER_BLUEBABY_B then
+                local coins = player:GetNumCoins()
+                local keys = player:GetNumKeys()
+
+                local total = coins + keys
+                local average = math.floor(total / 2)
+
+                -- Set each consumable to the average
+                player:AddCoins(average - coins)
+                player:AddKeys(average - keys)
+            else 
+                local coins = player:GetNumCoins()
+                local bombs = player:GetNumBombs()
+                local keys = player:GetNumKeys()
+
+                local total = coins + bombs + keys
+                local average = math.floor(total / 3)
+
+                -- Set each consumable to the average
+                player:AddCoins(average - coins)
+                player:AddBombs(average - bombs)
+                player:AddKeys(average - keys)
+            end
+
+
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseCommunismItem, COMMUNISM_ITEM)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
