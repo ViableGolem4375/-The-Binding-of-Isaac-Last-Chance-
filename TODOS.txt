@@ -1,6 +1,6 @@
 - Fix some visuals.
 - Fix d4 effects on tainted character maybe?
-- Forgotten and eve essence effects are kind of placeholders, need something more interesting.
+- Forgotten, lost, and eve essence effects are kind of placeholders, need something more interesting.
 - Essence items can give copies, maybe fix that or make sure they all stack.
 - Slot machines are turning into essence collectors by re-entering rooms possibly.
 - Maybe add some sound effects to items.
@@ -8,7 +8,6 @@
 - Maybe have a unique synergy between both mantles.
 - Look into book of jubilees and bone hearts.
 - Cards are huge on J+E HUD.
-- Generosity might be bugged, probably rework this anyways.
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -21,6 +20,8 @@
  - C section: works alongside spears as pontius, works alongside sword as t pontius, works alongside proto tech
  - Proto tech (for pontius'): works alongside spears as pontius, works alongside sword as t pontius, hud needs to be repositioned, no stacking effect
 
+
+
 Item Ideas to Add:
 
 the bibble
@@ -29,6 +30,7 @@ reverse soul stones?
 reusable HP up
 active item like birthright
 rapture
+all pills are horse pills
 
 Trinket Ideas:
 
