@@ -46,7 +46,7 @@
         <Item Name="Charity" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Humility" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Love" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <!-- <Item Name="Generosity" Weight="1" DecreaseBy="1" RemoveOn="0.1" /> -->
+        <Item Name="Generosity" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Temperance" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Zeal" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Kindness" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
@@ -73,6 +73,7 @@
         <Item Name="Become Back My Money" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Gold Spray Paint" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Toolbelt" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="The Pill" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -142,6 +143,7 @@
         <Item Name="Technology Omega" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Mysterious Concoction" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="The Pill" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
@@ -170,7 +172,7 @@
         <Item Name="Charity" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Humility" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Love" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <!-- <Item Name="Generosity" Weight="1" DecreaseBy="1" RemoveOn="0.1" /> -->
+        <Item Name="Generosity" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Temperance" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Zeal" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Kindness" Weight="1" DecreaseBy="1" RemoveOn="0.1" />

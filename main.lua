@@ -164,6 +164,7 @@ ENVIOUS_RAGE_ITEM = Isaac.GetItemIdByName("Envious Rage")
 VOID_DAMAGE_ITEM = Isaac.GetItemIdByName("Void Energy")
 CHARGE_DAMAGE_ITEM = Isaac.GetItemIdByName("Rampaging Rage")
 CONCOCTION_ITEM = Isaac.GetItemIdByName("Mysterious Concoction")
+PILL_ITEM = Isaac.GetItemIdByName("The Pill")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2044,6 +2045,8 @@ if EID then
     EID:addCard(JUDGEMENT_CARD, "Spawns a donation machine.#Spawns 2 donation machines while holding tarot cloth.", "Misprinted Judgement")
     EID:addCard(WORLD_CARD, "Adds curse of the lost for the floor and removes any other active curses.#Removes all curses for the floor while holding tarot cloth.", "Misprinted World")
     EID:addEntity(6, 249376972, -1, "Tithe", "{{Warning}} Removes 1 coin when touched.#{{ArrowUp}} Has a chance to grant various payouts when destroyed including angel room item wisps, eternal hearts, Key Pieces, soul hearts, HP ups, and angel room items.#Spawns random pickups when destroyed.")
+    EID:addCollectible(PILL_ITEM, "All pills spawn as horse pills.#Spawns a pill.", "The Pill")
+
 end
 
 --Function to handle dice item rerolls.
@@ -7821,6 +7824,54 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, function(_, player, cacheFlag)
         player.TearFlags = player.TearFlags | player:GetData().TemporaryStatusFlag -- ✅ Apply temporary effects
     end
 end)
+
+function Mod:ConvertPillsToHorse(pickup)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+
+        if player:HasCollectible(PILL_ITEM) then
+            if pickup.Variant == PickupVariant.PICKUP_PILL then
+                local subtype = pickup.SubType
+                -- Only convert normal pills (subtype < 2048)
+                if subtype > 0 and subtype < 2048 then
+                    local horseSubtype = subtype + 2048
+                    pickup:ToPickup():Morph(
+                        pickup.Type,
+                        pickup.Variant,
+                        horseSubtype,
+                        true,
+                        true
+                    )
+                end
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, Mod.ConvertPillsToHorse)
+
+local pillTriggered = {}
+
+function Mod:OnNewGamePill(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        pillTriggered = {}
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGamePill)
+
+function Mod:OnPlayerUpdate_PillSpawn(player)
+    local id = GetPtrHash(player)
+    if not pillTriggered[id] then
+        if player:HasCollectible(PILL_ITEM) then
+            local room = Game():GetRoom()
+            local pos = room:FindFreeTilePosition(player.Position, 100)
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_PILL, 0, pos, Vector.Zero, player)
+            pillTriggered[id] = true
+        end
+    end
+end
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdate_PillSpawn)
 
 
 ----------------------------------------------------------------------------------------
