@@ -1946,7 +1946,7 @@ if EID then
     EID:addCollectible(LOST_ESSENCE, "For the current room:#{{Warning}} Become the lost.#{{ArrowUp}} +20 damage.", "Essence of The Lost")
     EID:addCollectible(JACOB_AND_ESAU_ESSENCE, "Summon Esau as a helper for the current room.", "Essence of Jacob and Esau")
     EID:addCollectible(FORGOTTEN_ESSENCE, "Summon The Forgotten as a helper for the current room.", "Essence of The Forgotten")
-    EID:addCollectible(STAR_OF_DAVID, "{{ArrowUp}} 10% chance to fire star of david tears which deal 30% more damage.#{{Luck}} 100% chance at 9 luck.#{{ArrowUp}} 5% chance for enemies to drop a golden heart on death.#{{Luck}} 50% chance at 9 luck.", "Yamika")
+    EID:addCollectible(STAR_OF_DAVID, "{{ArrowUp}} 10% chance to fire star of david tears which deal 30% more damage.#{{Luck}} 100% chance at 9 luck.#{{ArrowUp}} 1% chance for enemies to drop a golden heart on death.#{{Luck}} +1% chance per point of luck.", "Yamika")
     EID:addCollectible(GUN_ITEM, "Fire a tear that deals 10x Isaac's damage plus 10 flat damage.#{{Warning}} The tear fired is wildly inaccurate.", "A Gun")
     EID:addCollectible(APPETIZER_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.", "Appetizer")
     EID:addCollectible(MORNING_SNACK_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.", "Early Morning Snack")
@@ -4964,18 +4964,18 @@ function Mod:onTearInitStar(tear)
     end
 end
 
-local goldenHeartChance = 0.05 -- Set the drop chance (10%)
+local goldenHeartChance = 0.01 -- Set the drop chance (10%)
 
 function Mod:onEnemyDeath(entity)
     for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
-        local starnumheart = player:GetCollectibleNum(STAR_OF_DAVID) * 0.05
+        local starnumheart = player:GetCollectibleNum(STAR_OF_DAVID) * 0.01
 
         if player:HasCollectible(STAR_OF_DAVID) and entity:IsEnemy() then
             -- ✅ Base chance (5%) + Luck scaling (5% per Luck point)
             print("work")
             local luckFactor = math.max(0, player.Luck * starnumheart) -- Prevent negative values
-            local finalChance = math.min(0.5, 0.1 + luckFactor) -- Cap at 50% drop rate
+            local finalChance = math.min(0.5, 0.01 + luckFactor) -- Cap at 50% drop rate
 
             -- ✅ Random chance to spawn a Golden Heart upon enemy death
             if math.random() <= finalChance then
@@ -7584,7 +7584,7 @@ function Mod:HandleUpdateZeal(familiar)
         tear.Scale = 1.3
         tear.CollisionDamage = (player.Damage / 2)
         tear.TearFlags = TearFlags.TEAR_GLOW | TearFlags.TEAR_HOMING
-        familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay, 1))
+        familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay * 3, 1))
 
         sprite.FlipX = doFlip
         sprite:Play(shootAnim, true)
