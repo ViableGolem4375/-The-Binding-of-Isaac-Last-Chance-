@@ -8,8 +8,7 @@
 - Maybe have a unique synergy between both mantles.
 - Look into book of jubilees and bone hearts.
 - Cards are huge on J+E HUD.
-- tithe wisps all get added to player 1
-- lil delirium problem.
+- remove that one hush super secret
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -22,7 +21,8 @@
  - C section: works alongside spears as pontius, works alongside sword as t pontius, works alongside proto tech
  - Proto tech (for pontius'): works alongside spears as pontius, works alongside sword as t pontius, hud needs to be repositioned, no stacking effect
 
-
+for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
 
 Item Ideas to Add:
 
@@ -37,4 +37,4 @@ Trinket Ideas:
 
 
 
-Win streak: 39 remember edens blessing gave eraser
+Win streak: 40
