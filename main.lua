@@ -2246,23 +2246,6 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.DullCoinUse, DULL_COIN_ID)
 
---[[ function Mod:ApplyBrokenHearts(player)
-    if player:HasCollectible(HATRED_ITEM) then
-        local brokenHeartCount = player:GetBrokenHearts()
-
-        -- Ensure the effect applies only once
-        if brokenHeartCount < 11 then
-            player:AddBrokenHearts(11 - brokenHeartCount) -- Set to exactly 11
-        end
-
-        -- Apply damage boost
-        player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
-        player:EvaluateItems()
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.ApplyBrokenHearts) ]]
-
 function Mod:GrantInvulnerabilityOnHit(entity, amount, flags, source, countdown)
     for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i) -- ✅ Loop through all players
@@ -6454,6 +6437,9 @@ end
 Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.AbeItemSelection, PickupVariant.PICKUP_COLLECTIBLE) -- Detect item selection
 
 function Mod:UpdateChoiceCounter(player)
+    if player:GetPlayerType() ~= abrahamType then return end
+
+
     local data = player:GetData()
 
     -- ✅ Ensure the counter exists
@@ -7178,40 +7164,6 @@ function Mod:RemovePlayerItems(player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.RemovePlayerItems)
---[[ 
-local envyItemGiven = false
-
-function Mod:OnNewGameEnvyItemGive(isContinued)
-    if not isContinued then -- Ensures it only resets for fresh runs, not continues
-        envyItemGiven = false
-
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameEnvyItemGive)
-
-function Mod:envyItemGive(entity)
-    if entity:IsBoss() then
-        
-        for i = 0, Game():GetNumPlayers() - 1 do
-            local player = Game():GetPlayer(i)
-
-            -- ✅ Ensure player has the item
-            if player:HasCollectible(WRATH_ITEM) and not trophyGiven then
-                player:AddCollectible(TROPHY_ITEM)
-                trophyGiven = true
-            end
-        end
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.envyItemGive)
-
-function Mod:ResetEnvyItemGive()
-    envyItemGiven = false
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.ResetTrophyGiven) ]]
 
 ---@param player EntityPlayer
 function Mod:EvaluateCacheEnvy(player)
@@ -7477,38 +7429,6 @@ function Mod:HealOnTearHit(tear, collider)
 end
 
 Mod:AddCallback(ModCallbacks.MC_PRE_TEAR_COLLISION, Mod.HealOnTearHit)
-
-
-
---[[ function Mod:GenerosityReplace()
-    local room = Game():GetRoom()
-    local level = Game():GetLevel()
-    local roomType = level:GetCurrentRoomDesc().Data.Type
-    local entities = Isaac.GetRoomEntities()
-
-
-
-    if roomType ~= RoomType.ROOM_ANGEL then return end
-
-    print("1")
-    for i = 1, Game():GetNumPlayers() do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(GENEROSITY_ITEM) and titheSpawned == false then
-            print("2")
-            for _, entity in ipairs(Isaac.GetRoomEntities()) do
-                if entity.Type == 1000 and entity.Variant == 5001 then
-                    print("3")
-                    entity:Remove()
-                    Isaac.Spawn(EntityType.ENTITY_SLOT, Tithe.SLOT_TITHE, 0, entity.Position, Vector(0,0), nil)
-                    
-                end
-            end
-
-        end
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.GenerosityReplace) ]]
 
 function Mod:ApplyTemperanceBoost(player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_FIREDELAY and player:HasCollectible(TEMPERANCE_ITEM) then
@@ -7948,6 +7868,178 @@ function Mod:UseCommunismItem(_, item, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseCommunismItem, COMMUNISM_ITEM)
+--[[ 
+function Mod:FixLilDeliriumJAndE()
+
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(0)
+        local player2 = Game():GetPlayer(1)
+        local player3 = Game():GetPlayer(2)
+        local player4 = Game():GetPlayer(3)
+
+        local player1count = player:GetCollectibleNum(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        local player2count = player2:GetCollectibleNum(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        local player3count = player3:GetCollectibleNum(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        local player4count = player4:GetCollectibleNum(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+
+
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        and not player2:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
+            player2:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        end
+
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        and not player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
+            player3:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        end
+
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        and not player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
+            player4:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        end
+
+        if player2:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        and not player:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
+            player:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        end
+
+        if player2:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        and not player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
+            player3:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        end
+
+        if player2:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        and not player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
+            player4:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        end
+
+        if player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        and not player:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
+            player:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        end
+
+        if player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        and not player2:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
+            player2:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        end
+
+        if player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        and not player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
+            player4:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        end
+
+        if player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        and not player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
+            player4:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        end
+
+        if player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        and not player:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
+            player:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        end
+
+        if player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        and not player2:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
+            player2:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        end
+
+        if player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        and not player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
+            player3:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.FixLilDeliriumJAndE) ]]
+
+
+--[[ Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, function()
+    --print("[Debug] Running Lil Delirium tracker…")
+
+    for _, familiar in ipairs(Isaac.FindByType(EntityType.ENTITY_FAMILIAR)) do
+        --if familiar.SubType == CollectibleType.COLLECTIBLE_LIL_DELIRIUM then
+            local fam = familiar:ToFamiliar()
+            local owner = fam and fam.Player or nil
+            local ownerName = owner and owner:GetName() or "nil"
+            print("[Lil D] ID:", familiar.InitSeed, "Frame:", familiar.FrameCount, "Owner:", ownerName)
+            --local all = Isaac.FindByType(EntityType.ENTITY_FAMILIAR)
+            --print("Total familiars in room:", #all)
+
+        --end
+    end
+end)
+ ]]
+--[[ Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, function()
+    local lilDs = {}
+    for _, fam in ipairs(Isaac.FindByType(EntityType.ENTITY_FAMILIAR)) do
+        --if fam.SubType == CollectibleType.COLLECTIBLE_LIL_DELIRIUM then
+        table.insert(lilDs, fam)
+        --end
+    end
+
+    for _, fam in ipairs(lilDs) do
+        local f = fam:ToFamiliar()
+        local owner = f and f.Player or nil
+        local name = owner and owner:GetName() or "nil"
+        print("[Lil D] ID:", fam.InitSeed, "Frame:", fam.FrameCount, "Owner:", name)
+    end
+
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local p = Game():GetPlayer(i)
+        print("Player", i, p:GetName(), "has", p:GetCollectibleNum(CollectibleType.COLLECTIBLE_LIL_DELIRIUM), "copies")
+    end
+end) ]]
+--[[ Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, function(_, familiar)
+    --if familiar.SubType == CollectibleType.COLLECTIBLE_LIL_DELIRIUM then
+    local player = familiar:ToFamiliar().Player
+    if player then
+        local count = Isaac.CountEntities(nil, EntityType.ENTITY_FAMILIAR, -1, -1)
+        print("[Lil D] Player:", player:GetName(), "Familiars in room:", count)
+    end
+    --end
+end) ]]
+
+--[[ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, function(_, player)
+    local targetItem = CollectibleType.COLLECTIBLE_LIL_DELIRIUM
+
+    -- Only run this once per frame for player index 0
+    --if player:GetControllerIndex() ~= 0 then return end
+
+    local game = Game()
+    local maxPlayers = game:GetNumPlayers()
+    local counts = {}
+
+    -- Gather all Lil D counts
+    for i = 0, maxPlayers - 1 do
+        local p = game:GetPlayer(i)
+        counts[i] = p:GetCollectibleNum(targetItem)
+    end
+
+    -- Determine the highest count among all players
+    local maxCount = 0
+    for _, count in pairs(counts) do
+        if count > maxCount then
+            maxCount = count
+        end
+    end
+
+    -- Sync all players to the highest count
+    for i = 0, maxPlayers - 1 do
+        local p = game:GetPlayer(i)
+        local current = counts[i]
+        if current < maxCount then
+            for _ = 1, maxCount - current do
+                p:AddCollectible(targetItem)
+            end
+        elseif current > maxCount then
+            p:RemoveCollectible(targetItem)
+            for _ = 1, maxCount do
+                p:AddCollectible(targetItem)
+            end
+        end
+    end
+end) ]]
+
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
@@ -8833,6 +8925,7 @@ function Tithe:onPlayerCollideTithe(player,collider,_low)
 			end
 	   
 			local slotSprite = collider:GetSprite()
+            slotData.LastPlayer = collider:ToPlayer()
 			
 			--If the machine isn't busy and the player can use it
 			if slotSprite:IsPlaying("Idle") and player:GetNumCoins() >= 1 then
@@ -8842,14 +8935,24 @@ function Tithe:onPlayerCollideTithe(player,collider,_low)
     end
 end
 
+--[[ Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, function(_, slot, collider)
+    if slot.Variant == Tithe.SLOT_TITHE and collider:ToPlayer() then
+        local data = slot:GetData()
+        data.LastPlayer = collider:ToPlayer()
+    end
+end, EntityType.ENTITY_SLOT) ]]
+
+
 function Tithe:onUpdateTithe()
     local slotsTable = Isaac.FindByType(EntityType.ENTITY_SLOT,Tithe.SLOT_TITHE,-1,false,false)
     local player = Isaac.GetPlayer(0)
     for k in pairs(slotsTable) do
+
         --print("working")
         local slot = slotsTable[k]
 
         local slotData = slot:GetData()
+
 		if slotData == nil then
 			return false
 		end
@@ -8865,31 +8968,83 @@ function Tithe:onUpdateTithe()
 
 
         if slotSprite:IsEventTriggered("Prize") then
+            print(slotRNG2)
             if slotRNG <= 34 then
+
                 if slotRNG2 < 10 then
-                    player:AddItemWisp(CollectibleType.COLLECTIBLE_HOLY_LIGHT, player.Position)
+                    for i = 0, Game():GetNumPlayers() - 1 do
+                        local player = Game():GetPlayer(i)
+                        player:AddItemWisp(CollectibleType.COLLECTIBLE_HOLY_LIGHT, player.Position)
+                    end
                 elseif slotRNG2 < 20 then
-                    player:AddSoulHearts(2)
-                elseif slotRNG < 30 then
-                    player:AddItemWisp(CollectibleType.COLLECTIBLE_CIRCLE_OF_PROTECTION, player.Position)
-                elseif slotRNG < 32 then
-                    player:AddItemWisp(CollectibleType.COLLECTIBLE_SACRED_HEART, player.Position)
-                elseif slotRNG < 34 then
-                    player:AddItemWisp(CollectibleType.COLLECTIBLE_REVELATION, player.Position)
-                elseif slotRNG < 45 then
-                    player:AddWisp(CollectibleType.COLLECTIBLE_BOOK_OF_REVELATIONS, player.Position)
-                elseif slotRNG < 55 then
-                    player:AddWisp(CollectibleType.COLLECTIBLE_HOLY_LIGHT, player.Position)
-                elseif slotRNG < 57 then
-                    player:AddItemWisp(CollectibleType.COLLECTIBLE_HOLY_MANTLE, player.Position)
-                elseif slotRNG < 67 then
-                    player:AddCollectible(CollectibleType.COLLECTIBLE_KEY_PIECE_1)
-                elseif slotRNG < 77 then
-                    player:AddCollectible(CollectibleType.COLLECTIBLE_KEY_PIECE_2)
-                elseif slotRNG < 87 then
-                    player:AddEternalHearts(1)
-                elseif slotRNG < 95 then
-                    player:AddMaxHearts(2)
+                    for i = 0, Game():GetNumPlayers() - 1 do
+                        local player = Game():GetPlayer(i)
+                        player:AddSoulHearts(2)
+                    end
+                elseif slotRNG2 < 30 then
+                    for i = 0, Game():GetNumPlayers() - 1 do
+                        local player = Game():GetPlayer(i)
+                        player:AddItemWisp(CollectibleType.COLLECTIBLE_CIRCLE_OF_PROTECTION, player.Position)
+                    end
+                elseif slotRNG2 < 32 then
+                    for i = 0, Game():GetNumPlayers() - 1 do
+                        local player = Game():GetPlayer(i)
+                        player:AddItemWisp(CollectibleType.COLLECTIBLE_SACRED_HEART, player.Position)
+                    end
+                elseif slotRNG2 < 34 then
+                    for i = 0, Game():GetNumPlayers() - 1 do
+                        local player = Game():GetPlayer(i)
+                        player:AddItemWisp(CollectibleType.COLLECTIBLE_REVELATION, player.Position)
+                    end
+                elseif slotRNG2 < 45 then
+                    for i = 0, Game():GetNumPlayers() - 1 do
+                        local player = Game():GetPlayer(i)
+                        player:AddWisp(CollectibleType.COLLECTIBLE_BOOK_OF_REVELATIONS, player.Position)
+                    end
+                elseif slotRNG2 < 55 then
+                    for i = 0, Game():GetNumPlayers() - 1 do
+                        local player = Game():GetPlayer(i)
+                        player:AddWisp(CollectibleType.COLLECTIBLE_HOLY_LIGHT, player.Position)
+                    end
+                elseif slotRNG2 < 57 then
+                    for i = 0, Game():GetNumPlayers() - 1 do
+                        local player = Game():GetPlayer(i)
+                        player:AddItemWisp(CollectibleType.COLLECTIBLE_HOLY_MANTLE, player.Position)
+                    end
+                elseif slotRNG2 < 67 and slotRNG2 >= 57 then
+                    for i = 0, Game():GetNumPlayers() - 1 do
+                        local player = Game():GetPlayer(i)
+                        if not player:HasCollectible(CollectibleType.COLLECTIBLE_KEY_PIECE_1) then
+                            SFXManager():Play(SoundEffect.SOUND_GOLDENKEY,1,0,false,1)
+                            player:AddCollectible(CollectibleType.COLLECTIBLE_KEY_PIECE_1)
+                        else
+                            SFXManager():Play(SoundEffect.SOUND_HOLY,1,0,false,1)
+                            player:AddSoulHearts(2)
+                        end
+                    end
+                elseif slotRNG2 < 77 then
+                    for i = 0, Game():GetNumPlayers() - 1 do
+                        local player = Game():GetPlayer(i)
+                        if not player:HasCollectible(CollectibleType.COLLECTIBLE_KEY_PIECE_2) then
+                            SFXManager():Play(SoundEffect.SOUND_GOLDENKEY,1,0,false,1)
+                            player:AddCollectible(CollectibleType.COLLECTIBLE_KEY_PIECE_2)
+                        else
+                            SFXManager():Play(SoundEffect.SOUND_HOLY,1,0,false,1)
+                            player:AddSoulHearts(2)
+                        end
+                    end
+                elseif slotRNG2 < 87 then
+                    SFXManager():Play(SoundEffect.SOUND_SUPERHOLY,1,0,false,1)
+                    for i = 0, Game():GetNumPlayers() - 1 do
+                        local player = Game():GetPlayer(i)
+                        player:AddEternalHearts(1)
+                    end
+                elseif slotRNG2 < 95 then
+                    SFXManager():Play(SoundEffect.SOUND_1UP,1,0,false,1)
+                    for i = 0, Game():GetNumPlayers() - 1 do
+                        local player = Game():GetPlayer(i)
+                        player:AddMaxHearts(2)
+                    end
                 else
                     slotSprite:Play("Death")
                 end

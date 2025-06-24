@@ -9,6 +9,7 @@
 - Look into book of jubilees and bone hearts.
 - Cards are huge on J+E HUD.
 - tithe wisps all get added to player 1
+- lil delirium problem.
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -30,9 +31,10 @@ reusable HP up
 active item like birthright
 rapture
 weakness status effect
+spawn a dice shard at the beginning of each floor.
 
 Trinket Ideas:
 
 
 
-Win streak: 38
+Win streak: 39 remember edens blessing gave eraser
