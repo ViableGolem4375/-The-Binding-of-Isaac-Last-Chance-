@@ -9,6 +9,7 @@
 - Look into book of jubilees and bone hearts.
 - Cards are huge on J+E HUD.
 - remove that one hush super secret
+- miniature shop is inescapable if it spawns as the member card shop
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -37,4 +38,4 @@ Trinket Ideas:
 
 
 
-Win streak: 40
+Win streak: 41
