@@ -11,6 +11,7 @@
 - the pill might be spawning a pill on run reenter
 - boss trophy sprite has a line on the right side
 - check my active items with void - communist manifesto isn't working
+- make familiars work with baby bender and BFFs
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -39,4 +40,4 @@ Trinket Ideas:
 
 
 
-Win streak: 45
+Win streak: 46

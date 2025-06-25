@@ -2328,11 +2328,21 @@ function Mod:HandleUpdate(familiar)
             familiar
         ):ToLaser()
 
+        if player:HasTrinket(TrinketType.TRINKET_BABY_BENDER) and laser then
+            laser.TearFlags = TearFlags.TEAR_HOMING
+        end
+
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+            laser.CollisionDamage = (TEAR_DAMAGE_URIEL + playerDamage) * 2
+        else
+            laser.CollisionDamage = TEAR_DAMAGE_URIEL + playerDamage
+        end
+
         laser.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
         laser.AngleDegrees = direction:GetAngleDegrees() -- Rotate laser to match direction
         laser.Parent = familiar -- Attach the laser to the familiar
         laser.Timeout = 15 -- Set duration (adjust as needed)
-        laser.CollisionDamage = TEAR_DAMAGE_URIEL + playerDamage
+        --laser.CollisionDamage = TEAR_DAMAGE_URIEL + playerDamage
         familiar.FireCooldown = SHOOTING_TICK_COOLDOWN_URIEL
 
         sprite.FlipX = doFlip
@@ -2406,11 +2416,21 @@ function Mod:HandleUpdateb(familiarb)
             familiarb
         ):ToLaser()
 
+        if playerb:HasTrinket(TrinketType.TRINKET_BABY_BENDER) and laser2 then
+            laser2.TearFlags = TearFlags.TEAR_HOMING
+        end
+
+        if playerb:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+            laser2.CollisionDamage = (TEAR_DAMAGE_GABRIEL + playerDamage) * 2
+        else
+            laser2.CollisionDamage = TEAR_DAMAGE_GABRIEL + playerDamage
+        end
+
         laser2.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
         laser2.AngleDegrees = 45 -- Rotate laser to match direction
         laser2.Parent = familiarb -- Attach the laser to the familiar
         laser2.Timeout = 15 -- Set duration (adjust as needed)
-        laser2.CollisionDamage = TEAR_DAMAGE_GABRIEL + playerDamage
+        --laser2.CollisionDamage = TEAR_DAMAGE_GABRIEL + playerDamage
         
         familiarb.FireCooldown = SHOOTING_TICK_COOLDOWN_GABRIEL
 
@@ -2423,11 +2443,21 @@ function Mod:HandleUpdateb(familiarb)
             familiarb
         ):ToLaser()
 
+        if playerb:HasTrinket(TrinketType.TRINKET_BABY_BENDER) and laser5 then
+            laser5.TearFlags = TearFlags.TEAR_HOMING
+        end
+
+        if playerb:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+            laser5.CollisionDamage = (TEAR_DAMAGE_GABRIEL + playerDamage) * 2
+        else
+            laser5.CollisionDamage = TEAR_DAMAGE_GABRIEL + playerDamage
+        end
+
         laser5.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
         laser5.AngleDegrees = 135 -- Rotate laser to match direction
         laser5.Parent = familiarb -- Attach the laser to the familiar
         laser5.Timeout = 15 -- Set duration (adjust as needed)
-        laser5.CollisionDamage = TEAR_DAMAGE_GABRIEL
+        --laser5.CollisionDamage = TEAR_DAMAGE_GABRIEL
         familiarb.FireCooldown = SHOOTING_TICK_COOLDOWN_GABRIEL
 
         local laser3 = Isaac.Spawn(
@@ -2439,11 +2469,21 @@ function Mod:HandleUpdateb(familiarb)
             familiarb
         ):ToLaser()
 
+        if playerb:HasTrinket(TrinketType.TRINKET_BABY_BENDER) and laser3 then
+            laser3.TearFlags = TearFlags.TEAR_HOMING
+        end
+
+        if playerb:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+            laser3.CollisionDamage = (TEAR_DAMAGE_GABRIEL + playerDamage) * 2
+        else
+            laser3.CollisionDamage = TEAR_DAMAGE_GABRIEL + playerDamage
+        end
+
         laser3.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
         laser3.AngleDegrees = -135 -- Rotate laser to match direction
         laser3.Parent = familiarb -- Attach the laser to the familiar
         laser3.Timeout = 15 -- Set duration (adjust as needed)
-        laser3.CollisionDamage = TEAR_DAMAGE_GABRIEL
+        --laser3.CollisionDamage = TEAR_DAMAGE_GABRIEL
         familiarb.FireCooldown = SHOOTING_TICK_COOLDOWN_GABRIEL
 
         local laser4 = Isaac.Spawn(
@@ -2455,11 +2495,21 @@ function Mod:HandleUpdateb(familiarb)
             familiarb
         ):ToLaser()
 
+        if playerb:HasTrinket(TrinketType.TRINKET_BABY_BENDER) and laser4 then
+            laser4.TearFlags = TearFlags.TEAR_HOMING
+        end
+
+        if playerb:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+            laser4.CollisionDamage = (TEAR_DAMAGE_GABRIEL + playerDamage) * 2
+        else
+            laser4.CollisionDamage = TEAR_DAMAGE_GABRIEL + playerDamage
+        end
+
         laser4.PositionOffset = Vector(0, -10) -- Adjust Y value as needed
         laser4.AngleDegrees = -45 -- Rotate laser to match direction
         laser4.Parent = familiarb -- Attach the laser to the familiar
         laser4.Timeout = 15 -- Set duration (adjust as needed)
-        laser4.CollisionDamage = TEAR_DAMAGE_GABRIEL
+        --laser4.CollisionDamage = TEAR_DAMAGE_GABRIEL
         familiarb.FireCooldown = SHOOTING_TICK_COOLDOWN_GABRIEL
 
         spriteb.FlipX = doFlipb
@@ -2579,11 +2629,22 @@ function Mod:HandleUpdatee(familiar)
             velocity,
             familiar
         ):ToTear()
+        if player:HasTrinket(TrinketType.TRINKET_BABY_BENDER) and tear then
+            tear.TearFlags = TearFlags.TEAR_HOMING | TearFlags.TEAR_BURSTSPLIT
+        else
+            tear.TearFlags = TearFlags.TEAR_BURSTSPLIT
+        end
+
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+            tear.CollisionDamage = TEAR_DAMAGE_FAIL * 2
+        else
+            tear.CollisionDamage = TEAR_DAMAGE_FAIL
+        end
 
         
         tear.Scale = TEAR_SCALE_FAIL
-        tear.CollisionDamage = TEAR_DAMAGE_FAIL
-        tear.TearFlags = TearFlags.TEAR_BURSTSPLIT -- Makes tears explode into smaller projectiles.
+        --tear.CollisionDamage = TEAR_DAMAGE_FAIL
+        --tear.TearFlags = TearFlags.TEAR_BURSTSPLIT -- Makes tears explode into smaller projectiles.
 
          -- Simulate gravity
          tear.FallingAcceleration = 1.2 -- Adjust gravity effect
@@ -7223,6 +7284,8 @@ function Mod:HandleUpdateEnvy(familiar)
         ):ToTear()
 
         
+
+        
         tear.Scale = 1.5
         tear.CollisionDamage = 3.5
         familiar.FireCooldown = 20
@@ -7231,7 +7294,16 @@ function Mod:HandleUpdateEnvy(familiar)
         --if data.lostItemCount then
         local newCooldown = 20 * (1 - (envynum * 0.2))
         -- ✅ Increase the familiar’s damage based on sacrificed items
-        tear.CollisionDamage = 3.5 * (1 + (envynum * 0.5))
+        --tear.CollisionDamage = 3.5 * (1 + (envynum * 0.5))
+        if player:HasTrinket(TrinketType.TRINKET_BABY_BENDER) and tear then
+            tear.TearFlags = TearFlags.TEAR_HOMING
+        end
+
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+            tear.CollisionDamage = (3.5 * (1 + (envynum * 0.5))) * 2
+        else
+            tear.CollisionDamage = 3.5 * (1 + (envynum * 0.5))
+        end
         familiar.FireCooldown = math.max(math.floor(newCooldown), 2)
 
         --end
@@ -7500,9 +7572,15 @@ function Mod:HandleUpdateZeal(familiar)
             familiar
         ):ToTear()
 
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+            tear.CollisionDamage = player.Damage
+        else
+            tear.CollisionDamage = (player.Damage / 2)
+        end
+
         
         tear.Scale = 1.3
-        tear.CollisionDamage = (player.Damage / 2)
+        --tear.CollisionDamage = (player.Damage / 2)
         tear.TearFlags = TearFlags.TEAR_GLOW | TearFlags.TEAR_HOMING
         familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay * 3, 1))
 
