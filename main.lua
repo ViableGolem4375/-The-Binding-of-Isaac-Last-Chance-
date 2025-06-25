@@ -171,6 +171,7 @@ JUBILEES_ITEM2 = Isaac.GetItemIdByName("Book of Jubilees 2/3")
 JUBILEES_ITEM3 = Isaac.GetItemIdByName("Book of Jubilees 1/3")
 PAGE_ITEM = Isaac.GetItemIdByName("Glowing Page")
 NEURO_ITEM = Isaac.GetItemIdByName("Neurotoxin")
+CRUSHED_DICE_ITEM = Isaac.GetItemIdByName("Crushed Dice")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2058,6 +2059,7 @@ if EID then
     EID:addCollectible(BIBBLE_ITEM, "Activates the effect of a random book item.#Will not activate the effects of Duae Viae or Book of Jubilees.", "The Bibble")
     EID:addCollectible(COMMUNISM_ITEM, "Evenly distributes Isaac's coins, keys, and bombs.#As Tainted Blue Baby this effect only evenly distributes coins and keys.", "The Communist Manifesto")
     EID:addCollectible(NEURO_ITEM, "5% chance to fire a tear that applies weakness to enemies for 5 seconds.#{{Luck}} +5% chance per point of luck.", "Neurotoxin")
+    EID:addCollectible(CRUSHED_DICE_ITEM, "Spawns 3 dice shards in the starting room upon entering a new floor.", "Crushed Dice")
 
 end
 
@@ -8124,6 +8126,32 @@ Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, Mod.onEnemyUpdateWeakness)
 Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.onToxinWeaknessHit)
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateToxin)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitToxin)
+
+function Mod:OnNewFloorDice()
+    --local game = Game()
+    local level = game:GetLevel()
+    local room = game:GetRoom()
+    for i = 0, Game():GetNumPlayers() - 1 do
+    
+        local player = Isaac.GetPlayer(i)
+
+    -- Ensure player has the item before spawning golden rewards
+        if player:HasCollectible(CRUSHED_DICE_ITEM) then
+            local spawnPositions = {
+                room:GetCenterPos() + Vector(0, 20),
+                room:GetCenterPos() + Vector(-40, 20),
+                room:GetCenterPos() + Vector(40, 20)
+            }
+
+            -- Spawn golden rewards
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, Card.CARD_DICE_SHARD, spawnPositions[1], Vector.Zero, player)
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, Card.CARD_DICE_SHARD, spawnPositions[2], Vector.Zero, player)
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, Card.CARD_DICE_SHARD, spawnPositions[3], Vector.Zero, player)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloorDice)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

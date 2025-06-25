@@ -46,5 +46,6 @@
     <costume id="94" anm2path="temperance.anm2" type="passive" priority="0" />
     <costume id="95" anm2path="kindness.anm2" type="active" priority="0" />
     <costume id="115" anm2path="neurotoxin.anm2" type="passive" priority="0" />
+    <costume id="116" anm2path="crusheddice.anm2" type="passive" priority="0" />
 
 </costumes>
