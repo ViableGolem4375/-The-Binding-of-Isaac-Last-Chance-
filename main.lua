@@ -2049,7 +2049,7 @@ if EID then
     EID:addCard(TOWER_CARD, "Spawns a giga bomb pickup.#Spawns two giga bomb pickups while holding tarot cloth.", "Misprinted Tower")
     EID:addCard(STARS_CARD, "Rerolls all item pedestals in the room into TMTRAINER items.", "Misprinted Stars")
     EID:addCard(MOON_CARD, "Teleports Isaac to a black market.#This black market is separate from the one spawned on the floor, multiple uses of Misprinted Moon will send Isaac to multiple different black markets.#Grants The Fool to leave.#Spawns an extra fool card while holding tarot cloth.", "Misprinted Moon")
-    EID:addCard(SUN_CARD, "Activates the effect of Book of Jubilees.#Tarot cloth reduces the damage taken by 1 heart.", "Misprinted Sun")
+    EID:addCard(SUN_CARD, "Damages Isaac for 1/2 of his total HP and activates the effect of Book of Jubilees.#Tarot cloth reduces the damage taken by 1 heart.", "Misprinted Sun")
     EID:addCard(JUDGEMENT_CARD, "Spawns a donation machine.#Spawns 2 donation machines while holding tarot cloth.", "Misprinted Judgement")
     EID:addCard(WORLD_CARD, "Adds curse of the lost for the floor and removes any other active curses.#Removes all curses for the floor while holding tarot cloth.", "Misprinted World")
     EID:addEntity(6, 249376972, -1, "Tithe", "{{Warning}} Removes 1 coin when touched.#{{ArrowUp}} Has a chance to grant various payouts when destroyed including angel room item wisps, eternal hearts, Key Pieces, soul hearts, HP ups, and angel room items.#Tithe rewards are given to all players.#Spawns random pickups when destroyed.")
