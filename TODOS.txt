@@ -8,10 +8,7 @@
 - Maybe have a unique synergy between both mantles.
 - Look into book of jubilees and bone hearts.
 - Cards are huge on J+E HUD.
-- the pill might be spawning a pill on run reenter
-- boss trophy sprite has a line on the right side
 - check my active items with void - communist manifesto isn't working
-- make familiars work with baby bender and BFFs
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
