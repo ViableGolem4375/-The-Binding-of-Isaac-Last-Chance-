@@ -2070,6 +2070,7 @@ function Mod:LuckyDiceUse(item, rng, player, flags)
         AZAZEL_ESSENCE,
         STAR_OF_DAVID,
         GLITCH_ITEM,
+        NEURO_ITEM,
         87, --Loki's Horns
         89, --Spider Bite
         103, --The Common Cold
@@ -4681,6 +4682,7 @@ local predefinedItemList = {
     AZAZEL_ESSENCE,
     STAR_OF_DAVID,
     GLITCH_ITEM,
+    NEURO_ITEM,
     87, --Loki's Horns
     89, --Spider Bite
     103, --The Common Cold
