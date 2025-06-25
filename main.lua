@@ -7103,7 +7103,7 @@ function Mod:UseJubilees2(item, rng, player)
             local rothealth = player:GetRottenHearts()
             local damage = (redhealth + soulhealth + blackhealth + bonehealth + rothealth) / 2 ]]
 
-            player:TakeDamage(damage, DamageFlag.DAMAGE_RED_HEARTS, EntityRef(player), 0)
+            --player:TakeDamage(damage, DamageFlag.DAMAGE_RED_HEARTS, EntityRef(player), 0)
 
 
             Isaac.ExecuteCommand("goto s.angel")
