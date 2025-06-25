@@ -8,11 +8,9 @@
 - Maybe have a unique synergy between both mantles.
 - Look into book of jubilees and bone hearts.
 - Cards are huge on J+E HUD.
-- remove that one hush super secret
 - the pill might be spawning a pill on run reenter
 - boss trophy sprite has a line on the right side
-- make communist manifesto round up consumables
-- sloth is attacking friendly enemies.
+- check my active items with void - communist manifesto isn't working
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -41,4 +39,4 @@ Trinket Ideas:
 
 
 
-Win streak: 44
+Win streak: 45
