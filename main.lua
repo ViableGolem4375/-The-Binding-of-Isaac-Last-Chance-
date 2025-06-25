@@ -170,6 +170,7 @@ COMMUNISM_ITEM = Isaac.GetItemIdByName("The Communist Manifesto")
 JUBILEES_ITEM2 = Isaac.GetItemIdByName("Book of Jubilees 2/3")
 JUBILEES_ITEM3 = Isaac.GetItemIdByName("Book of Jubilees 1/3")
 PAGE_ITEM = Isaac.GetItemIdByName("Glowing Page")
+NEURO_ITEM = Isaac.GetItemIdByName("Neurotoxin")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2056,6 +2057,7 @@ if EID then
     EID:addCollectible(PILL_ITEM, "All pills spawn as horse pills.#Spawns a pill.", "The Pill")
     EID:addCollectible(BIBBLE_ITEM, "Activates the effect of a random book item.#Will not activate the effects of Duae Viae or Book of Jubilees.", "The Bibble")
     EID:addCollectible(COMMUNISM_ITEM, "Evenly distributes Isaac's coins, keys, and bombs.#As Tainted Blue Baby this effect only evenly distributes coins and keys.", "The Communist Manifesto")
+    EID:addCollectible(NEURO_ITEM, "5% chance to fire a tear that applies weakness to enemies for 5 seconds.#{{Luck}} +5% chance per point of luck.", "Neurotoxin")
 
 end
 
@@ -8049,178 +8051,77 @@ function Mod:UseCommunismItem(_, item, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseCommunismItem, COMMUNISM_ITEM)
---[[ 
-function Mod:FixLilDeliriumJAndE()
 
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(0)
-        local player2 = Game():GetPlayer(1)
-        local player3 = Game():GetPlayer(2)
-        local player4 = Game():GetPlayer(3)
-
-        local player1count = player:GetCollectibleNum(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        local player2count = player2:GetCollectibleNum(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        local player3count = player3:GetCollectibleNum(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        local player4count = player4:GetCollectibleNum(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+local HasWeaknessEffect = false
 
 
-        if player:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        and not player2:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
-            player2:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        end
+function Mod:onUpdateToxin(player)
+	if game:GetFrameCount() == 1 then
+		HasWeaknessEffect = false
+	end
+	if not HasWeaknessEffect and player:HasCollectible(NEURO_ITEM) then
+		HasWeaknessEffect = true
+	end
+end
 
-        if player:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        and not player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
-            player3:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        end
+local function getRandomToxinEffect(player)
+    local baseChance = 0.05
+    local luckScaling = 0.05 * player:GetCollectibleNum(NEURO_ITEM)
 
-        if player:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        and not player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
-            player4:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        end
+    local luckBonus = math.max(0, player.Luck * luckScaling) -- Ensure non-negative
+    local finalChance = math.min(1, baseChance + luckBonus) -- Cap at 90% chance
 
-        if player2:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        and not player:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
-            player:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        end
+    local rand = math.random()
+    return rand <= finalChance -- Effect triggers if random number falls within chance
+end
 
-        if player2:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        and not player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
-            player3:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        end
+function Mod:onTearInitToxin(tear)
+    if HasWeaknessEffect then
+        local parent = tear.SpawnerEntity
+        if parent and parent:ToPlayer() then
+            local player = parent:ToPlayer()
+            if player:HasCollectible(NEURO_ITEM) and getRandomToxinEffect(player) then
+                tear:GetData().weakTrigger = true
+                tear:SetColor(Color(0.4, 0.1, 0.5, 1.0, 0, 0, 0), 30, 1, false, false)
+                
 
-        if player2:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        and not player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
-            player4:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        end
 
-        if player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        and not player:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
-            player:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        end
-
-        if player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        and not player2:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
-            player2:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        end
-
-        if player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        and not player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
-            player4:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        end
-
-        if player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        and not player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
-            player4:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        end
-
-        if player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        and not player:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
-            player:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        end
-
-        if player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        and not player2:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
-            player2:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        end
-
-        if player4:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
-        and not player3:HasCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM) then
-            player3:AddCollectible(CollectibleType.COLLECTIBLE_LIL_DELIRIUM)
+            end
         end
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.FixLilDeliriumJAndE) ]]
+function Mod:onToxinWeaknessHit(entity, damage, flags, source, countdown)
+    if source.Type == EntityType.ENTITY_TEAR and source.Entity then
+        local tear = source.Entity:ToTear()
+        if tear and tear:GetData().weakTrigger then
+            if entity:IsVulnerableEnemy() then
+                entity:AddEntityFlags(EntityFlag.FLAG_WEAKNESS)
+                entity:Update() -- Force update so the flag applies immediately
+                -- Apply dark purple tint (R, G, B, Alpha, Duration)
+                entity:SetColor(Color(0.4, 0.1, 0.5, 1.0, 0, 0, 0), 30, 1, false, false)
+                local data = entity:GetData()
+                data.WeaknessExpireFrame = Game():GetFrameCount() + 150
 
-
---[[ Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, function()
-    --print("[Debug] Running Lil Delirium tracker…")
-
-    for _, familiar in ipairs(Isaac.FindByType(EntityType.ENTITY_FAMILIAR)) do
-        --if familiar.SubType == CollectibleType.COLLECTIBLE_LIL_DELIRIUM then
-            local fam = familiar:ToFamiliar()
-            local owner = fam and fam.Player or nil
-            local ownerName = owner and owner:GetName() or "nil"
-            print("[Lil D] ID:", familiar.InitSeed, "Frame:", familiar.FrameCount, "Owner:", ownerName)
-            --local all = Isaac.FindByType(EntityType.ENTITY_FAMILIAR)
-            --print("Total familiars in room:", #all)
-
-        --end
-    end
-end)
- ]]
---[[ Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, function()
-    local lilDs = {}
-    for _, fam in ipairs(Isaac.FindByType(EntityType.ENTITY_FAMILIAR)) do
-        --if fam.SubType == CollectibleType.COLLECTIBLE_LIL_DELIRIUM then
-        table.insert(lilDs, fam)
-        --end
-    end
-
-    for _, fam in ipairs(lilDs) do
-        local f = fam:ToFamiliar()
-        local owner = f and f.Player or nil
-        local name = owner and owner:GetName() or "nil"
-        print("[Lil D] ID:", fam.InitSeed, "Frame:", fam.FrameCount, "Owner:", name)
-    end
-
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local p = Game():GetPlayer(i)
-        print("Player", i, p:GetName(), "has", p:GetCollectibleNum(CollectibleType.COLLECTIBLE_LIL_DELIRIUM), "copies")
-    end
-end) ]]
---[[ Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, function(_, familiar)
-    --if familiar.SubType == CollectibleType.COLLECTIBLE_LIL_DELIRIUM then
-    local player = familiar:ToFamiliar().Player
-    if player then
-        local count = Isaac.CountEntities(nil, EntityType.ENTITY_FAMILIAR, -1, -1)
-        print("[Lil D] Player:", player:GetName(), "Familiars in room:", count)
-    end
-    --end
-end) ]]
-
---[[ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, function(_, player)
-    local targetItem = CollectibleType.COLLECTIBLE_LIL_DELIRIUM
-
-    -- Only run this once per frame for player index 0
-    --if player:GetControllerIndex() ~= 0 then return end
-
-    local game = Game()
-    local maxPlayers = game:GetNumPlayers()
-    local counts = {}
-
-    -- Gather all Lil D counts
-    for i = 0, maxPlayers - 1 do
-        local p = game:GetPlayer(i)
-        counts[i] = p:GetCollectibleNum(targetItem)
-    end
-
-    -- Determine the highest count among all players
-    local maxCount = 0
-    for _, count in pairs(counts) do
-        if count > maxCount then
-            maxCount = count
-        end
-    end
-
-    -- Sync all players to the highest count
-    for i = 0, maxPlayers - 1 do
-        local p = game:GetPlayer(i)
-        local current = counts[i]
-        if current < maxCount then
-            for _ = 1, maxCount - current do
-                p:AddCollectible(targetItem)
-            end
-        elseif current > maxCount then
-            p:RemoveCollectible(targetItem)
-            for _ = 1, maxCount do
-                p:AddCollectible(targetItem)
             end
         end
     end
-end) ]]
+end
 
+function Mod:onEnemyUpdateWeakness(entity)
+    if entity:IsVulnerableEnemy() then
+        local data = entity:GetData()
+        if data.WeaknessExpireFrame and Game():GetFrameCount() >= data.WeaknessExpireFrame then
+            entity:ClearEntityFlags(EntityFlag.FLAG_WEAKNESS)
+            data.WeaknessExpireFrame = nil
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, Mod.onEnemyUpdateWeakness)
+Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.onToxinWeaknessHit)
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateToxin)
+Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitToxin)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

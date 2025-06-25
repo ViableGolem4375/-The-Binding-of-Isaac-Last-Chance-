@@ -25,6 +25,7 @@
         <Item Name="Mysterious Concoction" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Bibble" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Communist Manifesto" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="devil">
@@ -39,6 +40,7 @@
         <Item Name="Envy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wrath" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Sloth" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="angel">
@@ -61,6 +63,7 @@
         <Item Name="'/<<L7" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Debug Console" Weight="0.1" DecreaseBy="0.1" RemoveOn="0.05" />
         <Item Name="64 36" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="boss">
@@ -82,6 +85,7 @@
     </Pool>
     <Pool Name="curse">
         <Item Name="Necromancy" Weight="1" DecreaseBy="0.5" RemoveOn="0.1" />
+        <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -111,6 +115,7 @@
         <Item Name="Mysterious Concoction" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Bibble" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Communist Manifesto" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -152,10 +157,12 @@
         <Item Name="The Pill" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Bibble" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Communist Manifesto" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
         <Item Name="Necromancy" Weight="1" DecreaseBy="0.5" RemoveOn="0.1" />
+        <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -171,6 +178,7 @@
         <Item Name="Envy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wrath" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Sloth" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedAngel">
@@ -193,9 +201,11 @@
         <Item Name="'/<<L7" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Debug Console" Weight="0.1" DecreaseBy="0.1" RemoveOn="0.05" />
         <Item Name="64 36" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="craneGame">
+        <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         
 
     </Pool>
