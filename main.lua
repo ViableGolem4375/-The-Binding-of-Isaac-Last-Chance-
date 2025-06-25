@@ -1998,9 +1998,9 @@ if EID then
     EID:addCard(SOUL_DOMINO, "{{Luck}} +10 luck for the current room.", "Soul of Domino")
     EID:addCard(SOUL_PONTIUS, "Fire 8 spears in a circular pattern around yourself.#The spears deal 10x Isaac's damage.", "Soul of Pontius")
     EID:addCard(SOUL_ABRAHAM, "Removes all devil room chances and converts the into angel room chances for the floor.#{{Warning}} Taking red heart damage after activation can still reduce your chances of seeing an angel room.", "Soul of Abraham")
-    EID:addCollectible(JUBILEES_ITEM, "Isaac takes damage equal to half of his total health and is sent to an angel room.#Prioritizes red health.#The Keepers take one coin heart of damage.#This damage does not reduce normal devil/angel room chances.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.", "Book of Jubilees")
-    EID:addCollectible(JUBILEES_ITEM2, "Isaac takes damage equal to half of his total health and is sent to an angel room.#Prioritizes red health.#The Keepers take one coin heart of damage.#This damage does not reduce normal devil/angel room chances.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.", "Book of Jubilees 2/3")
-    EID:addCollectible(JUBILEES_ITEM3, "Isaac takes damage equal to half of his total health and is sent to an angel room.#Prioritizes red health.#The Keepers take one coin heart of damage.#This damage does not reduce normal devil/angel room chances.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.", "Book of Jubilees 1/3")
+    EID:addCollectible(JUBILEES_ITEM, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.", "Book of Jubilees")
+    EID:addCollectible(JUBILEES_ITEM2, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.", "Book of Jubilees 2/3")
+    EID:addCollectible(JUBILEES_ITEM3, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.", "Book of Jubilees 1/3")
     EID:addCollectible(PAGE_ITEM, "50% chance to gain 1/2 of a soul heart on use.", "Glowing Page")
     EID:addCard(RELIQUARY_CARD, "Spawns an Essence Collector.", "Essence Card")
     EID:addCollectible(ANGEL_BLAST_ITEM, "Fire a holy light beam which deals Isaac's damage.", "Angel Blast")
@@ -7057,14 +7057,14 @@ function Mod:UseJubilees(item, rng, player)
 
             -- ✅ Play activation sound
             --level:InitializeDevilAngelRoom(true, false)
-            local redhealth = player:GetEffectiveMaxHearts()
+            --[[ local redhealth = player:GetEffectiveMaxHearts()
             local soulhealth = player:GetSoulHearts()
             local blackhealth = player:GetBlackHearts()
             local bonehealth = player:GetBoneHearts()
             local rothealth = player:GetRottenHearts()
             local damage = (redhealth + soulhealth + blackhealth + bonehealth + rothealth) / 2
 
-            player:TakeDamage(damage, DamageFlag.DAMAGE_RED_HEARTS, EntityRef(player), 0)
+            player:TakeDamage(damage, DamageFlag.DAMAGE_RED_HEARTS, EntityRef(player), 0) ]]
 
 
             Isaac.ExecuteCommand("goto s.angel")
@@ -7096,12 +7096,12 @@ function Mod:UseJubilees2(item, rng, player)
 
             -- ✅ Play activation sound
             --level:InitializeDevilAngelRoom(true, false)
-            local redhealth = player:GetEffectiveMaxHearts()
+            --[[ local redhealth = player:GetEffectiveMaxHearts()
             local soulhealth = player:GetSoulHearts()
             local blackhealth = player:GetBlackHearts()
             local bonehealth = player:GetBoneHearts()
             local rothealth = player:GetRottenHearts()
-            local damage = (redhealth + soulhealth + blackhealth + bonehealth + rothealth) / 2
+            local damage = (redhealth + soulhealth + blackhealth + bonehealth + rothealth) / 2 ]]
 
             player:TakeDamage(damage, DamageFlag.DAMAGE_RED_HEARTS, EntityRef(player), 0)
 
@@ -7135,14 +7135,14 @@ function Mod:UseJubilees3(item, rng, player)
 
             -- ✅ Play activation sound
             --level:InitializeDevilAngelRoom(true, false)
-            local redhealth = player:GetEffectiveMaxHearts()
+            --[[ local redhealth = player:GetEffectiveMaxHearts()
             local soulhealth = player:GetSoulHearts()
             local blackhealth = player:GetBlackHearts()
             local bonehealth = player:GetBoneHearts()
             local rothealth = player:GetRottenHearts()
             local damage = (redhealth + soulhealth + blackhealth + bonehealth + rothealth) / 2
 
-            player:TakeDamage(damage, DamageFlag.DAMAGE_RED_HEARTS, EntityRef(player), 0)
+            player:TakeDamage(damage, DamageFlag.DAMAGE_RED_HEARTS, EntityRef(player), 0) ]]
 
 
             Isaac.ExecuteCommand("goto s.angel")
