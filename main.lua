@@ -1932,7 +1932,7 @@ if EID then
     EID:addCollectible(CAIN_ESSENCE, "Gives 20 coins, keys, and bombs upon pickup.#At the start of every new floor, spawns a golden penny, golden key, and golden bomb.", "Essence of Cain")
     EID:addCollectible(JUDAS_ESSENCE, "{{ArrowUp}} Gives +1 damage.#{{ArrowUp}} Grants a 2.5x damage multiplier when Isaac has 3 total hearts (of any type) or less.", "Essence of Judas")
     EID:addCollectible(BLUE_BABY_ESSENCE, "Entering a new room spawns 10 blue flies.", "Essence of ???")
-    EID:addCollectible(EVE_ESSENCE, "{{ArrowUp}} Grants +30 damage for the current room upon reaching 1 total heart or less.#This effect can trigger once per floor.", "Essence of Eve")
+    EID:addCollectible(EVE_ESSENCE, "{{ArrowUp}} Grants 5x damage upon reaching 1 total heart or less.", "Essence of Eve")
     EID:addCollectible(SAMSON_ESSENCE, "Dash forward becoming invulnerable.#The dash deals Isaac's damage + 10 to enemies.#{{ArrowUp}} The dash damage increases depending on how many enemies are hit.", "Essence of Samson")
     EID:addCollectible(AZAZEL_ESSENCE, "5% chance to fire a tear that causes Isaac to fire a large brimstone beam on contact with something.#{{Luck}} 100% chance at 19 luck.", "Essence of Azazel")
     EID:addCollectible(LAZARUS_ESSENCE, "{{ArrowUp}} Grants +1 damage, a +50% damage multiplier, -1 tear delay, +0.5 speed, +3.75 range, +1 shot speed, and +2 luck upon dying and being revived.#{{Warning}} Essence of Lazarus can only trigger once.#{{Warning}} This item will NOT revive you, it is not an extra life.", "Essence of Lazarus")
@@ -2013,7 +2013,7 @@ if EID then
     EID:addCollectible(PRIDE_ITEM, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.", "Pride")
     EID:addCollectible(ENVY_ITEM, "Gain a familiar which copies your tear effects.#{{Warning}} Picking up this item replaces all of your non quest items (and itself) with envious rage.#{{ArrowUp}} The familiar gains +50% damage and +20% fire rate for every copy of envious rage you posess.#{{Warning}} Once picked up, Envy cannot be removed or rerolled.", "Envy")
     EID:addCollectible(WRATH_ITEM, "{{Arrowup}} Killing bosses gives a trophy which grants +1 damage.", "Wrath")
-    EID:addCollectible(SLOTH_ITEM, "All enemies take constant damage.#{{Warning}} Isaac becomes unable to shoot.", "Sloth")
+    EID:addCollectible(SLOTH_ITEM, "All enemies take constant damage equal to Isaac's damage divided by 10 every tick.#{{Warning}} Isaac becomes unable to shoot.", "Sloth")
     EID:addCollectible(CHARITY_ITEM, "Gain 1/2 of a soul heart for every 5 coins spent.", "Charity")
     EID:addCollectible(HUMILITY_ITEM, "{{ArrowUp}} Gain 2x damage.#{{ArrowDown}} The bonus is lost if Isaac holds any quality 4 items.", "Humility")
     EID:addCollectible(LOVE_ITEM, "Issac's tears heal enemies which have been turned friendly.#{{Warning}} Does not work on enemies with the charmed status effect.", "Love")
@@ -2046,7 +2046,7 @@ if EID then
     EID:addCard(SUN_CARD, "Activates the effect of Book of Jubilees.#Tarot cloth reduces the damage taken by 1 heart.", "Misprinted Sun")
     EID:addCard(JUDGEMENT_CARD, "Spawns a donation machine.#Spawns 2 donation machines while holding tarot cloth.", "Misprinted Judgement")
     EID:addCard(WORLD_CARD, "Adds curse of the lost for the floor and removes any other active curses.#Removes all curses for the floor while holding tarot cloth.", "Misprinted World")
-    EID:addEntity(6, 249376972, -1, "Tithe", "{{Warning}} Removes 1 coin when touched.#{{ArrowUp}} Has a chance to grant various payouts when destroyed including angel room item wisps, eternal hearts, Key Pieces, soul hearts, HP ups, and angel room items.#Spawns random pickups when destroyed.")
+    EID:addEntity(6, 249376972, -1, "Tithe", "{{Warning}} Removes 1 coin when touched.#{{ArrowUp}} Has a chance to grant various payouts when destroyed including angel room item wisps, eternal hearts, Key Pieces, soul hearts, HP ups, and angel room items.#Tithe rewards are given to all players.#Spawns random pickups when destroyed.")
     EID:addCollectible(PILL_ITEM, "All pills spawn as horse pills.#Spawns a pill.", "The Pill")
     EID:addCollectible(BIBBLE_ITEM, "Activates the effect of a random book item.#Will not activate the effects of Duae Viae or Book of Jubilees.", "The Bibble")
     EID:addCollectible(COMMUNISM_ITEM, "Evenly distributes Isaac's coins, keys, and bombs.#As Tainted Blue Baby this effect only evenly distributes coins and keys.", "The Communist Manifesto")
@@ -4999,7 +4999,7 @@ function Mod:UseGun(item, rng, player)
         local randomDirection = directiongun:Rotated(angleVariation)
 
         -- ✅ Spawn the high-damage tear
-        local tear = player:FireTear(player.Position, randomDirection * 12, false, false, false, player, 1)
+        local tear = player:FireTear(player.Position, randomDirection * 50, false, false, false, player, 1)
 
         if tear then
             
@@ -7324,8 +7324,8 @@ function Mod:ApplyPassiveEnemyDamageSloth()
         if player:HasCollectible(SLOTH_ITEM) then
     
             for _, entity in ipairs(Isaac.GetRoomEntities()) do
-                if entity:IsEnemy() and entity:IsActiveEnemy() then
-                    entity:TakeDamage(0.1, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(nil), 1) -- ✅ Deal passive damage
+                if entity:IsEnemy() and entity:IsActiveEnemy() and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) then
+                    entity:TakeDamage(player.Damage * 0.1, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(nil), 1) -- ✅ Deal passive damage
                 end
             end
         end
@@ -7854,7 +7854,7 @@ function Mod:UseCommunismItem(_, item, rng, player)
                 local keys = player:GetNumKeys()
 
                 local total = coins + bombs + keys
-                local average = math.floor(total / 3)
+                local average = math.ceil(total / 3)
 
                 -- Set each consumable to the average
                 player:AddCoins(average - coins)
