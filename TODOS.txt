@@ -27,11 +27,12 @@ reverse soul stones?
 reusable HP up
 active item like birthright
 rapture
-weakness status effect
-spawn a dice shard at the beginning of each floor.
+item rooms have no items but secret rooms do
+all stats down plus something
+dogma static aura
 
 Trinket Ideas:
 
 
 
-Win streak: 46
+Win streak: 48

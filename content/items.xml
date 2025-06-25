@@ -117,8 +117,8 @@
     <passive id="109" name="The Pill" gfx="the_pill.png" description="Pills up" quality="1" craftquality="1" devilprice="1" tags="nocantrip offensive" />
     <active id="110" name="The Bibble" gfx="bibble.png" description="You dare question the word of the mighty jimmy!" quality="2" craftquality="2" devilprice="1" maxcharges="4" chargetype="normal" tags="offensive nocantrip book" />
     <active id="111" name="The Communist Manifesto" gfx="communism.png" description="Sharing is caring" quality="2" craftquality="2" devilprice="1" maxcharges="6" chargetype="normal" tags="offensive nocantrip book" />
-    <active id="112" name="Book of Jubilees 2/3" gfx="jubilees2.png" description="Deliver me unto salvation" quality="4" craftquality="-1" maxcharges="12" chargetype="normal" initcharge="0" devilprice="2" tags="noeden nocantrip" />
-    <active id="113" name="Book of Jubilees 1/3" gfx="jubilees3.png" description="Deliver me unto salvation" quality="4" craftquality="-1" maxcharges="12" chargetype="normal" initcharge="0" devilprice="2" tags="noeden nocantrip" />
+    <active id="112" name="Book of Jubilees 2/3" gfx="jubilees2.png" description="Deliver me unto salvation" quality="4" craftquality="-1" maxcharges="12" hidden="true" chargetype="normal" initcharge="0" devilprice="2" tags="noeden nocantrip" />
+    <active id="113" name="Book of Jubilees 1/3" gfx="jubilees3.png" description="Deliver me unto salvation" quality="4" craftquality="-1" maxcharges="12" hidden="true" chargetype="normal" initcharge="0" devilprice="2" tags="noeden nocantrip" />
     <active id="114" name="Glowing Page" gfx="page.png" description="Remnant" quality="1" craftquality="-1" maxcharges="6" chargetype="normal" devilprice="2" tags="noeden nocantrip" />
     <passive id="115" name="Neurotoxin" gfx="neurotoxin.png" description="Crippling tears" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive syringe" />
     <passive id="116" name="Crushed Dice" gfx="crusheddice.png" description="Reroll?" quality="2" craftquality="2" devilprice="1" tags="nocantrip offensive" />
