@@ -129,5 +129,6 @@
         bombs="1"
         skinColor="-1"
         canShoot="True"
+        costumeSuffix="g"
     />
 </players>
