@@ -122,6 +122,6 @@
     <active id="114" name="Glowing Page" gfx="page.png" description="Remnant" quality="1" craftquality="-1" maxcharges="6" chargetype="normal" devilprice="2" tags="noeden nocantrip" />
     <passive id="115" name="Neurotoxin" gfx="neurotoxin.png" description="Crippling tears" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive syringe" />
     <passive id="116" name="Crushed Dice" gfx="crusheddice.png" description="Reroll?" quality="2" craftquality="2" devilprice="1" tags="nocantrip offensive" />
-    <passive id="117" name="Dogmaticism" gfx="crusheddice.png" description="Eternal belief" quality="4" craftquality="4" devilprice="2" tags="nocantrip offensive angel" />
+    <passive id="117" name="Dogmaticism" gfx="dogmaticism.png" description="Eternal belief" quality="4" craftquality="4" devilprice="2" tags="nocantrip offensive angel" cache="damage firedelay range shotspeed" />
 
 </items>

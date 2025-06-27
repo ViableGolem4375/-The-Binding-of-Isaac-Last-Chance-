@@ -2078,6 +2078,7 @@ if EID then
     EID:addCollectible(COMMUNISM_ITEM, "Evenly distributes Isaac's coins, keys, and bombs.#As Tainted Blue Baby this effect only evenly distributes coins and keys.", "The Communist Manifesto")
     EID:addCollectible(NEURO_ITEM, "5% chance to fire a tear that applies weakness to enemies for 5 seconds.#{{Luck}} +5% chance per point of luck.", "Neurotoxin")
     EID:addCollectible(CRUSHED_DICE_ITEM, "Spawns 3 dice shards in the starting room upon entering a new floor.", "Crushed Dice")
+    EID:addCollectible(DOGMA_ITEM, "Grants: #{{ArrowUp}} +1 damage#{{ArrowUp}} +50% damage multiplier#{{ArrowUp}} +7.5 Range#{{ArrowDown}} -1 Tear Delay#{{ArrowDown}} -0.5 Shot Speed#Tears gain spectral and piercing along with a static aura.#Enemies that stand within the aura for 0.25 seconds are struck with a beam of light dealing 5x Isaac's damage.", "Dogmaticism")
 
 end
 
@@ -8171,51 +8172,36 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloorDice)
 
-local TrackedTears = {}
+local STAT_BOOST_DOGMA = {
+    FIREDELAY = 1, 
+    DAMAGE = 1, 
+    RANGE = 300, 
+    SHOTSPEED = -0.5,
+}
 
-function Mod:trackDogmaTears(tear)
-    local player = tear.SpawnerEntity and tear.SpawnerEntity:ToPlayer()
-    if player and player:HasCollectible(DOGMA_ITEM) then
-        TrackedTears[tear.InitSeed] = {
-            tear = tear,
-            player = player,
-            nearbyEnemies = {}
-        }
-    end
-end
-
---[[ function Mod:onUpdateTearProximity()
-    for seed, data in pairs(TrackedTears) do
-        print("1")
-        local tear = data.tear
-        local player = data.player
-        if not tear or not tear:Exists() or not player or not player:HasCollectible(DOGMA_ITEM) then
-            TrackedTears[seed] = nil
-            print("nope")
-        else
-            local enemies = Isaac.FindInRadius(tear.Position, 60, EntityPartition.ENEMY)
-            print("2")
-            for _, enemy in ipairs(enemies) do
-                print("3")
-                if enemy:IsVulnerableEnemy() and not enemy:IsDead() then
-                    local id = GetPtrHash(enemy)
-                    print("4")
-                    data.nearbyEnemies[id] = (data.nearbyEnemies[id] or 0) + 1
-
-                    if data.nearbyEnemies[id] == 60 then
-                        print("5")
-                        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CRACK_THE_SKY, 0, enemy.Position, Vector.Zero, player)
-                    end
-                end
-            end
+function Mod:DogmaStats(player, cacheFlag)
+    if player:HasCollectible(DOGMA_ITEM) then
+        local numdogma = player:GetCollectibleNum(DOGMA_ITEM)
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+            player.MaxFireDelay = player.MaxFireDelay + (STAT_BOOST_DOGMA.FIREDELAY * numdogma)
+        end
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = (player.Damage + STAT_BOOST_DOGMA.DAMAGE) * (1.5 * numdogma)
+        end
+        if cacheFlag == CacheFlag.CACHE_RANGE then
+            player.TearRange = player.TearRange + (STAT_BOOST_DOGMA.RANGE * numdogma)
+        end
+        if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
+            player.ShotSpeed = player.ShotSpeed+ (STAT_BOOST_DOGMA.SHOTSPEED * numdogma)
         end
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.onUpdateTearProximity) ]]
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.DogmaStats)
 
 local HasDogmaEffect = false
-
+local DogmaTears = {}
 
 function Mod:onUpdateDogma(player)
 	if game:GetFrameCount() == 1 then
@@ -8244,20 +8230,51 @@ function Mod:onTearInitDogma(tear)
             local player = parent:ToPlayer()
             if player:HasCollectible(DOGMA_ITEM) and getRandomDogmaEffect(player) then
                 tear:GetData().dogmaTrigger = true
-                tear:SetColor(Color(0.4, 0.1, 0.5, 1.0, 0, 0, 0), 30, 1, false, false)
-                local enemies = Isaac.FindInRadius(tear.Position, 60, EntityPartition.ENEMY)
-                print("2")
-                for _, enemy in ipairs(enemies) do
-                    print("3")
-                    if enemy:IsVulnerableEnemy() and not enemy:IsDead() then
-                        local id = GetPtrHash(enemy)
-                        print("4")
-                        data.nearbyEnemies[id] = (data.nearbyEnemies[id] or 0) + 1
 
-                        if data.nearbyEnemies[id] == 60 then
-                            print("5")
-                            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CRACK_THE_SKY, 0, enemy.Position, Vector.Zero, player)
-                        end
+                local sprite = tear:GetSprite()
+                sprite:Load("gfx/dogmaticism_aura.anm2", true)
+                sprite:Play("Aura", true)
+
+                --tear:SetColor(Color(0.4, 0.1, 0.5, 1.0, 0, 0, 0), 30, 1, false, false)
+                local data = tear:GetData()
+                data.dogmaTrigger = true
+                data.nearbyEnemies = data.nearbyEnemies or {}
+                table.insert(DogmaTears, tear)
+                AuraDamage = player.Damage
+                tear.TearFlags = TearFlags.TEAR_SPECTRAL | TearFlags.TEAR_PIERCING
+
+
+                
+            end
+        end
+    end
+end
+
+function Mod:UpdateDogmaTears()
+    for i = #DogmaTears, 1, -1 do
+        local tear = DogmaTears[i]
+        if not tear:Exists() then
+            table.remove(DogmaTears, i)
+        else
+            local data = tear:GetData()
+            local enemies = Isaac.FindInRadius(tear.Position, 120, EntityPartition.ENEMY)
+            for _, enemy in ipairs(enemies) do
+                if enemy:IsVulnerableEnemy() and not enemy:IsDead() then
+                    local id = GetPtrHash(enemy)
+                    data.nearbyEnemies[id] = (data.nearbyEnemies[id] or 0) + 1
+
+                    -- Whitening effect
+                    local t = math.min(data.nearbyEnemies[id] / 15, 1)
+                    local color = Color(1, 1, 1, 1, t, t, t)
+                    enemy:SetColor(color, 2, 1, false, false)
+
+                    -- Trigger beam
+                    if data.nearbyEnemies[id] == 15 then
+                        local dogmabeam = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CRACK_THE_SKY, 0, enemy.Position, Vector.Zero, tear.SpawnerEntity)
+                        dogmabeam.Parent = tear.SpawnerEntity
+                        dogmabeam.CollisionDamage = AuraDamage * 5
+                        
+
                     end
                 end
             end
@@ -8265,31 +8282,8 @@ function Mod:onTearInitDogma(tear)
     end
 end
 
-function Mod:onDogmaHit(entity, damage, flags, source, countdown)
-    if source.Type == EntityType.ENTITY_TEAR and source.Entity then
-        local tear = source.Entity:ToTear()
-        if tear and tear:GetData().dogmaTrigger then
-            if entity:IsVulnerableEnemy() then
-                -- Apply dark purple tint (R, G, B, Alpha, Duration)
-                entity:SetColor(Color(0.4, 0.1, 0.5, 1.0, 0, 0, 0), 30, 1, false, false)
-                local data = entity:GetData()
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.UpdateDogmaTears)
 
-            end
-        end
-    end
-end
-
-function Mod:onEnemyUpdateDogma(entity)
-    if entity:IsVulnerableEnemy() then
-        local data = entity:GetData()
-
-        entity:ClearEntityFlags(EntityFlag.FLAG_WEAKNESS)
-        data.WeaknessExpireFrame = nil
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, Mod.onEnemyUpdateDogma)
-Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.onDogmaHit)
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateDogma)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitDogma)
 
