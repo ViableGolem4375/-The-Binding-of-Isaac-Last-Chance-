@@ -130,5 +130,6 @@
         skinColor="-1"
         canShoot="True"
         costumeSuffix="g"
+        costume="104"
     />
 </players>
