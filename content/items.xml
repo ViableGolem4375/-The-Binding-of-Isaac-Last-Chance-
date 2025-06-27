@@ -101,7 +101,7 @@
     <passive id="94" name="Temperance" gfx="temperance.png" description="Tempered spirit" quality="3" craftquality="3" devilprice="2" tags="angel offensive nocantrip" cache="firedelay" />
     <familiar name="Zeal" gfx="zeal.png" description="Zealous companion" quality="4" craftquality="4" cache="familiars" devilprice="2" tags="baby offensive summonable monstermanual angel nocantrip" />
     <active id="95" name="Kindness" gfx="kindness.png" description="Kill them with kindness" quality="3" craftquality="3" devilprice="2" maxcharges="6" chargetype="normal" tags="angel offensive nocantrip" />
-    <active id="96" name="Glass Heart" gfx="kindness.png" description="Reusable heart container" quality="2" craftquality="2" devilprice="1" maxcharges="4" chargetype="normal" tags="offensive nocantrip" />
+    <active id="96" name="Glass Heart" gfx="kindness.png" description="Reusable heart container" quality="2" craftquality="2" devilprice="1" maxcharges="4" chargetype="normal" hidden="true" tags="offensive nocantrip" />
     <active id="97" name="Legion Charge" gfx="phalanx.png" description="Roma Invictus" quality="4" craftquality="-1" devilprice="1" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
     <active id="98" name="Pugio" gfx="gladius.png" description="Roma Invictus" quality="4" craftquality="-1" devilprice="1" maxcharges="300" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
     <trinket id="99" name="King Penny" gfx="king_penny.png" description="Wealth of items" />
@@ -122,5 +122,6 @@
     <active id="114" name="Glowing Page" gfx="page.png" description="Remnant" quality="1" craftquality="-1" maxcharges="6" chargetype="normal" devilprice="2" tags="noeden nocantrip" />
     <passive id="115" name="Neurotoxin" gfx="neurotoxin.png" description="Crippling tears" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive syringe" />
     <passive id="116" name="Crushed Dice" gfx="crusheddice.png" description="Reroll?" quality="2" craftquality="2" devilprice="1" tags="nocantrip offensive" />
+    <passive id="117" name="Dogmaticism" gfx="crusheddice.png" description="Eternal belief" quality="4" craftquality="4" devilprice="2" tags="nocantrip offensive angel" />
 
 </items>
