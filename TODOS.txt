@@ -6,6 +6,12 @@
 - Maybe have a unique synergy between both mantles.
 - Cards are huge on J+E HUD.
 - check my active items with void - communist manifesto isn't working
+- remove any unreachable areas in challenge rooms
+- update t pontous controls
+- t pontius deletes campfires and shopkeepers?
+- costumes on new characters need fixing to not be overwritten
+- t pontius can 1 shot invulned enemies
+- t pontius needs basic attack buffed, spear damage nerfed and holy light maybe redone a bit
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -35,4 +41,5 @@ Trinket Ideas:
 
 
 
-Win streak: 48
+Win streak: 0
+Best: 52
