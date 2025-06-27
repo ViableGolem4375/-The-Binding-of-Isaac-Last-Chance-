@@ -8,8 +8,6 @@
 - check my active items with void - communist manifesto isn't working
 - remove any unreachable areas in challenge rooms
 - update t pontous controls
-- costumes on new characters need fixing to not be overwritten
-- t pontius needs basic attack buffed, spear damage nerfed and holy light maybe redone a bit
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -24,6 +22,7 @@
 
 for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
+character_009b_lazarus2hair.png
 
 Item Ideas to Add:
 
