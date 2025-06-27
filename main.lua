@@ -1116,7 +1116,7 @@ function PontiusMelee:CheckMeleeHitbox(npc)
             if distance < 35 and Game():GetFrameCount() > data.LastMeleeHitFrame + 5 and not recentHits[npc.InitSeed] then
                local player = effect.SpawnerEntity and effect.SpawnerEntity:ToPlayer()
                 if player then
-                    local damageMultiplier = 2.5 -- ✅ Adjust as needed
+                    local damageMultiplier = 5 -- ✅ Adjust as needed
                     local scaledDamage = player.Damage * damageMultiplier -- ✅ Scale with player’s damage
                     
                     if npc:IsEnemy() and npc:IsVulnerableEnemy() then
