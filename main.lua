@@ -1103,9 +1103,10 @@ function PontiusMelee:CheckMeleeHitbox(npc)
                     local damageMultiplier = 2.5 -- ✅ Adjust as needed
                     local scaledDamage = player.Damage * damageMultiplier -- ✅ Scale with player’s damage
                     
-                    npc:TakeDamage(scaledDamage, DamageFlag.DAMAGE_CRUSH | DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(effect), 0)
-                    Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, npc.Position, Vector(0,0), npc)
-
+                    if npc:IsEnemy() and npc:IsVulnerableEnemy() then
+                        npc:TakeDamage(scaledDamage, DamageFlag.DAMAGE_CRUSH | DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(effect), 0)
+                        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, npc.Position, Vector(0,0), npc)
+                    end
                     data.LastMeleeHitFrame = Game():GetFrameCount()
                     print("Melee hit applied! Damage:", scaledDamage)
                 end
