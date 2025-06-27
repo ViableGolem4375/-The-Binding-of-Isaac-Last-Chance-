@@ -1999,7 +1999,7 @@ if EID then
     EID:addCollectible(OMEGA_ITEM, "Rapidly fire a barrage of lasers for 4 seconds.#The lasers deal 0.5x Isaac's damage.", "Technology Omega")
     EID:addTrinket(TECH_TRINKET, "10% chance to fire a technology laser instead of a normal tear.#{{Luck}} +5% chance to trigger per point of luck.#{{Collectible202}} +10% chance to trigger per point of luck when golden.", "Bootleg Tech")
     EID:addCard(SOUL_DOMINO, "{{Luck}} +10 luck for the current room.", "Soul of Domino")
-    EID:addCard(SOUL_PONTIUS, "Fire 8 spears in a circular pattern around yourself.#The spears deal 10x Isaac's damage.", "Soul of Pontius")
+    EID:addCard(SOUL_PONTIUS, "Fire 8 spears in a circular pattern around yourself.#The spears deal 5x Isaac's damage and copy tear effects.", "Soul of Pontius")
     EID:addCard(SOUL_ABRAHAM, "Removes all devil room chances and converts the into angel room chances for the floor.#{{Warning}} Taking red heart damage after activation can still reduce your chances of seeing an angel room.", "Soul of Abraham")
     EID:addCollectible(JUBILEES_ITEM, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.", "Book of Jubilees")
     EID:addCollectible(JUBILEES_ITEM2, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.", "Book of Jubilees 2/3")
@@ -8271,7 +8271,7 @@ function Mod:UseSoulStonePontius(card, player)
                     laser.TearFlags = TearFlags.TEAR_EXPLOSIVE | player.TearFlags
                 end
                 laser.AngleDegrees = laserDirection:GetAngleDegrees() -- Set correct angle
-                laser.PositionOffset = laserDirection * 10 -- Adjust for proper visuals
+                laser.PositionOffset = laserDirection * 5 -- Adjust for proper visuals
                 laser.Parent = player
                 laser.Timeout = 1 -- Set duration (adjust as needed)
                 laser.CollisionDamage = playerDamage * spearDamage -- Apply high damage
