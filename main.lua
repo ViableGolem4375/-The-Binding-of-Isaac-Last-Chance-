@@ -2063,7 +2063,7 @@ if EID then
     EID:addCard(WHEEL_CARD, "Activates the effect of a random item for the room.#Activates the effects of two random items for the room when holding tarot cloth.", "Misprinted Wheel of Fortune")
     EID:addCard(STRENGTH_CARD, "Gain 1/2 of a soul heart.#For the room gain:#{{ArrowUp}} +0.1 speed#{{ArrowUp}} +0.03 tears#{{ArrowUp}} +0.2 damage#{{ArrowUp}} +11.25 range#{{ArrowUp}} +3 shot speed#{{ArrowUp}} +1 luck.#Gives a full soul heart and doubled stat bonuses when holding tarot cloth.", "Misprinted Strength")
     EID:addCard(HANGED_CARD, "Gain the effect of The Pinking Shears for the current room.#Activated twice when holding tarot cloth.", "Misprinted Hanged Man")
-    EID:addCard(DEATH_CARD, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.#{{Warning}}Activated twice when holding tarot cloth, this is guaranteed to kill Isaac.", "Misprinted Death")
+    EID:addCard(DEATH_CARD, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.#{{Warning}} Activated twice when holding tarot cloth, this is guaranteed to kill Isaac.", "Misprinted Death")
     EID:addCard(TEMPERANCE_CARD, "Spawns a confessional.#Spawns 2 confessionals while holding tarot cloth.", "Misprinted Temperance")
     EID:addCard(DEVIL_CARD, "Activates the effect of Satanic Bible.#Activates the effect twice while holding tarot cloth.", "Misprinted Devil")
     EID:addCard(TOWER_CARD, "Spawns a giga bomb pickup.#Spawns two giga bomb pickups while holding tarot cloth.", "Misprinted Tower")
