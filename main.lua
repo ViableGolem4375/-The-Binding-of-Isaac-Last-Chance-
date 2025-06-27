@@ -772,7 +772,7 @@ function Pontiusb:onCachePontiusb(player, cacheFlag)
             player.MaxFireDelay = player.MaxFireDelay - 10 + Pontiusb.FIREDELAY
         end
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            player.Damage = player.Damage - 3.5 + Pontiusb.DAMAGE * 1.25
+            player.Damage = player.Damage - 3.5 + Pontiusb.DAMAGE
         end
         if cacheFlag == CacheFlag.CACHE_RANGE then
             player.TearRange = player.TearRange - 260 + Pontiusb.RANGE
@@ -899,17 +899,33 @@ function PontiusMelee:onUpdatePontiusFullCharge(player)
         
         if player:GetFireDirection() > -1 and PlayerData.PontiusCool2 == 0 then
             PlayerData.LastFireDirectionPontius2 = player:GetFireDirection()
-            PlayerData.PontiusFrame2 = math.min(player.MaxFireDelay * 6, PlayerData.PontiusFrame2 + 1)
-            if PlayerData.PontiusFrame2 == player.MaxFireDelay * 6 and not PlayerData.ChargeSoundPlayedb then
+            PlayerData.PontiusFrame2 = math.min(player.MaxFireDelay * 8, PlayerData.PontiusFrame2 + 1)
+            if PlayerData.PontiusFrame2 == player.MaxFireDelay * 8 and not PlayerData.ChargeSoundPlayedb then
                 --player:SetColor(Color(1,0,0,0.8,0, 0, 0), 1, 0, false, false)
                 SFXManager():Play(SoundEffect.SOUND_SOUL_PICKUP, 1, 2, false, 1.5, 0)
                 PlayerData.ChargeSoundPlayedb = true -- ✅ Mark sound as played
 
             end
         elseif game:GetRoom():GetFrameCount() > 1 then
-            if PlayerData.PontiusFrame2 == player.MaxFireDelay * 6 then
-                player:UseActiveItem(crackID, false, false)
+            if PlayerData.PontiusFrame2 == player.MaxFireDelay * 8 then
+                --player:UseActiveItem(crackID, false, false)
                 --PontiusMelee:MeleeWeaponSwing(player)
+                local enemies = Isaac.FindInRadius(player.Position, 1000, EntityPartition.ENEMY)
+
+                for _, enemy in ipairs(enemies) do
+                    if enemy:IsVulnerableEnemy() and not enemy:IsDead() then
+                        local holyBeam = Isaac.Spawn(
+                            EntityType.ENTITY_EFFECT,
+                            EffectVariant.CRACK_THE_SKY,
+                            0,
+                            enemy.Position,
+                            Vector.Zero,
+                            player
+                        )
+                        holyBeam.Parent = player
+                        holyBeam.CollisionDamage = player.Damage / 3
+                    end
+                end
                 
             else
                 --Dud
@@ -929,11 +945,11 @@ function Mod:RenderPontiusFullChargeHUD()
         if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
             local data = player:GetData()
             local timerValue = data.PontiusFrame2 or 0
-            local maxCharge = player.MaxFireDelay * 6
+            local maxCharge = player.MaxFireDelay * 8
             local chargePercentage = math.floor((timerValue / maxCharge) * 100)
             local scale = Vector(0.75, 0.75)
 
-            local screenPos = Vector(55, 110) -- ✅ Adjust position to fit HUD layout
+            local screenPos = Vector(55, 120) -- ✅ Adjust position to fit HUD layout
             local color = timerValue <= 300 and KColor(1, 0, 0, 1) or KColor(1, 1, 1, 1) -- ✅ Red near expiration
 
             Isaac.RenderScaledText("Holy Light: " .. chargePercentage .. "%", screenPos.X, screenPos.Y, scale.X, scale.Y, 1, 1, 1, 1)
@@ -957,15 +973,15 @@ function PontiusMelee:onUpdatePontiusFullChargePlus(player)
         
         if player:GetFireDirection() > -1 and PlayerData.PontiusCool2 == 0 then
             PlayerData.LastFireDirectionPontius3 = player:GetFireDirection()
-            PlayerData.PontiusFrame3 = math.min(player.MaxFireDelay * 8, PlayerData.PontiusFrame3 + 1)
-            if PlayerData.PontiusFrame3 == player.MaxFireDelay * 8 and not PlayerData.ChargeSoundPlayedc then
+            PlayerData.PontiusFrame3 = math.min(player.MaxFireDelay * 6, PlayerData.PontiusFrame3 + 1)
+            if PlayerData.PontiusFrame3 == player.MaxFireDelay * 6 and not PlayerData.ChargeSoundPlayedc then
                 --player:SetColor(Color(1,0,0,0.8,0, 0, 0), 1, 0, false, false)
                 SFXManager():Play(SoundEffect.SOUND_SOUL_PICKUP, 1, 2, false, 2, 0)
                 PlayerData.ChargeSoundPlayedc = true -- ✅ Mark sound as played
 
             end
         elseif game:GetRoom():GetFrameCount() > 1 then
-            if PlayerData.PontiusFrame3 == player.MaxFireDelay * 8 then
+            if PlayerData.PontiusFrame3 == player.MaxFireDelay * 6 then
                 --player:UseActiveItem(crackID, false, false)
                 --PontiusMelee:MeleeWeaponSwing(player)
                 player:UseCard(SOUL_PONTIUS, UseFlag.USE_NOANIM)
@@ -988,11 +1004,11 @@ function Mod:RenderPontiusFullChargePlusHUD()
         if player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
             local data = player:GetData()
             local timerValue = data.PontiusFrame3 or 0
-            local maxCharge = player.MaxFireDelay * 8
+            local maxCharge = player.MaxFireDelay * 6
             local chargePercentage = math.floor((timerValue / maxCharge) * 100)
             local scale = Vector(0.75, 0.75)
 
-            local screenPos = Vector(55, 120) -- ✅ Adjust position to fit HUD layout
+            local screenPos = Vector(55, 110) -- ✅ Adjust position to fit HUD layout
             local color = timerValue <= 300 and KColor(1, 0, 0, 1) or KColor(1, 1, 1, 1) -- ✅ Red near expiration
 
             Isaac.RenderScaledText("Spear Throw: " .. chargePercentage .. "%", screenPos.X, screenPos.Y, scale.X, scale.Y, 1, 1, 1, 1)
