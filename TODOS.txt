@@ -5,7 +5,11 @@
 - Maybe necromancy shouldnt res bosses.
 - Maybe have a unique synergy between both mantles.
 - Cards are huge on J+E HUD.
-- check my active items with void - communist manifesto isn't working
+- check my active items with void, things that don't work:
+ - essence of eden (probably fine)
+ - become back ym money (also probably fine)
+ - book of jubilees (also fine)
+ - eternal bond does work but removes void if used
 - remove any unreachable areas in challenge rooms
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 

@@ -4552,10 +4552,10 @@ local rampageEndTime = 0
 local killCount = 0
 
 -- ✅ Activate invulnerability and contact damage on use
-function Mod:ActivateRampage(_, item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(APOLLYON_ESSENCE) then
+function Mod:ActivateRampage(item, rng, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == APOLLYON_ESSENCE then
             player:AnimateCollectible(APOLLYON_ESSENCE, "UseItem", "PlayerPickupSparkle")
             player:AddCollectible(APOLLYON_ESSENCE_VFX)
             local apollyonsfx = SFXManager()
@@ -4572,7 +4572,7 @@ function Mod:ActivateRampage(_, item, rng, player)
             player:SetMinDamageCooldown(480)
             player:GetData().contactDamageBoost = true
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.ActivateRampage, APOLLYON_ESSENCE)
@@ -4812,10 +4812,10 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCacheDominoEssence)
 
 local spearCooldown = 0 -- Shared cooldown for all characters
 
-function Mod:UseSpearAttack(_, item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(PONTIUS_ESSENCE) then
+function Mod:UseSpearAttack(item, rng, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == PONTIUS_ESSENCE then
 
             local data = player:GetData()
             local playerDamage = player.Damage
@@ -4898,7 +4898,7 @@ function Mod:UseSpearAttack(_, item, rng, player)
                 spearCooldown = 30 -- Set a cooldown (adjust as needed)
             end
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSpearAttack, PONTIUS_ESSENCE)
@@ -4906,11 +4906,11 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSpearAttack, PONTIUS_ESSENCE)
 local SOUL_OF_THE_LOST = Card.CARD_SOUL_LOST -- Replace with actual Soul of the Lost ID
 
 
-function Mod:UseSoulItem(_, item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
+function Mod:UseSoulItem(item, rng, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
         player:AnimateCollectible(LOST_ESSENCE, "UseItem", "PlayerPickupSparkle")
-        if player:HasCollectible(LOST_ESSENCE) then
+        if item == LOST_ESSENCE then
 
             -- ✅ Force immediate use
             player:UseCard(SOUL_OF_THE_LOST)
@@ -4921,7 +4921,7 @@ function Mod:UseSoulItem(_, item, rng, player)
             player:EvaluateItems() ]]
 
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItem, LOST_ESSENCE)
@@ -4954,17 +4954,17 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplySoulDamageBoost) ]]
 local SOUL_OF_JE = Card.CARD_SOUL_JACOB -- Replace with actual Soul of the Lost ID
 
 
-function Mod:UseSoulItemJE(_, item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
+function Mod:UseSoulItemJE(item, rng, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
         player:AnimateCollectible(JACOB_AND_ESAU_ESSENCE, "UseItem", "PlayerPickupSparkle")
-        if player:HasCollectible(JACOB_AND_ESAU_ESSENCE) then
+        if item == JACOB_AND_ESAU_ESSENCE then
 
             -- ✅ Force immediate use
             player:UseCard(SOUL_OF_JE)
 
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItemJE, JACOB_AND_ESAU_ESSENCE)
@@ -4972,17 +4972,17 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItemJE, JACOB_AND_ESAU_ESSE
 
 local SOUL_OF_FORGOTTEN = Card.CARD_SOUL_FORGOTTEN -- Replace with actual Soul of the Lost ID
 
-function Mod:UseSoulItemForgotten(_, item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
+function Mod:UseSoulItemForgotten(item, rng, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
         player:AnimateCollectible(FORGOTTEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
-        if player:HasCollectible(FORGOTTEN_ESSENCE) then
+        if item == FORGOTTEN_ESSENCE then
 
             -- ✅ Force immediate use
             player:UseCard(SOUL_OF_FORGOTTEN)
 
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItemForgotten, FORGOTTEN_ESSENCE)
@@ -5066,7 +5066,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitStar)
 
 function Mod:UseGun(item, rng, player)
     --local player = Isaac.GetPlayer(0)
-    if player:HasCollectible(GUN_ITEM) then
+    if item == GUN_ITEM then
 
         local data = player:GetData()
         local playerDamage = player.Damage
@@ -5393,11 +5393,11 @@ end
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseRefundItem, MONEY_ITEM)
 
 
-function Mod:UseGoldSprayPaint(_, item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
+function Mod:UseGoldSprayPaint(item, rng, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
 
-        if player:HasCollectible(PAINT_ITEM) then
+        if item == PAINT_ITEM then
             player:AnimateCollectible(PAINT_ITEM, "UseItem", "PlayerPickupSparkle")
 
             -- ✅ Get the player's first held trinket
@@ -5416,7 +5416,7 @@ function Mod:UseGoldSprayPaint(_, item, rng, player)
                 player:EvaluateItems()
             end
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseGoldSprayPaint, PAINT_ITEM)
@@ -5690,9 +5690,9 @@ end ]]
 --Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameDebug) -- Reset flag between runs
 
 function Mod:OnChaosItemUse(item, rng, player, flags)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(DEBUG_ITEM) then
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == DEBUG_ITEM then
             player:AnimateCollectible(DEBUG_ITEM, "UseItem", "PlayerPickupSparkle")
             local commandIndex = rng:RandomInt(#DEBUG_COMMANDS) + 1
             local chosenCommand = DEBUG_COMMANDS[commandIndex]
@@ -5705,7 +5705,7 @@ function Mod:OnChaosItemUse(item, rng, player, flags)
             SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
 
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.OnChaosItemUse, DEBUG_ITEM)
@@ -7006,7 +7006,7 @@ local barrageEndTime = 0
 function Mod:ActivateBarrage(item, rng, player)
     --local player = Isaac.GetPlayer(0)
     --player:AnimateCollectible(OMEGA_ITEM, "UseItem", "PlayerPickupSparkle")
-    if player:HasCollectible(OMEGA_ITEM) then
+    if item == OMEGA_ITEM then
         player:AnimateCollectible(OMEGA_ITEM, "UseItem", "PlayerPickupSparkle")
 
 
@@ -7916,10 +7916,10 @@ local statusEffects = {
     TearFlags.TEAR_MAGNETIZE
 }
 
-function Mod:UseStatusItem(_, item, rng, player)
+function Mod:UseStatusItem(item, rng, player)
     for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
-        if player:HasCollectible(CONCOCTION_ITEM) then
+        if item == CONCOCTION_ITEM then
             player:AnimateCollectible(CONCOCTION_ITEM, "UseItem", "PlayerPickupSparkle")
             -- ✅ Apply multiple tear effects
             local effectFlag = 0
@@ -8022,10 +8022,10 @@ local BOOKS = {
     COMMUNISM_ITEM
 }
 
-function Mod:UseBibbleItem(_, item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(BIBBLE_ITEM) then
+function Mod:UseBibbleItem(item, rng, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == BIBBLE_ITEM then
             player:AnimateCollectible(BIBBLE_ITEM, "UseItem", "PlayerPickupSparkle")
             local rng = RNG()
             rng:SetSeed(Random(), 0xB00C)
@@ -8034,15 +8034,15 @@ function Mod:UseBibbleItem(_, item, rng, player)
             player:UseActiveItem(bookID, UseFlag.USE_NOANIM | UseFlag.USE_NOHUD, -1)
 
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseBibbleItem, BIBBLE_ITEM)
 
-function Mod:UseCommunismItem(_, item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(COMMUNISM_ITEM) then
+function Mod:UseCommunismItem(item, rng, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == COMMUNISM_ITEM then
             player:AnimateCollectible(COMMUNISM_ITEM, "UseItem", "PlayerPickupSparkle")
             if player:GetPlayerType() == PlayerType.PLAYER_BLUEBABY_B then
                 local coins = player:GetNumCoins()
@@ -8070,7 +8070,7 @@ function Mod:UseCommunismItem(_, item, rng, player)
 
 
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseCommunismItem, COMMUNISM_ITEM)
