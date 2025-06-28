@@ -5531,10 +5531,10 @@ function ProtoTech:onUpdateTech(player)
                 if ProtoTechLaser and player:HasCollectible(CollectibleType.COLLECTIBLE_20_20) then
                     laserDamage = laserDamage * 1.2
                 end
-                if ProtoTechLaser and player:HasCollectible(CollectibleType.COLLECTIBLE_INNER_EYE) then
+                if ProtoTechLaser and player:HasCollectible(CollectibleType.COLLECTIBLE_INNER_EYE) or player:GetPlayerType() ~= PlayerType.PLAYER_KEEPER then
                     laserDamage = laserDamage * 1.3
                 end
-                if ProtoTechLaser and player:HasCollectible(CollectibleType.COLLECTIBLE_MUTANT_SPIDER) then
+                if ProtoTechLaser and player:HasCollectible(CollectibleType.COLLECTIBLE_MUTANT_SPIDER) or player:GetPlayerType() ~= PlayerType.PLAYER_KEEPER_B then
                     laserDamage = laserDamage * 1.4
                 end
                 if ProtoTechLaser and player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then

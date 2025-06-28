@@ -31,7 +31,6 @@ active item like birthright
 rapture
 item rooms have no items but secret rooms do
 all stats down plus something
-dogma static aura
 something with this effect: EffectVariant.DOGMA_ORB,
 something with this effect: DOGMA_BLACKHOLE
 
