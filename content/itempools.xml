@@ -27,6 +27,7 @@
         <Item Name="The Communist Manifesto" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -123,6 +124,7 @@
         <Item Name="The Communist Manifesto" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -167,6 +169,7 @@
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Dogmaticism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
@@ -219,6 +222,7 @@
     <Pool Name="craneGame">
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>

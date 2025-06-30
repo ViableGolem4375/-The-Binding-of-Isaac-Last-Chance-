@@ -173,6 +173,7 @@ PAGE_ITEM = Isaac.GetItemIdByName("Glowing Page")
 NEURO_ITEM = Isaac.GetItemIdByName("Neurotoxin")
 CRUSHED_DICE_ITEM = Isaac.GetItemIdByName("Crushed Dice")
 DOGMA_ITEM = Isaac.GetItemIdByName("Dogmaticism")
+INFESTATION_ITEM = Isaac.GetItemIdByName("Infestation 3")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2079,6 +2080,7 @@ if EID then
     EID:addCollectible(NEURO_ITEM, "5% chance to fire a tear that applies weakness to enemies for 5 seconds.#{{Luck}} +5% chance per point of luck.", "Neurotoxin")
     EID:addCollectible(CRUSHED_DICE_ITEM, "Spawns 3 dice shards in the starting room upon entering a new floor.", "Crushed Dice")
     EID:addCollectible(DOGMA_ITEM, "Grants: #{{ArrowUp}} +1 damage#{{ArrowUp}} +50% damage multiplier#{{ArrowUp}} +7.5 Range#{{ArrowDown}} -1 Tear Delay#{{ArrowDown}} -0.5 Shot Speed#Tears gain spectral and piercing along with a static aura.#Enemies that stand within the aura for 0.25 seconds are struck with a beam of light dealing 5x Isaac's damage.", "Dogmaticism")
+    EID:addCollectible(INFESTATION_ITEM, "Enemies spawn a friendly swarm spider on death.", "Infestation 3")
 
 end
 
@@ -8286,6 +8288,33 @@ Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.UpdateDogmaTears)
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateDogma)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitDogma)
+
+function Mod:InfestationThree(entity)
+    if entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) then return end
+
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(i)
+        if player:HasCollectible(INFESTATION_ITEM) then
+            local count = player:GetCollectibleNum(INFESTATION_ITEM)
+            for j = 1, count do
+                local spider = Isaac.Spawn(
+                    EntityType.ENTITY_SWARM_SPIDER,
+                    0, -- Variant 0 = small yellow spider
+                    0,
+                    entity.Position,
+                    Vector.FromAngle(math.random(0, 359)) * 3,
+                    player
+                )
+                spider:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+                spider:AddEntityFlags(EntityFlag.FLAG_PERSISTENT) -- ✅ Makes it friendly
+                spider:AddEntityFlags(EntityFlag.FLAG_CHARM)
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.InfestationThree)
+
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

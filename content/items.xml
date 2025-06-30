@@ -123,5 +123,6 @@
     <passive id="115" name="Neurotoxin" gfx="neurotoxin.png" description="Crippling tears" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive syringe" />
     <passive id="116" name="Crushed Dice" gfx="crusheddice.png" description="Reroll?" quality="2" craftquality="2" devilprice="1" tags="nocantrip offensive" />
     <passive id="117" name="Dogmaticism" gfx="dogmaticism.png" description="Eternal belief" quality="4" craftquality="4" devilprice="2" tags="nocantrip offensive angel" cache="damage firedelay range shotspeed" />
+    <passive id="118" name="Infestation 3" gfx="infestation3.png" description="Infested enemies" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive" cache="familiars" />
 
 </items>
