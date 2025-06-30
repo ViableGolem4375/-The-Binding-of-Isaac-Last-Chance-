@@ -82,7 +82,7 @@
     <passive id="75" name="Neutrality" gfx="neutrality.png" description="Take the road less travelled" quality="4" craftquality="-1" hidden="true" devilprice="1" tags="quest noeden nocantrip" cache="damage" />
     <passive id="76" name="Essence of Abraham" gfx="abraham_essence.png" description="Duality" quality="2" craftquality="2" devilprice="1" tags="offensive nocantrip" />
     <passive id="77" name=" Toolbelt " gfx="toolbelt.png" description="Pocket active" quality="3" craftquality="-1" hidden="true" devilprice="1" tags="nocantrip offensive" />
-    <active id="78" name="Technology Omega" gfx="omegatech.png" description="Technological advancement" quality="2" craftquality="2" maxcharges="4" devilprice="1" chargetype="normal" tags="quest nocantrip tech" />
+    <active id="78" name="Technology Omega" gfx="omegatech.png" description="Reusable laser barrage" quality="2" craftquality="2" maxcharges="4" devilprice="1" chargetype="normal" tags="quest nocantrip tech" />
     <trinket id="79" name="Bootleg Tech" gfx="bootleg.png" description="It sort of works" cache="luck" />
     <active id="80" name="Book of Jubilees" gfx="jubilees.png" description="Deliver me unto salvation" quality="4" craftquality="4" maxcharges="12" chargetype="normal" initcharge="0" devilprice="2" tags="offensive book nocantrip" />
     <active id="81" name="Angel Blast" gfx="finaljudgement.png" description="Be Afraid" quality="4" craftquality="-1" maxcharges="50" chargetype="timed" hidden="true" devilprice="1" tags="quest noeden nocantrip"/>

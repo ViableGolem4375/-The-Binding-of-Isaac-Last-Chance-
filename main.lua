@@ -1924,7 +1924,7 @@ if EID then
     EID:addIcon("Player"..TAINTED_ABRAHAM_TYPE, "Heretic", 0, 16, 16, 0, 0, EIDicons)
 
     EID:addCollectible(LUCKY_DICE_ID, "Reroll all item pedestals in the current room.#{{Warning}} Items rerolled will be chosen from a special item pool consisting of luck/chance based items.", "Lucky Coin")
-    EID:addCollectible(DULL_COIN_ID, "Rerolls all item pedestals in the room.#{{Warning}} Items will always be rerolled into an item of 1 lower quality than the original item.#Using Dull Coin with no item pedestals in the room containing items with a quality above 1 will remove a random quality 0 item from Isaac's inventory and trigger the Berserk! state.#Triggering the Berserk! state in this way charges Isaac's active item by 12 bars.", "Dull Coin")
+    EID:addCollectible(DULL_COIN_ID, "Rerolls all item pedestals in the room.#{{Warning}} Items will always be rerolled into an item of 1 lower quality than the original item.#Using Dull Coin with no item pedestals in the room containing items with a quality above 1 will remove a random quality 0 item from Isaac's inventory and trigger the Berserk! state and charge Isaac's main active item by 12 bars.", "Dull Coin")
     EID:addCollectible(HATRED_ITEM, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} 25% chance to become invulnerable briefly upon damaging an enemy.", "Unholy Mantle")
     EID:addCollectible(URIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires a holy light beam forward.#Scales with Isaac's damage.", "Lil' Uriel")
     EID:addCollectible(GABRIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires 4 holy light beams in an 'X' pattern.#Scales with Isaac's damage.", "Lil' Gabriel")
