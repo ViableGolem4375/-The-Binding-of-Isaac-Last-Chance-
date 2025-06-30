@@ -172,7 +172,7 @@ JUBILEES_ITEM3 = Isaac.GetItemIdByName("Book of Jubilees 1/3")
 PAGE_ITEM = Isaac.GetItemIdByName("Glowing Page")
 NEURO_ITEM = Isaac.GetItemIdByName("Neurotoxin")
 CRUSHED_DICE_ITEM = Isaac.GetItemIdByName("Crushed Dice")
-DOGMA_ITEM = Isaac.GetItemIdByName("Dogmaticism")
+DOGMA_ITEM = Isaac.GetItemIdByName("Dogmatism")
 INFESTATION_ITEM = Isaac.GetItemIdByName("Infestation 3")
 RAPTURE_ITEM = Isaac.GetItemIdByName("Rapture")
 
@@ -2080,7 +2080,7 @@ if EID then
     EID:addCollectible(COMMUNISM_ITEM, "Evenly distributes Isaac's coins, keys, and bombs.#As Tainted Blue Baby this effect only evenly distributes coins and keys.", "The Communist Manifesto")
     EID:addCollectible(NEURO_ITEM, "5% chance to fire a tear that applies weakness to enemies for 5 seconds.#{{Luck}} +5% chance per point of luck.", "Neurotoxin")
     EID:addCollectible(CRUSHED_DICE_ITEM, "Spawns 3 dice shards in the starting room upon entering a new floor.", "Crushed Dice")
-    EID:addCollectible(DOGMA_ITEM, "Grants: #{{ArrowUp}} +1 damage#{{ArrowUp}} +50% damage multiplier#{{ArrowUp}} +7.5 Range#{{ArrowDown}} -1 Tear Delay#{{ArrowDown}} -0.5 Shot Speed#Tears gain spectral and piercing along with a static aura.#Enemies that stand within the aura for 0.25 seconds are struck with a beam of light dealing 5x Isaac's damage.", "Dogmaticism")
+    EID:addCollectible(DOGMA_ITEM, "Grants: #{{ArrowUp}} +1 damage#{{ArrowUp}} +50% damage multiplier#{{ArrowUp}} +7.5 Range#{{ArrowDown}} -1 Tear Delay#{{ArrowDown}} -0.5 Shot Speed#Tears gain spectral and piercing along with a static aura.#Enemies that stand within the aura for 0.25 seconds are struck with a beam of light dealing 5x Isaac's damage.", "Dogmatism")
     EID:addCollectible(INFESTATION_ITEM, "Enemies spawn a friendly swarm spider on death.", "Infestation 3")
     EID:addCollectible(RAPTURE_ITEM, "Make all players briefly invulnerable and throw an orb of light which detonates into 7 beams of light fired in a circular pattern after a brief delay.", "Rapture")
 

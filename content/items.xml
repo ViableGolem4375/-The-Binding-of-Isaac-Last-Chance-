@@ -109,7 +109,7 @@
     <passive id="101" name="Envious Rage" gfx="envious_rage.png" description="What's yours will be mine" quality="3" craftquality="-1" devilprice="1" hidden="true" tags="nocantrip quest noeden" />
     <passive id="102" name="Void Energy" gfx="blank.png" description="Void" quality="3" craftquality="-1" hidden="true" devilprice="1" tags="nocantrip quest noeden" cache="damage" />
     <passive id="103" name="Rampaging Rage" gfx="phalanx.png" description="Die" quality="3" craftquality="-1" hidden="true" devilprice="1" tags="nocantrip quest noeden" cache="damage" />
-    <active id="104" name="Mysterious Concoction" gfx="concoction.png" description="It tastes awful" quality="2" craftquality="2" devilprice="1" maxcharges="4" chargetype="normal" tags="offensive nocantrip" cache="tearflag" />
+    <active id="104" name="Mysterious Concoction" gfx="concoction2.png" description="It tastes awful" quality="2" craftquality="2" devilprice="1" maxcharges="4" chargetype="normal" tags="offensive nocantrip" cache="tearflag" />
     <active id="105" name="Eternal Bond 3" gfx="bond2-3.png" description="Us against the world!" quality="4" craftquality="-1" charge="0" hidden="true" devilprice="2" tags="quest noeden nocantrip"/>
     <active id="106" name="Eternal Bond 2" gfx="bond2-2.png" description="Us against the world!" quality="4" craftquality="-1" charge="0" hidden="true" devilprice="2" tags="quest noeden nocantrip"/>
     <active id="107" name="Eternal Bond 1" gfx="bond2-1.png" description="Us against the world!" quality="4" craftquality="-1" charge="0" hidden="true" devilprice="2" tags="quest noeden nocantrip"/>
@@ -122,7 +122,7 @@
     <active id="114" name="Glowing Page" gfx="page.png" description="Remnant" quality="1" craftquality="-1" maxcharges="6" chargetype="normal" devilprice="2" tags="noeden nocantrip" />
     <passive id="115" name="Neurotoxin" gfx="neurotoxin.png" description="Crippling tears" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive syringe" />
     <passive id="116" name="Crushed Dice" gfx="crusheddice.png" description="Reroll?" quality="2" craftquality="2" devilprice="1" tags="nocantrip offensive" />
-    <passive id="117" name="Dogmaticism" gfx="dogmaticism.png" description="Eternal belief" quality="4" craftquality="4" devilprice="2" tags="nocantrip offensive angel" cache="damage firedelay range shotspeed" />
+    <passive id="117" name="Dogmatism" gfx="dogmaticism.png" description="Eternal belief" quality="4" craftquality="4" devilprice="2" tags="nocantrip offensive angel" cache="damage firedelay range shotspeed" />
     <passive id="118" name="Infestation 3" gfx="infestation3.png" description="Infested enemies" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive" cache="familiars" />
     <active id="119" name="Rapture" gfx="rapture.png" description="The trumpets blare" quality="3" craftquality="3" maxcharges="6" chargetype="normal" devilprice="1" tags="noeden nocantrip angel" />
 

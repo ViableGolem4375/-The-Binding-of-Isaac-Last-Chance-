@@ -1,8 +1,8 @@
 <AnimatedActor>
-	<Info CreatedBy="robot" CreatedOn="6/27/2025 7:46:25 PM" Version="108" Fps="30"/>
+	<Info CreatedBy="robot" CreatedOn="6/30/2025 2:51:41 PM" Version="109" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="costumes\dogmaticism.png" Id="0"/>
+			<Spritesheet Path="costumes\dogmatism.png" Id="0"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="head4" Id="0" SpritesheetId="0"/>
