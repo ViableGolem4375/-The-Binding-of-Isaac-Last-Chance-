@@ -1143,7 +1143,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.ClearHitTracking)
 
 function Mod:UsePugio(item, rng, player)
     --local player = Isaac.GetPlayer(0)
-    if player:HasCollectible(PUGIO_ITEM) then
+    if item == PUGIO_ITEM then
 
         local data = player:GetData()
         local playerDamage = player.Damage
@@ -1174,7 +1174,7 @@ function Mod:UsePugio(item, rng, player)
             
             tear.CollisionDamage = player.Damage -- ✅ Apply extreme damage boost
 
-            tear.TearFlags = TearFlags.TEAR_FREEZE
+            tear.TearFlags = TearFlags.TEAR_FREEZE | TearFlags.TEAR_BAIT
             -- ✅ Load custom tear sprite (if desired)
             local sprite = tear:GetSprite()
             sprite:Load("gfx/gladius.anm2", true)
@@ -1942,10 +1942,10 @@ if EID then
     EID:addTrinket(ORB_TRINKET, "Automatically rerolls quality 0 items.#{{Collectible202}} No effect if golden.", "Orb Shard")
     EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.#{{Collectible202}} No effect if golden.", "Stitched Photo")
     EID:addTrinket(CANDLE_TRINKET, "Grants 2 black hearts at the beginning of a floor if there is an active curse.#{{Collectible202}} Grants 4 black hearts if golden.", "Black Candle Wick")
-    EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond 4")
-    EID:addCollectible(BOND_ITEM2, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond 3")
-    EID:addCollectible(BOND_ITEM3, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond 2")
-    EID:addCollectible(BOND_ITEM4, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.", "Eternal Bond 1")
+    EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#{{Warning}} Absorbing this item with void will cause void to turn into Eternal Bond on activation.", "Eternal Bond 4")
+    EID:addCollectible(BOND_ITEM2, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#{{Warning}} Absorbing this item with void will cause void to turn into Eternal Bond on activation.", "Eternal Bond 3")
+    EID:addCollectible(BOND_ITEM3, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#{{Warning}} Absorbing this item with void will cause void to turn into Eternal Bond on activation.", "Eternal Bond 2")
+    EID:addCollectible(BOND_ITEM4, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#{{Warning}} Absorbing this item with void will cause void to turn into Eternal Bond on activation.", "Eternal Bond 1")
     EID:addCollectible(BOND_ITEM_EMPTY, "Does nothing.#Activating the item will restore Eternal Bond back to 4 charges.", "Empty Eternal Bond")
     EID:addCollectible(COMP_ITEM, "{{ArrowUp}} Grants +1 damage for every quality 0 item Isaac holds.")
     EID:addCollectible(ANATOMY_ITEM, "Grants 1 bone heart on use.")
@@ -1960,7 +1960,7 @@ if EID then
     EID:addCollectible(AZAZEL_ESSENCE, "5% chance to fire a tear that causes Isaac to fire a large brimstone beam on contact with something.#{{Luck}} 100% chance at 19 luck.", "Essence of Azazel")
     EID:addCollectible(LAZARUS_ESSENCE, "{{ArrowUp}} Grants +1 damage, a +50% damage multiplier, -1 tear delay, +0.5 speed, +3.75 range, +1 shot speed, and +2 luck upon dying and being revived.#{{Warning}} Essence of Lazarus can only trigger once.#{{Warning}} This item will NOT revive you, it is not an extra life.", "Essence of Lazarus")
     EID:addCollectible(LAZARUS_ESSENCE_UNLOCKED, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} -1 tear delay.#{{ArrowUp}} +0.5 speed.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +1 shot speed.#{{ArrowUp}} +2 luck.", "Unlocked Essence of Lazarus")
-    EID:addCollectible(EDEN_ESSENCE, "One time use active that rerolls all held passive items.#Rerolls have an extreme tendency to give high quality items.", "Essence of Eden")
+    EID:addCollectible(EDEN_ESSENCE, "One time use active that rerolls all held passive items.#Rerolls have an extreme tendency to give high quality items.#Will still only activate once if absorbed by void.", "Essence of Eden")
     EID:addCollectible(KEEPER_ESSENCE, "Grants 99 cents on pickup.#Infinite money for the current floor.", "Essence of Keeper")
     EID:addCollectible(APOLLYON_ESSENCE, "For 8 seconds gain:#{{ArrowUp}} Invincibility#{{ArrowUp}} 40 contact damage to enemies.#For every enemy killed during Essence of Apollyon's effect, permanently gain +0.05 damage.", "Essence of Apollyon")
     EID:addCollectible(BETHANY_ESSENCE, "Grants a random Book of Virtues wisp when entering a new room.", "Essence of Bethany")
@@ -1979,7 +1979,7 @@ if EID then
     EID:addBirthright(TAINTED_PONTIUS_TYPE, "Grants Pugio as a pocket active item.#Pugio allows Isaac to throw a projectile which petrifies enemies it hits.")
     EID:addCollectible(DEFENSE_TECH_ITEM, "Spawns a laser ring around Isaac that deals 25% of his damage every tick.", "Defense Tech")
     EID:addCollectible(NECROMANCY_ITEM, "Killed enemies have a 10% chance to be revived as friendlies which last for the current room.#{{Luck}} 75% chance at 18 luck.", "Necromancy")
-    EID:addCollectible(MONEY_ITEM, "One time use active item that gives Isaac coins equal to the amount of money spent throughout the run.", "Become Back My Money")
+    EID:addCollectible(MONEY_ITEM, "One time use active item that gives Isaac coins equal to the amount of money spent throughout the run.#Will still only activate once if absorbed by void.", "Become Back My Money")
     EID:addCollectible(PAINT_ITEM, "Turns Isaac's currently held trinket into its golden version.#{{Warning}} Using the item on a golden trinket will turn it into its non golden variant.#{{Warning}} Will only affect one trinket at a time, always turns the trinket held in the first slot to gold.", "Gold Spray Paint")
     EID:addCollectible(GLITCH_ITEM, "Grants a 1 in 100,000,000 chance to fire a tear that instantly kills any enemy it hits inclusing bosses.#{{Luck}} 100% chance at 99,999,999 luck.", "'/<<L7")
     EID:addCollectible(PROTO_ITEM, "Isaac's tears are replaced by a chargeable 1 tick laser which deals 10x Isaac's damage.", "Proto-Tech")
@@ -2018,9 +2018,9 @@ if EID then
     EID:addCard(SOUL_DOMINO, "{{Luck}} +10 luck for the current room.", "Soul of Domino")
     EID:addCard(SOUL_PONTIUS, "Fire 8 spears in a circular pattern around yourself.#The spears deal 5x Isaac's damage and copy tear effects.", "Soul of Pontius")
     EID:addCard(SOUL_ABRAHAM, "Removes all devil room chances and converts the into angel room chances for the floor.#{{Warning}} Taking red heart damage after activation can still reduce your chances of seeing an angel room.", "Soul of Abraham")
-    EID:addCollectible(JUBILEES_ITEM, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.", "Book of Jubilees")
-    EID:addCollectible(JUBILEES_ITEM2, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.", "Book of Jubilees 2/3")
-    EID:addCollectible(JUBILEES_ITEM3, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.", "Book of Jubilees 1/3")
+    EID:addCollectible(JUBILEES_ITEM, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.#{{Warning}} Absorbing this item with void will cause void to turn into Book of Jubilees on activation.", "Book of Jubilees")
+    EID:addCollectible(JUBILEES_ITEM2, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.#{{Warning}} Absorbing this item with void will cause void to turn into Book of Jubilees on activation.", "Book of Jubilees 2/3")
+    EID:addCollectible(JUBILEES_ITEM3, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.#{{Warning}} Absorbing this item with void will cause void to turn into Book of Jubilees on activation.", "Book of Jubilees 1/3")
     EID:addCollectible(PAGE_ITEM, "50% chance to gain 1/2 of a soul heart on use.", "Glowing Page")
     EID:addCard(RELIQUARY_CARD, "Spawns an Essence Collector.", "Essence Card")
     EID:addCollectible(ANGEL_BLAST_ITEM, "Fire a holy light beam which deals Isaac's damage.", "Angel Blast")
@@ -2047,7 +2047,7 @@ if EID then
     EID:addCollectible(TEMPERANCE_ITEM, "{{ArrowUp}} Gain -20% fire delay while below full red health.#Does not work on characters without red health.", "Temperance")
     EID:addCollectible(ZEAL_ITEM, "Gain a familiar which fires godhead tears that scales with your damage and fire rate.", "Zeal")
     EID:addCollectible(KINDNESS_ITEM, "Creates an extermely brief aura around Isaac which turns enemies friendly.", "Kindness")
-    EID:addCollectible(PUGIO_ITEM, "Throw a projectile that petrifies any enemies it makes contact with.", "Pugio")
+    EID:addCollectible(PUGIO_ITEM, "Throw a projectile that petrifies and baits any enemies it makes contact with.", "Pugio")
     EID:addTrinket(KING_TRINKET, "Extremely small chance for a pedestal item to drop when picking up a coin.#Higher value coins have a higher chance to trigger this effect.#This trinket is destroyed after triggering.#{{Collectible202}} Chances are doubled when golden.", "King Penny")
     EID:addCollectible(CONCOCTION_ITEM, "For the room your tears apply:# Poison# Bait# Fear# Slowness# Concussed# Charm# Burning# Shrinking# Magnetism", "Mysterious Concoction")
     EID:addCard(FOOL_CARD, "Activates the effect of Teleport 2.0.", "Misprinted Fool")
@@ -2697,10 +2697,10 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdatee, FAMILIAR_VARIANT_FAIL)
 
-function Mod:UseAngelBlast(_, item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(ANGEL_BLAST_ITEM) then
+function Mod:UseAngelBlast(item, rng, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == ANGEL_BLAST_ITEM then
 
             local data = player:GetData()
             local playerDamage = player.Damage
@@ -2740,7 +2740,7 @@ function Mod:UseAngelBlast(_, item, rng, player)
                 spearCooldown = 30 -- Set a cooldown (adjust as needed)
             end
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseAngelBlast, ANGEL_BLAST_ITEM)
@@ -4423,11 +4423,11 @@ Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPlayerUpdateLaz)
 local rerolledItems = {} -- Track rerolled items to prevent duplicates
 
 -- Function to upgrade all passive items by +1 quality
-function Mod:UpgradeItemsOnUse(_, item, rng, player)
-    for j = 0, Game():GetNumPlayers() - 1 do
-        local player = Isaac.GetPlayer(j)
+function Mod:UpgradeItemsOnUse(item, rng, player)
+    --for j = 0, Game():GetNumPlayers() - 1 do
+        --local player = Isaac.GetPlayer(j)
         player:AnimateCollectible(EDEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
-        if player:HasCollectible(EDEN_ESSENCE) then
+        if item == EDEN_ESSENCE then
 
             local collectiblesToReroll = {} -- Store all valid passive items for rerolling
 
@@ -4463,7 +4463,7 @@ function Mod:UpgradeItemsOnUse(_, item, rng, player)
             -- ✅ Consume the active item after processing all upgrades
             player:RemoveCollectible(EDEN_ESSENCE)
         end
-    end
+    --end
     
 end
 
@@ -5197,10 +5197,10 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyBossRoomDamage)
 
 local INVINCIBILITY_DURATION = 30 -- 1 second (since Isaac runs at 30 FPS)
 
-function Mod:UseInvincibilityItem(_, item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(PHALANX_ITEM) then
+function Mod:UseInvincibilityItem(item, rng, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == PHALANX_ITEM then
 
             -- ✅ Apply invulnerability effect
             player:SetMinDamageCooldown(60)
@@ -5210,7 +5210,7 @@ function Mod:UseInvincibilityItem(_, item, rng, player)
             local sfx = SFXManager()
             sfx:Play(SoundEffect.SOUND_BALL_AND_CHAIN_HIT)
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseInvincibilityItem, PHALANX_ITEM)
@@ -5367,10 +5367,10 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameMoney) -- Reset flag between runs
 
 
-function Mod:UseRefundItem(_, item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(MONEY_ITEM) then
+function Mod:UseRefundItem(item, rng, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == MONEY_ITEM then
 
             player:AnimateCollectible(MONEY_ITEM, "UseItem", "PlayerPickupSparkle")
 
@@ -5387,7 +5387,7 @@ function Mod:UseRefundItem(_, item, rng, player)
 
             end
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseRefundItem, MONEY_ITEM)
@@ -5947,9 +5947,9 @@ function Mod:FindItemPedestalsGlitchEssence()
 end
 
 function Mod:UseTMTrainerReroll(item, rng, player, flags)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(GLITCH_ESSENCE) then
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == GLITCH_ESSENCE then
             player:AnimateCollectible(GLITCH_ESSENCE, "UseItem", "PlayerPickupSparkle")
 
             local pedestals = Mod:FindItemPedestalsGlitchEssence()
@@ -5976,7 +5976,7 @@ function Mod:UseTMTrainerReroll(item, rng, player, flags)
             player:RemoveCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
             print("Successfully rerolled all pedestals into TMTRAINER items!")
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTMTrainerReroll, GLITCH_ESSENCE)
@@ -6464,9 +6464,9 @@ local function GetDark()
 end
 
 function Mod:UseDuaeitem(item, rng, player, flags)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(DUAE_ITEM) then
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == DUAE_ITEM then
             player:AnimateCollectible(DUAE_ITEM, "UseItem", "PlayerPickupSparkle")
             for _, pos in ipairs(pedestalPositionsAbe1) do
                 local safePos = GetSafePedestalPosition(pos)
@@ -6502,7 +6502,7 @@ function Mod:UseDuaeitem(item, rng, player, flags)
             end
 
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseDuaeitem, DUAE_ITEM)
@@ -7021,7 +7021,7 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.ActivateBarrage, OMEGA_ITEM)
 -- ✅ Apply contact damage effect
 function Mod:OnPlayerUpdateBarrage(player)
     --local player = Isaac.GetPlayer(0)
-    if barrageActive and player:HasCollectible(OMEGA_ITEM) then
+    if (barrageActive and player:HasCollectible(OMEGA_ITEM)) or (barrageActive and player:HasCollectible(CollectibleType.COLLECTIBLE_VOID)) then
         -- ✅ Damage enemies on contact
         --local player = Isaac.GetPlayer(0)
         local fireDirectionAzazel = player:GetFireDirection()
@@ -7069,9 +7069,9 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdateBarrage)
 
 function Mod:UseJubilees(item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(JUBILEES_ITEM) then
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == JUBILEES_ITEM then
             player:AnimateCollectible(JUBILEES_ITEM, "UseItem", "PlayerPickupSparkle")
             local level = Game():GetLevel()
             --local currentChance = level:GetAngelRoomChance()
@@ -7102,15 +7102,15 @@ function Mod:UseJubilees(item, rng, player)
 
         --return true -- ✅ Consume the item properly
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseJubilees, JUBILEES_ITEM)
 
 function Mod:UseJubilees2(item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(JUBILEES_ITEM2) then
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == JUBILEES_ITEM2 then
             player:AnimateCollectible(JUBILEES_ITEM2, "UseItem", "PlayerPickupSparkle")
             local level = Game():GetLevel()
             --local currentChance = level:GetAngelRoomChance()
@@ -7141,15 +7141,15 @@ function Mod:UseJubilees2(item, rng, player)
 
         --return true -- ✅ Consume the item properly
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseJubilees2, JUBILEES_ITEM2)
 
 function Mod:UseJubilees3(item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
-        if player:HasCollectible(JUBILEES_ITEM3) then
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == JUBILEES_ITEM3 then
             player:AnimateCollectible(JUBILEES_ITEM3, "UseItem", "PlayerPickupSparkle")
             local level = Game():GetLevel()
             --local currentChance = level:GetAngelRoomChance()
@@ -7180,7 +7180,7 @@ function Mod:UseJubilees3(item, rng, player)
 
         --return true -- ✅ Consume the item properly
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseJubilees3, JUBILEES_ITEM3)

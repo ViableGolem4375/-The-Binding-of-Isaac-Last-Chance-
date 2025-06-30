@@ -6,10 +6,7 @@
 - Maybe have a unique synergy between both mantles.
 - Cards are huge on J+E HUD.
 - check my active items with void, things that don't work:
- - essence of eden (probably fine)
- - become back ym money (also probably fine)
- - book of jubilees (also fine)
- - eternal bond does work but removes void if used
+ - tech omega
 - remove any unreachable areas in challenge rooms
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
@@ -37,10 +34,12 @@ item rooms have no items but secret rooms do
 all stats down plus something
 something with this effect: EffectVariant.DOGMA_ORB,
 something with this effect: DOGMA_BLACKHOLE
+spawn the yellow spiders on enemy death
 
 Trinket Ideas:
 
 
-
-Win streak: 0
-Best: 52
+Streaks:
+T Keeper Win Streak: 4
+Jacob and Esau:
+	Best: 52
