@@ -31,7 +31,6 @@ item rooms have no items but secret rooms do
 all stats down plus something
 something with this effect: EffectVariant.DOGMA_ORB,
 something with this effect: DOGMA_BLACKHOLE
-spawn the yellow spiders on enemy death
 
 Trinket Ideas:
 

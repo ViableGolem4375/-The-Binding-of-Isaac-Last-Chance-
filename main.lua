@@ -174,6 +174,7 @@ NEURO_ITEM = Isaac.GetItemIdByName("Neurotoxin")
 CRUSHED_DICE_ITEM = Isaac.GetItemIdByName("Crushed Dice")
 DOGMA_ITEM = Isaac.GetItemIdByName("Dogmaticism")
 INFESTATION_ITEM = Isaac.GetItemIdByName("Infestation 3")
+RAPTURE_ITEM = Isaac.GetItemIdByName("Rapture")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2081,6 +2082,7 @@ if EID then
     EID:addCollectible(CRUSHED_DICE_ITEM, "Spawns 3 dice shards in the starting room upon entering a new floor.", "Crushed Dice")
     EID:addCollectible(DOGMA_ITEM, "Grants: #{{ArrowUp}} +1 damage#{{ArrowUp}} +50% damage multiplier#{{ArrowUp}} +7.5 Range#{{ArrowDown}} -1 Tear Delay#{{ArrowDown}} -0.5 Shot Speed#Tears gain spectral and piercing along with a static aura.#Enemies that stand within the aura for 0.25 seconds are struck with a beam of light dealing 5x Isaac's damage.", "Dogmaticism")
     EID:addCollectible(INFESTATION_ITEM, "Enemies spawn a friendly swarm spider on death.", "Infestation 3")
+    EID:addCollectible(RAPTURE_ITEM, "Make all players briefly invulnerable and throw an orb of light which detonates into 7 beams of light fired in a circular pattern after a brief delay.", "Rapture")
 
 end
 
@@ -8314,6 +8316,66 @@ function Mod:InfestationThree(entity)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.InfestationThree)
+
+function Mod:UseRaptureItem(item, rng, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        if item == RAPTURE_ITEM then
+            player:AnimateCollectible(RAPTURE_ITEM, "UseItem", "PlayerPickupSparkle")
+            local dir = player:GetFireDirection()
+            local velocity = Vector(0, 0)
+
+            if dir == Direction.LEFT then
+                velocity = Vector(-10, 0)
+            elseif dir == Direction.RIGHT then
+                velocity = Vector(10, 0)
+            elseif dir == Direction.UP then
+                velocity = Vector(0, -10)
+            elseif dir == Direction.DOWN then
+                velocity = Vector(0, 10)
+            elseif dir == Direction.NO_DIRECTION then
+                velocity = Vector(0, 10)
+            end
+
+            
+            local rapturebeam = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.DOGMA_ORB, 0, player.Position, velocity, player)
+            for i = 0, Game():GetNumPlayers() - 1 do
+                local player = Game():GetPlayer(i)
+                player:SetMinDamageCooldown(80)
+            end
+            local sfx = SFXManager()
+            sfx:Play(SoundEffect.SOUND_DOGMA_LIGHT_RAY_CHARGE, 1, 2, false, 2)
+            sfx:Play(SoundEffect.SOUND_DOGMA_LIGHT_RAY_FIRE)
+            rapturebeam.CollisionDamage = 20 + player.Damage
+            rapturebeam:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+            local data = rapturebeam:GetData()
+            rapturebeam:GetData().isRaptureOrb = true
+            data.spawnFrameRapture = Game():GetFrameCount()
+
+
+
+
+        end
+    --end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseRaptureItem, RAPTURE_ITEM)
+
+function Mod:UpdateRaptureOrb(entity)
+    local data = entity:GetData()
+    if data.isRaptureOrb and data.spawnFrameRapture then
+        local currentFrame = Game():GetFrameCount()
+        
+
+        if currentFrame - data.spawnFrameRapture >= 15 then
+            entity:Remove()
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Mod.UpdateRaptureOrb, EffectVariant.DOGMA_ORB)
+
+
 
 
 ----------------------------------------------------------------------------------------
