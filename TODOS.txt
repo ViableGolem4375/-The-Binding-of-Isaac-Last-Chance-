@@ -5,8 +5,6 @@
 - Maybe necromancy shouldnt res bosses.
 - Maybe have a unique synergy between both mantles.
 - Cards are huge on J+E HUD.
-- check my active items with void, things that don't work:
- - tech omega
 - remove any unreachable areas in challenge rooms
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
