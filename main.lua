@@ -175,6 +175,7 @@ CRUSHED_DICE_ITEM = Isaac.GetItemIdByName("Crushed Dice")
 DOGMA_ITEM = Isaac.GetItemIdByName("Dogmatism")
 INFESTATION_ITEM = Isaac.GetItemIdByName("Infestation 3")
 RAPTURE_ITEM = Isaac.GetItemIdByName("Rapture")
+NIL_VALUE_ITEM = Isaac.GetTrinketIdByName("Nil Value")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2092,6 +2093,7 @@ if EID then
     EID:addCollectible(DOGMA_ITEM, "Grants: #{{ArrowUp}} +1 damage#{{ArrowUp}} +50% damage multiplier#{{ArrowUp}} +7.5 Range#{{ArrowDown}} -1 Tear Delay#{{ArrowDown}} -0.5 Shot Speed#Tears gain spectral and piercing along with a static aura.#Enemies that stand within the aura for 0.25 seconds are struck with a beam of light dealing 5x Isaac's damage.", "Dogmatism")
     EID:addCollectible(INFESTATION_ITEM, "Enemies have a 10% chance to spawn a friendly swarm spider on death.#{{Luck}} +2% chance per point of luck.", "Infestation 3")
     EID:addCollectible(RAPTURE_ITEM, "Make all players briefly invulnerable and throw an orb of light which detonates into 7 beams of light fired in a circular pattern after a brief delay.", "Rapture")
+    EID:addTrinket(NIL_VALUE_ITEM, "Activates the effects of Dataminer when Isaac takes damage.#{{Collectible202}} No effect when golden.", "Nil Value")
 
 end
 
@@ -9943,6 +9945,22 @@ function Mod:OnCoinPickupKing(pickup, collider)
 end
 
 Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Mod.OnCoinPickupKing, PickupVariant.PICKUP_COIN)
+
+function Mod:OnPlayerDamagedNil(entity, amount, flags, source, countdown)
+    if entity.Type == EntityType.ENTITY_PLAYER then
+        local player = entity:ToPlayer()
+
+        if player:HasTrinket(NIL_VALUE_ITEM) then
+            -- Trigger Dataminer effect manually
+            SFXManager():Play(SoundEffect.SOUND_EDEN_GLITCH)
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_DATAMINER, false, false)
+            
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.OnPlayerDamagedNil)
+
 ----------------------------------------------------------------------------------------
 --- Room Code For Essence Reliquary Below.
 

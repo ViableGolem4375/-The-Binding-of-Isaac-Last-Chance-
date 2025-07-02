@@ -5,7 +5,6 @@
 - Maybe necromancy shouldnt res bosses.
 - Maybe have a unique synergy between both mantles.
 - Cards are huge on J+E HUD.
-- add more chance stuff to lucky coin and q4 stuff to the t domiuno birthright
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
