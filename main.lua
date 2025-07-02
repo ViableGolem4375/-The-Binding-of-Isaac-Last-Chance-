@@ -2377,7 +2377,11 @@ function Mod:HandleUpdate(familiar)
         laser.Parent = familiar -- Attach the laser to the familiar
         laser.Timeout = 15 -- Set duration (adjust as needed)
         --laser.CollisionDamage = TEAR_DAMAGE_URIEL + playerDamage
-        familiar.FireCooldown = SHOOTING_TICK_COOLDOWN_URIEL
+        if player:HasTrinket(TrinketType.TRINKET_FORGOTTEN_LULLABY) then
+            familiar.FireCooldown = SHOOTING_TICK_COOLDOWN_URIEL / 2
+        else
+            familiar.FireCooldown = SHOOTING_TICK_COOLDOWN_URIEL
+        end
 
         sprite.FlipX = doFlip
         sprite:Play(shootAnim, true)
@@ -2465,8 +2469,13 @@ function Mod:HandleUpdateb(familiarb)
         laser2.Parent = familiarb -- Attach the laser to the familiar
         laser2.Timeout = 15 -- Set duration (adjust as needed)
         --laser2.CollisionDamage = TEAR_DAMAGE_GABRIEL + playerDamage
+        if playerb:HasTrinket(TrinketType.TRINKET_FORGOTTEN_LULLABY) then
+            familiarb.FireCooldown = SHOOTING_TICK_COOLDOWN_GABRIEL / 2
+        else
+            familiarb.FireCooldown = SHOOTING_TICK_COOLDOWN_GABRIEL
+        end
         
-        familiarb.FireCooldown = SHOOTING_TICK_COOLDOWN_GABRIEL
+        --familiarb.FireCooldown = SHOOTING_TICK_COOLDOWN_GABRIEL
 
         local laser5 = Isaac.Spawn(
             EntityType.ENTITY_LASER,
@@ -2683,9 +2692,14 @@ function Mod:HandleUpdatee(familiar)
          -- Simulate gravity
          tear.FallingAcceleration = 1.2 -- Adjust gravity effect
          tear.FallingSpeed = -20 -- Initial upward motion
+         if player:HasTrinket(TrinketType.TRINKET_FORGOTTEN_LULLABY) then
+            familiar.FireCooldown = SHOOTING_TICK_COOLDOWN_FAIL / 2
+        else
+            familiar.FireCooldown = SHOOTING_TICK_COOLDOWN_FAIL
+        end
  
 
-        familiar.FireCooldown = SHOOTING_TICK_COOLDOWN_FAIL
+        --familiar.FireCooldown = SHOOTING_TICK_COOLDOWN_FAIL
 
         sprite.FlipX = doFlip
         sprite:Play(shootAnim, true)
@@ -7425,6 +7439,7 @@ function Mod:HandleUpdateEnvy(familiar)
         local envynum = player:GetCollectibleNum(ENVIOUS_RAGE_ITEM)
         --if data.lostItemCount then
         local newCooldown = 20 * (1 - (envynum * 0.2))
+        local newcooldownlullaby = (20 * (1 - (envynum * 0.2))) / 2
         -- ✅ Increase the familiar’s damage based on sacrificed items
         --tear.CollisionDamage = 3.5 * (1 + (envynum * 0.5))
         if player:HasTrinket(TrinketType.TRINKET_BABY_BENDER) and tear then
@@ -7436,7 +7451,13 @@ function Mod:HandleUpdateEnvy(familiar)
         else
             tear.CollisionDamage = 3.5 * (1 + (envynum * 0.5))
         end
-        familiar.FireCooldown = math.max(math.floor(newCooldown), 2)
+
+        if player:HasTrinket(TrinketType.TRINKET_FORGOTTEN_LULLABY) then
+            familiar.FireCooldown = math.max(math.floor(newcooldownlullaby), 2)
+        else
+            familiar.FireCooldown = math.max(math.floor(newCooldown), 2)
+        end
+        --familiar.FireCooldown = math.max(math.floor(newCooldown), 2)
 
         --end
 
@@ -7714,7 +7735,12 @@ function Mod:HandleUpdateZeal(familiar)
         tear.Scale = 1.3
         --tear.CollisionDamage = (player.Damage / 2)
         tear.TearFlags = TearFlags.TEAR_GLOW | TearFlags.TEAR_HOMING
-        familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay * 3, 1))
+        if player:HasTrinket(TrinketType.TRINKET_FORGOTTEN_LULLABY) then
+            familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay * 1.5, 1))
+        else
+            familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay * 3, 1))
+        end
+        --familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay * 3, 1))
 
         sprite.FlipX = doFlip
         sprite:Play(shootAnim, true)
