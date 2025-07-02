@@ -8,7 +8,6 @@
 - make familiars scale with forgotten lullaby
 - infestation 3 definitely needs a nerf
 - look into making t pontius' sword the spirit sword hitbox by using that entity
-- make cluttony not affected by the essence of samson/essence of apollyon items
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech

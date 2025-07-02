@@ -2036,7 +2036,7 @@ if EID then
     EID:addCharacterInfo(TAINTED_ABRAHAM_TYPE, "{{ArrowUp}} Extremely high stats.#{{ArrowUp}} The Heretic cannot take damage.#{{Warning}} The Heretic is on a 10 second timer, if it runs out he dies.#The timer can be reset by dealing damage to an enemy.#Collecting Knife Piece 1 will automatically grant Knife Piece 2.#Starts with Rend as a pocket active item.", "The Heretic")
     EID:addCollectible(DUAE_ITEM, "Spawns two item pedestals in the room, one containing Path of Salvation and the other containing Path of Temptation.#Picking up these items will grant 1 stack towards their respective path and remove 1 stack from the other path.#Stacks grant special effects depending on how many you have and culminate in an incredibly powerful effect at 4 stacks which resets the stack counter on activation.", "Duae Viae")
     EID:addCollectible(GLUTTONY_ITEM, "{{ArrowUp}} Gain a small all stats up which increases depending on how many items are held.", "Gluttony")
-    EID:addCollectible(GREED_ITEM, "{{ArrowUp}} Gain 5x damage.#{{Warning}} This item will be removed from Isaac's inventory if any money is lost or spent.", "Greed")
+    EID:addCollectible(GREED_ITEM, "{{ArrowUp}} Gain 2x damage.#{{Warning}} This item will be removed from Isaac's inventory if any money is lost or spent.", "Greed")
     EID:addCollectible(LUST_ITEM, "Enemies that touch Isaac become charmed for 10 seconds.", "Lust")
     EID:addCollectible(PRIDE_ITEM, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.", "Pride")
     EID:addCollectible(ENVY_ITEM, "Gain a familiar which copies your tear effects.#{{Warning}} Picking up this item replaces all of your non quest items (and itself) with envious rage.#{{ArrowUp}} The familiar gains +50% damage and +20% fire rate for every copy of envious rage you posess.#{{Warning}} Once picked up, Envy cannot be removed or rerolled.", "Envy")
@@ -2081,7 +2081,7 @@ if EID then
     EID:addCollectible(NEURO_ITEM, "5% chance to fire a tear that applies weakness to enemies for 5 seconds.#{{Luck}} +5% chance per point of luck.", "Neurotoxin")
     EID:addCollectible(CRUSHED_DICE_ITEM, "Spawns 3 dice shards in the starting room upon entering a new floor.", "Crushed Dice")
     EID:addCollectible(DOGMA_ITEM, "Grants: #{{ArrowUp}} +1 damage#{{ArrowUp}} +50% damage multiplier#{{ArrowUp}} +7.5 Range#{{ArrowDown}} -1 Tear Delay#{{ArrowDown}} -0.5 Shot Speed#Tears gain spectral and piercing along with a static aura.#Enemies that stand within the aura for 0.25 seconds are struck with a beam of light dealing 5x Isaac's damage.", "Dogmatism")
-    EID:addCollectible(INFESTATION_ITEM, "Enemies spawn a friendly swarm spider on death.", "Infestation 3")
+    EID:addCollectible(INFESTATION_ITEM, "Enemies have a 10% chance to spawn a friendly swarm spider on death.#{{Luck}} +2% chance per point of luck.", "Infestation 3")
     EID:addCollectible(RAPTURE_ITEM, "Make all players briefly invulnerable and throw an orb of light which detonates into 7 beams of light fired in a circular pattern after a brief delay.", "Rapture")
 
 end
@@ -8297,19 +8297,24 @@ function Mod:InfestationThree(entity)
     for i = 0, Game():GetNumPlayers() - 1 do
         local player = Isaac.GetPlayer(i)
         if player:HasCollectible(INFESTATION_ITEM) then
-            local count = player:GetCollectibleNum(INFESTATION_ITEM)
-            for j = 1, count do
-                local spider = Isaac.Spawn(
-                    EntityType.ENTITY_SWARM_SPIDER,
-                    0, -- Variant 0 = small yellow spider
-                    0,
-                    entity.Position,
-                    Vector.FromAngle(math.random(0, 359)) * 3,
-                    player
-                )
-                spider:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
-                spider:AddEntityFlags(EntityFlag.FLAG_PERSISTENT) -- ✅ Makes it friendly
-                spider:AddEntityFlags(EntityFlag.FLAG_CHARM)
+            local luck = player.Luck
+            local chance = math.min(0.10 + (luck * 0.02), 1.0) -- Max 100% cap
+            if math.random() <= chance then
+
+                local count = player:GetCollectibleNum(INFESTATION_ITEM)
+                for j = 1, count do
+                    local spider = Isaac.Spawn(
+                        EntityType.ENTITY_SWARM_SPIDER,
+                        0,
+                        0,
+                        entity.Position,
+                        Vector.FromAngle(math.random(0, 359)) * 3,
+                        player
+                    )
+                    spider:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+                    spider:AddEntityFlags(EntityFlag.FLAG_PERSISTENT) -- ✅ Makes it friendly
+                    spider:AddEntityFlags(EntityFlag.FLAG_CHARM)
+                end
             end
         end
     end
