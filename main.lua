@@ -1809,6 +1809,10 @@ function Mod:ApplyBirthrightEffect(player)
                     GABRIEL_ITEM,
                     AZAZEL_ESSENCE,
                     CAIN_ESSENCE,
+                    DOGMA_ITEM,
+                    ZEAL_ITEM,
+                    PROTO_ITEM,
+                    NECROMANCY_ITEM,
                     -- Vanilla items.
                     330,  -- Sacred Heart
                     169,  -- Polyphemus
@@ -2097,6 +2101,8 @@ function Mod:LuckyDiceUse(item, rng, player, flags)
         STAR_OF_DAVID,
         GLITCH_ITEM,
         NEURO_ITEM,
+        INFESTATION_ITEM,
+        576,
         87, --Loki's Horns
         89, --Spider Bite
         103, --The Common Cold
@@ -4723,6 +4729,8 @@ local predefinedItemList = {
     STAR_OF_DAVID,
     GLITCH_ITEM,
     NEURO_ITEM,
+    INFESTATION_ITEM,
+    576,
     87, --Loki's Horns
     89, --Spider Bite
     103, --The Common Cold

@@ -5,7 +5,6 @@
 - Maybe necromancy shouldnt res bosses.
 - Maybe have a unique synergy between both mantles.
 - Cards are huge on J+E HUD.
-- look into making t pontius' sword the spirit sword hitbox by using that entity
 - add more chance stuff to lucky coin and q4 stuff to the t domiuno birthright
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
