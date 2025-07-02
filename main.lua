@@ -1124,6 +1124,10 @@ function PontiusMelee:CheckMeleeHitbox(npc)
                     
                     if npc:IsEnemy() and npc:IsVulnerableEnemy() then
                         npc:TakeDamage(scaledDamage, DamageFlag.DAMAGE_CRUSH | DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(effect), 0)
+                        local knockbackStrength = 6 -- 🛠️ Adjust as needed
+                        local direction = (npc.Position - effect.Position):Normalized()
+                        npc.Velocity = npc.Velocity + direction * knockbackStrength
+
                         Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, npc.Position, Vector(0,0), npc)
                         SFXManager():Play(SoundEffect.SOUND_MEATY_DEATHS)
                     end
