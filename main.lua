@@ -7211,7 +7211,7 @@ function Mod:UpdateGluttony(player)
 
         -- ✅ Loop **once** when an item is gained instead of every frame
         for i = 1, 5000 do
-            if player:HasCollectible(i) then
+            if i ~= VOID_DAMAGE_ITEM and i ~= CHARGE_DAMAGE_ITEM and i ~= FINAL_JUDGMENT_ITEM_VFX and i~= APOLLYON_ESSENCE_VFX and i ~= DEVIL_FOUR_VFX and player:HasCollectible(i) then
                 totalItems = totalItems + player:GetCollectibleNum(i) -- ✅ Count duplicates too
             end
         end
