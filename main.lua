@@ -7266,7 +7266,7 @@ function Mod:ApplyMoneyDamageBoost(player, cacheFlag)
         -- ✅ Grant +10 damage only if they haven't spent money
 
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            player.Damage = player.Damage *5
+            player.Damage = player.Damage * 2
         end
     end
 end
