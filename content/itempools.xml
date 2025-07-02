@@ -28,6 +28,7 @@
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Shattered Gladius" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -126,6 +127,7 @@
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Shattered Gladius" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -171,6 +173,7 @@
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Dogmaticism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Shattered Gladius" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
@@ -225,6 +228,7 @@
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Shattered Gladius" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>

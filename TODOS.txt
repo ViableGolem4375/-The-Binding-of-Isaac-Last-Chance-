@@ -29,7 +29,6 @@ active item like birthright
 item rooms have no items but secret rooms do
 all stats down plus something
 something with this effect: DOGMA_BLACKHOLE
-activate dataminer on hit
 active item to send the player to a challenge room
 mess with max hp if possible
 

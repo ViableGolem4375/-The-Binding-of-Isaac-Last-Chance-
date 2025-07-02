@@ -176,6 +176,7 @@ DOGMA_ITEM = Isaac.GetItemIdByName("Dogmatism")
 INFESTATION_ITEM = Isaac.GetItemIdByName("Infestation 3")
 RAPTURE_ITEM = Isaac.GetItemIdByName("Rapture")
 NIL_VALUE_ITEM = Isaac.GetTrinketIdByName("Nil Value")
+SHATTERED_GLADIUS_ITEM = Isaac.GetItemIdByName("Shattered Gladius")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2094,6 +2095,7 @@ if EID then
     EID:addCollectible(INFESTATION_ITEM, "Enemies have a 10% chance to spawn a friendly swarm spider on death.#{{Luck}} +2% chance per point of luck.", "Infestation 3")
     EID:addCollectible(RAPTURE_ITEM, "Make all players briefly invulnerable and throw an orb of light which detonates into 7 beams of light fired in a circular pattern after a brief delay.", "Rapture")
     EID:addTrinket(NIL_VALUE_ITEM, "Activates the effects of Dataminer when Isaac takes damage.#{{Collectible202}} No effect when golden.", "Nil Value")
+    EID:addCollectible(SHATTERED_GLADIUS_ITEM, "Teleports Isaac to a challenge room.#Has a 10% chance to teleport Isaac to a boss challenge room instead.#These challenge rooms are separate from the one spawned on the floor.", "Shattered Gladius")
 
 end
 
@@ -8421,8 +8423,27 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Mod.UpdateRaptureOrb, EffectVariant.DOGMA_ORB)
 
+function Mod:UseShatteredGladius(item, rng, player)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
+        local sfx = SFXManager()
+        if item == SHATTERED_GLADIUS_ITEM then
+            player:AnimateCollectible(SHATTERED_GLADIUS_ITEM, "UseItem", "PlayerPickupSparkle")
+            local roll = rng:RandomFloat() -- Get a random number between 0 and 1
 
+            if roll <= 0.1 then
+                Isaac.ExecuteCommand("goto s.challenge.24")
+                sfx:Play(SoundEffect.SOUND_HELL_PORTAL1)
+            else
+                Isaac.ExecuteCommand("goto s.challenge.9")
+                sfx:Play(SoundEffect.SOUND_HELL_PORTAL1)
+            end
 
+        end
+    --end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseShatteredGladius, SHATTERED_GLADIUS_ITEM)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
