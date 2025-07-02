@@ -1116,15 +1116,16 @@ function PontiusMelee:CheckMeleeHitbox(npc)
             local distance = npc.Position:Distance(effect.Position)
             
             -- ✅ Only allow one hit per enemy per attack cycle
-            if distance < 35 and Game():GetFrameCount() > data.LastMeleeHitFrame + 5 and not recentHits[npc.InitSeed] then
+            if distance < 100 and Game():GetFrameCount() > data.LastMeleeHitFrame + 5 and not recentHits[npc.InitSeed] then
                local player = effect.SpawnerEntity and effect.SpawnerEntity:ToPlayer()
                 if player then
-                    local damageMultiplier = 5 -- ✅ Adjust as needed
+                    local damageMultiplier = 2.5 -- ✅ Adjust as needed
                     local scaledDamage = player.Damage * damageMultiplier -- ✅ Scale with player’s damage
                     
                     if npc:IsEnemy() and npc:IsVulnerableEnemy() then
                         npc:TakeDamage(scaledDamage, DamageFlag.DAMAGE_CRUSH | DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(effect), 0)
                         Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, npc.Position, Vector(0,0), npc)
+                        SFXManager():Play(SoundEffect.SOUND_MEATY_DEATHS)
                     end
                     data.LastMeleeHitFrame = Game():GetFrameCount()
                     print("Melee hit applied! Damage:", scaledDamage)
