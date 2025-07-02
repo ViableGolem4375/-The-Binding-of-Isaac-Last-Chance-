@@ -124,8 +124,9 @@
     <passive id="116" name="Crushed Dice" gfx="crusheddice.png" description="Reroll?" quality="2" craftquality="2" devilprice="1" tags="nocantrip offensive" />
     <passive id="117" name="Dogmatism" gfx="dogmaticism.png" description="Eternal belief" quality="4" craftquality="4" devilprice="2" tags="nocantrip offensive angel" cache="damage firedelay range shotspeed" />
     <passive id="118" name="Infestation 3" gfx="infestation3.png" description="Infested enemies" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive" cache="familiars" />
-    <active id="119" name="Rapture" gfx="rapture.png" description="The trumpets blare" quality="3" craftquality="3" maxcharges="6" chargetype="normal" devilprice="1" tags="noeden nocantrip angel" />
+    <active id="119" name="Rapture" gfx="rapture.png" description="The trumpets blare" quality="3" craftquality="3" maxcharges="6" chargetype="normal" devilprice="1" tags="offensive nocantrip angel" />
     <trinket id="120" name="Nil Value" gfx="nilvalue.png" description="[Mod:6]ERROR" />
-    <active id="121" name="Shattered Gladius" gfx="shatteredgladius.png" description="Challenge bringer" quality="3" craftquality="3" maxcharges="6" chargetype="normal" devilprice="1" tags="noeden nocantrip" />
+    <active id="121" name="Shattered Gladius" gfx="shatteredgladius.png" description="Challenge bringer" quality="3" craftquality="3" maxcharges="6" chargetype="normal" devilprice="1" tags="offensive nocantrip" />
+    <active id="122" name="Trash Bag" gfx="trashbag.png" description="One man's trash..." quality="3" craftquality="3" maxcharges="6" chargetype="normal" devilprice="1" tags="offensive nocantrip" />
 
 </items>

@@ -177,6 +177,7 @@ INFESTATION_ITEM = Isaac.GetItemIdByName("Infestation 3")
 RAPTURE_ITEM = Isaac.GetItemIdByName("Rapture")
 NIL_VALUE_ITEM = Isaac.GetTrinketIdByName("Nil Value")
 SHATTERED_GLADIUS_ITEM = Isaac.GetItemIdByName("Shattered Gladius")
+TRASH_ITEM = Isaac.GetItemIdByName("Trash Bag")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2096,6 +2097,7 @@ if EID then
     EID:addCollectible(RAPTURE_ITEM, "Make all players briefly invulnerable and throw an orb of light which detonates into 7 beams of light fired in a circular pattern after a brief delay.", "Rapture")
     EID:addTrinket(NIL_VALUE_ITEM, "Activates the effects of Dataminer when Isaac takes damage.#{{Collectible202}} No effect when golden.", "Nil Value")
     EID:addCollectible(SHATTERED_GLADIUS_ITEM, "Teleports Isaac to a challenge room.#Has a 10% chance to teleport Isaac to a boss challenge room instead.#These challenge rooms are separate from the one spawned on the floor.", "Shattered Gladius")
+    EID:addCollectible(TRASH_ITEM, "On activation will:#Spawn an item pedestal containing a quality 0 item.#Spawn a random garbage related trinket.#Spawn a rotten heart.#Spawn several blue flies.", "Trash Bag")
 
 end
 
@@ -8444,6 +8446,86 @@ function Mod:UseShatteredGladius(item, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseShatteredGladius, SHATTERED_GLADIUS_ITEM)
+
+function Mod:UseTrashBag(item, rng, player)
+    local sfx = SFXManager()
+    if item == TRASH_ITEM then
+        player:AnimateCollectible(TRASH_ITEM, "UseItem", "PlayerPickupSparkle")
+        local room = Game():GetRoom()
+            
+        local roll = rng:RandomInt(4) + 1 -- 1 to 4
+        local position =  room:FindFreeTilePosition(player.Position + Vector(20,20), 100)
+
+        if roll == 1 then
+            -- 🎲 Spawn a random quality 0 item
+            local itemPool = Game():GetItemPool()
+            local itemId = itemPool:GetCollectible(ItemPoolType.POOL_TREASURE, true, player.InitSeed)
+            while Isaac.GetItemConfig():GetCollectible(itemId).Quality ~= 0 do
+                itemId = itemPool:GetCollectible(ItemPoolType.POOL_TREASURE, true, player.InitSeed)
+            end
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemId, position, Vector.Zero, nil)
+
+        elseif roll == 2 then
+            -- 🎲 Spawn a trinket from a defined list
+            local trinketPool = {
+                YUCK_PENNY_TRINKET,
+                TrinketType.TRINKET_BUTT_PENNY,
+                TrinketType.TRINKET_EVES_BIRD_FOOT,
+                TrinketType.TRINKET_FISH_HEAD,
+                TrinketType.TRINKET_FISH_TAIL,
+                TrinketType.TRINKET_GOAT_HOOF,
+                TrinketType.TRINKET_FISH_HEAD,
+                TrinketType.TRINKET_LUCKY_TOE,
+                TrinketType.TRINKET_FISH_HEAD,
+                TrinketType.TRINKET_JUDAS_TONGUE,
+                TrinketType.TRINKET_MOMS_TOENAIL,
+                TrinketType.TRINKET_PAPER_CLIP,
+                TrinketType.TRINKET_PETRIFIED_POOP,
+                TrinketType.TRINKET_PULSE_WORM,
+                TrinketType.TRINKET_RING_WORM,
+                TrinketType.TRINKET_RUSTED_KEY,
+                TrinketType.TRINKET_SAFETY_CAP,
+                TrinketType.TRINKET_TICK,
+                TrinketType.TRINKET_WHIP_WORM,
+                TrinketType.TRINKET_WIGGLE_WORM,
+                TrinketType.TRINKET_LIL_LARVA,
+                TrinketType.TRINKET_LOUSE,
+                TrinketType.TRINKET_RAINBOW_WORM,
+                TrinketType.TRINKET_TAPE_WORM,
+                TrinketType.TRINKET_LOST_CORK,
+                TrinketType.TRINKET_MECONIUM,
+                TrinketType.TRINKET_OUROBOROS_WORM,
+                TrinketType.TRINKET_ROTTEN_PENNY,
+                TrinketType.TRINKET_USED_DIAPER,
+                TrinketType.TRINKET_BRAIN_WORM,
+                TrinketType.TRINKET_BROKEN_GLASSES,
+                TrinketType.TRINKET_CHEWED_PEN,
+                TrinketType.TRINKET_CRICKET_LEG,
+                TrinketType.TRINKET_BROKEN_REMOTE,
+                TrinketType.TRINKET_BROKEN_SYRINGE
+
+            }
+            local index = rng:RandomInt(#trinketPool) + 1
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, trinketPool[index], position, Vector.Zero, nil)
+
+        elseif roll == 3 then
+            -- 🎲 Spawn a rotten heart
+            local heart = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_ROTTEN, position, Vector.Zero, nil)
+
+        elseif roll == 4 then
+            -- 🎲 Spawn blue flies
+            local numFlies = rng:RandomInt(6) + 3 -- Between 3 and 8
+            for i = 1, numFlies do
+                player:AddBlueFlies(1, player.Position, player)
+            end
+        end
+        sfx:Play(SoundEffect.SOUND_THUMBSUP)
+
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTrashBag, TRASH_ITEM)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
