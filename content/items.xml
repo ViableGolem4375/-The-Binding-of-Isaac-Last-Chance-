@@ -128,7 +128,7 @@
     <trinket id="120" name="Nil Value" gfx="nilvalue.png" description="[Mod:6]ERROR" />
     <active id="121" name="Shattered Gladius" gfx="shatteredgladius.png" description="Challenge bringer" quality="3" craftquality="3" maxcharges="6" chargetype="normal" devilprice="1" tags="offensive nocantrip" />
     <active id="122" name="Trash Bag" gfx="trashbag.png" description="One man's trash..." quality="3" craftquality="3" maxcharges="6" chargetype="normal" devilprice="1" tags="offensive nocantrip" />
-    <passive id="123" name="Birthday Cake" gfx="cake.png" description="All stats up!" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive" cache="all" />
+    <passive id="123" name="Birthday Cake" gfx="cake.png" description="All stats up!" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive" maxhearts="2" hearts="4" cache="all" />
     <passive id="124" name="Abyssal Rift" gfx="abyssalrift.png" description="Apocalyptic friends" quality="2" craftquality="2" devilprice="1" tags="nocantrip offensive" cache="familiars" />
 
 </items>
