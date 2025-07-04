@@ -179,6 +179,7 @@ NIL_VALUE_ITEM = Isaac.GetTrinketIdByName("Nil Value")
 SHATTERED_GLADIUS_ITEM = Isaac.GetItemIdByName("Shattered Gladius")
 TRASH_ITEM = Isaac.GetItemIdByName("Trash Bag")
 CAKE_ITEM = Isaac.GetItemIdByName("Birthday Cake")
+RIFT_ITEM = Isaac.GetItemIdByName("Abyssal Rift")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2100,6 +2101,7 @@ if EID then
     EID:addCollectible(SHATTERED_GLADIUS_ITEM, "Teleports Isaac to a challenge room.#Has a 10% chance to teleport Isaac to a boss challenge room instead.#These challenge rooms are separate from the one spawned on the floor.", "Shattered Gladius")
     EID:addCollectible(TRASH_ITEM, "On activation will:#Spawn an item pedestal containing a quality 0 item.#Spawn a random garbage related trinket.#Spawn a rotten heart.#Spawn several blue flies.", "Trash Bag")
     EID:addCollectible(CAKE_ITEM, "{{ArrowUp}} +0.3 Speed#{{ArrowUp}} -0.5 Tear Delay#{{ArrowUp}} +1 Damage#{{ArrowUp}} +3.75 Range#{{ArrowUp}} +0.16 Shot Speed#{{ArrowUp}} +1 Luck", "Birthday Cake")
+    EID:addCollectible(RIFT_ITEM, "Grants:# A locust which deals 1x Isaac's damage and applies the slowness debuff.# A locust which deals 1x Isaac's damage and applies the poison debuff.# A locust which deals 1x Isaac's damage and explodes.# A locust which deals 2x Isaac's damage.", "Abyssal Rift")
 
 end
 
@@ -8566,6 +8568,80 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.CakePickup)
 
+local hasGivenLocusts = {}
+
+function Mod:CheckPassiveItemPickup(player)
+    if player:HasCollectible(RIFT_ITEM) and not hasGivenLocusts[player.InitSeed] then
+        hasGivenLocusts[player.InitSeed] = true
+
+        -- Spawn 3 random Abyss locusts
+        --for i = 1, 3 do
+            --local rng = RNG()
+            --rng:SetSeed(Random(), 1)
+            --local variant = rng:RandomInt(6) -- 0 to 5
+
+        local locust = Isaac.Spawn(
+            EntityType.ENTITY_FAMILIAR,
+            FamiliarVariant.ABYSS_LOCUST,
+            89,
+            player.Position,
+            Vector.Zero,
+            player
+        ):ToFamiliar()
+
+        if locust then
+            locust:ClearEntityFlags(EntityFlag.FLAG_APPEAR)
+            locust:Update()
+        end
+
+        local locust2 = Isaac.Spawn(
+            EntityType.ENTITY_FAMILIAR,
+            FamiliarVariant.ABYSS_LOCUST,
+            393,
+            player.Position,
+            Vector.Zero,
+            player
+        ):ToFamiliar()
+
+        if locust2 then
+            locust2:ClearEntityFlags(EntityFlag.FLAG_APPEAR)
+            locust2:Update()
+        end
+
+        local locust3 = Isaac.Spawn(
+            EntityType.ENTITY_FAMILIAR,
+            FamiliarVariant.ABYSS_LOCUST,
+            220,
+            player.Position,
+            Vector.Zero,
+            player
+        ):ToFamiliar()
+
+        if locust3 then
+            locust3:ClearEntityFlags(EntityFlag.FLAG_APPEAR)
+            locust3:Update()
+        end
+
+        local locust4 = Isaac.Spawn(
+            EntityType.ENTITY_FAMILIAR,
+            FamiliarVariant.ABYSS_LOCUST,
+            7,
+            player.Position,
+            Vector.Zero,
+            player
+        ):ToFamiliar()
+
+        if locust4 then
+            locust4:ClearEntityFlags(EntityFlag.FLAG_APPEAR)
+            locust4:Update()
+        end
+        --end
+
+        --SFXManager():Play(SoundEffect.SOUND_INSECT_SWARM)
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.CheckPassiveItemPickup)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

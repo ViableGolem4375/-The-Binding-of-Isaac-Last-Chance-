@@ -34,7 +34,6 @@ all stats down plus something
 something with this effect: DOGMA_BLACKHOLE
 mess with max hp if possible - needs HP api
 instakill melee weapon
-birthday cake all stats up for boss pool
 random dad item effect
 give one of every heart
 give some abyss locusts
