@@ -185,6 +185,7 @@ BATTERY_ITEM = Isaac.GetItemIdByName("Expired Battery")
 
 POLTERGEIST_ITEM = Isaac.GetItemIdByName("Poltergeist")
 FAMILIAR_POLTERGEIST = Isaac.GetEntityVariantByName("Poltergeist")
+AXE_ITEM = Isaac.GetItemIdByName("Executioner's Axe")
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Pontius")
@@ -2109,6 +2110,7 @@ if EID then
     EID:addCollectible(HEALTH_SACK_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.#{{ArrowUp}} +1 soul heart#{{ArrowUp}} +1 black heart#{{ArrowUp}} +1 bone heart#{{ArrowUp}} +1 golden heart#{{ArrowUp}} +1 rotten heart", "Sack of Hearts")
     EID:addCollectible(BATTERY_ITEM, "Using active items causes Isaac to explode dealing 40 damage to enemies and leave behind green creep which damages enemies that pass over it.#Isaac does not take damage from these explosions.", "Expired Battery")
     EID:addCollectible(POLTERGEIST_ITEM, "Grants an orbital which applies a brief fear status effect to enemies which touch it.", "Poltergeist")
+    EID:addCollectible(AXE_ITEM, "Swing a melee attack which deals 999999 damage to anything it hits.#{{Warning}} Hitting an enemy with this attack will consume the item.", "Executioner's Axe")
 
 end
 
@@ -8692,7 +8694,7 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseBattery)
 
-function PontiusMelee:CheckExplosionHitbox(npc)
+function Mod:CheckExplosionHitbox(npc)
     local data = npc:GetData()
     
     if not data.ExplosionHit then
@@ -8724,7 +8726,7 @@ function PontiusMelee:CheckExplosionHitbox(npc)
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, PontiusMelee.CheckExplosionHitbox)
+Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, Mod.CheckExplosionHitbox)
 
 function Mod:PoltergeistInit(Poltergeist)
     --Moon.EntityCollisionClass = EntityCollisionClass.ENTCOLL_ENEMIES
@@ -8775,6 +8777,111 @@ function Mod:PoltergeistFear(Poltergeist)
 end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.PoltergeistFear, FAMILIAR_POLTERGEIST)
+
+function Mod:FixSpriteRotationAxe()
+    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.POOF01)) do
+        if effect:GetData().PersistRotation then
+            effect:GetSprite().Rotation = effect:GetData().PersistRotation
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.FixSpriteRotationAxe)
+
+function Mod:UseAxe(item, rng, player)
+    local sfx = SFXManager()
+    if item == AXE_ITEM then
+
+        local direction = Vector(0, 0) -- ✅ Default: No movement
+    
+        local dir = player:GetFireDirection()
+        print(dir)
+        local velocity = Vector(0, 0)
+
+        if dir == Direction.LEFT then
+            velocity = Vector(-1, 0)
+        elseif dir == Direction.RIGHT then
+            velocity = Vector(1, 0)
+        elseif dir == Direction.UP then
+            velocity = Vector(0, -1)
+        elseif dir == Direction.DOWN then
+            velocity = Vector(0, 1)
+        elseif dir == Direction.NO_DIRECTION then
+            velocity = Vector(0, 1)
+        end
+        print(dir)
+
+        -- ✅ Spawn melee hitbox in correct direction
+        --if direction.X ~= 0 or direction.Y ~= 0 then
+            --print("2")
+            local meleeHitbox = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CLEAVER_SLASH, 0, player.Position + velocity * 120, Vector(0,0), player)
+            if meleeHitbox then
+                --print("3")
+                local sprite = meleeHitbox:GetSprite()
+                -- ✅ Adjust sprite orientation based on attack direction
+                if velocity.X < 0 then
+                    sprite.FlipX = false -- ✅ Flip horizontally for left attacks
+                    sprite.Rotation = 90 -- ✅ Keep default rotation
+                elseif velocity.X > 0 then
+                    sprite.FlipX = false -- ✅ Keep normal for right attacks
+                    sprite.Rotation = -90 -- ✅ Keep default rotation
+                elseif velocity.Y < 0 then
+                    sprite.Rotation = 0
+                    sprite.FlipY = true -- ✅ Rotate for upward attacks
+                elseif velocity.Y > 0 then
+                    sprite.Rotation = 0
+                    sprite.FlipY = false -- ✅ Rotate for downward attacks
+                end
+                -- ✅ Persist rotation until animation ends
+                meleeHitbox:GetData().PersistRotation = sprite.Rotation
+
+            end
+            meleeHitbox:GetData().IsAxeHitbox = true
+            meleeHitbox:GetData().DestroyNextFrame = true
+            meleeHitbox:GetSprite():Play("Appear")
+            SFXManager():Play(SoundEffect.SOUND_SWORD_SPIN) -- ✅ Sword swing sound
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseAxe, AXE_ITEM)
+
+function Mod:CheckAxeHitbox(npc)
+    local data = npc:GetData()
+    
+    if not data.AxeHit then
+        data.AxeHit = -1 -- ✅ Initialize tracking
+    end
+
+    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.CLEAVER_SLASH)) do
+        if effect:GetData().IsAxeHitbox then
+            local distance = npc.Position:Distance(effect.Position)
+            
+            -- ✅ Only allow one hit per enemy per attack cycle
+            if distance < 100 and Game():GetFrameCount() > data.AxeHit + 5 and not recentHits[npc.InitSeed] then
+               local player = effect.SpawnerEntity and effect.SpawnerEntity:ToPlayer()
+                if player then
+                    local damageMultiplier = 1 -- ✅ Adjust as needed
+                    local scaledDamage = 999999 -- ✅ Scale with player’s damage
+                    
+                    if npc:IsEnemy() and npc:IsVulnerableEnemy() then
+                        npc:TakeDamage(scaledDamage, DamageFlag.DAMAGE_CRUSH | DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(effect), 0)
+                        local knockbackStrength = 6 -- 🛠️ Adjust as needed
+                        local direction = (npc.Position - effect.Position):Normalized()
+                        npc.Velocity = npc.Velocity + direction * knockbackStrength
+                        SFXManager():Play(SoundEffect.SOUND_MEATY_DEATHS)
+                        SFXManager():Play(SoundEffect.SOUND_KNIFE_PULL)
+                        player:RemoveCollectible(AXE_ITEM)
+                    end
+                    data.AxeHit = Game():GetFrameCount()
+                end
+
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, Mod.CheckAxeHitbox)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
