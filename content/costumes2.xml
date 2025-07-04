@@ -49,5 +49,9 @@
     <costume id="116" anm2path="crusheddice.anm2" type="passive" priority="0" />
     <costume id="117" anm2path="dogmaticism.anm2" type="passive" priority="0" />
     <costume id="118" anm2path="infestation3.anm2" type="passive" priority="0" />
+    <costume id="123" anm2path="cake.anm2" type="passive" priority="0" />
+    <costume id="124" anm2path="abyssal_rift.anm2" type="passive" priority="0" />
+    <costume id="125" anm2path="sack_of_hearts.anm2" type="passive" priority="0" />
+    <costume id="126" anm2path="expired_battery.anm2" type="passive" priority="0" />
 
 </costumes>

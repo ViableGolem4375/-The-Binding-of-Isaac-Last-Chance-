@@ -180,6 +180,8 @@ SHATTERED_GLADIUS_ITEM = Isaac.GetItemIdByName("Shattered Gladius")
 TRASH_ITEM = Isaac.GetItemIdByName("Trash Bag")
 CAKE_ITEM = Isaac.GetItemIdByName("Birthday Cake")
 RIFT_ITEM = Isaac.GetItemIdByName("Abyssal Rift")
+HEALTH_SACK_ITEM = Isaac.GetItemIdByName("Sack of Hearts")
+BATTERY_ITEM = Isaac.GetItemIdByName("Expired Battery")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2102,6 +2104,8 @@ if EID then
     EID:addCollectible(TRASH_ITEM, "On activation will:#Spawn an item pedestal containing a quality 0 item.#Spawn a random garbage related trinket.#Spawn a rotten heart.#Spawn several blue flies.", "Trash Bag")
     EID:addCollectible(CAKE_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.{{ArrowUp}} +0.3 Speed#{{ArrowUp}} -0.5 Tear Delay#{{ArrowUp}} +1 Damage#{{ArrowUp}} +3.75 Range#{{ArrowUp}} +0.16 Shot Speed#{{ArrowUp}} +1 Luck", "Birthday Cake")
     EID:addCollectible(RIFT_ITEM, "Grants:# A locust which deals 1x Isaac's damage and applies the slowness debuff.# A locust which deals 1x Isaac's damage and applies the poison debuff.# A locust which deals 1x Isaac's damage and explodes.# A locust which deals 2x Isaac's damage.", "Abyssal Rift")
+    EID:addCollectible(HEALTH_SACK_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.#{{ArrowUp}} +1 soul heart#{{ArrowUp}} +1 black heart#{{ArrowUp}} +1 bone heart#{{ArrowUp}} +1 golden heart#{{ArrowUp}} +1 rotten heart", "Sack of Hearts")
+    EID:addCollectible(BATTERY_ITEM, "Using active items causes Isaac to explode dealing 40 damage to enemies and leave behind green creep which damages enemies that pass over it.#Isaac does not take damage from these explosions.", "Expired Battery")
 
 end
 
@@ -8642,6 +8646,82 @@ function Mod:CheckPassiveItemPickup(player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.CheckPassiveItemPickup)
+
+local healthTriggered = {}
+
+function Mod:OnNewGameHealth(isContinued)
+    if not isContinued then -- Ensures it only resets for fresh runs, not continues
+        healthTriggered = {}
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameHealth)
+
+function Mod:OnPlayerUpdate_HealthGive(player)
+    local id = GetPtrHash(player)
+    if not healthTriggered[id] then
+        if player:HasCollectible(HEALTH_SACK_ITEM) then
+            player:AddBoneHearts(1)
+            player:AddGoldenHearts(1)
+            player:AddRottenHearts(1)
+            healthTriggered[id] = true
+        end
+    end
+end
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnPlayerUpdate_HealthGive)
+
+function Mod:UseBattery(item, rng, player)
+    local sfx = SFXManager()
+    if player:HasCollectible(BATTERY_ITEM) then
+        
+        local explosion = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_EXPLOSION, 0, player.Position, Vector(0, 0), player)
+        explosion:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+        --explosion.CollisionDamage = 40
+        explosion:GetData().IsExplosionHitbox = true
+
+        local creep = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_GREEN, 0, player.Position, Vector(0, 0), player)
+        creep:ToEffect():SetTimeout(300)
+        -- Adjust creep size
+        creep.SpriteScale = Vector(5, 5)
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseBattery)
+
+function PontiusMelee:CheckExplosionHitbox(npc)
+    local data = npc:GetData()
+    
+    if not data.ExplosionHit then
+        data.ExplosionHit = -1 -- ✅ Initialize tracking
+    end
+
+    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_EXPLOSION)) do
+        if effect:GetData().IsExplosionHitbox then
+            local distance = npc.Position:Distance(effect.Position)
+            
+            -- ✅ Only allow one hit per enemy per attack cycle
+            if distance < 100 and Game():GetFrameCount() > data.ExplosionHit + 5 and not recentHits[npc.InitSeed] then
+               local player = effect.SpawnerEntity and effect.SpawnerEntity:ToPlayer()
+                if player then
+                    local damageMultiplier = 1 -- ✅ Adjust as needed
+                    local scaledDamage = 40 -- ✅ Scale with player’s damage
+                    
+                    if npc:IsEnemy() and npc:IsVulnerableEnemy() then
+                        npc:TakeDamage(scaledDamage, DamageFlag.DAMAGE_EXPLOSION | DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(effect), 0)
+                        local knockbackStrength = 6 -- 🛠️ Adjust as needed
+                        local direction = (npc.Position - effect.Position):Normalized()
+                        npc.Velocity = npc.Velocity + direction * knockbackStrength
+                    end
+                    data.ExplosionHit = Game():GetFrameCount()
+                end
+
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, PontiusMelee.CheckExplosionHitbox)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

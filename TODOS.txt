@@ -35,7 +35,6 @@ something with this effect: DOGMA_BLACKHOLE
 mess with max hp if possible - needs HP api
 instakill melee weapon
 random dad item effect
-give one of every heart
 orbital that applies some debuff
 using actives explodes isaac (damage immune to it)
 pick a stage and go there
