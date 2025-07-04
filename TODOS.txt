@@ -1,10 +1,13 @@
 - Fix d4 effects on tainted character maybe?
+- essence collectors are definitely replacing slot machines by reentering rooms
 - Forgotten, lost, and eve essence effects are kind of placeholders, need something more interesting.
 - Essence items can give copies, maybe fix that or make sure they all stack.
 - Maybe add some sound effects to items.
 - Maybe necromancy shouldnt res bosses.
 - Maybe have a unique synergy between both mantles.
 - Cards are huge on J+E HUD.
+- make proc effects work with teardrop charm
+- make defense tech not interact with enviromnentals
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -30,12 +33,21 @@ item rooms have no items but secret rooms do
 all stats down plus something
 something with this effect: DOGMA_BLACKHOLE
 mess with max hp if possible - needs HP api
+instakill melee weapon
+birthday cake all stats up for boss pool
+random dad item effect
+give one of every heart
+give some abyss locusts
+orbital that applies some debuff
+using actives explodes isaac (damage immune to it)
+pick a stage and go there
+dogma familiar
 
 Trinket Ideas:
 
 
 Streaks:
-T Keeper Win Streak: 1
+T Keeper Win Streak: 3`
 	Best: 5
 Jacob and Esau:
 	Best: 52

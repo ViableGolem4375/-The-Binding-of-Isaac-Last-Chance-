@@ -30,6 +30,7 @@
         <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Shattered Gladius" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Trash Bag" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Birthday Cake" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -83,6 +84,7 @@
         <Item Name="Kingslayer" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Toast Sandwich" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Sack of Lucky Pennies" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Birthday Cake" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="shop">
@@ -132,6 +134,7 @@
         <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Shattered Gladius" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Trash Bag" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Birthday Cake" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -179,6 +182,7 @@
         <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Shattered Gladius" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Trash Bag" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Birthday Cake" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">

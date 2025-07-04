@@ -178,6 +178,7 @@ RAPTURE_ITEM = Isaac.GetItemIdByName("Rapture")
 NIL_VALUE_ITEM = Isaac.GetTrinketIdByName("Nil Value")
 SHATTERED_GLADIUS_ITEM = Isaac.GetItemIdByName("Shattered Gladius")
 TRASH_ITEM = Isaac.GetItemIdByName("Trash Bag")
+CAKE_ITEM = Isaac.GetItemIdByName("Birthday Cake")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2052,7 +2053,7 @@ if EID then
     EID:addCollectible(LUST_ITEM, "Enemies that touch Isaac become charmed for 10 seconds.", "Lust")
     EID:addCollectible(PRIDE_ITEM, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.", "Pride")
     EID:addCollectible(ENVY_ITEM, "Gain a familiar which copies your tear effects.#{{Warning}} Picking up this item replaces all of your non quest items (and itself) with envious rage.#{{ArrowUp}} The familiar gains +50% damage and +20% fire rate for every copy of envious rage you posess.#{{Warning}} Once picked up, Envy cannot be removed or rerolled.", "Envy")
-    EID:addCollectible(WRATH_ITEM, "{{Arrowup}} Killing bosses gives a trophy which grants +1 damage.", "Wrath")
+    EID:addCollectible(WRATH_ITEM, "{{ArrowUp}} Killing bosses gives a trophy which grants +1 damage.", "Wrath")
     EID:addCollectible(SLOTH_ITEM, "All enemies take constant damage equal to Isaac's damage divided by 10 every tick.#{{Warning}} Isaac becomes unable to shoot.", "Sloth")
     EID:addCollectible(CHARITY_ITEM, "Gain 1/2 of a soul heart for every 5 coins spent.", "Charity")
     EID:addCollectible(HUMILITY_ITEM, "{{ArrowUp}} Gain 2x damage.#{{ArrowDown}} The bonus is lost if Isaac holds any quality 4 items.", "Humility")
@@ -2098,6 +2099,7 @@ if EID then
     EID:addTrinket(NIL_VALUE_ITEM, "Activates the effects of Dataminer when Isaac takes damage.#{{Collectible202}} No effect when golden.", "Nil Value")
     EID:addCollectible(SHATTERED_GLADIUS_ITEM, "Teleports Isaac to a challenge room.#Has a 10% chance to teleport Isaac to a boss challenge room instead.#These challenge rooms are separate from the one spawned on the floor.", "Shattered Gladius")
     EID:addCollectible(TRASH_ITEM, "On activation will:#Spawn an item pedestal containing a quality 0 item.#Spawn a random garbage related trinket.#Spawn a rotten heart.#Spawn several blue flies.", "Trash Bag")
+    EID:addCollectible(CAKE_ITEM, "{{ArrowUp}} +0.3 Speed#{{ArrowUp}} -0.5 Tear Delay#{{ArrowUp}} +1 Damage#{{ArrowUp}} +3.75 Range#{{ArrowUp}} +0.16 Shot Speed#{{ArrowUp}} +1 Luck", "Birthday Cake")
 
 end
 
@@ -5293,6 +5295,7 @@ function Mod:UpdateLaserRing(player)
                 spear.Parent = player
                 spear.Timeout = 9999999
                 spear.CollisionDamage = playerDamage * 0.25
+                spear.TearFlags = TearFlags.TEAR_NO_GRID_DAMAGE
             end
         end
     end
@@ -8526,6 +8529,43 @@ function Mod:UseTrashBag(item, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTrashBag, TRASH_ITEM)
+
+local STAT_BOOST_CAKE = {
+    SPEED = 0.3,
+    FIREDELAY = -0.5, 
+    DAMAGE = 1, 
+    RANGE = 150, 
+    SHOTSPEED = 0.16,
+    LUCK = 1.00,
+}
+
+function Mod:CakePickup(player, cacheFlag)
+    if player:HasCollectible(CAKE_ITEM) then
+        local numcake = player:GetCollectibleNum(CAKE_ITEM)
+        if cacheFlag == CacheFlag.CACHE_SPEED then
+            player.MoveSpeed = player.MoveSpeed + (STAT_BOOST_CAKE.SPEED * numcake)
+        end
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+            player.MaxFireDelay = player.MaxFireDelay + (STAT_BOOST_CAKE.FIREDELAY * numcake)
+        end
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            player.Damage = player.Damage + (STAT_BOOST_CAKE.DAMAGE * numcake)
+        end
+        if cacheFlag == CacheFlag.CACHE_RANGE then
+            player.TearRange = player.TearRange + (STAT_BOOST_CAKE.RANGE * numcake)
+        end
+        if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
+            player.ShotSpeed = player.ShotSpeed+ (STAT_BOOST_CAKE.SHOTSPEED * numcake)
+        end
+        if cacheFlag == CacheFlag.CACHE_LUCK then
+            player.Luck = player.Luck + (STAT_BOOST_CAKE.LUCK * numcake)
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.CakePickup)
+
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
