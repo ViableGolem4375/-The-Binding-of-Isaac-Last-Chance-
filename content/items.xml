@@ -133,5 +133,6 @@
     <passive id="125" name="Sack of Hearts" gfx="heartsack.png" description="Health up" quality="3" craftquality="3" devilprice="1" tags="nocantrip nolostbr" maxhearts="2" hearts="4" soulhearts="2" blackhearts="2" />
     <passive id="126" name="Expired Battery" gfx="expired_battery.png" description="It's leaking" quality="2" craftquality="2" devilprice="1" tags="nocantrip offensive" />
     <familiar name="Poltergeist" gfx="poltergeist.png" description="Spooky friend" quality="1" craftquality="1" devilprice="1" cache="familiars" tags="offensive summonable monstermanual" />
+    <active id="127" name="Executioner's Axe" gfx="executioner_axe.png" description="Memento mori" quality="3" craftquality="3" charge="0" devilprice="2" tags="offensive nocantrip" />
 
 </items>

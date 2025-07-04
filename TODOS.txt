@@ -35,7 +35,6 @@ something with this effect: DOGMA_BLACKHOLE
 mess with max hp if possible - needs HP api
 instakill melee weapon
 random dad item effect
-orbital that applies some debuff
 pick a stage and go there
 dogma familiar
 

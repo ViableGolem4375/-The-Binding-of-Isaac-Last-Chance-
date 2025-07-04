@@ -52,6 +52,7 @@
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Executioner's Axe" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="angel">
@@ -111,6 +112,7 @@
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Executioner's Axe" Weight="0.5" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -203,6 +205,7 @@
         <Item Name="Sack of Hearts" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Expired Battery" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Executioner's Axe" Weight="0.5" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
@@ -210,6 +213,7 @@
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Executioner's Axe" Weight="0.5" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -228,6 +232,7 @@
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Executioner's Axe" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedAngel">
@@ -284,7 +289,8 @@
         <Item Name="Sloth" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Dogmaticism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-
+        <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Sack of Hearts" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
     </Pool>
     <Pool Name="library">
         <Item Name="Anatomy Textbook" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
