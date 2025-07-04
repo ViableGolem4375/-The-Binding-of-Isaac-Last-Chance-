@@ -36,7 +36,6 @@ mess with max hp if possible - needs HP api
 instakill melee weapon
 random dad item effect
 orbital that applies some debuff
-using actives explodes isaac (damage immune to it)
 pick a stage and go there
 dogma familiar
 
@@ -44,7 +43,7 @@ Trinket Ideas:
 
 
 Streaks:
-T Keeper Win Streak: 3`
+T Keeper Win Streak: 3
 	Best: 5
 Jacob and Esau:
 	Best: 52

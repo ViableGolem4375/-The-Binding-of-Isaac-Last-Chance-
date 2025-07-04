@@ -33,6 +33,7 @@
         <Item Name="Birthday Cake" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Sack of Hearts" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -50,6 +51,7 @@
         <Item Name="Sloth" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="angel">
@@ -108,6 +110,7 @@
         <Item Name="Necromancy" Weight="1" DecreaseBy="0.5" RemoveOn="0.1" />
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -145,6 +148,7 @@
         <Item Name="Birthday Cake" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Sack of Hearts" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -198,12 +202,14 @@
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Sack of Hearts" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Expired Battery" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
         <Item Name="Necromancy" Weight="1" DecreaseBy="0.5" RemoveOn="0.1" />
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -221,6 +227,7 @@
         <Item Name="Sloth" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedAngel">
@@ -295,6 +302,8 @@
         <Item Name="Envy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Deep Orbit" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Broken Flux Capacitor" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
     </Pool>
     <Pool Name="woodenChest">
         

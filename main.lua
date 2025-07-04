@@ -183,6 +183,8 @@ RIFT_ITEM = Isaac.GetItemIdByName("Abyssal Rift")
 HEALTH_SACK_ITEM = Isaac.GetItemIdByName("Sack of Hearts")
 BATTERY_ITEM = Isaac.GetItemIdByName("Expired Battery")
 
+POLTERGEIST_ITEM = Isaac.GetItemIdByName("Poltergeist")
+FAMILIAR_POLTERGEIST = Isaac.GetEntityVariantByName("Poltergeist")
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Pontius")
@@ -2015,7 +2017,7 @@ if EID then
     EID:addCollectible(TOOLBELT_ITEM, "Makes Isaac's currently held active item into a pocket active.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If Isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} When holding 2 active items via Schoolbag, the currently selected active item will be moved to the pocket slot.", "Toolbelt")
     EID:addCollectible(TOOLBELT_FIX_ITEM, "Makes Isaac's currently held active item into a pocket active.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If Isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} When holding 2 active items via Schoolbag, the currently selected active item will be moved to the pocket slot.", " Toolbelt ")
     EID:addCollectible(MOON_ITEM, "Grants 3 fast moving orbitals which orbit Isaac as a far distance.#The orbitals block enemy projectiles and deal 5 damage per tick to enemies.", "Deep Orbit")
-    EID:addCollectible(FLUX_ITEM, "Grants an absudly fast moving orbital.#The orbital can block enemy projectiles and deals 20 damage per tick to enemies.#The orbital will randomly change orbiting distance at random intervals.", "Broken Flux Capacitor")
+    EID:addCollectible(FLUX_ITEM, "Grants an absurdly fast moving orbital.#The orbital can block enemy projectiles and deals 20 damage per tick to enemies.#The orbital will randomly change orbiting distance at random intervals.", "Broken Flux Capacitor")
     EID:addCollectible(LIGHT_ITEM, "Grants 1 stack towards the angel path.", "Path of Salvation")
     EID:addCollectible(DARK_ITEM, "Grants 1 stack towards the devil path.", "Path of Temptation")
     EID:addCollectible(ANGEL_ONE_ITEM, "5% chance for enemies to drop a half soul heart on death.#{{Luck}} +2.5% chance per point of luck.", "Angel's Path 1")
@@ -2106,6 +2108,7 @@ if EID then
     EID:addCollectible(RIFT_ITEM, "Grants:# A locust which deals 1x Isaac's damage and applies the slowness debuff.# A locust which deals 1x Isaac's damage and applies the poison debuff.# A locust which deals 1x Isaac's damage and explodes.# A locust which deals 2x Isaac's damage.", "Abyssal Rift")
     EID:addCollectible(HEALTH_SACK_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.#{{ArrowUp}} +1 soul heart#{{ArrowUp}} +1 black heart#{{ArrowUp}} +1 bone heart#{{ArrowUp}} +1 golden heart#{{ArrowUp}} +1 rotten heart", "Sack of Hearts")
     EID:addCollectible(BATTERY_ITEM, "Using active items causes Isaac to explode dealing 40 damage to enemies and leave behind green creep which damages enemies that pass over it.#Isaac does not take damage from these explosions.", "Expired Battery")
+    EID:addCollectible(POLTERGEIST_ITEM, "Grants an orbital which applies a brief fear status effect to enemies which touch it.", "Poltergeist")
 
 end
 
@@ -8722,6 +8725,56 @@ function PontiusMelee:CheckExplosionHitbox(npc)
 end
 
 Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, PontiusMelee.CheckExplosionHitbox)
+
+function Mod:PoltergeistInit(Poltergeist)
+    --Moon.EntityCollisionClass = EntityCollisionClass.ENTCOLL_ENEMIES
+    Poltergeist:AddToOrbit(7007)
+    
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.PoltergeistInit, FAMILIAR_POLTERGEIST)
+
+function Mod:PoltergeistUpdate(Poltergeist)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+    
+        Poltergeist.OrbitDistance = Vector(50,50)
+        Poltergeist.OrbitSpeed = 0.05
+        --Moon.OrbitLayer = 7007
+        Poltergeist.Velocity = Poltergeist:GetOrbitPosition(player.Position + player.Velocity) - Poltergeist.Position
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.PoltergeistUpdate, FAMILIAR_POLTERGEIST)
+
+function Mod:onCachePoltergeist(player, cacheFlag)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local numFamiliars = player:GetCollectibleNum(POLTERGEIST_ITEM)
+        --if cacheFlag == cacheFlag.CACHE_FAMILIARS then
+        if player:HasCollectible(POLTERGEIST_ITEM) then
+            player:CheckFamiliar(FAMILIAR_POLTERGEIST, numFamiliars, player:GetCollectibleRNG(POLTERGEIST_ITEM))
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.onCachePoltergeist)
+
+function Mod:PoltergeistFear(Poltergeist)
+    --if not Poltergeist:IsFrame(1) then return end -- Reduce checks to once per frame
+
+    local radius = 20 -- 🔧 Adjust for contact sensitivity
+    local entities = Isaac.FindInRadius(Poltergeist.Position, radius, EntityPartition.ENEMY)
+
+    for _, npc in ipairs(entities) do
+        if npc:IsVulnerableEnemy() and not npc:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) then
+            npc:AddFear(EntityRef(Poltergeist), 60) -- 👻 Apply fear for 60 frames (2 seconds)
+        end
+    end
+
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.PoltergeistFear, FAMILIAR_POLTERGEIST)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
