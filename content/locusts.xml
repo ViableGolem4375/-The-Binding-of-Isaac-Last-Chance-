@@ -150,7 +150,66 @@
     <locust id="112" tearFlags="39" gfx="holy.png"/>
     <locust id="113" tearFlags2="39" procChance="0.5" gfx="holy.png"/>
     <locust id="114" color="fly_lightblue"/>
-    <!--  Gluttony: charm 100% chance -->
-    <locust id="83" tearFlags="13" color="fly_darkred"/>
-
+    <!--  Gluttony: high damage locust -->
+    <locust id="83" damageMultiplier="1.5" color="fly_darkred"/>
+    <!--  Greed: drop money on kill -->
+    <locust id="84" tearFlags="44" color="fly_darkred"/>
+    <!--  Lust: 20% chance charm -->
+    <locust id="85" tearFlags2="13" procChance="0.2" color="fly_pink"/>
+    <!--  Pride: one extremely high damage locust with an extremely slow tick rate -->
+    <locust id="86" damageMultiplier="10" collisionInterval="10000" color="fly_darkred"/>
+    <!--  Sloth: extremely high damage extremely slow locust -->
+    <locust id="87" damageMultiplier="10" speed="0" color="fly_darkred"/>
+    <!--  Envy: useless locust that barely moves and does almost no damage -->
+    <locust id="88" damageMultiplier="0.01" speed="0" color="fly_darkred"/>
+    <!--  Wrath: high damage locust -->
+    <locust id="89" damageMultiplier="1.5" color="fly_darkred"/>
+    <!--  Charity: drop money on kill -->
+    <locust id="90" tearFlags="44" color="fly_lightblue"/>
+    <!--  Humility: high damage locust -->
+    <locust id="91" damageMultiplier="1.5" color="fly_lightblue"/>
+    <!--  Love: 20% chance charm locust -->
+    <locust id="92" tearFlags2="13" procChance="0.2" color="fly_lightblue"/>
+    <!--  Generosity: drop money on kill -->
+    <locust id="93" tearFlags="44" color="fly_lightblue"/>
+    <!--  Temperance: faster tick rate locust -->
+    <locust id="94" collisionInterval="3" color="fly_lightblue"/>
+    <!--  Zeal: godhead locust -->
+    <locust id="133" tearFlags="31" color="fly_lightblue"/>
+    <!--  Kindness: 35% chance charm locust -->
+    <locust id="95" tearFlags2="13" procChance="0.35" color="fly_lightblue"/>
+    <!--  Mysterious Concoction: very low damage locust, 20% chance for a lot of effects -->
+    <locust id="104" damageMultiplier="0.1" tearFlags="0 1 2 3 4 5 13 14 20 21 22 23 24 34 43 53" procChance="0.2" gfx="concoction.png"/>
+    <!--  The Pill: random effects 30% chance -->
+    <locust id="109" locustFlags2="1" procChance="0.3" gfx="pill.png"/>
+    <!--  The Bibble: random effects 30% chance -->
+    <locust id="110" locustFlags2="1" procChance="0.3" color="fly_gold"/>
+    <!--  Communist Manifesto: regular locust -->
+    <locust id="111" color="fly_red"/>
+    <!--  Neurotoxin: 10% euthanasia shot -->
+    <locust id="115" tearFlags2="54" procChance="0.1" color="fly_purple"/>
+    <!--  Crushed Dice: 20% reroll enemies -->
+    <locust id="116" locustFlags="3" gfx="dice.png"/>
+    <!--  Dogmatism: godhead + 100% light beam chance locust, piercing, spectral, slow, large, very high damage -->
+    <locust id="117" tearFlags="0 1 31 39" damageMultiplier="2.0" speed="0.7" scale="1.5" gfx="dogma.png"/>
+    <!--  Infestation 3: 30% chance for parasitoid effect -->
+    <locust id="118" tearFlags2="49" procChance="0.3" gfx="infestation.png"/>
+    <!--  Rapture: 30% chance for light beams -->
+    <locust id="119" tearFlags2="39" procChance="0.3" gfx="holy.png"/>
+    <!--  Shattered Gladius: dashing, piercing locust -->
+    <locust id="121" tearFlags="1" speed="6" color="fly_brown"/>
+    <!--  Trash Bag: 30% chance for random effects -->
+    <locust id="122" locustFlags2="1" procChance="0.3" gfx="trash.png"/>
+    <!--  Birthday Cake: higher damage, speed, size, tick rate -->
+    <locust id="123" damageMultiplier="1.3" speed="1.3" scale="1.3" collisionInterval="5" gfx="cake.png"/>
+    <!--  Abyssal Rift: 20 very small very low damage locusts -->
+    <locust id="124" count="20" damageMultiplier="0.2" scale="0.2" color="fly_white"/>
+    <!--  Sack of Hearts: 6 low damage locusts 33% chance to drop hp on kill -->
+    <locust id="125" count="6" damageMultiplier="0.16" locustFlags="15" gfx="heart.png"/>
+    <!--  Expired Battery: locust with a 30% chance to explode -->
+    <locust id="126" locustFlags2="0" procChance="0.3" gfx="bomb.png"/>
+    <!--  Executioner's Axe: 10% euthanasia shot -->
+    <locust id="127" tearFlags2="54" procChance="0.1" gfx="axe.png"/>
+    <!--  Poltergeist: 50% fear -->
+    <locust id="134" tearFlags="0" tearFlags2="20" procChance="0.5"  color="fly_purple"/>
 </locusts>
