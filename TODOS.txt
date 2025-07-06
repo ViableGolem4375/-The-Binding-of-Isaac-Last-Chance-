@@ -8,6 +8,8 @@
 - Cards are huge on J+E HUD.
 - make proc effects work with teardrop charm
 - make defense tech not interact with enviromnentals
+- maybe add locusts for items, definitely do this for abyssal rift.
+- rapture should probably be a 4 room charge.
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -33,7 +35,6 @@ item rooms have no items but secret rooms do
 all stats down plus something
 something with this effect: DOGMA_BLACKHOLE
 mess with max hp if possible - needs HP api
-instakill melee weapon
 random dad item effect
 pick a stage and go there
 dogma familiar
@@ -42,7 +43,9 @@ Trinket Ideas:
 
 
 Streaks:
-T Keeper Win Streak: 3
+T Apollyon Win Streak: 4
+	Best: 4
+T Keeper Win Streak: 0
 	Best: 5
 Jacob and Esau:
 	Best: 52

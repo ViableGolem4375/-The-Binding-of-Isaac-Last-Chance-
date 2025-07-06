@@ -2,10 +2,10 @@
     <active id="1" name="Lucky Coin" gfx="dice.png" description="Take control of your destiny" quality="4" craftquality="4" maxcharges="6" chargetype="normal" devilprice="2" tags="offensive nocantrip"/>
     <active id="2" name="Dull Coin" gfx="dice2.png" description="Reroll your destiny?" quality="4" craftquality="-1" charge="0" hidden="true" devilprice="1" tags="quest noeden nocantrip"/>
     <passive id="3" name="Unholy Mantle" gfx="unholymantle.png" description="Revel in Their Pain" quality="4" craftquality="4" devilprice="2" tags="devil nocantrip"/>
-    <familiar name="Lil' Uriel" gfx="uriel.png" description="Angelic friend" quality="4" craftquality="4" cache="familiars" devilprice="2" tags="baby offensive summonable monstermanual angel nocantrip" />
-    <familiar name="Lil' Gabriel" gfx="gabriel.png" description="Eternal friend" quality="4" craftquality="4" cache="familiars" devilprice="2" tags="baby offensive summonable monstermanual angel nocantrip" />
+    <passive id="128" name="Lil' Uriel" gfx="uriel.png" description="Angelic friend" quality="4" craftquality="4" cache="familiars" devilprice="2" tags="baby offensive summonable monstermanual angel nocantrip" />
+    <passive id="129" name="Lil' Gabriel" gfx="gabriel.png" description="Eternal friend" quality="4" craftquality="4" cache="familiars" devilprice="2" tags="baby offensive summonable monstermanual angel nocantrip" />
     <active id="4" name="Catalyst Character Sheet" gfx="catalyst_character_sheet.png" description="It's in my head IT'S IN MY HEAD AAAAAAAAAAA" quality="3" devilprice="1" craftquality="3" maxcharges="4" chargetype="normal" tags="offensive nocantrip"/>
-    <familiar name="Failed Abortion" gfx="failed_abortion.png" description="It's still breathing!" quality="2" craftquality="2" cache="familiars" devilprice="1" tags="baby offensive summonable monstermanual" />
+    <passive id="130" name="Failed Abortion" gfx="failed_abortion.png" description="It's still breathing!" quality="2" craftquality="2" cache="familiars" devilprice="1" tags="baby offensive summonable monstermanual" />
     <active id="5" name="Final Judgement" gfx="finaljudgement.png" description="Be Afraid" quality="4" craftquality="-1" maxcharges="12" devilprice="1" chargetype="normal" hidden="true" tags="quest noeden nocantrip"/>
     <passive id="6" name="Final Judgement VFX" gfx="finaljudgement.png" description="I exist to make the Final Judgement VFX work!" quality="4" devilprice="1" craftquality="-1" hidden="true" tags="nocantrip quest noeden"/>
     <active id="7" name="Essence of Lilith" gfx="essence_of_lilith.png" description="To me my children" quality="2" craftquality="2" maxcharges="12" devilprice="1" chargetype="normal" tags="offensive nocantrip"/>
@@ -64,8 +64,8 @@
     <active id="59" name="64 36" gfx="glitch_essence.png" description="72 65 72 6F 6C 6C" quality="1" craftquality="1" maxcharges="1" devilprice="1" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="60" name="Sack of Lucky Pennies" gfx="sack_of_lucky_pennies.png" description="Sold at your local souvenir shop for only 39.99!" quality="2" craftquality="2" devilprice="1" tags="nocantrip offensive" />
     <passive id="61" name="Toolbelt" gfx="toolbelt.png" description="Pocket active" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive" />
-    <familiar name="Deep Orbit" gfx="orbiting_moons.png" description="One small step for man..." quality="3" craftquality="3" devilprice="2" cache="familiars" tags="offensive summonable monstermanual" />
-    <familiar name="Broken Flux Capacitor" gfx="flux_capacitor_2.png" description="Localized time distortion" quality="1" craftquality="1" devilprice="1" cache="familiars" tags="offensive summonable monstermanual" />
+    <passive id="131" name="Deep Orbit" gfx="orbiting_moons.png" description="One small step for man..." quality="3" craftquality="3" devilprice="2" cache="familiars" tags="offensive summonable monstermanual" />
+    <passive id="132" name="Broken Flux Capacitor" gfx="flux_capacitor_2.png" description="Localized time distortion" quality="1" craftquality="1" devilprice="1" cache="familiars" tags="offensive summonable monstermanual" />
     <active id="62" name="Duae Viae" gfx="duae.png" description="Make your choice" quality="4" craftquality="-1" maxcharges="6" chargetype="normal" initcharge="0" devilprice="1" hidden="true" tags="quest nocantrip book noeden" />
     <passive id="63" name="Path of Salvation" gfx="angelpath.png" description="I am saved" quality="4" craftquality="-1" hidden="true" devilprice="1" tags="quest noeden nocantrip" />
     <passive id="64" name="Path of Temptation" gfx="devilpath.png" description="My life is yours" quality="4" craftquality="-1" hidden="true" devilprice="1" tags="quest noeden nocantrip" />
@@ -99,7 +99,7 @@
     <passive id="92" name="Love" gfx="love.png" description="Love thy neighbor" quality="0" craftquality="0" devilprice="1" tags="angel offensive nocantrip" />
     <passive id="93" name="Generosity" gfx="generosity.png" description="Giving = power" quality="3" craftquality="3" devilprice="2" tags="angel offensive nocantrip" cache="damage" />
     <passive id="94" name="Temperance" gfx="temperance.png" description="Tempered spirit" quality="3" craftquality="3" devilprice="2" tags="angel offensive nocantrip" cache="firedelay" />
-    <familiar name="Zeal" gfx="zeal.png" description="Zealous companion" quality="4" craftquality="4" cache="familiars" devilprice="2" tags="baby offensive summonable monstermanual angel nocantrip" />
+    <passive id="133" name="Zeal" gfx="zeal.png" description="Zealous companion" quality="4" craftquality="4" cache="familiars" devilprice="2" tags="baby offensive summonable monstermanual angel nocantrip" />
     <active id="95" name="Kindness" gfx="kindness.png" description="Kill them with kindness" quality="3" craftquality="3" devilprice="2" maxcharges="6" chargetype="normal" tags="angel offensive nocantrip" />
     <active id="96" name="Glass Heart" gfx="kindness.png" description="Reusable heart container" quality="2" craftquality="2" devilprice="1" maxcharges="4" chargetype="normal" hidden="true" tags="offensive nocantrip" />
     <active id="97" name="Legion Charge" gfx="phalanx.png" description="Roma Invictus" quality="4" craftquality="-1" devilprice="1" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />

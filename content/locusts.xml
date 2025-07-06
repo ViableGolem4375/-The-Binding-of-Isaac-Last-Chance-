@@ -1,0 +1,101 @@
+<locusts gfxroot="gfx/familiar/locusts/">
+    <!--  Default Vals  -->
+    <color name="default" />
+	<color name="fly_red" r="255" g="0" b="0" or="50" og="0" ob="0"/>
+	<color name="fly_lightred" r="215" g="75" b="75" or="50" og="10" ob="10"/>
+	<color name="fly_green" r="0" g="255" b="0" or="0" og="0" ob="0"/>
+	<color name="fly_blue" r="0" g="0" b="255" or="0" og="0" ob="10"/>
+	<color name="fly_brown" r="80" g="50" b="30" or="25" og="12" ob="10"/>
+	<color name="fly_yellow" r="241" g="179" b="12" or="0" og="0" ob="0"/>
+	<color name="fly_gold" r="202" g="178" b="0" or="150" og="150" ob="-255"/>
+	<color name="fly_magnet" r="219" g="204" b="94" or="0" og="0" ob="0"/>
+	<color name="fly_orange" r="255" g="115" b="0" or="100" og="60" ob="0"/>
+	<color name="fly_black" r="1" g="1" b="1"/>
+	<color name="fly_grey" r="120" g="120" b="120" or="10" og="10" ob="10"/>
+	<color name="fly_darkred" r="255" g="0" b="0"/>
+	<color name="fly_purple" r="126" g="12" b="174" or="50" og="-255" ob="50"/>
+	<color name="fly_darkpurple" r="126" g="12" b="174" or="0" og="-150" ob="0"/>
+	<color name="fly_pink" r="255" g="84" b="148" or="50" og="-255" ob="10"/>
+	<color name="fly_cyan" r="12" g="217" b="241" or="0" og="20" ob="50"/>
+	<color name="fly_lightblue" r="122" g="242" b="238" or="0" og="20" ob="50"/>
+	<color name="fly_white" r="255" g="255" b="255" or="150" og="150" ob="150"/>
+	<color name="fly_gas" r="0" g="155" b="0" or="0" og="0" ob="0"/>
+	<color name="fly_fart" r="184" g="191" b="134" or="24" og="24" ob="24"/>
+
+    <scale quality="0" scale="0.8"/>
+    <scale quality="1" scale="0.9"/>
+    <scale quality="2" scale="1.0"/>
+    <scale quality="3" scale="1.1"/>
+    <scale quality="4" scale="1.2"/>
+
+    <!--  Lucky Coin: 20% reroll enemies  -->
+    <locust id="1" locustFlags="3" gfx="dice.png"/>
+    <!--  Dull Coin: 20% reroll enemies  -->
+    <locust id="2" locustFlags="3" gfx="dice.png"/>
+    <!--  Unholy Mantle: high damage shielded  -->
+    <locust id="3" tearFlags="34" damageMultiplier="1.5" color="fly_darkred"/>
+    <!--  Lil' Uriel: high damage 100% light beams  -->
+    <locust id="128" tearFlags="39" damageMultiplier="1.5" color="fly_white"/>
+    <!--  Lil' Gabriel: high damage 100% light beams  -->
+    <locust id="129" tearFlags="39" damageMultiplier="1.5" color="fly_white"/>
+    <!-- Catalyst Character Sheet: confusion and 30% bait  -->
+    <locust id="4" tearFlags="14" tearFlags2="67" procChance="0.3" color="fly_red"/>
+    <!--  Failed Abortion: one big high damage locust and 4 small low damage ones, all low speed -->
+    <locust id="130" damageMultiplier="1.5" scale="1.5" speed="0.8" color="fly_darkred"/>
+    <locust id="130" damageMultiplier="0.4" scale="0.4" speed="0.8" color="fly_darkred"/>
+    <locust id="130" damageMultiplier="0.4" scale="0.4" speed="0.8" color="fly_darkred"/>
+    <locust id="130" damageMultiplier="0.4" scale="0.4" speed="0.8" color="fly_darkred"/>
+    <locust id="130" damageMultiplier="0.4" scale="0.4" speed="0.8" color="fly_darkred"/>
+    <!--  Essence of Lilith: 50% charm  -->
+    <locust id="7" tearFlags2="13" procChance="0.5" color="fly_pink"/>
+    <!--  Amplifier: extremely high damage extremely slow  -->
+    <locust id="9" damageMultiplier="5" speed="0.1" color="fly_orange"/>
+    <!--  Huh: 10% to turn enemies to poop  -->
+    <locust id="11" tearFlags2="73" procChance="0.1" color="fly_fart"/>
+    <!--  Compensator: high damage locust  -->
+    <locust id="12" damageMultiplier="1.3" color="fly_red"/>
+    <!--  Eternal Bond: dashing shielded locust that makes enemies have a 33% chance to drop hearts  -->
+    <locust id="17" tearFlags="34" tearFlags2="15" procChance="1.0" speed="6" color="fly_purple"/>
+    <locust id="105" tearFlags="34" tearFlags2="15" procChance="1.0" speed="6" color="fly_purple"/>
+    <locust id="106" tearFlags="34" tearFlags2="15" procChance="1.0" speed="6" color="fly_purple"/>
+    <locust id="107" tearFlags="34" tearFlags2="15" procChance="1.0" speed="6" color="fly_purple"/>
+    <locust id="108" tearFlags="34" tearFlags2="15" procChance="1.0" speed="6" color="fly_purple"/>
+    <!--  Anatomy Textbook: shielded locust  -->
+    <locust id="18" tearFlags="34" gfx="bone.png"/>
+    <!--  Blank Slate: random effect locust 30% chance  -->
+    <locust id="19" locustFlags2="1" procChance="0.3" gfx="glitch.png"/>
+    <!--  Essence of Isaac: reroll enemies 20% chance, random effect locust 100% chance  -->
+    <locust id="20" locustFlags="3" locustFlags2="1" procChance="1" gfx="dice.png"/>
+    <!--  Essence of Mag: chance to drop hearts  -->
+    <locust id="21" tearFlags2="15" procChance="1.0" color="fly_pink"/>
+    <!--  Essence of Cain: killed enemies might drop money  -->
+    <locust id="22" tearFlags="74" color="fly_gold"/>
+    <!--  Essence of Judas: high damage locust  -->
+    <locust id="23" damageMultiplier="1.5" color="fly_red"/>
+    <!--  Essence of Blue Baby: 15% chance to turn things to poop  -->
+    <locust id="24" tearFlags2="73" procChance="0.15" color="fly_blue"/>
+    <!--  Essence of Eve: high damage locust  -->
+    <locust id="25" damageMultiplier="1.5" color="fly_darkred"/>
+    <!--  Essence of Samson: dashing high damage locust, extra gore  -->
+    <locust id="26" speed="6" tearFlags="120" damageMultiplier="1.2" color="fly_red"/>
+    <!--  Essence of Azazel: high damage brimstone locust  -->
+    <locust id="27" locustFlags2="12" damageMultiplier="1.5" gfx="brim.png"/>
+    <!--  Essence of Laz: slightly higher damage, faster, bigger locust  -->
+    <locust id="28" damageMultiplier="1.1" speed="1.1" scale="1.1" color="fly_darkred"/>
+    <!--  Essence of Eden: Locust that does random effects  -->
+    <locust id="30" locustFlags2="1" procChance="1" gfx="glitch.png"/>
+    <!--  Essence of Keeper: killed enemies might drop money  -->
+    <locust id="31" tearFlags="74" color="fly_gold"/>
+    <!--  Essence of Apollyon: shielded, 30% rift spawns  -->
+    <locust id="32" tearFlags="34" tearFlags2="76" procChance="0.3" color="fly_black"/>
+    <!--  Essence of Bethany: shielded 100% burn  -->
+    <locust id="34" tearFlags="34" tearFlags2="22" procChance="1.0" color="fly_lightblue"/>
+    <!--  Essence of Domino: 4 low damage locusts, fear, slow, confusion, burn  -->
+    <locust id="35" tearFlags2="20" procChance="0.5" damageMultiplier="0.5" scale="0.7" color="fly_green"/>
+    <locust id="35" tearFlags2="22" procChance="0.5" damageMultiplier="0.5" scale="0.7" color="fly_green"/>
+    <locust id="35" tearFlags2="14" procChance="0.5" damageMultiplier="0.5" scale="0.7" color="fly_green"/>
+    <locust id="35" tearFlags2="3" procChance="0.5" damageMultiplier="0.5" scale="0.7" color="fly_green"/>
+    <!--  Essence of Pontius: extremely fast piercing locust  -->
+    <locust id="36" speed="10" color="fly_grey"/>
+
+</locusts>
