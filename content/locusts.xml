@@ -21,6 +21,7 @@
 	<color name="fly_white" r="255" g="255" b="255" or="150" og="150" ob="150"/>
 	<color name="fly_gas" r="0" g="155" b="0" or="0" og="0" ob="0"/>
 	<color name="fly_fart" r="184" g="191" b="134" or="24" og="24" ob="24"/>
+    <color name="fly_peach" r="87" g="50" b="57" or="0" og="0" ob="0"/>
 
     <scale quality="0" scale="0.8"/>
     <scale quality="1" scale="0.9"/>
@@ -35,9 +36,9 @@
     <!--  Unholy Mantle: high damage shielded  -->
     <locust id="3" tearFlags="34" damageMultiplier="1.5" color="fly_darkred"/>
     <!--  Lil' Uriel: high damage 100% light beams  -->
-    <locust id="128" tearFlags="39" damageMultiplier="1.5" color="fly_white"/>
+    <locust id="128" tearFlags="39" damageMultiplier="1.5" gfx="holy.png"/>
     <!--  Lil' Gabriel: high damage 100% light beams  -->
-    <locust id="129" tearFlags="39" damageMultiplier="1.5" color="fly_white"/>
+    <locust id="129" tearFlags="39" damageMultiplier="1.5" gfx="holy.png"/>
     <!-- Catalyst Character Sheet: confusion and 30% bait  -->
     <locust id="4" tearFlags="14" tearFlags2="67" procChance="0.3" color="fly_red"/>
     <!--  Failed Abortion: one big high damage locust and 4 small low damage ones, all low speed -->
@@ -96,6 +97,60 @@
     <locust id="35" tearFlags2="14" procChance="0.5" damageMultiplier="0.5" scale="0.7" color="fly_green"/>
     <locust id="35" tearFlags2="3" procChance="0.5" damageMultiplier="0.5" scale="0.7" color="fly_green"/>
     <!--  Essence of Pontius: extremely fast piercing locust  -->
-    <locust id="36" speed="10" color="fly_grey"/>
+    <locust id="36" tearFlags="1" speed="10" gfx="piercing.png" overlayColor="fly_gray"/>
+    <!--  Essence of The Lost: shielded locust -->
+    <locust id="37" tearFlags="34" color="fly_white"/>
+    <!--  Essence of Jacob and Esau: 2 locusts, one slightly lower damage slightly higher tick speed, one slightly higher damage slower tick speed -->
+    <locust id="38" damageMultiplier="0.9" collisionInterval="5" gfx="jacob.png"/>
+    <locust id="38" damageMultiplier="1.1" collisionInterval="7" color="fly_darkred"/>
+    <!--  Essence of The Forgotten: bone shots locust and a fast spectral locust -->
+    <locust id="39" tearFlags2="51" gfx="bone.png"/>
+    <locust id="39" tearFlags="0" speed="1.3" color="fly_lightblue"/>
+    <!--  Yamika: high damage locust that drops money on hit sometimes -->
+    <locust id="40" damageMultiplier="1.3" tearFlags2="40" procChance="0.1" gfx="yamika.png"/>
+    <!--  A Gun: dashing locust -->
+    <locust id="41" speed="6" color="fly_grey"/>
+    <!--  Kingslayer: high damage locust -->
+    <locust id="44" damageMultiplier="1.3" color="fly_gold"/>
+    <!--  Defense Tech: shocking locust -->
+    <locust id="45" tearFlags2="55" procChance="1.0" color="fly_red"/>
+    <!--  Necromancy: charm 100% chance -->
+    <locust id="47" tearFlags="13" color="fly_purple"/>
+    <!--  Become Back My Money: chance to drop money on hit -->
+    <locust id="48" tearFlags2="40" procChance="0.1" color="fly_gold"/>
+    <!--  Gold Spray Paint: midas touch 20% chance -->
+    <locust id="49" tearFlags2="53" procChance="0.2" color="fly_gold"/>
+    <!--  '/<<L7: random effects 30% chance, euthanasia shot 1% chance -->
+    <locust id="50" locustFlags2="1" procChance="0.3" tearFlags2="54" procChance="0.01" gfx="funny.png"/>
+    <!--  Proto Tech: extremely high damage, slow, large, shocking locust -->
+    <locust id="51" damageMultiplier="10" tearFlags2="55" procChance="1.0" speed="0.7" scale="1.5" gfx="proto.png"/>
+    <!--  Fred The Friendly Gaper: 20% chance charm locust -->
+    <locust id="52" tearFlags2="13" procChance="0.2" color="fly_red"/>
+    <!--  Debug Console: random effects 100% chance, euthanasia shot 100% chance -->
+    <locust id="55" tearFlags2="54" locustFlags2="1" procChance="1.0" gfx="debug.png"/>
+    <!--  Necromancy: dashing locust, every so slightly higher damage -->
+    <locust id="56" speed="6" damageMultiplier="1.01" color="fly_brown"/>
+    <!--  64 36: random effects 30% chance -->
+    <locust id="59" locustFlags2="1" procChance="0.3" gfx="glitch.png"/>
+    <!--  Sack of Lucky Pennies: 5 locusts that deal almost no damage but have a high chance to drop money on hit -->
+    <locust id="60" count="5" damageMultiplier="0.01" tearFlags2="44" procChance="0.3" color="fly_green"/>
+    <!--  Toolbelt: high damage fast locust -->
+    <locust id="61" damageMultiplier="1.3" speed="2" color="fly_yellow"/>
+    <!--  Deep Orbit: 3 fast shielded locusts -->
+    <locust id="131" count="3" tearFlags="34" speed="2" gfx="stone.png"/>
+    <!--  Broken Flux Capacitor: one unbelievably fast shielded locust -->
+    <locust id="132" tearFlags="34" speed="100" gfx="flux.png"/>
+    <!--  Essence of Abraham: one locust with 20% light beams, one dashing high damage piercing locust -->
+    <locust id="76" tearFlags2="39" procChance="0.2" color="fly_lightblue"/>
+    <locust id="76" tearFlags="1" damageMultiplier="1.5" speed="6" color="fly_black"/>
+    <!--  Tech Omega: 20 tiny very small very low damage locusts -->
+    <locust id="78" count="20" damageMultiplier="0.2" scale="0.2" color="fly_red"/>
+    <!--  Book of Jubilees/Glowing Page:  -->
+    <locust id="80" tearFlags="39" damageMultiplier="1.5" gfx="holy.png"/>
+    <locust id="112" tearFlags="39" gfx="holy.png"/>
+    <locust id="113" tearFlags2="39" procChance="0.5" gfx="holy.png"/>
+    <locust id="114" color="fly_lightblue"/>
+    <!--  Gluttony: charm 100% chance -->
+    <locust id="83" tearFlags="13" color="fly_darkred"/>
 
 </locusts>
