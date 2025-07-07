@@ -6058,21 +6058,28 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.OnLuckyPennyItemPickup)
 
-local toolbeltTriggered = false
+local toolbeltTriggered = {}
 
 function Mod:OnNewGameToolbelt(isContinued)
     if not isContinued then -- Ensures it only resets for fresh runs, not continues
-        toolbeltTriggered = false
+        toolbeltTriggered = {}
     end
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameToolbelt) -- Reset flag between runs
 
 function Mod:ConvertActiveToPocket(player)
-    if player:HasCollectible(TOOLBELT_ITEM) and toolbeltTriggered == false then
+    local id = GetPtrHash(player)
+    if player:HasCollectible(TOOLBELT_ITEM) and not toolbeltTriggered[id] then
         local activeItem = player:GetActiveItem(ActiveSlot.SLOT_PRIMARY)
+        local pocketActive = player:GetActiveItem(ActiveSlot.SLOT_POCKET)
+        if pocketActive and pocketActive ~= CollectibleType.COLLECTIBLE_NULL then
+            print("Player already has a pocket active! Dropping pedestal item instead.")
+            Mod:DropActiveItemOnPedestal(player)
+            
+        --end
 
-        if activeItem and activeItem ~= CollectibleType.COLLECTIBLE_NULL then
+        elseif activeItem and activeItem ~= CollectibleType.COLLECTIBLE_NULL then
             print("Converting active item to pocket active:", activeItem)
             player:RemoveCollectible(activeItem, false, ActiveSlot.SLOT_PRIMARY)
             player:SetPocketActiveItem(activeItem, ActiveSlot.SLOT_POCKET, true)
@@ -6080,7 +6087,7 @@ function Mod:ConvertActiveToPocket(player)
             print("Player has no active item—assigning a new one!")
             Mod:GiveRandomActiveItem(player)
         end
-        toolbeltTriggered = true
+        toolbeltTriggered[id] = true
         player:RemoveCollectible(TOOLBELT_ITEM)
         player:AddCollectible(TOOLBELT_FIX_ITEM)
     end
@@ -6092,11 +6099,11 @@ function Mod:GiveRandomActiveItem(player)
     -- ✅ Check if player already has a pocket active
     local pocketActive = player:GetActiveItem(ActiveSlot.SLOT_POCKET)
 
-    if pocketActive and pocketActive ~= CollectibleType.COLLECTIBLE_NULL then
+    --[[ if pocketActive and pocketActive ~= CollectibleType.COLLECTIBLE_NULL then
         print("Player already has a pocket active! Dropping pedestal item instead.")
         Mod:DropActiveItemOnPedestal(player)
         return
-    end
+    end ]]
 
     local itemPool = Game():GetItemPool()
     local rng = player:GetCollectibleRNG(TOOLBELT_ITEM)
