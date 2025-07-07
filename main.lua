@@ -9174,14 +9174,12 @@ function Mod:UseEmperorMisprint(card, player)
         if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
             local monstro2 = Isaac.Spawn(EntityType.ENTITY_MONSTRO2, 0, 0, player.Position, Vector(0,0), player)
             monstro2:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- ✅ Makes it friendly
-            monstro2:AddEntityFlags(EntityFlag.FLAG_PERSISTENT) -- ✅ Makes it friendly
 
             -- **Apply permanent charmed effect (adds the hearts visual)**
             monstro2:AddEntityFlags(EntityFlag.FLAG_CHARM)
         else
             local monstro = Isaac.Spawn(EntityType.ENTITY_MONSTRO, 0, 0, player.Position, Vector(0,0), player)
             monstro:AddEntityFlags(EntityFlag.FLAG_FRIENDLY) -- ✅ Makes it friendly
-            monstro:AddEntityFlags(EntityFlag.FLAG_PERSISTENT) -- ✅ Makes it friendly
 
             -- **Apply permanent charmed effect (adds the hearts visual)**
             monstro:AddEntityFlags(EntityFlag.FLAG_CHARM)

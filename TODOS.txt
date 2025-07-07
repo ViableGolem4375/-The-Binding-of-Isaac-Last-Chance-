@@ -8,8 +8,6 @@
 - Cards are huge on J+E HUD.
 - make proc effects work with teardrop charm
 - make defense tech not interact with enviromnentals
-- rapture should probably be a 4 room charge.
-- toolbelt got bugged somehow, if you have an active and a pocket active its overwriting it
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -43,9 +41,10 @@ Trinket Ideas:
 
 
 Streaks:
-T Apollyon Win Streak: 4
-	Best: 4
+T Apollyon Win Streak: 7
+	Best: 7
 T Keeper Win Streak: 0
 	Best: 5
 Jacob and Esau:
 	Best: 52
+
