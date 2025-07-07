@@ -2075,7 +2075,7 @@ if EID then
     EID:addCard(MAGICIAN_CARD, "For the room gain:#{{ArrowUp}} +10 damage.#{{ArrowDown}} 0.25x range.#Damage bonus and range down are doubled when holding tarot cloth.", "Misprinted Magician")
     EID:addCard(PRIESTESS_CARD, "Activates the effect of Doctor's Remote.#Also activates the effect of Crack the Sky when holding tarot cloth.", "Misprinted High Priestess")
     EID:addCard(EMPRESS_CARD, "Activates the effect of Gello.#Also activates the effect of Box of Friends twice when holding tarot cloth.", "Misprinted Empress")
-    EID:addCard(EMPEROR_CARD, "Spawns a friendly Monstro to fight alongside you.#Spawns Monstro 2 when holding tarot cloth.#{{Warning}} The summoned Monstros have a chance to be champion variants.", "Misprinted Emperor")
+    EID:addCard(EMPEROR_CARD, "Spawns a friendly Monstro to fight alongside you for the room.#Spawns Monstro 2 when holding tarot cloth.#{{Warning}} The summoned Monstros have a chance to be champion variants.", "Misprinted Emperor")
     EID:addCard(HIEROPHANT_CARD, "Spawns 2 black hearts.#Spawns 4 black hearts when holding tarot cloth.", "Misprinted Hierophant")
     EID:addCard(LOVERS_CARD, "Spawns 2 golden hearts.#Spawns 4 golden hearts when holding tarot cloth.", "Misprinted Lovers")
     EID:addCard(CHARIOT_CARD, "Charge in the current movement direction dealing 100 damage to all enemies you collide with.", "Misprinted Chariot")
