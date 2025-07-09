@@ -3130,13 +3130,46 @@ if EID then
     end
     function HeartsCallback(descObj)
         local textColor = "{{ColorRed}}"
-        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20 locusts.")
-        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extremely small.")
-        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 0.2x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "6 locusts.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 0.16x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "33% chance for enemies to drop red hearts on kill.")
 	    return descObj
     end
 
     EID:addDescriptionModifier("Hearts Mod", HeartsAbyss, HeartsCallback)
+
+    function ExpiredAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BATTERY_ITEM then return true end
+    end
+    function ExpiredCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance to explode on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Expired Mod", ExpiredAbyss, ExpiredCallback)
+
+    function ExexutionerAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == AXE_ITEM then return true end
+    end
+    function ExecutionerCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "10% chance to apply the effect of Euthanasia on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Executioner Mod", ExexutionerAbyss, ExecutionerCallback)
+
+    function PoltergeistAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == POLTERGEIST_ITEM then return true end
+    end
+    function PoltergeistCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "50% chance to apply fear on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Poltergeist Mod", PoltergeistAbyss, PoltergeistCallback)
 
 end
 
