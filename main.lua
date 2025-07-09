@@ -2116,82 +2116,80 @@ if EID then
     EID:addCollectible(POLTERGEIST_ITEM, "Grants an orbital which applies a brief fear status effect to enemies which touch it.", "Poltergeist")
     EID:addCollectible(AXE_ITEM, "Swing a melee attack which deals 999999 damage to anything it hits.#{{Warning}} Hitting an enemy with this attack will consume the item.", "Executioner's Axe")
 
-    local function luckyDiceAbyss(descObj)
+    function LuckyDiceAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LUCKY_DICE_ID then return true end
     end
-    local function luckyDiceCallback(descObj)
+    function LuckyDiceCallback(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance to reroll enemies.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Lucky Dice Mod", luckyDiceAbyss, luckyDiceCallback)
+    EID:addDescriptionModifier("Lucky Dice Mod", LuckyDiceAbyss, LuckyDiceCallback)
     
-    local function dullCoinAbyss(descObj)
+    function DullCoinAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DULL_COIN_ID then return true end
     end
-    local function dullCoinCallback(descObj)
+    function DullCoinCallback(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance to reroll enemies.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Dull Coin Mod", dullCoinAbyss, dullCoinCallback)
+    EID:addDescriptionModifier("Dull Coin Mod", DullCoinAbyss, DullCoinCallback)
 
-    local function unholyMantleAbyss(descObj)
+    function UnholyMantleAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == HATRED_ITEM then return true end
     end
-    local function unholyMantleCallback(descObj)
+    function UnholyMantleCallback(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.5x damage multiplier.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Unholy Mantle Mod", unholyMantleAbyss, unholyMantleCallback)
+    EID:addDescriptionModifier("Unholy Mantle Mod", UnholyMantleAbyss, UnholyMantleCallback)
 
-    local function urielAbyss(descObj)
+    function UrielAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == URIEL_ITEM then return true end
     end
-    local function urielCallback(descObj)
+    function UrielCallback(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.5x damage multiplier.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance for holy light beams on hit.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Uriel Mod", urielAbyss, urielCallback)
+    EID:addDescriptionModifier("Uriel Mod", UrielAbyss, UrielCallback)
 
-    local function gabrielAbyss(descObj)
+    function GabrielAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GABRIEL_ITEM then return true end
     end
-    local function gabrielCallback(descObj)
+    function GabrielCallback(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.5x damage multiplier.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance for holy light beams on hit.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Gabriel Mod", gabrielAbyss, gabrielCallback)
+    EID:addDescriptionModifier("Gabriel Mod", GabrielAbyss, GabrielCallback)
 
-    EID:addDescriptionModifier("Uriel Mod", urielAbyss, urielCallback)
-
-    local function catalystAbyss(descObj)
+    function CatalystAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CATALYST_SHEET_ITEM then return true end
     end
-    local function catalystCallback(descObj)
+    function CatalystCallback(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance to apply confusion on hit.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance to apply baited on hit.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Catalyst Mod", catalystAbyss, catalystCallback)
+    EID:addDescriptionModifier("Catalyst Mod", CatalystAbyss, CatalystCallback)
 
-    local function failAbyss(descObj)
+    function FailAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == FAIL_ITEM then return true end
     end
-    local function failCallback(descObj)
+    function FailCallback(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.5x damage multiplier.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Slow.")
@@ -2201,57 +2199,57 @@ if EID then
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Fail Mod", failAbyss, failCallback)
+    EID:addDescriptionModifier("Fail Mod", FailAbyss, FailCallback)
 
-    local function lilithAbyss(descObj)
+    function LilithAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LILITH_ESSENCE then return true end
     end
-    local function lilithCallback(descObj)
+    function LilithCallback(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "50% chance to apply charm on hit.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Lilith Mod", lilithAbyss, lilithCallback)
+    EID:addDescriptionModifier("Lilith Mod", LilithAbyss, LilithCallback)
 
-    local function ampAbyss(descObj)
+    function AmpAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == AMP_ITEM then return true end
     end
-    local function ampCallback(descObj)
+    function AmpCallback(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 5x damage multiplier.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Moves extremely slow.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Amp Mod", ampAbyss, ampCallback)
+    EID:addDescriptionModifier("Amp Mod", AmpAbyss, AmpCallback)
 
-    local function huhAbyss(descObj)
+    function HuhAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == HUH_ITEM then return true end
     end
-    local function huhCallback(descObj)
+    function HuhCallback(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "10% chance to turn non-boss enemies into poop on hit.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Huh Mod", huhAbyss, huhCallback)
+    EID:addDescriptionModifier("Huh Mod", HuhAbyss, HuhCallback)
 
-    local function compAbyss(descObj)
+    function CompAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == COMP_ITEM then return true end
     end
-    local function compCallback(descObj)
+    function CompCallback(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.3x damage multiplier.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Comp Mod", compAbyss, compCallback)
+    EID:addDescriptionModifier("Comp Mod", CompAbyss, CompCallback)
 
-    local function eternalAbyss(descObj)
+    function EternalAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM then return true end
     end
-    local function eternalCallback(descObj)
+    function EternalCallback(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Dashing.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
@@ -2259,12 +2257,12 @@ if EID then
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Eternal Mod", eternalAbyss, eternalCallback)
+    EID:addDescriptionModifier("Eternal Mod", EternalAbyss, EternalCallback)
 
-    local function eternalAbyss(descObj)
+    function EternalAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM then return true end
     end
-    local function eternalCallback(descObj)
+    function EternalCallback(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Dashing.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
@@ -2272,12 +2270,12 @@ if EID then
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Eternal Mod", eternalAbyss, eternalCallback)
+    EID:addDescriptionModifier("Eternal Mod", EternalAbyss, EternalCallback)
 
-    local function eternalAbyss2(descObj)
+    function EternalAbyss2(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM2 then return true end
     end
-    local function eternalCallback2(descObj)
+    function EternalCallback2(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Dashing.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
@@ -2285,12 +2283,12 @@ if EID then
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Eternal2 Mod", eternalAbyss2, eternalCallback2)
+    EID:addDescriptionModifier("Eternal2 Mod", EternalAbyss2, EternalCallback2)
 
-    local function eternalAbyss3(descObj)
+    function EternalAbyss3(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM3 then return true end
     end
-    local function eternalCallback3(descObj)
+    function EternalCallback3(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Dashing.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
@@ -2298,12 +2296,12 @@ if EID then
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Eternal3 Mod", eternalAbyss3, eternalCallback3)
+    EID:addDescriptionModifier("Eternal3 Mod", EternalAbyss3, EternalCallback3)
 
-    local function eternalAbyss4(descObj)
+    function EternalAbyss4(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM4 then return true end
     end
-    local function eternalCallback4(descObj)
+    function EternalCallback4(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Dashing.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
@@ -2311,12 +2309,12 @@ if EID then
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Eternal4 Mod", eternalAbyss4, eternalCallback4)
+    EID:addDescriptionModifier("Eternal4 Mod", EternalAbyss4, EternalCallback4)
 
-    local function eternalAbyssEmpty(descObj)
+    function EternalAbyssEmpty(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM_EMPTY then return true end
     end
-    local function eternalCallbackEmpty(descObj)
+    function EternalCallbackEmpty(descObj)
         local textColor = "{{ColorRed}}"
 	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Dashing.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
@@ -2324,101 +2322,101 @@ if EID then
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Eternal Mod Empty", eternalAbyssEmpty, eternalCallbackEmpty)
+    EID:addDescriptionModifier("Eternal Mod Empty", EternalAbyssEmpty, EternalCallbackEmpty)
 
-    local function anatomyAbyss(descObj)
+    function AnatomyAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == ANATOMY_ITEM then return true end
     end
-    local function anatomyCallback(descObj)
+    function AnatomyCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Anatomy Mod", anatomyAbyss, anatomyCallback)
+    EID:addDescriptionModifier("Anatomy Mod", AnatomyAbyss, AnatomyCallback)
 
-    local function blankAbyss(descObj)
+    function BlankAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BLANK_SLATE_ITEM then return true end
     end
-    local function blankCallback(descObj)
+    function BlankCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance for random effects on hit.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Blank Mod", blankAbyss, blankCallback)
+    EID:addDescriptionModifier("Blank Mod", BlankAbyss, BlankCallback)
 
-    local function isaacAbyss(descObj)
+    function IsaacAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == ISAAC_ESSENCE then return true end
     end
-    local function isaacCallback(descObj)
+    function IsaacCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance for random effects on hit.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance to reroll enemies.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Isaac Mod", isaacAbyss, isaacCallback)
+    EID:addDescriptionModifier("Isaac Mod", IsaacAbyss, IsaacCallback)
 
-    local function magAbyss(descObj)
+    function MagAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == MAGDALENE_ESSENCE then return true end
     end
-    local function magCallback(descObj)
+    function MagCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "33% chance for enemies to drop red hearts on kill.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Mag Mod", magAbyss, magCallback)
+    EID:addDescriptionModifier("Mag Mod", MagAbyss, MagCallback)
 
-    local function cainAbyss(descObj)
+    function CainAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CAIN_ESSENCE then return true end
     end
-    local function cainCallback(descObj)
+    function CainCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Chance for enemies to drop coins on kill.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Cain Mod", cainAbyss, cainCallback)
+    EID:addDescriptionModifier("Cain Mod", CainAbyss, CainCallback)
 
-    local function judasAbyss(descObj)
+    function JudasAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == JUDAS_ESSENCE then return true end
     end
-    local function judasCallback(descObj)
+    function JudasCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.5x damage multiplier.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Judas Mod", judasAbyss, judasCallback)
+    EID:addDescriptionModifier("Judas Mod", JudasAbyss, JudasCallback)
 
-    local function babyAbyss(descObj)
+    function BabyAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BLUE_BABY_ESSENCE then return true end
     end
-    local function babyCallback(descObj)
+    function BabyCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "15% chance to turn non-boss enemies into poop on hit.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Baby Mod", babyAbyss, babyCallback)
+    EID:addDescriptionModifier("Baby Mod", BabyAbyss, BabyCallback)
 
-    local function eveAbyss(descObj)
+    function EveAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == EVE_ESSENCE then return true end
     end
-    local function eveCallback(descObj)
+    function EveCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.5x damage multiplier.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Eve Mod", eveAbyss, eveCallback)
+    EID:addDescriptionModifier("Eve Mod", EveAbyss, EveCallback)
 
-    local function samsonAbyss(descObj)
+    function SamsonAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == SAMSON_ESSENCE then return true end
     end
-    local function samsonCallback(descObj)
+    function SamsonCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.2x damage multiplier.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Dashing.")
@@ -2426,24 +2424,24 @@ if EID then
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Samson Mod", samsonAbyss, samsonCallback)
+    EID:addDescriptionModifier("Samson Mod", SamsonAbyss, SamsonCallback)
 
-    local function azazelAbyss(descObj)
+    function AzazelAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == AZAZEL_ESSENCE then return true end
     end
-    local function azazelCallback(descObj)
+    function AzazelCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.5x damage multiplier.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Spawns anti-gravity brimstone lasers on hit.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Azazel Mod", azazelAbyss, azazelCallback)
+    EID:addDescriptionModifier("Azazel Mod", AzazelAbyss, AzazelCallback)
 
-    local function lazAbyss(descObj)
+    function LazAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LAZARUS_ESSENCE then return true end
     end
-    local function lazCallback(descObj)
+    function LazCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.1x damage multiplier.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Slightly larger.")
@@ -2451,93 +2449,93 @@ if EID then
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Laz Mod", lazAbyss, lazCallback)
+    EID:addDescriptionModifier("Laz Mod", LazAbyss, LazCallback)
 
-    local function edenAbyss(descObj)
+    function EdenAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == EDEN_ESSENCE then return true end
     end
-    local function edenCallback(descObj)
+    function EdenCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance for random effects on hit.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Eden Mod", edenAbyss, edenCallback)
+    EID:addDescriptionModifier("Eden Mod", EdenAbyss, EdenCallback)
 
-    local function keeperAbyss(descObj)
+    function KeeperAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == KEEPER_ESSENCE then return true end
     end
-    local function keeperCallback(descObj)
+    function KeeperCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Chance for enemies to drop coins on kill.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Keeper Mod", keeperAbyss, keeperCallback)
+    EID:addDescriptionModifier("Keeper Mod", KeeperAbyss, KeeperCallback)
 
-    local function apollyonAbyss(descObj)
+    function ApollyonAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == APOLLYON_ESSENCE then return true end
     end
-    local function apollyonCallback(descObj)
+    function ApollyonCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance for ocular rift effect on hit.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Apollyon Mod", apollyonAbyss, apollyonCallback)
+    EID:addDescriptionModifier("Apollyon Mod", ApollyonAbyss, ApollyonCallback)
 
-    local function bethanyAbyss(descObj)
+    function BethanyAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BETHANY_ESSENCE then return true end
     end
-    local function bethanyCallback(descObj)
+    function BethanyCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance to apply burn effect on hit.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Bethany Mod", bethanyAbyss, bethanyCallback)
+    EID:addDescriptionModifier("Bethany Mod", BethanyAbyss, BethanyCallback)
 
-    local function dominoAbyss(descObj)
+    function DominoAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DOMINO_ESSENCE then return true end
     end
-    local function dominoCallback(descObj)
+    function DominoCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "4 locusts with an extra 0.5x damage multiplier.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Each has a 50% chance to apply a status effect, fear, slow, confusion, and burn respectively.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Domino Mod", dominoAbyss, dominoCallback)
+    EID:addDescriptionModifier("Domino Mod", DominoAbyss, DominoCallback)
 
-    local function pontiusAbyss(descObj)
+    function PontiusAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PONTIUS_ESSENCE then return true end
     end
-    local function pontiusCallback(descObj)
+    function PontiusCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Dashing.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Piercing.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Pontius Mod", pontiusAbyss, pontiusCallback)
+    EID:addDescriptionModifier("Pontius Mod", PontiusAbyss, PontiusCallback)
 
-    local function lostAbyss(descObj)
+   function LostAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LOST_ESSENCE then return true end
     end
-    local function lostCallback(descObj)
+    function LostCallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
 	    return descObj
     end
 
-    EID:addDescriptionModifier("Lost Mod", lostAbyss, lostCallback)
+    EID:addDescriptionModifier("Lost Mod", LostAbyss, LostCallback)
 
-    local function JEAbyss(descObj)
+    function JEAbyss(descObj)
 	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == JACOB_AND_ESAU_ESSENCE then return true end
     end
-    local function JECallback(descObj)
+    function JECallback(descObj)
         local textColor = "{{ColorRed}}"
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 0.9x damage multiplier.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Slightly faster damage tick rate.")
@@ -2549,6 +2547,596 @@ if EID then
 
     EID:addDescriptionModifier("JE Mod", JEAbyss, JECallback)
 
+    function ForgottenAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == FORGOTTEN_ESSENCE then return true end
+    end
+    function ForgottenCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Sends out bone projectiles on hit.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "1 locust (1.5x damage multiplier)")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Slightly faster.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Spectral.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Forgotten Mod", ForgottenAbyss, ForgottenCallback)
+
+    function YamikaAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == STAR_OF_DAVID then return true end
+    end
+    function YamikaCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.3x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Enemies have a 10% chance to drop coins on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Yamika Mod", YamikaAbyss, YamikaCallback)
+
+    function GunAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GUN_ITEM then return true end
+    end
+    function GunCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Dashing.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Gun Mod", GunAbyss, GunCallback)
+
+    function KingslayerAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == KINGSLAYER_ITEM then return true end
+    end
+    function KingslayerCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.3x damage multiplier.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Kingslayer Mod", KingslayerAbyss, KingslayerCallback)
+
+    function DefenseAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DEFENSE_TECH_ITEM then return true end
+    end
+    function DefenseCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance to shock nearby enemies on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Defense Mod", DefenseAbyss, DefenseCallback)
+
+    function NecromancyAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == NECROMANCY_ITEM then return true end
+    end
+    function NecromancyCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance to apply charmed on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Necromancy Mod", NecromancyAbyss, NecromancyCallback)
+
+    function MoneyAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == MONEY_ITEM then return true end
+    end
+    function MoneyCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Enemies have a 10% chance to drop coins on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Money Mod", MoneyAbyss, MoneyCallback)
+
+    function PaintAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PAINT_ITEM then return true end
+    end
+    function PaintCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance to apply the Midas Touch effect on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Paint Mod", PaintAbyss, PaintCallback)
+
+    function GlitchAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GLITCH_ITEM then return true end
+    end
+    function GlitchCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance to apply random effects on hit.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "1% chance to apply the effect of Euthanasia on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Glitch Mod", GlitchAbyss, GlitchCallback)
+
+    function ProtoAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PROTO_ITEM then return true end
+    end
+    function ProtoCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 10x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Larger.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Slow.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance to shock nearby enemies on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Proto Mod", ProtoAbyss, ProtoCallback)
+
+    function FredAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == FRED_ITEM then return true end
+    end
+    function FredCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance to apply charmed on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Fred Mod", FredAbyss, FredCallback)
+
+    function DebugAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DEBUG_ITEM then return true end
+    end
+    function DebugCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance to apply random effects on hit.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance to apply the effect of Euthanasia on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Debug Mod", DebugAbyss, DebugCallback)
+
+    function ToastAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == TOAST_ITEM then return true end
+    end
+    function ToastCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.01x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Dashing.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Toast Mod", ToastAbyss, ToastCallback)
+
+    function GlitchDiceAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GLITCH_ESSENCE then return true end
+    end
+    function GlitchDiceCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance to apply random effects on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Glitch Dice Mod", GlitchDiceAbyss, GlitchDiceCallback)
+
+    function LuckyPenniesAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LUCKY_PENNY_ITEM then return true end
+    end
+    function LuckyPenniesCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "5 locusts with an extra 0.01x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance to drop coins on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Lucky Pennies Mod", LuckyPenniesAbyss, LuckyPenniesCallback)
+
+    function ToolbeltAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == TOOLBELT_ITEM then return true end
+    end
+    function ToolbeltCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.3x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Faster.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Toolbelt Mod", ToolbeltAbyss, ToolbeltCallback)
+
+    function OrbitAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == MOON_ITEM then return true end
+    end
+    function OrbitCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "3 locusts.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Faster.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Orbit Mod", OrbitAbyss, OrbitCallback)
+
+    function FluxAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == FLUX_ITEM then return true end
+    end
+    function FluxCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Absurdly fast.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Flux Mod", FluxAbyss, FluxCallback)
+
+    function AbrahamAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == ABRAHAM_ESSENCE_ITEM then return true end
+    end
+    function AbrahamCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance for holy light beams on hit.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "1 locust (1.5x damage multiplier)")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.5x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Dashing.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Piercing.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Abraham Mod", AbrahamAbyss, AbrahamCallback)
+
+    function OmegaAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == OMEGA_ITEM then return true end
+    end
+    function OmegaCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20 locusts.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extremely small.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 0.2x damage multiplier.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Omega Mod", OmegaAbyss, OmegaCallback)
+
+    function JubileesAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == JUBILEES_ITEM then return true end
+    end
+    function JubileesCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.5x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance for holy light beams on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Jubilees Mod", JubileesAbyss, JubileesCallback)
+
+    function Jubilees2Abyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == JUBILEES_ITEM2 then return true end
+    end
+    function Jubilees2Callback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance for holy light beams on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Jubilees2 Mod", Jubilees2Abyss, Jubilees2Callback)
+
+    function Jubilees3Abyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == JUBILEES_ITEM3 then return true end
+    end
+    function Jubilees3Callback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "50% chance for holy light beams on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Jubilees3 Mod", Jubilees3Abyss, Jubilees3Callback)
+
+    function GluttonyAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GLUTTONY_ITEM then return true end
+    end
+    function GluttonyCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.5x damage multiplier.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Gluttony Mod", GluttonyAbyss, GluttonyCallback)
+
+    function GreedAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GREED_ITEM then return true end
+    end
+    function GreedCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Enemies have a chance to drop coins on kill.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Greed Mod", GreedAbyss, GreedCallback)
+
+    function LustAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LUST_ITEM then return true end
+    end
+    function LustCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance to apply charmed on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Lust Mod", LustAbyss, LustCallback)
+
+    function PrideAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PRIDE_ITEM then return true end
+    end
+    function PrideCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance to apply the effect of Euthanasia on hit.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Deals no direct damage.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Pride Mod", PrideAbyss, PrideCallback)
+
+    function SlothAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == SLOTH_ITEM then return true end
+    end
+    function SlothCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 10x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Moves extremely slow.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Sloth Mod", SlothAbyss, SlothCallback)
+
+    function EnvyAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == ENVY_ITEM then return true end
+    end
+    function EnvyCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 0.01x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Moves extremely slow.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Envy Mod", EnvyAbyss, EnvyCallback)
+
+    function WrathAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == WRATH_ITEM then return true end
+    end
+    function WrathCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.5x damage multiplier.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Wrath Mod", WrathAbyss, WrathCallback)
+
+    function CharityAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CHARITY_ITEM then return true end
+    end
+    function CharityCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Enemies have a chance to drop money on kill.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Charity Mod", CharityAbyss, CharityCallback)
+
+    function HumilityAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == HUMILITY_ITEM then return true end
+    end
+    function HumilityCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.5x damage multiplier.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Humility Mod", HumilityAbyss, HumilityCallback)
+
+    function LoveAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LOVE_ITEM then return true end
+    end
+    function LoveCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance to apply charmed on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Love Mod", LoveAbyss, LoveCallback)
+
+    function GenerosityAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GENEROSITY_ITEM then return true end
+    end
+    function GenerosityCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Enemies have a chance to drop money on kill.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Generosity Mod", GenerosityAbyss, GenerosityCallback)
+
+    function TemperanceAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == TEMPERANCE_ITEM then return true end
+    end
+    function TemperanceCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Faster damage tick rate.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Temperance Mod", TemperanceAbyss, TemperanceCallback)
+
+    function ZealAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == ZEAL_ITEM then return true end
+    end
+    function ZealCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Godhead effect.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Zeal Mod", ZealAbyss, ZealCallback)
+
+    function KindnessAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == KINDNESS_ITEM then return true end
+    end
+    function KindnessCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "35% chance to apply charmed on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Kindness Mod", KindnessAbyss, KindnessCallback)
+
+    function ConcoctionAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CONCOCTION_ITEM then return true end
+    end
+    function ConcoctionCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 0.1x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance to apply a lot of different effects.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Homing.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Concoction Mod", ConcoctionAbyss, ConcoctionCallback)
+
+    function PillAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PILL_ITEM then return true end
+    end
+    function PillCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance to apply random effects on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Pill Mod", PillAbyss, PillCallback)
+
+    function BibbleAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BIBBLE_ITEM then return true end
+    end
+    function BibbleCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance to apply random effects on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Bibble Mod", BibbleAbyss, BibbleCallback)
+
+    function NeuroAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == NEURO_ITEM then return true end
+    end
+    function NeuroCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "10% chance to apply the effect of Euthanasia on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Neuro Mod", NeuroAbyss, NeuroCallback)
+
+    function CrushedAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CRUSHED_DICE_ITEM then return true end
+    end
+    function CrushedCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance to reroll enemies.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Crushed Mod", CrushedAbyss, CrushedCallback)
+
+    function DogmaAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DOGMA_ITEM then return true end
+    end
+    function DogmaCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 2x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Slower.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Larger.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Piercing.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Spectral.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance for light beams on hit.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Godhead effect.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Dogma Mod", DogmaAbyss, DogmaCallback)
+
+    function InfestationAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == INFESTATION_ITEM then return true end
+    end
+    function InfestationCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance for the Parasitoid effect on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Infestation Mod", InfestationAbyss, InfestationCallback)
+
+    function RaptureAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == RAPTURE_ITEM then return true end
+    end
+    function RaptureCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance for light beams on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Rapture Mod", RaptureAbyss, RaptureCallback)
+
+    function GladiusAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == SHATTERED_GLADIUS_ITEM then return true end
+    end
+    function GladiusCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Dashing.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Piercing.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Gladius Mod", GladiusAbyss, GladiusCallback)
+
+    function TrashAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == TRASH_ITEM then return true end
+    end
+    function TrashCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance to apply random effects on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Trash Mod", TrashAbyss, TrashCallback)
+
+    function CakeAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == TRASH_ITEM then return true end
+    end
+    function CakeCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.3x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Larger.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Faster.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Faster damage tick speed.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Cake Mod", CakeAbyss, CakeCallback)
+
+    function AbyssAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == RIFT_ITEM then return true end
+    end
+    function AbyssCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20 locusts.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extremely small.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 0.2x damage multiplier.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Abyss Mod", AbyssAbyss, AbyssCallback)
+
+    function HeartsAbyss(descObj)
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == HEALTH_SACK_ITEM then return true end
+    end
+    function HeartsCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20 locusts.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extremely small.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 0.2x damage multiplier.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Hearts Mod", HeartsAbyss, HeartsCallback)
 
 end
 

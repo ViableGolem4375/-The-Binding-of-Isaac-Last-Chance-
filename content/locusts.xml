@@ -128,7 +128,7 @@
     <locust id="52" tearFlags2="13" procChance="0.2" color="fly_red"/>
     <!--  Debug Console: random effects 100% chance, euthanasia shot 100% chance -->
     <locust id="55" tearFlags2="54" locustFlags2="1" procChance="1.0" gfx="debug.png"/>
-    <!--  Necromancy: dashing locust, every so slightly higher damage -->
+    <!--  Toast Sandwich: dashing locust, every so slightly higher damage -->
     <locust id="56" speed="6" damageMultiplier="1.01" color="fly_brown"/>
     <!--  64 36: random effects 30% chance -->
     <locust id="59" locustFlags2="1" procChance="0.3" gfx="glitch.png"/>
@@ -156,8 +156,8 @@
     <locust id="84" tearFlags="44" color="fly_darkred"/>
     <!--  Lust: 20% chance charm -->
     <locust id="85" tearFlags2="13" procChance="0.2" color="fly_pink"/>
-    <!--  Pride: one extremely high damage locust with an extremely slow tick rate -->
-    <locust id="86" damageMultiplier="10" collisionInterval="10000" color="fly_darkred"/>
+    <!--  Pride: Does no damage, 50% chance to apply euthanasia, extremely low tick rate. -->
+    <locust id="86" damageMultiplier="0" tearFlags2="54" procChance="0.5" collisionInterval="10000" color="fly_darkred"/>
     <!--  Sloth: extremely high damage extremely slow locust -->
     <locust id="87" damageMultiplier="10" speed="0" color="fly_darkred"/>
     <!--  Envy: useless locust that barely moves and does almost no damage -->
