@@ -3,10 +3,6 @@ local game = Game()
 
 --include("lua.constants.items")
 
-for i = 0, Game():GetNumPlayers() - 1 do
-    THE_PLAYER = Game():GetPlayer(i)
-end
-
 local itemConfig = Isaac.GetItemConfig()
 
 local templateType = Isaac.GetPlayerTypeByName("Template", false)
@@ -1949,7 +1945,7 @@ if EID then
     EID:addIcon("Player"..TAINTED_ABRAHAM_TYPE, "Heretic", 0, 16, 16, 0, 0, EIDicons)
 
     EID:addCollectible(LUCKY_DICE_ID, "Reroll all item pedestals in the current room.#{{Warning}} Items rerolled will be chosen from a special item pool consisting of luck/chance based items.", "Lucky Coin")
-    EID:addCollectible(DULL_COIN_ID, "Rerolls all item pedestals in the room.#{{Warning}} Items will always be rerolled into an item of 1 lower quality than the original item.#Using Dull Coin with no item pedestals in the room containing items with a quality above 1 will remove a random quality 0 item from Isaac's inventory and trigger the Berserk! state and charge Isaac's main active item by 12 bars.", "Dull Coin")
+    EID:addCollectible(DULL_COIN_ID, "Rerolls all item pedestals in the room into items of 1 lower quality rating.#If no item pedestals in the room containing quality 1 items or higher exist in the room, a random quality 0 item will be removed from Isaac's inventory, the Berserk! state will trigger, and Isaac's main active item will charge 12 bars.", "Dull Coin")
     EID:addCollectible(HATRED_ITEM, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} 25% chance to become invulnerable briefly upon damaging an enemy.", "Unholy Mantle")
     EID:addCollectible(URIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires a holy light beam forward.#Scales with Isaac's damage.", "Lil' Uriel")
     EID:addCollectible(GABRIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires 4 holy light beams in an 'X' pattern.#Scales with Isaac's damage.", "Lil' Gabriel")
@@ -1967,10 +1963,10 @@ if EID then
     EID:addTrinket(ORB_TRINKET, "Automatically rerolls quality 0 items.#{{Collectible202}} No effect if golden.", "Orb Shard")
     EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.#{{Collectible202}} No effect if golden.", "Stitched Photo")
     EID:addTrinket(CANDLE_TRINKET, "Grants 2 black hearts at the beginning of a floor if there is an active curse.#{{Collectible202}} Grants 4 black hearts if golden.", "Black Candle Wick")
-    EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#{{Warning}} Absorbing this item with void will cause void to turn into Eternal Bond on activation.", "Eternal Bond 4")
-    EID:addCollectible(BOND_ITEM2, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#{{Warning}} Absorbing this item with void will cause void to turn into Eternal Bond on activation.", "Eternal Bond 3")
-    EID:addCollectible(BOND_ITEM3, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#{{Warning}} Absorbing this item with void will cause void to turn into Eternal Bond on activation.", "Eternal Bond 2")
-    EID:addCollectible(BOND_ITEM4, "Become invincible and dash forward leaving behind creep which lasts 10 seconds that deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#{{Warning}} Absorbing this item with void will cause void to turn into Eternal Bond on activation.", "Eternal Bond 1")
+    EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind creep which deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#Creep expires after 10 seconds.", "Eternal Bond 4")
+    EID:addCollectible(BOND_ITEM2, "Become invincible and dash forward leaving behind creep which deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#Creep expires after 10 seconds", "Eternal Bond 3")
+    EID:addCollectible(BOND_ITEM3, "Become invincible and dash forward leaving behind creep which deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#Creep expires after 10 seconds", "Eternal Bond 2")
+    EID:addCollectible(BOND_ITEM4, "Become invincible and dash forward leaving behind creep which deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#Creep expires after 10 seconds", "Eternal Bond 1")
     EID:addCollectible(BOND_ITEM_EMPTY, "Does nothing.#Activating the item will restore Eternal Bond back to 4 charges.", "Empty Eternal Bond")
     EID:addCollectible(COMP_ITEM, "{{ArrowUp}} Grants +1 damage for every quality 0 item Isaac holds.")
     EID:addCollectible(ANATOMY_ITEM, "Grants 1 bone heart on use.")
@@ -1991,7 +1987,7 @@ if EID then
     EID:addCollectible(BETHANY_ESSENCE, "Grants a random Book of Virtues wisp when entering a new room.", "Essence of Bethany")
     EID:addCollectible(DOMINO_ESSENCE, "{{ArrowUp}} +3 luck.#Grants 2 items from the Lucky Coin item pool.", "Essence of Domino")
     EID:addCollectible(PONTIUS_ESSENCE, "Throw one of Pontius' spears in the current attack direction.#Spears deal 10x Isaac's damage.", "Essence of Pontius")
-    EID:addCollectible(LOST_ESSENCE, "For the current room:#{{Warning}} Become the lost.#{{ArrowUp}} +20 damage.", "Essence of The Lost")
+    EID:addCollectible(LOST_ESSENCE, "For the current room:#{{Warning}} Become the lost.", "Essence of The Lost")
     EID:addCollectible(JACOB_AND_ESAU_ESSENCE, "Summon Esau as a helper for the current room.", "Essence of Jacob and Esau")
     EID:addCollectible(FORGOTTEN_ESSENCE, "Summon The Forgotten as a helper for the current room.", "Essence of The Forgotten")
     EID:addCollectible(STAR_OF_DAVID, "{{ArrowUp}} 10% chance to fire star of david tears which deal 30% more damage.#{{Luck}} 100% chance at 9 luck.#{{ArrowUp}} 1% chance for enemies to drop a golden heart on death.#{{Luck}} +1% chance per point of luck.", "Yamika")
@@ -2019,8 +2015,8 @@ if EID then
     EID:addBirthright(glitchType, "Reduces the charges required to use D-=777'L from 12 to 6.")
     EID:addCollectible(GLITCH_ESSENCE, "Reroll all item pedestals in the room into TMTRAINER items.", "64 36")
     EID:addCollectible(LUCKY_PENNY_ITEM, "Spawns 5 lucky pennies on the ground around Isaac.", "Sack of Lucky Pennies")
-    EID:addCollectible(TOOLBELT_ITEM, "Makes Isaac's currently held active item into a pocket active.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If Isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} When holding 2 active items via Schoolbag, the currently selected active item will be moved to the pocket slot.", "Toolbelt")
-    EID:addCollectible(TOOLBELT_FIX_ITEM, "Makes Isaac's currently held active item into a pocket active.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If Isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} When holding 2 active items via Schoolbag, the currently selected active item will be moved to the pocket slot.", " Toolbelt ")
+    EID:addCollectible(TOOLBELT_ITEM, "Isaac's active item is moved to the pocket slot.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If Isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} If Isaac has 2 active items, the currently selected one will be moved to the pocket slot.", "Toolbelt")
+    EID:addCollectible(TOOLBELT_FIX_ITEM, "Isaac's active item is moved to the pocket slot.#If Isaac does not have an active item, it grants a random one and makes it a pocket active.#If Isaac already has a pocket active, it will spawn a random active item on a pedestal.#{{Warning}} If Isaac has 2 active items, the currently selected one will be moved to the pocket slot.", " Toolbelt ")
     EID:addCollectible(MOON_ITEM, "Grants 3 fast moving orbitals which orbit Isaac as a far distance.#The orbitals block enemy projectiles and deal 5 damage per tick to enemies.", "Deep Orbit")
     EID:addCollectible(FLUX_ITEM, "Grants an absurdly fast moving orbital.#The orbital can block enemy projectiles and deals 20 damage per tick to enemies.#The orbital will randomly change orbiting distance at random intervals.", "Broken Flux Capacitor")
     EID:addCollectible(LIGHT_ITEM, "Grants 1 stack towards the angel path.", "Path of Salvation")
@@ -2037,15 +2033,15 @@ if EID then
     EID:addBirthright(TAINTED_ABRAHAM_TYPE, "Death timer is extended to 15 seconds.")
     EID:addBirthright(abrahamType, "Grants the Neutrality item when stacks for both the angel and devil paths are 0.")
     EID:addCollectible(NEUTRAL_ITEM, "{{ArrowUp}} +50% damage.", "Neutrality")
-    EID:addCollectible(ABRAHAM_ESSENCE_ITEM, "Grants 3 soul hearts when entering an angel room for the first time.#Grants 3 black hearts when entering a devil room for the first time.#Essence of Abraham can be triggered once per floor.", "Essence of Abraham")
+    EID:addCollectible(ABRAHAM_ESSENCE_ITEM, "Grants 3 soul hearts when entering an angel room.#Grants 3 black hearts when entering a devil room.#Essence of Abraham can be triggered once per floor.", "Essence of Abraham")
     EID:addCollectible(OMEGA_ITEM, "Rapidly fire a barrage of lasers for 4 seconds.#The lasers deal 0.5x Isaac's damage.", "Technology Omega")
     EID:addTrinket(TECH_TRINKET, "10% chance to fire a technology laser instead of a normal tear.#{{Luck}} +5% chance to trigger per point of luck.#{{Collectible202}} +10% chance to trigger per point of luck when golden.", "Bootleg Tech")
     EID:addCard(SOUL_DOMINO, "{{Luck}} +10 luck for the current room.", "Soul of Domino")
     EID:addCard(SOUL_PONTIUS, "Fire 8 spears in a circular pattern around yourself.#The spears deal 5x Isaac's damage and copy tear effects.", "Soul of Pontius")
     EID:addCard(SOUL_ABRAHAM, "Removes all devil room chances and converts the into angel room chances for the floor.#{{Warning}} Taking red heart damage after activation can still reduce your chances of seeing an angel room.", "Soul of Abraham")
-    EID:addCollectible(JUBILEES_ITEM, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.#{{Warning}} Absorbing this item with void will cause void to turn into Book of Jubilees on activation.", "Book of Jubilees")
-    EID:addCollectible(JUBILEES_ITEM2, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.#{{Warning}} Absorbing this item with void will cause void to turn into Book of Jubilees on activation.", "Book of Jubilees 2/3")
-    EID:addCollectible(JUBILEES_ITEM3, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} This item can only be used a maximum of 3 times per run, afterwards it will turn into Glowing Page.#{{Warning}} Absorbing this item with void will cause void to turn into Book of Jubilees on activation.", "Book of Jubilees 1/3")
+    EID:addCollectible(JUBILEES_ITEM, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} After being activates 3 timee, it will turn into Glowing Page.", "Book of Jubilees")
+    EID:addCollectible(JUBILEES_ITEM2, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} After being activates 3 timee, it will turn into Glowing Page.", "Book of Jubilees 2/3")
+    EID:addCollectible(JUBILEES_ITEM3, "Sends Isaac to an angel room.# This angel room is separate from the one generated for the floor.# Starts uncharged.#{{Warning}} After being activates 3 timee, it will turn into Glowing Page.", "Book of Jubilees 1/3")
     EID:addCollectible(PAGE_ITEM, "50% chance to gain 1/2 of a soul heart on use.", "Glowing Page")
     EID:addCard(RELIQUARY_CARD, "Spawns an Essence Collector.", "Essence Card")
     EID:addCollectible(ANGEL_BLAST_ITEM, "Fire a holy light beam which deals Isaac's damage.", "Angel Blast")
@@ -2062,7 +2058,7 @@ if EID then
     EID:addCollectible(GREED_ITEM, "{{ArrowUp}} Gain 2x damage.#{{Warning}} This item will be removed from Isaac's inventory if any money is lost or spent.", "Greed")
     EID:addCollectible(LUST_ITEM, "Enemies that touch Isaac become charmed for 10 seconds.", "Lust")
     EID:addCollectible(PRIDE_ITEM, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.", "Pride")
-    EID:addCollectible(ENVY_ITEM, "Gain a familiar which copies your tear effects.#{{Warning}} Picking up this item replaces all of your non quest items (and itself) with envious rage.#{{ArrowUp}} The familiar gains +50% damage and +20% fire rate for every copy of envious rage you posess.#{{Warning}} Once picked up, Envy cannot be removed or rerolled.", "Envy")
+    EID:addCollectible(ENVY_ITEM, "Gain a familiar which copies your damage and tear effects.#{{Warning}} Envy replaces all of your non quest items (and itself) with envious rage.#{{ArrowUp}} Envy gains +50% damage and +20% fire rate for every copy of envious rage you posess.#{{Warning}} Envy cannot be removed or rerolled.", "Envy")
     EID:addCollectible(WRATH_ITEM, "{{ArrowUp}} Killing bosses gives a trophy which grants +1 damage.", "Wrath")
     EID:addCollectible(SLOTH_ITEM, "All enemies take constant damage equal to Isaac's damage divided by 10 every tick.#{{Warning}} Isaac becomes unable to shoot.", "Sloth")
     EID:addCollectible(CHARITY_ITEM, "Gain 1/2 of a soul heart for every 5 coins spent.", "Charity")
@@ -2107,17 +2103,31 @@ if EID then
     EID:addCollectible(INFESTATION_ITEM, "Enemies have a 10% chance to spawn a friendly swarm spider on death.#{{Luck}} +2% chance per point of luck.", "Infestation 3")
     EID:addCollectible(RAPTURE_ITEM, "Make all players briefly invulnerable and throw an orb of light which detonates into 7 beams of light fired in a circular pattern after a brief delay.", "Rapture")
     EID:addTrinket(NIL_VALUE_ITEM, "Activates the effects of Dataminer when Isaac takes damage.#{{Collectible202}} No effect when golden.", "Nil Value")
-    EID:addCollectible(SHATTERED_GLADIUS_ITEM, "Teleports Isaac to a challenge room.#Has a 10% chance to teleport Isaac to a boss challenge room instead.#These challenge rooms are separate from the one spawned on the floor.", "Shattered Gladius")
+    EID:addCollectible(SHATTERED_GLADIUS_ITEM, "Teleports Isaac to a challenge room separate to the one on the floor.#Has a 10% chance to teleport Isaac to a boss challenge room instead.", "Shattered Gladius")
     EID:addCollectible(TRASH_ITEM, "On activation will:#Spawn an item pedestal containing a quality 0 item.#Spawn a random garbage related trinket.#Spawn a rotten heart.#Spawn several blue flies.", "Trash Bag")
-    EID:addCollectible(CAKE_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.{{ArrowUp}} +0.3 Speed#{{ArrowUp}} -0.5 Tear Delay#{{ArrowUp}} +1 Damage#{{ArrowUp}} +3.75 Range#{{ArrowUp}} +0.16 Shot Speed#{{ArrowUp}} +1 Luck", "Birthday Cake")
-    EID:addCollectible(RIFT_ITEM, "Grants:# A locust which deals 1x Isaac's damage and applies the slowness debuff.# A locust which deals 1x Isaac's damage and applies the poison debuff.# A locust which deals 1x Isaac's damage and explodes.# A locust which deals 2x Isaac's damage.", "Abyssal Rift")
+    EID:addCollectible(CAKE_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.#{{ArrowUp}} +0.3 Speed#{{ArrowUp}} -0.5 Tear Delay#{{ArrowUp}} +1 Damage#{{ArrowUp}} +3.75 Range#{{ArrowUp}} +0.16 Shot Speed#{{ArrowUp}} +1 Luck", "Birthday Cake")
+    EID:addCollectible(RIFT_ITEM, "Grants a slowing locust, a poison locust, an explosive locust, and a high damage locust.", "Abyssal Rift")
     EID:addCollectible(HEALTH_SACK_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.#{{ArrowUp}} +1 soul heart#{{ArrowUp}} +1 black heart#{{ArrowUp}} +1 bone heart#{{ArrowUp}} +1 golden heart#{{ArrowUp}} +1 rotten heart", "Sack of Hearts")
     EID:addCollectible(BATTERY_ITEM, "Using active items causes Isaac to explode dealing 40 damage to enemies and leave behind green creep which damages enemies that pass over it.#Isaac does not take damage from these explosions.", "Expired Battery")
     EID:addCollectible(POLTERGEIST_ITEM, "Grants an orbital which applies a brief fear status effect to enemies which touch it.", "Poltergeist")
     EID:addCollectible(AXE_ITEM, "Swing a melee attack which deals 999999 damage to anything it hits.#{{Warning}} Hitting an enemy with this attack will consume the item.", "Executioner's Axe")
+    
+    --[[ THE_PLAYER = Game():GetPlayer(0)
+
+    function Mod:GetThePlayer()
+        for i = 0, Game():GetNumPlayers() - 1 do
+            THE_PLAYER = Game():GetPlayer(i)
+        end
+    end
+
+    Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.GetThePlayer) ]]
 
     function LuckyDiceAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LUCKY_DICE_ID then return true end
+        for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LUCKY_DICE_ID and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function LuckyDiceCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2128,7 +2138,11 @@ if EID then
     EID:addDescriptionModifier("Lucky Dice Mod", LuckyDiceAbyss, LuckyDiceCallback)
     
     function DullCoinAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DULL_COIN_ID then return true end
+        for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DULL_COIN_ID and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function DullCoinCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2139,7 +2153,11 @@ if EID then
     EID:addDescriptionModifier("Dull Coin Mod", DullCoinAbyss, DullCoinCallback)
 
     function UnholyMantleAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == HATRED_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == HATRED_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function UnholyMantleCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2151,7 +2169,11 @@ if EID then
     EID:addDescriptionModifier("Unholy Mantle Mod", UnholyMantleAbyss, UnholyMantleCallback)
 
     function UrielAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == URIEL_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == URIEL_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function UrielCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2163,7 +2185,11 @@ if EID then
     EID:addDescriptionModifier("Uriel Mod", UrielAbyss, UrielCallback)
 
     function GabrielAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GABRIEL_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GABRIEL_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function GabrielCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2175,7 +2201,11 @@ if EID then
     EID:addDescriptionModifier("Gabriel Mod", GabrielAbyss, GabrielCallback)
 
     function CatalystAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CATALYST_SHEET_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CATALYST_SHEET_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function CatalystCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2187,7 +2217,11 @@ if EID then
     EID:addDescriptionModifier("Catalyst Mod", CatalystAbyss, CatalystCallback)
 
     function FailAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == FAIL_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == FAIL_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function FailCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2202,7 +2236,11 @@ if EID then
     EID:addDescriptionModifier("Fail Mod", FailAbyss, FailCallback)
 
     function LilithAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LILITH_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LILITH_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function LilithCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2213,7 +2251,11 @@ if EID then
     EID:addDescriptionModifier("Lilith Mod", LilithAbyss, LilithCallback)
 
     function AmpAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == AMP_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == AMP_AREA and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function AmpCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2225,7 +2267,11 @@ if EID then
     EID:addDescriptionModifier("Amp Mod", AmpAbyss, AmpCallback)
 
     function HuhAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == HUH_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == HUH_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function HuhCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2236,7 +2282,11 @@ if EID then
     EID:addDescriptionModifier("Huh Mod", HuhAbyss, HuhCallback)
 
     function CompAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == COMP_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == COMP_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function CompCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2247,20 +2297,11 @@ if EID then
     EID:addDescriptionModifier("Comp Mod", CompAbyss, CompCallback)
 
     function EternalAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM then return true end
-    end
-    function EternalCallback(descObj)
-        local textColor = "{{ColorRed}}"
-	    EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Dashing.")
-        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded.")
-        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "33% chance for enemies to drop red hearts on kill.")
-	    return descObj
-    end
-
-    EID:addDescriptionModifier("Eternal Mod", EternalAbyss, EternalCallback)
-
-    function EternalAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function EternalCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2273,7 +2314,11 @@ if EID then
     EID:addDescriptionModifier("Eternal Mod", EternalAbyss, EternalCallback)
 
     function EternalAbyss2(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM2 then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM2 and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function EternalCallback2(descObj)
         local textColor = "{{ColorRed}}"
@@ -2286,7 +2331,11 @@ if EID then
     EID:addDescriptionModifier("Eternal2 Mod", EternalAbyss2, EternalCallback2)
 
     function EternalAbyss3(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM3 then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM3 and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function EternalCallback3(descObj)
         local textColor = "{{ColorRed}}"
@@ -2299,7 +2348,11 @@ if EID then
     EID:addDescriptionModifier("Eternal3 Mod", EternalAbyss3, EternalCallback3)
 
     function EternalAbyss4(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM4 then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM4 and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function EternalCallback4(descObj)
         local textColor = "{{ColorRed}}"
@@ -2312,7 +2365,11 @@ if EID then
     EID:addDescriptionModifier("Eternal4 Mod", EternalAbyss4, EternalCallback4)
 
     function EternalAbyssEmpty(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM_EMPTY then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM_EMPTY and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function EternalCallbackEmpty(descObj)
         local textColor = "{{ColorRed}}"
@@ -2325,7 +2382,11 @@ if EID then
     EID:addDescriptionModifier("Eternal Mod Empty", EternalAbyssEmpty, EternalCallbackEmpty)
 
     function AnatomyAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == ANATOMY_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == ANATOMY_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function AnatomyCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2336,7 +2397,11 @@ if EID then
     EID:addDescriptionModifier("Anatomy Mod", AnatomyAbyss, AnatomyCallback)
 
     function BlankAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BLANK_SLATE_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BLANK_SLATE_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function BlankCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2347,7 +2412,11 @@ if EID then
     EID:addDescriptionModifier("Blank Mod", BlankAbyss, BlankCallback)
 
     function IsaacAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == ISAAC_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == ISAAC_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function IsaacCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2359,7 +2428,11 @@ if EID then
     EID:addDescriptionModifier("Isaac Mod", IsaacAbyss, IsaacCallback)
 
     function MagAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == MAGDALENE_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == MAGDALENE_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function MagCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2370,7 +2443,11 @@ if EID then
     EID:addDescriptionModifier("Mag Mod", MagAbyss, MagCallback)
 
     function CainAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CAIN_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CAIN_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function CainCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2381,7 +2458,11 @@ if EID then
     EID:addDescriptionModifier("Cain Mod", CainAbyss, CainCallback)
 
     function JudasAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == JUDAS_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == JUDAS_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function JudasCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2392,7 +2473,11 @@ if EID then
     EID:addDescriptionModifier("Judas Mod", JudasAbyss, JudasCallback)
 
     function BabyAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BLUE_BABY_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BLUE_BABY_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function BabyCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2403,7 +2488,11 @@ if EID then
     EID:addDescriptionModifier("Baby Mod", BabyAbyss, BabyCallback)
 
     function EveAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == EVE_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == EVE_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function EveCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2414,7 +2503,11 @@ if EID then
     EID:addDescriptionModifier("Eve Mod", EveAbyss, EveCallback)
 
     function SamsonAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == SAMSON_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == SAMSON_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function SamsonCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2427,7 +2520,11 @@ if EID then
     EID:addDescriptionModifier("Samson Mod", SamsonAbyss, SamsonCallback)
 
     function AzazelAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == AZAZEL_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == AZAZEL_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function AzazelCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2439,7 +2536,11 @@ if EID then
     EID:addDescriptionModifier("Azazel Mod", AzazelAbyss, AzazelCallback)
 
     function LazAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LAZARUS_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LAZARUS_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function LazCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2452,7 +2553,11 @@ if EID then
     EID:addDescriptionModifier("Laz Mod", LazAbyss, LazCallback)
 
     function EdenAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == EDEN_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == EDEN_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function EdenCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2463,7 +2568,11 @@ if EID then
     EID:addDescriptionModifier("Eden Mod", EdenAbyss, EdenCallback)
 
     function KeeperAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == KEEPER_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == KEEPER_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function KeeperCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2474,7 +2583,11 @@ if EID then
     EID:addDescriptionModifier("Keeper Mod", KeeperAbyss, KeeperCallback)
 
     function ApollyonAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == APOLLYON_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == APOLLYON_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function ApollyonCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2486,7 +2599,11 @@ if EID then
     EID:addDescriptionModifier("Apollyon Mod", ApollyonAbyss, ApollyonCallback)
 
     function BethanyAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BETHANY_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BETHANY_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function BethanyCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2498,7 +2615,11 @@ if EID then
     EID:addDescriptionModifier("Bethany Mod", BethanyAbyss, BethanyCallback)
 
     function DominoAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DOMINO_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DOMINO_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function DominoCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2510,7 +2631,11 @@ if EID then
     EID:addDescriptionModifier("Domino Mod", DominoAbyss, DominoCallback)
 
     function PontiusAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PONTIUS_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PONTIUS_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function PontiusCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2522,7 +2647,11 @@ if EID then
     EID:addDescriptionModifier("Pontius Mod", PontiusAbyss, PontiusCallback)
 
    function LostAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LOST_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LOST_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function LostCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2533,7 +2662,11 @@ if EID then
     EID:addDescriptionModifier("Lost Mod", LostAbyss, LostCallback)
 
     function JEAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == JACOB_AND_ESAU_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == JACOB_AND_ESAU_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function JECallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2548,7 +2681,11 @@ if EID then
     EID:addDescriptionModifier("JE Mod", JEAbyss, JECallback)
 
     function ForgottenAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == FORGOTTEN_ESSENCE then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == FORGOTTEN_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function ForgottenCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2562,7 +2699,11 @@ if EID then
     EID:addDescriptionModifier("Forgotten Mod", ForgottenAbyss, ForgottenCallback)
 
     function YamikaAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == STAR_OF_DAVID then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == STAR_OF_DAVID and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function YamikaCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2574,7 +2715,11 @@ if EID then
     EID:addDescriptionModifier("Yamika Mod", YamikaAbyss, YamikaCallback)
 
     function GunAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GUN_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GUN_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function GunCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2585,7 +2730,11 @@ if EID then
     EID:addDescriptionModifier("Gun Mod", GunAbyss, GunCallback)
 
     function KingslayerAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == KINGSLAYER_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == KINGSLAYER_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function KingslayerCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2596,7 +2745,11 @@ if EID then
     EID:addDescriptionModifier("Kingslayer Mod", KingslayerAbyss, KingslayerCallback)
 
     function DefenseAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DEFENSE_TECH_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DEFENSE_TECH_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function DefenseCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2607,7 +2760,11 @@ if EID then
     EID:addDescriptionModifier("Defense Mod", DefenseAbyss, DefenseCallback)
 
     function NecromancyAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == NECROMANCY_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == NECROMANCY_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function NecromancyCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2618,7 +2775,11 @@ if EID then
     EID:addDescriptionModifier("Necromancy Mod", NecromancyAbyss, NecromancyCallback)
 
     function MoneyAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == MONEY_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == MONEY_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function MoneyCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2629,7 +2790,11 @@ if EID then
     EID:addDescriptionModifier("Money Mod", MoneyAbyss, MoneyCallback)
 
     function PaintAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PAINT_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PAINT_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function PaintCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2640,7 +2805,11 @@ if EID then
     EID:addDescriptionModifier("Paint Mod", PaintAbyss, PaintCallback)
 
     function GlitchAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GLITCH_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GLITCH_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function GlitchCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2652,7 +2821,11 @@ if EID then
     EID:addDescriptionModifier("Glitch Mod", GlitchAbyss, GlitchCallback)
 
     function ProtoAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PROTO_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PROTO_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function ProtoCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2666,7 +2839,11 @@ if EID then
     EID:addDescriptionModifier("Proto Mod", ProtoAbyss, ProtoCallback)
 
     function FredAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == FRED_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == FRED_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function FredCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -2677,7 +2854,11 @@ if EID then
     EID:addDescriptionModifier("Fred Mod", FredAbyss, FredCallback)
 
     function DebugAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DEBUG_ITEM then return true end
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DEBUG_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
     end
     function DebugCallback(descObj)
         local textColor = "{{ColorRed}}"
@@ -3099,7 +3280,7 @@ if EID then
     EID:addDescriptionModifier("Trash Mod", TrashAbyss, TrashCallback)
 
     function CakeAbyss(descObj)
-	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == TRASH_ITEM then return true end
+	    if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CAKE_ITEM then return true end
     end
     function CakeCallback(descObj)
         local textColor = "{{ColorRed}}"
