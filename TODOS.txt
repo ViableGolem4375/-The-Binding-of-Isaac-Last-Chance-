@@ -8,8 +8,6 @@
 - Cards are huge on J+E HUD.
 - make proc effects work with teardrop charm
 - make defense tech not interact with enviromnentals
-- soul of domino giving 20 luck for some reason?
-- misprinted magician giving +20 damage?
 - bibble activating the nail?
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
@@ -27,7 +25,6 @@ for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
 character_009b_lazarus2hair.png
 
-add an extended desc for void for jubilees and bond
 
 Item Ideas to Add:
 
