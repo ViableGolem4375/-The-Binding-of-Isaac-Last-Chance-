@@ -5854,9 +5854,14 @@ end
 
 local function getRandomLaserEffect(player)
     local baseChance = 0.05 -- Default chance (10%)
-    local luckScaling = 0.05 -- Each Luck point increases chance by 5%
+    local luckScaling = 0.05 * player:GetCollectibleNum(AZAZEL_ESSENCE) -- Each Luck point increases chance by 5%
+    local teardropScaling = 0
 
-    local luckBonus = math.max(0, player.Luck * luckScaling) -- Ensure non-negative
+    if player:HasTrinket(TrinketType.TRINKET_TEARDROP_CHARM) then
+        teardropScaling = 0.15
+    end
+
+    local luckBonus = math.max(0, (player.Luck * luckScaling) + teardropScaling) -- Ensure non-negative
     local finalChance = math.min(1, baseChance + luckBonus) -- Cap at 90% chance
 
     local rand = math.random()
@@ -6576,8 +6581,13 @@ end
 local function getRandomStarEffect(player)
     local baseChance = 0.1 -- Default chance (10%)
     local luckScaling = 0.1 -- Each Luck point increases chance by 5%
+    local teardropScaling = 0
 
-    local luckBonus = math.max(0, player.Luck * luckScaling) -- Ensure non-negative
+    if player:HasTrinket(TrinketType.TRINKET_TEARDROP_CHARM) then
+        teardropScaling = 0.3
+    end
+
+    local luckBonus = math.max(0, (player.Luck * luckScaling) + teardropScaling) -- Ensure non-negative
     local finalChance = math.min(0.90, baseChance + luckBonus) -- Cap at 90% chance
 
     local rand = math.random()
@@ -7009,9 +7019,14 @@ end
 
 local function getRandomGlitchEffect(player)
     local baseChance = 0.00000001
+    local teardropScaling = 0
     local luckScaling = 0.00000001 * player:GetCollectibleNum(GLITCH_ITEM)
 
-    local luckBonus = math.max(0, player.Luck * luckScaling) -- Ensure non-negative
+    if player:HasTrinket(TrinketType.TRINKET_TEARDROP_CHARM) then
+        teardropScaling = 0.00000003
+    end
+
+    local luckBonus = math.max(0, (player.Luck * luckScaling) + teardropScaling) -- Ensure non-negative
     local finalChance = math.min(1, baseChance + luckBonus) -- Cap at 90% chance
 
     local rand = math.random()
@@ -9686,7 +9701,14 @@ local function getRandomToxinEffect(player)
     local baseChance = 0.05
     local luckScaling = 0.05 * player:GetCollectibleNum(NEURO_ITEM)
 
-    local luckBonus = math.max(0, player.Luck * luckScaling) -- Ensure non-negative
+    local teardropScaling = 0
+
+    if player:HasTrinket(TrinketType.TRINKET_TEARDROP_CHARM) then
+        teardropScaling = 0.15
+    end
+
+
+    local luckBonus = math.max(0, (player.Luck * luckScaling) + teardropScaling) -- Ensure non-negative
     local finalChance = math.min(1, baseChance + luckBonus) -- Cap at 90% chance
 
     local rand = math.random()
