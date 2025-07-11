@@ -6,7 +6,6 @@
 - Maybe necromancy shouldnt res bosses.
 - Maybe have a unique synergy between both mantles.
 - Cards are huge on J+E HUD.
-- make proc effects work with teardrop charm
 - make defense tech not interact with enviromnentals
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
@@ -23,7 +22,6 @@
 for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
 character_009b_lazarus2hair.png
-
 
 Item Ideas to Add:
 

@@ -11284,9 +11284,10 @@ function EssenceCollector:StopExplosionHack(machine)
 
 end
 
-local currentRoom = Game():GetRoom()
+--local currentRoom = Game():GetRoom()
 
 function EssenceCollector:onNewRoom()
+    local currentRoom = Game():GetRoom()
     if currentRoom:IsFirstVisit() == true then
         local donTable = Isaac.FindByType(EntityType.ENTITY_SLOT,1,-1,false,false)
 				
