@@ -10424,7 +10424,7 @@ function Mod:UseSoulStone(card, player)
         if not data.TempLuckBoost then data.TempLuckBoost = 0 end
         
         -- ✅ Add 10 Luck instead of overwriting the boost
-        data.TempLuckBoost = data.TempLuckBoost + 10
+        data.TempLuckBoost = data.TempLuckBoost + 5
 
         player:AddCacheFlags(CacheFlag.CACHE_LUCK)
         player:EvaluateItems()
@@ -10600,13 +10600,13 @@ function Mod:UseMagicianMisprint(card, player)
         -- ✅ If no existing boost, initialize it
         if not data.TempDamageBoost then data.TempDamageBoost = 0 end
         if not data.TempRangeDown then data.TempRangeDown = 0 end
-        local dmgBoost  = 10
+        local dmgBoost  = 5
         local rngDown   = 4
 
-        if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
+        --[[ if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
             dmgBoost = 10
             rngDown = 4
-        end
+        end ]]
 
 
         

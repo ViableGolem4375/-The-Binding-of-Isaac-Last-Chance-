@@ -8,8 +8,9 @@
 - Cards are huge on J+E HUD.
 - make proc effects work with teardrop charm
 - make defense tech not interact with enviromnentals
-- bday cake description is messed up
-- closet shop not going to work, need to remove
+- soul of domino giving 20 luck for some reason?
+- misprinted magician giving +20 damage?
+- bibble activating the nail?
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -26,6 +27,8 @@ for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
 character_009b_lazarus2hair.png
 
+add an extended desc for void for jubilees and bond
+
 Item Ideas to Add:
 
 reverse soul stones?
@@ -38,13 +41,14 @@ mess with max hp if possible - needs HP api
 random dad item effect
 pick a stage and go there
 dogma familiar
+templeos
 
 Trinket Ideas:
 
 
 Streaks:
-T Apollyon Win Streak: 15
-	Best: 15
+T Apollyon Win Streak: 21
+	Best: 21
 T Keeper Win Streak: 0
 	Best: 5
 Jacob and Esau:
