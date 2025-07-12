@@ -3729,11 +3729,60 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.LuckyDiceUse, LUCKY_DICE_ID) 
 
+local quality4ItemsDullCoin = {
+                    -- Mod items.
+                    URIEL_ITEM,
+                    GABRIEL_ITEM,
+                    AZAZEL_ESSENCE,
+                    CAIN_ESSENCE,
+                    DOGMA_ITEM,
+                    ZEAL_ITEM,
+                    PROTO_ITEM,
+                    NECROMANCY_ITEM,
+                    -- Vanilla items.
+                    330,  -- Sacred Heart
+                    169,  -- Polyphemus
+                    118,  -- Brimstone
+                    395,  -- Tech X
+                    114,  -- Mom's Knife
+                    584,  -- Revelation
+                    --347,  -- Mega Blast
+                    35,   -- Cricket's Head
+                    --681,   -- Death Certificate
+                    --105, -- D6
+                    --489, -- D Infinity
+                    --711, -- Flip
+                    --625, --Mega Mush
+                    --636, --R Key
+                    723, --Spindown Dice
+                    --12, -- Magic Mushroom
+                    52, -- Dr. Fetus
+                    108, -- The Wafer
+                    149, -- Ipecac
+                    223, -- Pyromaniac
+                    232, -- Stopwatch
+                    245, -- 20/20
+                    313, -- Holy Mantle
+                    331, -- Godhead
+                    360, -- Incubus
+                    415, -- Crown of Light
+                    495, -- Ghost Pepper
+                    531, -- Haemolacria
+                    562, -- Rock Bottom
+                    581, -- Psy Fly
+                    664, -- Binge Eater
+                    678, -- C Section
+                    689, -- Glitched Crown
+                    691, -- Sacred Orb
+                    698, -- Twisted Pair
+                }
+
 function Mod:DullCoinUse(item, rng, player, flags)
     player:AnimateCollectible(DULL_COIN_ID, "UseItem", "PlayerPickupSparkle")
 
     local entities = Isaac.GetRoomEntities()
     local validRerolls = {}
+    local removedItems = {}
 
     for _, entity in ipairs(entities) do
         if entity.Type == EntityType.ENTITY_PICKUP and entity.Variant == PickupVariant.PICKUP_COLLECTIBLE then
@@ -3791,21 +3840,52 @@ function Mod:DullCoinUse(item, rng, player, flags)
         -- Ensure item exists, is Quality 0, and is Passive
         if itemConfig and itemConfig.Quality == 0 and player:HasCollectible(itemID) then
             if itemConfig.Type == ItemType.ITEM_PASSIVE or itemConfig.Type == ItemType.ITEM_FAMILIAR then -- Only allow passive items
-            table.insert(qualityZeroItems, itemID)
+            table.insert(removedItems, itemID)
             end
         end
     end
 
         -- If player has no Quality 0 items, exit
-        if #qualityZeroItems == 0 then
+        --[[ if #qualityZeroItems == 0 then
             return
+        end ]]
+        if #removedItems < 10 then
+            print("Not enough quality 0 items to convert.")
+            return false
         end
 
-        -- Pick a random Quality 0 item to remove
-        local itemToRemove = qualityZeroItems[math.random(#qualityZeroItems)]
+        -- Shuffle and remove 10 items
+        for i = 1, 10 do
+            local index = rng:RandomInt(#removedItems) + 1
+            local toRemove = removedItems[index]
+            table.remove(removedItems, index)
+            player:RemoveCollectible(toRemove)
+        end
 
-        local prevActiveItem = player:GetActiveItem()
-        local berserkID = CollectibleType.COLLECTIBLE_BERSERK
+        -- Pick a random quality 4 item
+        local rewardIndex = rng:RandomInt(#quality4ItemsDullCoin) + 1
+        local rewardID = quality4ItemsDullCoin[rewardIndex]
+        player:AddCollectible(rewardID)
+
+        --[[ Isaac.Spawn(
+            EntityType.ENTITY_PICKUP,
+            PickupVariant.PICKUP_COLLECTIBLE,
+            rewardID,
+            player.Position,
+            Vector.Zero,
+            player
+        ) ]]
+
+        SFXManager():Play(SoundEffect.SOUND_SUPERHOLY)
+        --return true
+
+
+
+        -- Pick a random Quality 0 item to remove
+        --local itemToRemove = qualityZeroItems[math.random(#qualityZeroItems)]
+
+        --local prevActiveItem = player:GetActiveItem()
+        --local berserkID = CollectibleType.COLLECTIBLE_BERSERK
 
         -- Remove previous active item before applying Berserk effect
         --if prevActiveItem ~= nil then
@@ -3813,19 +3893,19 @@ function Mod:DullCoinUse(item, rng, player, flags)
         --end
         
         --player:AddCollectible(berserkID, 0, true)
-        player:UseActiveItem(berserkID, false, false)
-        player:UseActiveItem(berserkID, false, false)
-        player:UseActiveItem(berserkID, false, false)
+        --player:UseActiveItem(berserkID, false, false)
+        --player:UseActiveItem(berserkID, false, false)
+        --player:UseActiveItem(berserkID, false, false)
         --player:RemoveCollectible(berserkID) -- Remove Berserk immediately
 
         -- Remove selected Quality 0 item
-        player:RemoveCollectible(itemToRemove)
+        --player:RemoveCollectible(itemToRemove)
 
         -- Restore previous active item if it existed
-        if prevActiveItem ~= nil then
+        --if prevActiveItem ~= nil then
             --player:AddCollectible(prevActiveItem, 0, true)
-            player:SetActiveCharge(24) -- Fully charge restored item
-        end
+        --    player:SetActiveCharge(24) -- Fully charge restored item
+        --end
     end
 
     return true
