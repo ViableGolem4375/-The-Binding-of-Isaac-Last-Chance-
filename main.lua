@@ -1999,7 +1999,7 @@ if EID then
     EID:addCollectible(PHALANX_ITEM, "Grants Isaac 1 second of invulnerability on use and has a 5 second cooldown.", "Phalanx")
     EID:addBirthright(TAINTED_PONTIUS_TYPE, "Grants Pugio as a pocket active item.#Pugio allows Isaac to throw a projectile which petrifies enemies it hits.")
     EID:addCollectible(DEFENSE_TECH_ITEM, "Spawns a laser ring around Isaac that deals 25% of his damage every tick.", "Defense Tech")
-    EID:addCollectible(NECROMANCY_ITEM, "Killed enemies have a 10% chance to be revived as friendlies which last for the current room.#{{Luck}} 75% chance at 18 luck.", "Necromancy")
+    EID:addCollectible(NECROMANCY_ITEM, "Killed non-boss enemies have a 10% chance to be revived as friendlies which last for the current room.#{{Luck}} 75% chance at 18 luck.", "Necromancy")
     EID:addCollectible(MONEY_ITEM, "One time use active item that gives Isaac coins equal to the amount of money spent throughout the run.#Will still only activate once if absorbed by void.", "Become Back My Money")
     EID:addCollectible(PAINT_ITEM, "Turns Isaac's currently held trinket into its golden version.#{{Warning}} Using the item on a golden trinket will turn it into its non golden variant.#{{Warning}} Will only affect one trinket at a time, always turns the trinket held in the first slot to gold.", "Gold Spray Paint")
     EID:addCollectible(GLITCH_ITEM, "Grants a 1 in 100,000,000 chance to fire a tear that instantly kills any enemy it hits inclusing bosses.#{{Luck}} 100% chance at 99,999,999 luck.", "'/<<L7")
@@ -7127,7 +7127,7 @@ function Mod:OnEnemyDeath(entity)
         local necronum = player:GetCollectibleNum(NECROMANCY_ITEM) * 0.05
 
         -- ✅ Check if player has the item and enemy is valid
-        if player:HasCollectible(NECROMANCY_ITEM) and entity:IsEnemy() then
+        if player:HasCollectible(NECROMANCY_ITEM) and entity:IsEnemy() and not entity:IsBoss() then
             -- ✅ Scale chance with Luck
             local luckFactor = math.max(0, player.Luck * necronum)
             local finalChance = math.min(0.75, BASE_CHANCE + luckFactor) -- Cap at 75% chance

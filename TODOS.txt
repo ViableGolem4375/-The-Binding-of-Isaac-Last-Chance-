@@ -4,7 +4,6 @@
 - Essence items can give copies, maybe fix that or make sure they all stack.
 - Maybe add some sound effects to items.
 - Maybe necromancy shouldnt res bosses.
-- Maybe have a unique synergy between both mantles.
 - Cards are huge on J+E HUD.
 - make defense tech not interact with enviromnentals
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
