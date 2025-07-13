@@ -33,7 +33,7 @@
         costume="104"
     />
     <player 
-        name="Pontius" 
+        name="Longinus" 
         skin="character_pontius_lol.png" 
         nameimage="playername_pontius.png" 
         portrait="playerportrait_pontius.png"
@@ -47,9 +47,9 @@
         canShoot="True" 
     />
     <player 
-        name="Pontius"
+        name="Longinus"
         skin="character_pontius_b_real.png" 
-        bSkinParent="Pontius"
+        bSkinParent="Longinus"
         nameimage="playername_pontius_b.png" 
         portrait="playerportrait_pontius_b_real.png"
         birthright="Gladius throw"

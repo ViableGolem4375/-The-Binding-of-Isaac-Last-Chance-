@@ -37,7 +37,7 @@
     <passive id="33" name="Essence of Apollyon VFX" gfx="apollyon_essence.png" description="I exist to make essence of apollyon visuals work!" quality="4" devilprice="1" craftquality="-1" hidden="true" tags="nocantrip nolostbr noeden quest"/>
     <passive id="34" name="Essence of Bethany" gfx="beth_essence.png" description="Army of eternal flame" quality="3" craftquality="3" devilprice="1" tags="offensive nocantrip"/>
     <passive id="35" name="Essence of Domino" gfx="matt_essence.png" description="Luck up + power through chance" quality="3" craftquality="3" devilprice="1" tags="offensive nocantrip" cache="luck"/>
-    <active id="36" name="Essence of Pontius" gfx="pontius_essence.png" description="Spear thrower" quality="2" craftquality="2" maxcharges="300" chargetype="timed" devilprice="1" tags="offensive nocantrip" cache="damage"/>
+    <active id="36" name="Essence of Longinus" gfx="pontius_essence.png" description="Spear thrower" quality="2" craftquality="2" maxcharges="300" chargetype="timed" devilprice="1" tags="offensive nocantrip" cache="damage"/>
     <active id="37" name="Essence of The Lost" gfx="lost_essence.png" description="Glass cannon" quality="3" craftquality="3" maxcharges="1" chargetype="normal" devilprice="1" tags="nocantrip" cache="damage"/>
     <active id="38" name="Essence of Jacob and Esau" gfx="JE_essence.png" description="Brotherly bond" quality="3" craftquality="3" maxcharges="1" devilprice="1" chargetype="normal" tags="offensive nocantrip"/>
     <active id="39" name="Essence of The Forgotten" gfx="forgotten_essence.png" description="A helping skeleton" quality="3" craftquality="3" maxcharges="1" devilprice="1" chargetype="normal" tags="offensive nocantrip"/>

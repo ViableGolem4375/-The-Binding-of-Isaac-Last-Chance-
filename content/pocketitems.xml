@@ -1,6 +1,6 @@
 <pocketitems>
     <rune type="rune" mimiccharge="3" name="Soul of Domino" hud="Soul of Domino" description="Luck up!" pickup="885"/>
-    <rune type="rune" mimiccharge="3" name="Soul of Pontius" hud="Soul of Pontius" description="The glory of rome" pickup="886"/>
+    <rune type="rune" mimiccharge="3" name="Soul of Longinus" hud="Soul of Longinus" description="The glory of rome" pickup="886"/>
     <rune type="rune" mimiccharge="6" name="Soul of Abraham" hud="Soul of Abraham" description="Salvation" pickup="887"/>
     <card type="tarot" mimiccharge="12" name="Essence Card" hud="Essence Card" description="Essence Summoner" pickup="888"/>
     <card type="tarot" mimiccharge="4" name="Misprinted Fool" hud="Misprinted Fool" description="Where journey wishes to be" pickup="889"/>
