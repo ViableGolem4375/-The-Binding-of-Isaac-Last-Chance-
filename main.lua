@@ -1946,7 +1946,7 @@ if EID then
 
     EID:addCollectible(LUCKY_DICE_ID, "Reroll all item pedestals in the current room.#{{Warning}} Items rerolled will be chosen from a special item pool consisting of luck/chance based items.", "Lucky Coin")
     EID:addCollectible(DULL_COIN_ID, "Rerolls all item pedestals in the room.#Items are rerolled into ones of 1 lower quality.#If no item pedestals containing quality 1 items or above exist and Isaac holds at least 10 quality 0 items, 10 quality 0 items will be removed from his inventory and replaced with a quality 3 or 4 item.", "Dull Coin")
-    EID:addCollectible(HATRED_ITEM, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} 25% chance to become invulnerable briefly upon damaging an enemy.", "Unholy Mantle")
+    EID:addCollectible(HATRED_ITEM, "{{ArrowUp}} 25% chance to become invulnerable briefly upon damaging an enemy.", "Unholy Mantle")
     EID:addCollectible(URIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires a holy light beam forward.#Scales with Isaac's damage.", "Lil' Uriel")
     EID:addCollectible(GABRIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires 4 holy light beams in an 'X' pattern.#Scales with Isaac's damage.", "Lil' Gabriel")
     EID:addCollectible(CATALYST_SHEET_ITEM, "No no no NO NO NO nO no AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "Catalyst Character Sheet")
@@ -3635,6 +3635,39 @@ if EID then
     end
 
     EID:addDescriptionModifier("Jubilees3 Void Mod", JubileesBondVoid3, JubileesVoidCallback3)
+
+    function UnholyMantle(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CollectibleType.COLLECTIBLE_HOLY_MANTLE and player:HasCollectible(HATRED_ITEM) then return true end
+        end
+    end
+    function UnholyMantleCallback(descObj)
+        local itemId = Isaac.GetItemIdByName("Unholy Mantle")
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible"..itemId.."}} " .. textColor .. "{{ArrowUp}} Grants +1 damage and a +50% damage multiplier.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Unholy Mantle Mod", UnholyMantle, UnholyMantleCallback)
+
+    function HolyMantle(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == HATRED_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_HOLY_MANTLE) then return true end
+        end
+    end
+    function HolyMantleCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible313}} " .. textColor .. "{{ArrowUp}} Grants +1 damage and a +50% damage multiplier.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Holy Mantle Mod", HolyMantle, HolyMantleCallback)
+
+    
 end
 
 --Function to handle dice item rerolls.
@@ -4090,7 +4123,7 @@ Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.GrantInvulnerabilityOnHit)
 
 -- Handle the actual damage scaling
 function Mod:EvaluateCachec(player, cacheFlag)
-    if player:HasCollectible(HATRED_ITEM) and cacheFlag == CacheFlag.CACHE_DAMAGE then
+    if player:HasCollectible(HATRED_ITEM) and player:HasCollectible(CollectibleType.COLLECTIBLE_HOLY_MANTLE) and cacheFlag == CacheFlag.CACHE_DAMAGE then
         player.Damage = player.Damage + 1 + (player.Damage * 0.5) -- Adjust as needed
     end
 end
