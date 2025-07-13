@@ -1945,7 +1945,7 @@ if EID then
     EID:addIcon("Player"..TAINTED_ABRAHAM_TYPE, "Heretic", 0, 16, 16, 0, 0, EIDicons)
 
     EID:addCollectible(LUCKY_DICE_ID, "Reroll all item pedestals in the current room.#{{Warning}} Items rerolled will be chosen from a special item pool consisting of luck/chance based items.", "Lucky Coin")
-    EID:addCollectible(DULL_COIN_ID, "Rerolls all item pedestals in the room into items of 1 lower quality rating.#If no item pedestals in the room containing quality 1 items or higher exist in the room, a random quality 0 item will be removed from Isaac's inventory, the Berserk! state will trigger, and Isaac's main active item will charge 12 bars.", "Dull Coin")
+    EID:addCollectible(DULL_COIN_ID, "Rerolls all item pedestals in the room.#Items are rerolled into ones of 1 lower quality.#If no item pedestals containing quality 1 items or above exist and Isaac holds at least 10 quality 0 items, 10 quality 0 items will be removed from his inventory and replaced with a quality 3 or 4 item.", "Dull Coin")
     EID:addCollectible(HATRED_ITEM, "{{ArrowUp}} +1 damage.#{{ArrowUp}} +50% damage multiplier.#{{ArrowUp}} 25% chance to become invulnerable briefly upon damaging an enemy.", "Unholy Mantle")
     EID:addCollectible(URIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires a holy light beam forward.#Scales with Isaac's damage.", "Lil' Uriel")
     EID:addCollectible(GABRIEL_ITEM, "Familiar that trails behind Isaac and preiodically fires 4 holy light beams in an 'X' pattern.#Scales with Isaac's damage.", "Lil' Gabriel")
@@ -3777,6 +3777,160 @@ local quality4ItemsDullCoin = {
                     698, -- Twisted Pair
                 }
 
+local quality3ItemsDullCoin = {
+                    -- Mod items.
+                    COMP_ITEM,
+                    JUDAS_ESSENCE,
+                    BLUE_BABY_ESSENCE,
+                    KEEPER_ESSENCE,
+                    BETHANY_ESSENCE,
+                    DOMINO_ESSENCE,
+                    STAR_OF_DAVID,
+                    MOON_ITEM,
+                    GLUTTONY_ITEM,
+                    WRATH_ITEM,
+                    CHARITY_ITEM,
+                    HUMILITY_ITEM,
+                    GENEROSITY_ITEM,
+                    TEMPERANCE_ITEM,
+                    NEURO_ITEM,
+                    INFESTATION_ITEM,
+                    CAKE_ITEM,
+                    HEALTH_SACK_ITEM,
+                    -- Vanilla items.
+                    1,
+                    2,
+                    3,
+                    7,
+                    18,
+                    32,
+                    50,
+                    51,
+                    68,
+                    69,
+                    70,
+                    79,
+                    80,
+                    82,
+                    90,
+                    98,
+                    101,
+                    104,
+                    109,
+                    110,
+                    132,
+                    150,
+                    151,
+                    153,
+                    159,
+                    165,
+                    170,
+                    173,
+                    178,
+                    179,
+                    183,
+                    184,
+                    185,
+                    189,
+                    190,
+                    196,
+                    199,
+                    203,
+                    208,
+                    215,
+                    216,
+                    221,
+                    224,
+                    234,
+                    237,
+                    244,
+                    249,
+                    259,
+                    260,
+                    261,
+                    265,
+                    268,
+                    278,
+                    301,
+                    305,
+                    306,
+                    307,
+                    310,
+                    311,
+                    333,
+                    334,
+                    335,
+                    341,
+                    342,
+                    345,
+                    350,
+                    356,
+                    359,
+                    370,
+                    373,
+                    374,
+                    375,
+                    381,
+                    390,
+                    397,
+                    399,
+                    401,
+                    402,
+                    407,
+                    408,
+                    411,
+                    414,
+                    417,
+                    424,
+                    438,
+                    443,
+                    444,
+                    453,
+                    459,
+                    461,
+                    462,
+                    494,
+                    495,
+                    496,
+                    497,
+                    499,
+                    503,
+                    506,
+                    514,
+                    520,
+                    524,
+                    528,
+                    532,
+                    533,
+                    534,
+                    547,
+                    553,
+                    572,
+                    573,
+                    579,
+                    586,
+                    589,
+                    592,
+                    596,
+                    597,
+                    600,
+                    601,
+                    615,
+                    616,
+                    629,
+                    651,
+                    660,
+                    669,
+                    682,
+                    690,
+                    696,
+                    700,
+                    708,
+                    716,
+                    730,
+                    732
+                }
+
 function Mod:DullCoinUse(item, rng, player, flags)
     player:AnimateCollectible(DULL_COIN_ID, "UseItem", "PlayerPickupSparkle")
 
@@ -3862,22 +4016,26 @@ function Mod:DullCoinUse(item, rng, player, flags)
             player:RemoveCollectible(toRemove)
         end
 
-        -- Pick a random quality 4 item
-        local rewardIndex = rng:RandomInt(#quality4ItemsDullCoin) + 1
-        local rewardID = quality4ItemsDullCoin[rewardIndex]
-        player:AddCollectible(rewardID)
+        local roll = rng:RandomInt(4) + 1
 
-        --[[ Isaac.Spawn(
-            EntityType.ENTITY_PICKUP,
-            PickupVariant.PICKUP_COLLECTIBLE,
-            rewardID,
-            player.Position,
-            Vector.Zero,
-            player
-        ) ]]
+        if roll < 4 then
 
-        SFXManager():Play(SoundEffect.SOUND_SUPERHOLY)
-        --return true
+            -- Pick a random quality 4 item
+            local rewardIndex = rng:RandomInt(#quality3ItemsDullCoin) + 1
+            local rewardID = quality3ItemsDullCoin[rewardIndex]
+            player:AddCollectible(rewardID)
+
+            SFXManager():Play(SoundEffect.SOUND_SUPERHOLY)
+            player:AnimateCollectible(rewardID, "UseItem", "PlayerPickupSparkle")
+        elseif roll == 4 then
+            -- Pick a random quality 4 item
+            local rewardIndex = rng:RandomInt(#quality4ItemsDullCoin) + 1
+            local rewardID = quality4ItemsDullCoin[rewardIndex]
+            player:AddCollectible(rewardID)
+
+            SFXManager():Play(SoundEffect.SOUND_SUPERHOLY)
+            player:AnimateCollectible(rewardID, "UseItem", "PlayerPickupSparkle")
+        end
 
 
 
