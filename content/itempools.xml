@@ -67,7 +67,7 @@
         <Item Name="Zeal" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Kindness" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Bibble" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Dogmaticism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dogmatism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Rapture" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
@@ -80,7 +80,7 @@
         <Item Name="64 36" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Dogmaticism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dogmatism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Trash Bag" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
@@ -196,7 +196,7 @@
         <Item Name="The Communist Manifesto" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Dogmaticism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dogmatism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Shattered Gladius" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Trash Bag" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
@@ -247,7 +247,7 @@
         <Item Name="Zeal" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Kindness" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Bibble" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Dogmaticism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dogmatism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Rapture" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
@@ -260,7 +260,7 @@
         <Item Name="64 36" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Dogmaticism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dogmatism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Trash Bag" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
@@ -288,7 +288,7 @@
         <Item Name="Wrath" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Sloth" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Dogmaticism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dogmatism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Sack of Hearts" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
     </Pool>

@@ -3,7 +3,6 @@
 - Maybe add some sound effects to items.
 - Cards are huge on J+E HUD.
 - make defense tech not interact with enviromnentals
-- the light beams from dogmatism damage the player
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
