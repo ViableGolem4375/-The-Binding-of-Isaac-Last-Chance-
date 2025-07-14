@@ -40,8 +40,8 @@
     <active id="36" name="Essence of Longinus" gfx="pontius_essence.png" description="Spear thrower" quality="2" craftquality="2" maxcharges="300" chargetype="timed" devilprice="1" tags="offensive nocantrip" cache="damage"/>
     <active id="37" name="Essence of The Lost" gfx="lost_essence.png" description="Glass cannon" quality="3" craftquality="3" maxcharges="1" chargetype="normal" devilprice="1" tags="nocantrip" cache="damage"/>
     <passive id="38" name="Essence of Jacob and Esau" gfx="JE_essence.png" description="Brotherly bond" quality="3" craftquality="3" devilprice="1" cache="familiars" tags="baby offensive summonable monstermanual nocantrip"/>
-    <active id="39" name="Essence of The Forgotten" gfx="forgotten_essence2.png" description="A helping skeleton" quality="3" craftquality="3" maxcharges="200" devilprice="1" chargetype="timed" tags="offensive nocantrip"/>
-    <passive id="135" name="Essence of The Soul" gfx="soul_essence.png" description="A helping skeleton" quality="3" craftquality="3" cache="familiars" devilprice="1" hidden="true" tags="nocantrip quest noeden"/>
+    <active id="39" name="Essence of The Forgotten" gfx="forgotten_essence2.png" description="Soulbound" quality="2" craftquality="2" maxcharges="200" devilprice="1" chargetype="timed" tags="offensive nocantrip"/>
+    <passive id="135" name="Essence of The Soul" gfx="soul_essence.png" description="Soulbound" quality="2" craftquality="2" cache="familiars" devilprice="1" hidden="true" tags="nocantrip quest noeden"/>
     <passive id="40" name="Yamika" gfx="star_of_david.png" description="Mazeltov!" quality="3" craftquality="3" devilprice="2" tags="offensive nocantrip" cache="damage luck"/>
     <active id="41" name="A Gun" gfx="gun.png" description="You'll shoot your eye out!" quality="1" craftquality="1" maxcharges="300" chargetype="timed" devilprice="1" tags="offensive nocantrip" cache="damage shotspeed"/>
     <passive id="42" name="Appetizer" gfx="brunch.png" description="Health up" quality="1" craftquality="1" tags="nocantrip nolostbr" devilprice="1" maxhearts="2" hearts="4"/>

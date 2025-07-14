@@ -7108,7 +7108,7 @@ function Mod:UseSoulItemForgotten(item, rng, player)
                 player:SetMinDamageCooldown(30)
                 SFXManager():Play(SoundEffect.SOUND_HELL_PORTAL2)
                 player.Position = closestFamiliar.Position
-                player:SetVelocity(Vector.Zero)
+                --player:SetVelocity(Vector.Zero)
             else
                 print("Forgotten Soul teleport failed: no familiar found")
             end
