@@ -97,4 +97,6 @@
     <entity anm2path="essence_chest.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="10" collisionRadius="12" friction="1" id="5" name="Essence Chest" numGridCollisionPoints="24" shadowSize="28" stageHP="0" variant="249376973">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
+    <entity name="Lil' Jacob" id="3" anm2path="liljacob.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
+    <entity name="Lil' Esau" id="3" anm2path="lilesau.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
 </entities>

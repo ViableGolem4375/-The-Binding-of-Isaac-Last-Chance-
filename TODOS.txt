@@ -1,10 +1,9 @@
 - essence collectors are definitely replacing slot machines by reentering rooms - this might be fixed.
-- Forgotten, lost, and eve essence effects are kind of placeholders, need something more interesting.
+- Forgotten, lost, j+e essence effects are kind of placeholders, need something more interesting.
 - Essence items can give copies, maybe fix that or make sure they all stack.
 - Maybe add some sound effects to items.
 - Cards are huge on J+E HUD.
 - make defense tech not interact with enviromnentals
-- add in the other essence reliquaries
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -46,3 +45,4 @@ T Keeper Win Streak: 0
 Jacob and Esau:
 	Best: 52
 
+154600

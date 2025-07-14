@@ -26,7 +26,7 @@
     <passive id="22" name="Essence of Cain" gfx="essence_of_cain.png" description="Abundance" quality="4" craftquality="4" devilprice="2" tags="offensive nocantrip"/>
     <passive id="23" name="Essence of Judas" gfx="judas_essence.png" description="Risk = Power" quality="3" craftquality="3" devilprice="1" tags="offensive nocantrip" cache="damage"/>
     <passive id="24" name="Essence of ???" gfx="blue_baby_essence.png" description="Swarm of friends" quality="3" craftquality="3" devilprice="1" tags="offensive nocantrip fly" cache="familiars"/>
-    <passive id="25" name="Essence of Eve" gfx="eve_essence.png" description="Power through desperation" quality="2" craftquality="2" devilprice="1" tags="offensive nocantrip" cache="damage"/>
+    <passive id="25" name="Essence of Eve" gfx="eve_essence.png" description="Power through desperation" quality="2" craftquality="2" devilprice="1" tags="offensive nocantrip" cache="damage firedelay"/>
     <active id="26" name="Essence of Samson" gfx="samson_essence.png" description="Rage incarnate" quality="3" craftquality="3" devilprice="1" maxcharges="300" chargetype="timed" tags="offensive nocantrip" cache="damage"/>
     <passive id="27" name="Essence of Azazel" gfx="azazel_essence.png" description="Brimstone unleashed" quality="4" craftquality="4" devilprice="2" tags="offensive nocantrip" cache="damage luck"/>
     <passive id="28" name="Essence of Lazarus" gfx="laz_essence.png" description="Strength through rebirth" quality="2" craftquality="2" devilprice="1" tags="offensive nocantrip" cache="all"/>
@@ -39,7 +39,7 @@
     <passive id="35" name="Essence of Domino" gfx="matt_essence.png" description="Luck up + power through chance" quality="3" craftquality="3" devilprice="1" tags="offensive nocantrip" cache="luck"/>
     <active id="36" name="Essence of Longinus" gfx="pontius_essence.png" description="Spear thrower" quality="2" craftquality="2" maxcharges="300" chargetype="timed" devilprice="1" tags="offensive nocantrip" cache="damage"/>
     <active id="37" name="Essence of The Lost" gfx="lost_essence.png" description="Glass cannon" quality="3" craftquality="3" maxcharges="1" chargetype="normal" devilprice="1" tags="nocantrip" cache="damage"/>
-    <active id="38" name="Essence of Jacob and Esau" gfx="JE_essence.png" description="Brotherly bond" quality="3" craftquality="3" maxcharges="1" devilprice="1" chargetype="normal" tags="offensive nocantrip"/>
+    <passive id="38" name="Essence of Jacob and Esau" gfx="JE_essence.png" description="Brotherly bond" quality="3" craftquality="3" devilprice="1" cache="familiars" tags="baby offensive summonable monstermanual nocantrip"/>
     <active id="39" name="Essence of The Forgotten" gfx="forgotten_essence.png" description="A helping skeleton" quality="3" craftquality="3" maxcharges="1" devilprice="1" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="40" name="Yamika" gfx="star_of_david.png" description="Mazeltov!" quality="3" craftquality="3" devilprice="2" tags="offensive nocantrip" cache="damage luck"/>
     <active id="41" name="A Gun" gfx="gun.png" description="You'll shoot your eye out!" quality="1" craftquality="1" maxcharges="300" chargetype="timed" devilprice="1" tags="offensive nocantrip" cache="damage shotspeed"/>

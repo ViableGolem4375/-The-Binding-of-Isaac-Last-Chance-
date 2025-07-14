@@ -83,7 +83,13 @@ BETHANY_ESSENCE = Isaac.GetItemIdByName("Essence of Bethany")
 DOMINO_ESSENCE = Isaac.GetItemIdByName("Essence of Domino")
 PONTIUS_ESSENCE = Isaac.GetItemIdByName("Essence of Longinus")
 LOST_ESSENCE = Isaac.GetItemIdByName("Essence of The Lost")
+
 JACOB_AND_ESAU_ESSENCE = Isaac.GetItemIdByName("Essence of Jacob and Esau")
+CONFIG_JACOB = itemConfig:GetCollectible(JACOB_AND_ESAU_ESSENCE)
+FAMILIAR_VARIANT_JACOB = Isaac.GetEntityVariantByName("Lil' Jacob")
+CONFIG_ESAU = itemConfig:GetCollectible(JACOB_AND_ESAU_ESSENCE)
+FAMILIAR_VARIANT_ESAU = Isaac.GetEntityVariantByName("Lil' Esau")
+
 FORGOTTEN_ESSENCE = Isaac.GetItemIdByName("Essence of The Forgotten")
 STAR_OF_DAVID = Isaac.GetItemIdByName("Yamika")
 GUN_ITEM = Isaac.GetItemIdByName("A Gun")
@@ -1976,7 +1982,7 @@ if EID then
     EID:addCollectible(CAIN_ESSENCE, "Gives 20 coins, keys, and bombs upon pickup.#At the start of every new floor, spawns a golden penny, golden key, and golden bomb.", "Essence of Cain")
     EID:addCollectible(JUDAS_ESSENCE, "{{ArrowUp}} Gives +1 damage.#{{ArrowUp}} Grants a 2.5x damage multiplier when Isaac has 3 total hearts (of any type) or less.", "Essence of Judas")
     EID:addCollectible(BLUE_BABY_ESSENCE, "Entering a new room spawns 10 blue flies.", "Essence of ???")
-    EID:addCollectible(EVE_ESSENCE, "{{ArrowUp}} Grants 5x damage upon reaching 1 total heart or less.", "Essence of Eve")
+    EID:addCollectible(EVE_ESSENCE, "While Isaac has no filled red heart containers:#{{ArrowUp}} +25% damage multiplier#{{ArrowUp}} -1 fire delay", "Essence of Eve")
     EID:addCollectible(SAMSON_ESSENCE, "Dash forward becoming invulnerable.#The dash deals Isaac's damage + 10 to enemies.#{{ArrowUp}} The dash damage increases depending on how many enemies are hit.", "Essence of Samson")
     EID:addCollectible(AZAZEL_ESSENCE, "5% chance to fire a tear that causes Isaac to fire a large brimstone beam on contact with something.#{{Luck}} 100% chance at 19 luck.", "Essence of Azazel")
     EID:addCollectible(LAZARUS_ESSENCE, "{{ArrowUp}} Grants +1 damage, a +50% damage multiplier, -1 tear delay, +0.5 speed, +3.75 range, +1 shot speed, and +2 luck upon dying and being revived.#{{Warning}} Essence of Lazarus can only trigger once.#{{Warning}} This item will NOT revive you, it is not an extra life.", "Essence of Lazarus")
@@ -1988,7 +1994,7 @@ if EID then
     EID:addCollectible(DOMINO_ESSENCE, "{{ArrowUp}} +3 luck.#Grants 2 items from the Lucky Coin item pool.", "Essence of Domino")
     EID:addCollectible(PONTIUS_ESSENCE, "Throw one of Longinus' spears in the current attack direction.#Spears deal 10x Isaac's damage.", "Essence of Longinus")
     EID:addCollectible(LOST_ESSENCE, "For the current room:#{{Warning}} Become the lost.", "Essence of The Lost")
-    EID:addCollectible(JACOB_AND_ESAU_ESSENCE, "Summon Esau as a helper for the current room.", "Essence of Jacob and Esau")
+    EID:addCollectible(JACOB_AND_ESAU_ESSENCE, "Gain two familiars, Lil' Jacob and Lil' Esau which scale with Isaac's damage and fire rate.#Jacob deals less damage but shoots faster, Esau deals more damage but shoots slower.", "Essence of Jacob and Esau")
     EID:addCollectible(FORGOTTEN_ESSENCE, "Summon The Forgotten as a helper for the current room.", "Essence of The Forgotten")
     EID:addCollectible(STAR_OF_DAVID, "{{ArrowUp}} 10% chance to fire star of david tears which deal 30% more damage.#{{Luck}} 100% chance at 9 luck.#{{ArrowUp}} 1% chance for enemies to drop a golden heart on death.#{{Luck}} +1% chance per point of luck.", "Yamika")
     EID:addCollectible(GUN_ITEM, "Fire a tear that deals 10x Isaac's damage plus 10 flat damage.#{{Warning}} The tear fired is wildly inaccurate.", "A Gun")
@@ -2104,7 +2110,7 @@ if EID then
     EID:addCollectible(RAPTURE_ITEM, "Make all players briefly invulnerable and throw an orb of light which detonates into 7 beams of light fired in a circular pattern after a brief delay.", "Rapture")
     EID:addTrinket(NIL_VALUE_ITEM, "Activates the effects of Dataminer when Isaac takes damage.#{{Collectible202}} No effect when golden.", "Nil Value")
     EID:addCollectible(SHATTERED_GLADIUS_ITEM, "Teleports Isaac to a challenge room separate to the one on the floor.#Has a 10% chance to teleport Isaac to a boss challenge room instead.", "Shattered Gladius")
-    EID:addCollectible(TRASH_ITEM, "On activation will:#Spawn an item pedestal containing a quality 0 item.#Spawn a random garbage related trinket.#Spawn a rotten heart.#Spawn several blue flies.", "Trash Bag")
+    EID:addCollectible(TRASH_ITEM, "On activation will do one of the following:#Spawn an item pedestal containing a quality 0 item.#Spawn a random garbage related trinket.#Spawn a rotten heart.#Spawn several blue flies.", "Trash Bag")
     EID:addCollectible(CAKE_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.#{{ArrowUp}} +0.3 Speed#{{ArrowUp}} -0.5 Tear Delay#{{ArrowUp}} +1 Damage#{{ArrowUp}} +3.75 Range#{{ArrowUp}} +0.16 Shot Speed#{{ArrowUp}} +1 Luck", "Birthday Cake")
     EID:addCollectible(RIFT_ITEM, "Grants a slowing locust, a poison locust, an explosive locust, and a high damage locust.", "Abyssal Rift")
     EID:addCollectible(HEALTH_SACK_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.#{{ArrowUp}} +1 soul heart#{{ArrowUp}} +1 black heart#{{ArrowUp}} +1 bone heart#{{ArrowUp}} +1 golden heart#{{ArrowUp}} +1 rotten heart", "Sack of Hearts")
@@ -5965,22 +5971,26 @@ Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoom) -- Reset damage bo
 
 
 function Mod:OnCacheUpdateEveEssence(player, cacheFlag)
-    if cacheFlag == CacheFlag.CACHE_DAMAGE then
+    --if cacheFlag == CacheFlag.CACHE_DAMAGE then
         if player:HasCollectible(EVE_ESSENCE) then
-            local evenum = player:GetCollectibleNum(EVE_ESSENCE) * 5
-            -- Base bonus: +1 damage
-            local damageBonus = 1
+            local evenum = player:GetCollectibleNum(EVE_ESSENCE)
             
             -- Calculate total hearts (Red, Soul, Bone converted to half-hearts)
             local totalHearts = player:GetHearts() + player:GetSoulHearts() + player:GetBlackHearts() + player:GetRottenHearts() + (player:GetBoneHearts() * 2)
+            local redhearts = player:GetHearts()
 
             -- Apply 2.5x multiplier if total health is 3 hearts (6 half-hearts) or less
-            if totalHearts <= 1 then
-                player.Damage = player.Damage * evenum
+            if redhearts <= 1 then
+                if cacheFlag == CacheFlag.CACHE_DAMAGE then
+                    player.Damage = player.Damage * (evenum * 1.25)
+                end
+                if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+                    player.MaxFireDelay = player.MaxFireDelay + (-1 * evenum)
+                end
             end
             
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateEveEssence)
@@ -6800,10 +6810,189 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplySoulDamageBoost) ]]
 
-local SOUL_OF_JE = Card.CARD_SOUL_JACOB -- Replace with actual Soul of the Lost ID
+---@param player EntityPlayer
+function Mod:EvaluateCacheJacob(player)
+    local effects = player:GetEffects()
+    local count = effects:GetCollectibleEffectNum(JACOB_AND_ESAU_ESSENCE) + player:GetCollectibleNum(JACOB_AND_ESAU_ESSENCE)
+    local rng = RNG()
+    local seed = math.max(Random(), 1)
+    rng:SetSeed(seed, RNG_SHIFT_INDEX_FAIL)
+
+    player:CheckFamiliar(FAMILIAR_VARIANT_JACOB, count, rng, CONFIG_FAIL)
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.EvaluateCacheJacob, CacheFlag.CACHE_FAMILIARS)
+
+---@param familiar EntityFamiliar
+function Mod:HandleInitJacob(familiar)
+    familiar:AddToFollowers()
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.HandleInitJacob, FAMILIAR_VARIANT_JACOB)
+
+---@param familiar EntityFamiliar
+function Mod:HandleUpdateJacob(familiar)
+    local sprite = familiar:GetSprite()
+    local player = familiar.Player
+
+    local fireDirection = player:GetFireDirection()
+    local direction
+    local shootAnim
+    local doFlip = false
+    local TEAR_DAMAGE_JACOB = player.Damage * 0.4
+    local JACOB_FIRE_RATE = player.FireDelay / 2
+
+    if fireDirection == Direction.LEFT then
+        direction = Vector(-1, 0)
+        shootAnim = "FloatShootSide"
+        doFlip = true
+    elseif fireDirection == Direction.RIGHT then
+        direction = Vector(1, 0)
+        shootAnim = "FloatShootSide"
+    elseif fireDirection == Direction.DOWN then
+        direction = Vector(0, 1)
+        shootAnim = "FloatShootDown"
+    elseif fireDirection == Direction.UP then
+        direction = Vector(0, -1)
+        shootAnim = "FloatShootUp"
+    end
+
+    if direction ~= nil and familiar.FireCooldown == 0 then
+        local velocity = direction * TEAR_SPEED_FAIL + player:GetTearMovementInheritance(direction)
+        local tear = Isaac.Spawn(
+            EntityType.ENTITY_TEAR,
+            TearVariant.BLOOD,
+            0,
+            familiar.Position,
+            velocity,
+            familiar
+        ):ToTear()
+        if player:HasTrinket(TrinketType.TRINKET_BABY_BENDER) and tear then
+            tear.TearFlags = TearFlags.TEAR_HOMING
+        end
+
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+            tear.CollisionDamage = TEAR_DAMAGE_JACOB * 2
+        else
+            tear.CollisionDamage = TEAR_DAMAGE_JACOB
+        end
+
+         if player:HasTrinket(TrinketType.TRINKET_FORGOTTEN_LULLABY) then
+            familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay, 1))
+        else
+            familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay * 2, 1))
+        end
+ 
+
+        --familiar.FireCooldown = SHOOTING_TICK_COOLDOWN_FAIL
+
+        sprite.FlipX = doFlip
+        sprite:Play(shootAnim, true)
+    end
+
+    if sprite:IsFinished() then
+        sprite:Play("FloatDown")
+    end
+
+    familiar:FollowParent()
+    familiar.FireCooldown = math.max(familiar.FireCooldown - 1, 0)
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdateJacob, FAMILIAR_VARIANT_JACOB)
+
+---@param player EntityPlayer
+function Mod:EvaluateCacheEsau(player)
+    local effects = player:GetEffects()
+    local count = effects:GetCollectibleEffectNum(JACOB_AND_ESAU_ESSENCE) + player:GetCollectibleNum(JACOB_AND_ESAU_ESSENCE)
+    local rng = RNG()
+    local seed = math.max(Random(), 1)
+    rng:SetSeed(seed, RNG_SHIFT_INDEX_FAIL)
+
+    player:CheckFamiliar(FAMILIAR_VARIANT_ESAU, count, rng, CONFIG_ESAU)
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.EvaluateCacheEsau, CacheFlag.CACHE_FAMILIARS)
+
+---@param familiar EntityFamiliar
+function Mod:HandleInitEsau(familiar)
+    familiar:AddToFollowers()
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.HandleInitEsau, FAMILIAR_VARIANT_ESAU)
+
+---@param familiar EntityFamiliar
+function Mod:HandleUpdateEsau(familiar)
+    local sprite = familiar:GetSprite()
+    local player = familiar.Player
+
+    local fireDirection = player:GetFireDirection()
+    local direction
+    local shootAnim
+    local doFlip = false
+    local TEAR_DAMAGE_ESAU = player.Damage * 0.6
+    local ESAU_FIRE_RATE = player.FireDelay / 2.5
+
+    if fireDirection == Direction.LEFT then
+        direction = Vector(-1, 0)
+        shootAnim = "FloatShootSide"
+        doFlip = true
+    elseif fireDirection == Direction.RIGHT then
+        direction = Vector(1, 0)
+        shootAnim = "FloatShootSide"
+    elseif fireDirection == Direction.DOWN then
+        direction = Vector(0, 1)
+        shootAnim = "FloatShootDown"
+    elseif fireDirection == Direction.UP then
+        direction = Vector(0, -1)
+        shootAnim = "FloatShootUp"
+    end
+
+    if direction ~= nil and familiar.FireCooldown == 0 then
+        local velocity = direction * TEAR_SPEED_FAIL + player:GetTearMovementInheritance(direction)
+        local tear = Isaac.Spawn(
+            EntityType.ENTITY_TEAR,
+            TearVariant.BLOOD,
+            0,
+            familiar.Position,
+            velocity,
+            familiar
+        ):ToTear()
+        if player:HasTrinket(TrinketType.TRINKET_BABY_BENDER) and tear then
+            tear.TearFlags = TearFlags.TEAR_HOMING
+        end
+
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+            tear.CollisionDamage = TEAR_DAMAGE_ESAU * 2
+        else
+            tear.CollisionDamage = TEAR_DAMAGE_ESAU
+        end
+         if player:HasTrinket(TrinketType.TRINKET_FORGOTTEN_LULLABY) then
+            familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay * 1.5, 1))
+        else
+            familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay * 3, 1))
+        end
+ 
+
+        --familiar.FireCooldown = SHOOTING_TICK_COOLDOWN_FAIL
+
+        sprite.FlipX = doFlip
+        sprite:Play(shootAnim, true)
+    end
+
+    if sprite:IsFinished() then
+        sprite:Play("FloatDown")
+    end
+
+    familiar:FollowParent()
+    familiar.FireCooldown = math.max(familiar.FireCooldown - 1, 0)
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdateEsau, FAMILIAR_VARIANT_ESAU)
+
+--local SOUL_OF_JE = Card.CARD_SOUL_JACOB -- Replace with actual Soul of the Lost ID
 
 
-function Mod:UseSoulItemJE(item, rng, player)
+--[[ function Mod:UseSoulItemJE(item, rng, player)
     --for i = 0, Game():GetNumPlayers() - 1 do
         --local player = Game():GetPlayer(i)
         player:AnimateCollectible(JACOB_AND_ESAU_ESSENCE, "UseItem", "PlayerPickupSparkle")
@@ -6816,7 +7005,7 @@ function Mod:UseSoulItemJE(item, rng, player)
     --end
 end
 
-Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItemJE, JACOB_AND_ESAU_ESSENCE)
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItemJE, JACOB_AND_ESAU_ESSENCE) ]]
 
 
 local SOUL_OF_FORGOTTEN = Card.CARD_SOUL_FORGOTTEN -- Replace with actual Soul of the Lost ID
