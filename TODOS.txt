@@ -1,5 +1,4 @@
 - essence collectors are definitely replacing slot machines by reentering rooms - this might be fixed.
-- Forgotten, lost essence effects are kind of placeholders, need something more interesting.
 - Essence items can give copies, maybe fix that or make sure they all stack.
 - Maybe add some sound effects to items.
 - Cards are huge on J+E HUD.

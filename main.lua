@@ -6866,7 +6866,7 @@ function Mod:HandleUpdateJacob(familiar)
         local velocity = direction * TEAR_SPEED_FAIL + player:GetTearMovementInheritance(direction)
         local tear = Isaac.Spawn(
             EntityType.ENTITY_TEAR,
-            TearVariant.BLOOD,
+            TearVariant.BLUE,
             0,
             familiar.Position,
             velocity,
@@ -7044,7 +7044,7 @@ function Mod:HandleUpdateSoul(familiar)
         local velocity = direction * TEAR_SPEED_FAIL + player:GetTearMovementInheritance(direction)
         local tear = Isaac.Spawn(
             EntityType.ENTITY_TEAR,
-            TearVariant.BLOOD,
+            TearVariant.BLUE,
             0,
             familiar.Position,
             velocity,
