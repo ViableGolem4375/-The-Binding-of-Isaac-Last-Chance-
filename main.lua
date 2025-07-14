@@ -91,6 +91,10 @@ CONFIG_ESAU = itemConfig:GetCollectible(JACOB_AND_ESAU_ESSENCE)
 FAMILIAR_VARIANT_ESAU = Isaac.GetEntityVariantByName("Lil' Esau")
 
 FORGOTTEN_ESSENCE = Isaac.GetItemIdByName("Essence of The Forgotten")
+SOUL_ESSENCE = Isaac.GetItemIdByName("Essence of The Soul")
+CONFIG_SOUL = itemConfig:GetCollectible(SOUL_ESSENCE)
+FAMILIAR_VARIANT_SOUL = Isaac.GetEntityVariantByName("The Soul")
+
 STAR_OF_DAVID = Isaac.GetItemIdByName("Yamika")
 GUN_ITEM = Isaac.GetItemIdByName("A Gun")
 APPETIZER_ITEM = Isaac.GetItemIdByName("Appetizer")
@@ -1995,7 +1999,8 @@ if EID then
     EID:addCollectible(PONTIUS_ESSENCE, "Throw one of Longinus' spears in the current attack direction.#Spears deal 10x Isaac's damage.", "Essence of Longinus")
     EID:addCollectible(LOST_ESSENCE, "For the current room:#{{Warning}} Become the lost.", "Essence of The Lost")
     EID:addCollectible(JACOB_AND_ESAU_ESSENCE, "Gain two familiars, Lil' Jacob and Lil' Esau which scale with Isaac's damage and fire rate.#Jacob deals less damage but shoots faster, Esau deals more damage but shoots slower.", "Essence of Jacob and Esau")
-    EID:addCollectible(FORGOTTEN_ESSENCE, "Summon The Forgotten as a helper for the current room.", "Essence of The Forgotten")
+    EID:addCollectible(FORGOTTEN_ESSENCE, "Gain a familiar which scales with your damage and fire rate.#Activating Essence of the Forgotten will teleport Isaac to the familiar's position.", "Essence of The Forgotten")
+    EID:addCollectible(SOUL_ESSENCE, "Gain a familiar which scales with your damage and fire rate.#Activating Essence of the Forgotten will teleport Isaac to the familiar's position.", "Essence of The Soul")
     EID:addCollectible(STAR_OF_DAVID, "{{ArrowUp}} 10% chance to fire star of david tears which deal 30% more damage.#{{Luck}} 100% chance at 9 luck.#{{ArrowUp}} 1% chance for enemies to drop a golden heart on death.#{{Luck}} +1% chance per point of luck.", "Yamika")
     EID:addCollectible(GUN_ITEM, "Fire a tear that deals 10x Isaac's damage plus 10 flat damage.#{{Warning}} The tear fired is wildly inaccurate.", "A Gun")
     EID:addCollectible(APPETIZER_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.", "Appetizer")
@@ -6989,41 +6994,143 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdateEsau, FAMILIAR_VARIANT_ESAU)
 
---local SOUL_OF_JE = Card.CARD_SOUL_JACOB -- Replace with actual Soul of the Lost ID
+---@param player EntityPlayer
+function Mod:EvaluateCacheSoul(player)
+    local effects = player:GetEffects()
+    local count = effects:GetCollectibleEffectNum(SOUL_ESSENCE) + player:GetCollectibleNum(SOUL_ESSENCE)
+    local rng = RNG()
+    local seed = math.max(Random(), 1)
+    rng:SetSeed(seed, RNG_SHIFT_INDEX_FAIL)
 
-
---[[ function Mod:UseSoulItemJE(item, rng, player)
-    --for i = 0, Game():GetNumPlayers() - 1 do
-        --local player = Game():GetPlayer(i)
-        player:AnimateCollectible(JACOB_AND_ESAU_ESSENCE, "UseItem", "PlayerPickupSparkle")
-        if item == JACOB_AND_ESAU_ESSENCE then
-
-            -- ✅ Force immediate use
-            player:UseCard(SOUL_OF_JE)
-
-        end
-    --end
+    player:CheckFamiliar(FAMILIAR_VARIANT_SOUL, count, rng, CONFIG_SOUL)
 end
 
-Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItemJE, JACOB_AND_ESAU_ESSENCE) ]]
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.EvaluateCacheSoul, CacheFlag.CACHE_FAMILIARS)
 
+---@param familiar EntityFamiliar
+function Mod:HandleInitSoul(familiar)
+    familiar:AddToFollowers()
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.HandleInitSoul, FAMILIAR_VARIANT_SOUL)
+
+---@param familiar EntityFamiliar
+function Mod:HandleUpdateSoul(familiar)
+    local sprite = familiar:GetSprite()
+    local player = familiar.Player
+
+    local fireDirection = player:GetFireDirection()
+    local direction
+    local shootAnim
+    local doFlip = false
+    local TEAR_DAMAGE_SOUL = player.Damage * 0.6
+
+    if fireDirection == Direction.LEFT then
+        direction = Vector(-1, 0)
+        shootAnim = "FloatShootSide"
+        doFlip = true
+    elseif fireDirection == Direction.RIGHT then
+        direction = Vector(1, 0)
+        shootAnim = "FloatShootSide"
+    elseif fireDirection == Direction.DOWN then
+        direction = Vector(0, 1)
+        shootAnim = "FloatShootDown"
+    elseif fireDirection == Direction.UP then
+        direction = Vector(0, -1)
+        shootAnim = "FloatShootUp"
+    end
+
+    if direction ~= nil and familiar.FireCooldown == 0 then
+        local velocity = direction * TEAR_SPEED_FAIL + player:GetTearMovementInheritance(direction)
+        local tear = Isaac.Spawn(
+            EntityType.ENTITY_TEAR,
+            TearVariant.BLOOD,
+            0,
+            familiar.Position,
+            velocity,
+            familiar
+        ):ToTear()
+        if player:HasTrinket(TrinketType.TRINKET_BABY_BENDER) and tear then
+            tear.TearFlags = TearFlags.TEAR_HOMING
+        end
+
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+            tear.CollisionDamage = TEAR_DAMAGE_SOUL * 2
+        else
+            tear.CollisionDamage = TEAR_DAMAGE_SOUL
+        end
+         if player:HasTrinket(TrinketType.TRINKET_FORGOTTEN_LULLABY) then
+            familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay * 1.5, 1))
+        else
+            familiar.FireCooldown = math.floor(math.max(player.MaxFireDelay * 3, 1))
+        end
+ 
+
+        --familiar.FireCooldown = SHOOTING_TICK_COOLDOWN_FAIL
+
+        sprite.FlipX = doFlip
+        sprite:Play(shootAnim, true)
+    end
+
+    if sprite:IsFinished() then
+        sprite:Play("FloatDown")
+    end
+
+    familiar:FollowParent()
+    familiar.FireCooldown = math.max(familiar.FireCooldown - 1, 0)
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdateSoul, FAMILIAR_VARIANT_SOUL)
 
 local SOUL_OF_FORGOTTEN = Card.CARD_SOUL_FORGOTTEN -- Replace with actual Soul of the Lost ID
 
 function Mod:UseSoulItemForgotten(item, rng, player)
     --for i = 0, Game():GetNumPlayers() - 1 do
         --local player = Game():GetPlayer(i)
-        player:AnimateCollectible(FORGOTTEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
+        --player:AnimateCollectible(FORGOTTEN_ESSENCE, "UseItem", "PlayerPickupSparkle")
         if item == FORGOTTEN_ESSENCE then
+            -- Find closest valid Soul familiar
+            local closestFamiliar = nil
+            local closestDistance = math.huge
 
-            -- ✅ Force immediate use
-            player:UseCard(SOUL_OF_FORGOTTEN)
+            for _, familiar in ipairs(Isaac.FindByType(EntityType.ENTITY_FAMILIAR, FAMILIAR_VARIANT_SOUL)) do
+                --if familiar.Player and familiar.Player.Index == player.Index then
+                    local distance = player.Position:Distance(familiar.Position)
+                    if distance < closestDistance then
+                        closestDistance = distance
+                        closestFamiliar = familiar
+                    end
+                --end
+            end
 
+            -- If found, teleport player
+            if closestFamiliar then
+                player:SetMinDamageCooldown(30)
+                SFXManager():Play(SoundEffect.SOUND_HELL_PORTAL2)
+                player.Position = closestFamiliar.Position
+                player:SetVelocity(Vector.Zero)
+            else
+                print("Forgotten Soul teleport failed: no familiar found")
+            end
         end
     --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseSoulItemForgotten, FORGOTTEN_ESSENCE)
+
+function Mod:GiveSoulEssence(item, rng, player)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:HasCollectible(FORGOTTEN_ESSENCE) and not player:HasCollectible(SOUL_ESSENCE) then
+            player:AddCollectible(SOUL_ESSENCE)
+        elseif not player:HasCollectible(FORGOTTEN_ESSENCE) then
+            player:RemoveCollectible(SOUL_ESSENCE)
+
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.GiveSoulEssence)
 
 
 local HasStarEffect = false

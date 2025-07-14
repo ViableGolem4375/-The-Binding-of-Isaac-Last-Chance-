@@ -99,4 +99,5 @@
     </entity>
     <entity name="Lil' Jacob" id="3" anm2path="liljacob.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
     <entity name="Lil' Esau" id="3" anm2path="lilesau.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
+    <entity name="The Soul" id="3" anm2path="thesoul.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
 </entities>
