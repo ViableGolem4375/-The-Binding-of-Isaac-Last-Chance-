@@ -2114,7 +2114,7 @@ if EID then
     EID:addCollectible(INFESTATION_ITEM, "Enemies have a 10% chance to spawn a friendly swarm spider on death.#{{Luck}} +2% chance per point of luck.", "Infestation 3")
     EID:addCollectible(RAPTURE_ITEM, "Make all players briefly invulnerable and throw an orb of light which detonates into 7 beams of light fired in a circular pattern after a brief delay.", "Rapture")
     EID:addTrinket(NIL_VALUE_ITEM, "Activates the effects of Dataminer when Isaac takes damage.#{{Collectible202}} No effect when golden.", "Nil Value")
-    EID:addCollectible(SHATTERED_GLADIUS_ITEM, "Teleports Isaac to a challenge room separate to the one on the floor.#Has a 10% chance to teleport Isaac to a boss challenge room instead.", "Shattered Gladius")
+    EID:addCollectible(SHATTERED_GLADIUS_ITEM, "Teleports Isaac to a challenge room separate to the one on the floor.#This challenge room always contains a random item from the treasure room pool.#Can only be used once per floor.", "Shattered Gladius")
     EID:addCollectible(TRASH_ITEM, "On activation will do one of the following:#Spawn an item pedestal containing a quality 0 item.#Spawn a random garbage related trinket.#Spawn a rotten heart.#Spawn several blue flies.", "Trash Bag")
     EID:addCollectible(CAKE_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.#{{ArrowUp}} +0.3 Speed#{{ArrowUp}} -0.5 Tear Delay#{{ArrowUp}} +1 Damage#{{ArrowUp}} +3.75 Range#{{ArrowUp}} +0.16 Shot Speed#{{ArrowUp}} +1 Luck", "Birthday Cake")
     EID:addCollectible(RIFT_ITEM, "Grants a slowing locust, a poison locust, an explosive locust, and a high damage locust.", "Abyssal Rift")
@@ -10566,21 +10566,42 @@ function Mod:UseShatteredGladius(item, rng, player)
         local sfx = SFXManager()
         if item == SHATTERED_GLADIUS_ITEM then
             player:AnimateCollectible(SHATTERED_GLADIUS_ITEM, "UseItem", "PlayerPickupSparkle")
-            local roll = rng:RandomFloat() -- Get a random number between 0 and 1
-
-            if roll <= 0.1 then
+            --local roll = rng:RandomFloat() -- Get a random number between 0 and 1
+            Isaac.ExecuteCommand("goto s.challenge.8038")
+            sfx:Play(SoundEffect.SOUND_HELL_PORTAL1)
+            --[[ if roll <= 0.1 then
                 Isaac.ExecuteCommand("goto s.challenge.24")
                 sfx:Play(SoundEffect.SOUND_HELL_PORTAL1)
             else
                 Isaac.ExecuteCommand("goto s.challenge.9")
                 sfx:Play(SoundEffect.SOUND_HELL_PORTAL1)
-            end
+            end ]]
 
         end
     --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseShatteredGladius, SHATTERED_GLADIUS_ITEM)
+
+function Mod:ChargeGladius(player)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Isaac.GetPlayer(i)
+        for slot = 0, 1 do
+            if player:GetActiveItem(slot) == SHATTERED_GLADIUS_ITEM then
+                local maxCharge = Isaac.GetItemConfig():GetCollectible(SHATTERED_GLADIUS_ITEM).MaxCharges or 6
+                player:SetActiveCharge(maxCharge, slot)
+                local sfx = SFXManager()
+                sfx:Play(SoundEffect.SOUND_BATTERYCHARGE)
+            end
+        end
+
+    end
+
+
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.ChargeGladius)
+
 
 function Mod:UseTrashBag(item, rng, player)
     local sfx = SFXManager()
@@ -12777,12 +12798,12 @@ end
 function Chest:onNewRoomChest()
     local currentRoom = Game():GetRoom()
     if currentRoom:IsFirstVisit() == true then
-        local donTable = Isaac.FindByType(EntityType.ENTITY_PICKUP,60,-1,false,false)
+        local donTable = Isaac.FindByType(EntityType.ENTITY_PICKUP,360,-1,false,false)
 				
 		for k in pairs(donTable) do
 			local replaceChance = math.random(0,101)
 					
-			if replaceChance <= 10 then
+			if replaceChance <= 30 then
 				Isaac.Spawn(EntityType.ENTITY_PICKUP,Chest.CHEST_ESSENCE,0,donTable[k].Position,Vector(0,0),nil)
 				donTable[k]:Remove()
 			end
