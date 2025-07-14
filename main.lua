@@ -12353,5 +12353,148 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, OnNewRoom)
 
 ----------------------------------------------------------------------------------------
---- Room Code For Essence of Isaac Below.
+--- Code For Chests Below
 
+local Chest = {}
+
+Chest.CHEST_ESSENCE = 249376973
+
+function Chest:onPlayerCollideChest(player,collider,_low)
+    if collider.Type == 5 and collider.Variant == Chest.CHEST_ESSENCE then
+        local slotData = collider:GetData()
+			if slotData == nil then
+				return false
+			end
+	   
+			local slotSprite = collider:GetSprite()
+            slotData.LastPlayer = collider:ToPlayer()
+			
+			--If the machine isn't busy and the player can use it
+			if slotSprite:IsPlaying("Idle") and player:GetNumKeys() >= 1 then
+                slotSprite:Play("Open")
+                player:AddKeys(-1)
+            end
+    end
+end
+
+
+function Chest:onUpdateChest()
+    local slotsTable = Isaac.FindByType(EntityType.ENTITY_PICKUP,Chest.CHEST_ESSENCE,-1,false,false)
+    local player = Isaac.GetPlayer(0)
+    for k in pairs(slotsTable) do
+
+        --print("working")
+        local slot = slotsTable[k]
+
+        local slotData = slot:GetData()
+
+		if slotData == nil then
+			return false
+		end
+
+        local slotSprite = slot:GetSprite()
+        if slotSprite:IsEventTriggered("Opened") then
+		    SFXManager():Play(SoundEffect.SOUND_CHEST_OPEN,1,0,false,1)
+	    end
+
+        local slotRNG = slot:GetDropRNG():RandomInt(100)
+        local slotRNG2 = slot:GetDropRNG():RandomInt(100)
+        local slotRNG3 = slot:GetDropRNG():RandomInt(100)
+
+
+        if slotSprite:IsEventTriggered("Opened") then
+            print(slotRNG2)
+            if slotRNG <= 100 then
+
+                if slotRNG2 < 10 then
+                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, RELIQUARY_TRINKET, slot.Position, Vector(0,0), nil)
+                    slotSprite:Play("Opened")
+                elseif slotRNG2 < 80 then
+                    if slotRNG3 < 5 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 81, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 10 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 82, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 15 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 83, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 20 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 84, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 25 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 85, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 30 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 86, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 35 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 87, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 40 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 88, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 45 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 89, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 50 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 90, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 55 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 91, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 60 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 92, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 65 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 93, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 70 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 94, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 75 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 95, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 80 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 96, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 85 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 97, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 90 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, SOUL_DOMINO, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 95 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, SOUL_PONTIUS, slot.Position, Vector(0,0), nil)
+                    elseif slotRNG3 < 100 then
+                        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, SOUL_ABRAHAM, slot.Position, Vector(0,0), nil)
+                    end
+                    slotSprite:Play("Opened")
+                elseif slotRNG2 < 90 then
+                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_SOUL, slot.Position, Vector(0,0), nil)
+                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_SOUL, slot.Position, Vector(0,0), nil)
+                    slotSprite:Play("Opened")
+                elseif slotRNG2 < 100 then
+                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_SOUL, slot.Position, Vector(0,0), nil)
+                    slotSprite:Play("Opened")
+                else
+                    slotSprite:Play("Opened")
+                end
+
+
+            end
+
+        end
+
+        if slotSprite:IsFinished("Idle") then
+			slotSprite:Play("Open",true)
+		end
+			
+		if slotSprite:IsFinished("Open") then
+			slotSprite:Play("Opened",true)				
+		end
+    end
+end
+
+function Chest:onNewRoomChest()
+    local currentRoom = Game():GetRoom()
+    if currentRoom:IsFirstVisit() == true then
+        local donTable = Isaac.FindByType(EntityType.ENTITY_PICKUP,60,-1,false,false)
+				
+		for k in pairs(donTable) do
+			local replaceChance = math.random(0,101)
+					
+			if replaceChance <= 10 then
+				Isaac.Spawn(EntityType.ENTITY_PICKUP,Chest.CHEST_ESSENCE,0,donTable[k].Position,Vector(0,0),nil)
+				donTable[k]:Remove()
+			end
+		end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Chest.onNewRoomChest)
+Mod:AddCallback(ModCallbacks.MC_PRE_PLAYER_COLLISION, Chest.onPlayerCollideChest)
+Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Chest.onUpdateChest)
