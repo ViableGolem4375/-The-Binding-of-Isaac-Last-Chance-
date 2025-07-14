@@ -10443,7 +10443,7 @@ function Mod:UpdateDogmaTears()
             local data = tear:GetData()
             local enemies = Isaac.FindInRadius(tear.Position, 120, EntityPartition.ENEMY)
             for _, enemy in ipairs(enemies) do
-                if enemy:IsVulnerableEnemy() and not enemy:IsDead() then
+                if enemy:IsVulnerableEnemy() and not enemy:IsDead() and not enemy:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) then
                     local id = GetPtrHash(enemy)
                     data.nearbyEnemies[id] = (data.nearbyEnemies[id] or 0) + 1
 
@@ -10457,6 +10457,8 @@ function Mod:UpdateDogmaTears()
                         local dogmabeam = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CRACK_THE_SKY, 0, enemy.Position, Vector.Zero, tear.SpawnerEntity)
                         dogmabeam.Parent = tear.SpawnerEntity
                         dogmabeam.CollisionDamage = AuraDamage * 5
+                        dogmabeam:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+
                         
 
                     end

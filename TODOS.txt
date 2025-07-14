@@ -3,7 +3,7 @@
 - Maybe add some sound effects to items.
 - Cards are huge on J+E HUD.
 - make defense tech not interact with enviromnentals
-- shattered gladius normal rooms not triggering a fight sometimes?
+- the light beams from dogmatism damage the player
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -38,8 +38,8 @@ Trinket Ideas:
 
 
 Streaks:
-T Apollyon Win Streak: 26
-	Best: 26
+T Apollyon Win Streak: 27
+	Best: 27
 T Keeper Win Streak: 0
 	Best: 5
 Jacob and Esau:
