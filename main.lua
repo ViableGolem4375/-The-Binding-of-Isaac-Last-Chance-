@@ -12888,7 +12888,9 @@ function Chest:onUpdateChest()
 
                 if slotRNG2 < 10 then
                     Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, RELIQUARY_TRINKET, slot.Position, Vector(0,0), nil)
+                    Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, slot.Position, Vector(0,0), player)
                     slotSprite:Play("Opened")
+                    SFXManager():Play(SoundEffect.SOUND_DIVINE_INTERVENTION,1,0,false,1)
                 elseif slotRNG2 < 80 then
                     if slotRNG3 < 5 then
                         Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, 81, slot.Position, Vector(0,0), nil)
@@ -12931,16 +12933,24 @@ function Chest:onUpdateChest()
                     elseif slotRNG3 < 100 then
                         Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, SOUL_ABRAHAM, slot.Position, Vector(0,0), nil)
                     end
+                    Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, slot.Position, Vector(0,0), player)
                     slotSprite:Play("Opened")
+                    SFXManager():Play(SoundEffect.SOUND_DIVINE_INTERVENTION,1,0,false,1)
                 elseif slotRNG2 < 90 then
                     Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_SOUL, slot.Position, Vector(0,0), nil)
                     Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_SOUL, slot.Position, Vector(0,0), nil)
+                    Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, slot.Position, Vector(0,0), player)
                     slotSprite:Play("Opened")
+                    SFXManager():Play(SoundEffect.SOUND_DIVINE_INTERVENTION,1,0,false,1)
                 elseif slotRNG2 < 100 then
                     Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_SOUL, slot.Position, Vector(0,0), nil)
+                    Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, slot.Position, Vector(0,0), player)
                     slotSprite:Play("Opened")
+                    SFXManager():Play(SoundEffect.SOUND_DIVINE_INTERVENTION,1,0,false,1)
                 else
+                    Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, slot.Position, Vector(0,0), player)
                     slotSprite:Play("Opened")
+                    SFXManager():Play(SoundEffect.SOUND_DIVINE_INTERVENTION,1,0,false,1)
                 end
 
 
@@ -12955,8 +12965,24 @@ function Chest:onUpdateChest()
 		if slotSprite:IsFinished("Open") then
 			slotSprite:Play("Opened",true)				
 		end
+        
+        if slotSprite:IsFinished("Opened") then
+			slot:Remove()			
+		end
     end
 end
+
+--[[ function Chest:RemoveTheChest(machine)
+    local asploded = machine.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND
+    if not asploded then return end
+	
+	local machineSprite = machine:GetSprite()
+	
+	if machineSprite:GetAnimation() ~= "Opened" then
+		machineSprite:Play("Opened",true)
+	end
+
+end ]]
 
 function Chest:onNewRoomChest()
     local currentRoom = Game():GetRoom()
