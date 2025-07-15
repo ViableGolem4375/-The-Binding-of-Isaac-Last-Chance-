@@ -12689,7 +12689,13 @@ function Chest:onPlayerCollideChest(player,collider,_low)
             slotData.LastPlayer = collider:ToPlayer()
 			
 			--If the machine isn't busy and the player can use it
-			if slotSprite:IsPlaying("Idle") and player:GetNumKeys() >= 1 then
+			if slotSprite:IsPlaying("Idle") and player:HasTrinket(TrinketType.TRINKET_PAPER_CLIP) then
+                slotSprite:Play("Open")
+                --player:AddKeys(-1)
+            elseif slotSprite:IsPlaying("Idle") and player:GetNumCoins() >= 1 and player:HasCollectible(CollectibleType.COLLECTIBLE_PAY_TO_PLAY) then
+                slotSprite:Play("Open")
+                player:AddCoins(-1)
+            elseif slotSprite:IsPlaying("Idle") and player:GetNumKeys() >= 1 then
                 slotSprite:Play("Open")
                 player:AddKeys(-1)
             end
