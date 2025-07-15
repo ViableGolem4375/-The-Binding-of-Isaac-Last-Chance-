@@ -1,4 +1,3 @@
-- essence collectors are definitely replacing slot machines by reentering rooms - this might be fixed.
 - Essence items can give copies, maybe fix that or make sure they all stack.
 - Maybe add some sound effects to items.
 - Cards are huge on J+E HUD.
@@ -27,11 +26,11 @@ active item like birthright
 item rooms have no items but secret rooms do
 all stats down plus something
 something with this effect: DOGMA_BLACKHOLE
-mess with max hp if possible - needs HP api
 random dad item effect
 pick a stage and go there
 dogma familiar
 templeos
+deal more damage depending on how many enemies are in the room
 
 Trinket Ideas:
 
