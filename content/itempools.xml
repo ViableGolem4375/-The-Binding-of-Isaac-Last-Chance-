@@ -53,6 +53,7 @@
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Executioner's Axe" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dark Motivator" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="angel">
@@ -113,6 +114,7 @@
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Executioner's Axe" Weight="0.5" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dark Motivator" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -214,6 +216,7 @@
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Executioner's Axe" Weight="0.5" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dark Motivator" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -233,6 +236,7 @@
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Executioner's Axe" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dark Motivator" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedAngel">
@@ -291,6 +295,8 @@
         <Item Name="Dogmatism" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Sack of Hearts" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dark Motivator" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
     </Pool>
     <Pool Name="library">
         <Item Name="Anatomy Textbook" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
@@ -349,7 +355,23 @@
 
     </Pool>
     <Pool Name="demonBeggar">
-        
+        <Item Name="Unholy Mantle" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Failed Abortion" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="A Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Necromancy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Gluttony" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Greed" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Lust" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Pride" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Envy" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Wrath" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Sloth" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Neurotoxin" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Executioner's Axe" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Dark Motivator" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
 
     </Pool>
     <Pool Name="keyMaster">

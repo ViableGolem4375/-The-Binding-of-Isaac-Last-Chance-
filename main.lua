@@ -196,6 +196,8 @@ BATTERY_ITEM = Isaac.GetItemIdByName("Expired Battery")
 POLTERGEIST_ITEM = Isaac.GetItemIdByName("Poltergeist")
 FAMILIAR_POLTERGEIST = Isaac.GetEntityVariantByName("Poltergeist")
 AXE_ITEM = Isaac.GetItemIdByName("Executioner's Axe")
+MOTIVATOR_ITEM = Isaac.GetItemIdByName("Dark Motivator")
+
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Longinus")
@@ -2122,7 +2124,8 @@ if EID then
     EID:addCollectible(BATTERY_ITEM, "Using active items causes Isaac to explode dealing 40 damage to enemies and leave behind green creep which damages enemies that pass over it.#Isaac does not take damage from these explosions.", "Expired Battery")
     EID:addCollectible(POLTERGEIST_ITEM, "Grants an orbital which applies a brief fear status effect to enemies which touch it.", "Poltergeist")
     EID:addCollectible(AXE_ITEM, "Swing a melee attack which deals 999999 damage to anything it hits.#{{Warning}} Hitting an enemy with this attack will consume the item.", "Executioner's Axe")
-    
+    EID:addCollectible(MOTIVATOR_ITEM, "{{ArrowUp}} Gain +10% damage for every enemy in the current room.", "Dark Motivator")
+
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
     function Mod:GetThePlayer()
@@ -3511,6 +3514,21 @@ if EID then
     end
 
     EID:addDescriptionModifier("Executioner Mod", ExexutionerAbyss, ExecutionerCallback)
+
+    function MotivatorAbyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == MOTIVATOR_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function MotivatorCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 1.5x damage multiplier.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Motivator Mod", MotivatorAbyss, MotivatorCallback)
 
     function PoltergeistAbyss(descObj)
 	    for i = 0, Game():GetNumPlayers() - 1 do
@@ -11026,6 +11044,49 @@ function Mod:CheckAxeHitbox(npc)
 end
 
 Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, Mod.CheckAxeHitbox)
+
+function Mod:UpdateMotivatorDamage(player)
+    if not player:HasCollectible(MOTIVATOR_ITEM) then return end
+
+    local room = Game():GetRoom()
+    local enemyCount = 0
+
+    -- ✅ Count all vulnerable enemies
+    for _, entity in ipairs(Isaac.GetRoomEntities()) do
+        if entity:IsVulnerableEnemy() and not entity:IsDead() and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) then
+            enemyCount = enemyCount + 1
+        end
+    end
+
+    if room:IsClear() or enemyCount == 0 then
+        -- 🔻 Reset when there’s no one left to be motivated by
+        if player:GetData().motivatorDamageBoost then
+            player:GetData().motivatorDamageBoost = nil
+            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+            player:EvaluateItems()
+        end
+    else
+        -- 🔺 Apply boost based on enemy count
+        local baseMultiplier = 1.0
+        local perEnemyBonus = 0.1 * player:GetCollectibleNum(MOTIVATOR_ITEM) -- Each enemy adds 5% bonus
+        local totalBoost = baseMultiplier + (enemyCount * perEnemyBonus)
+
+        player:GetData().motivatorDamageBoost = totalBoost
+        player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+        player:EvaluateItems()
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.UpdateMotivatorDamage)
+
+function Mod:ApplyMotivatorDamage(player, cacheFlag)
+    if cacheFlag == CacheFlag.CACHE_DAMAGE and player:GetData().motivatorDamageBoost then
+        player.Damage = player.Damage * player:GetData().motivatorDamageBoost
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyMotivatorDamage)
+
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

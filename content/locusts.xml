@@ -212,4 +212,7 @@
     <locust id="127" tearFlags2="54" procChance="0.1" gfx="axe.png"/>
     <!--  Poltergeist: 50% fear -->
     <locust id="134" tearFlags="0" tearFlags2="20" procChance="0.5"  color="fly_purple"/>
+    <!--  Dark Motivator: high damage locust -->
+    <locust id="136" damageMultiplier="1.5" color="fly_darkred"/>
+
 </locusts>

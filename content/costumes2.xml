@@ -54,5 +54,6 @@
     <costume id="125" anm2path="sack_of_hearts.anm2" type="passive" priority="0" />
     <costume id="126" anm2path="expired_battery.anm2" type="passive" priority="0" />
     <costume id="38" anm2path="JE_essence.anm2" type="passive" priority="0" />
+    <costume id="136" anm2path="motivator.anm2" type="passive" priority="0" />
 
 </costumes>
