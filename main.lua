@@ -197,6 +197,7 @@ POLTERGEIST_ITEM = Isaac.GetItemIdByName("Poltergeist")
 FAMILIAR_POLTERGEIST = Isaac.GetEntityVariantByName("Poltergeist")
 AXE_ITEM = Isaac.GetItemIdByName("Executioner's Axe")
 MOTIVATOR_ITEM = Isaac.GetItemIdByName("Dark Motivator")
+TEMPLE_ITEM = Isaac.GetItemIdByName("TempleOS")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2125,6 +2126,7 @@ if EID then
     EID:addCollectible(POLTERGEIST_ITEM, "Grants an orbital which applies a brief fear status effect to enemies which touch it.", "Poltergeist")
     EID:addCollectible(AXE_ITEM, "Swing a melee attack which deals 999999 damage to anything it hits.#{{Warning}} Hitting an enemy with this attack will consume the item.", "Executioner's Axe")
     EID:addCollectible(MOTIVATOR_ITEM, "{{ArrowUp}} Gain +10% damage for every enemy in the current room.", "Dark Motivator")
+    EID:addCollectible(TEMPLE_ITEM, "Activates a random effect from a predefined list.#Has a 1% chance to grant Dogmatism on use.", "TempleOS")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -3544,6 +3546,21 @@ if EID then
     end
 
     EID:addDescriptionModifier("Poltergeist Mod", PoltergeistAbyss, PoltergeistCallback)
+
+    function TempleAbyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == TEMPLE_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function TempleCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance for random effects on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Temple Mod", TempleAbyss, TempleCallback)
 
     function BondVoid(descObj)
 	    for i = 0, Game():GetNumPlayers() - 1 do
@@ -10110,8 +10127,8 @@ local statusEffects = {
 }
 
 function Mod:UseStatusItem(item, rng, player)
-    for i = 0, Game():GetNumPlayers() - 1 do
-        local player = Game():GetPlayer(i)
+    --for i = 0, Game():GetNumPlayers() - 1 do
+        --local player = Game():GetPlayer(i)
         if item == CONCOCTION_ITEM then
             player:AnimateCollectible(CONCOCTION_ITEM, "UseItem", "PlayerPickupSparkle")
             -- ✅ Apply multiple tear effects
@@ -10124,7 +10141,7 @@ function Mod:UseStatusItem(item, rng, player)
             player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
             player:EvaluateItems()
         end
-    end
+    --end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseStatusItem, CONCOCTION_ITEM)
@@ -11087,6 +11104,82 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyMotivatorDamage)
 
+--[[ function Mod:UseTempleItem(_, _, player, _)
+    local rng = RNG()
+    rng:SetSeed(Random(), 35) -- Use a unique offset for consistency
+    local random = rng:RandomFloat()
+
+    if random < 0.1 then
+        player:AddSoulHearts(2)
+        SFXManager():Play(SoundEffect.SOUND_HOLY, 1, 0, false, 1)
+    elseif random < 0.2 then
+        player:UseActiveItem(PONTIUS_ESSENCE)
+    elseif random < 0.3 then
+        player:UseActiveItem(GUN_ITEM)
+    elseif random < 0.4 then
+        player:UseCard(RELIQUARY_CARD)
+    elseif random < 0.5 then
+        player:UseActiveItem(RAPTURE_ITEM)
+    elseif random < 0.6 then
+        player:UseActiveItem(CONCOCTION_ITEM)
+    elseif random < 0.7 then
+        player:UseCard(JUSTICE_CARD)
+    elseif random < 0.8 then
+        player:UseActiveItem(TRASH_ITEM)
+    elseif random < 0.9 then
+        player:UseActiveItem(CollectibleType.COLLECTIBLE_DEAD_SEA_SCROLLS)
+    elseif random < 0.99 then
+        player:UseActiveItem(TOWER_CARD)
+    elseif random < 1 then
+        player:AddCollectible(DOGMA_ITEM)
+    else
+        SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 0, false, 1)
+    end
+
+    return true
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTempleItem, TEMPLE_ITEM) ]]
+
+function Mod:UseTempleItem(item, rng, player)
+    local sfx = SFXManager()
+    if item == TEMPLE_ITEM then
+        player:AnimateCollectible(TEMPLE_ITEM, "UseItem", "PlayerPickupSparkle")
+        local room = Game():GetRoom()
+            
+        local roll = rng:RandomInt(100) + 1 -- 1 to 4
+        local position =  room:FindFreeTilePosition(player.Position + Vector(20,20), 100)
+
+        if roll <= 10 then
+            player:AddSoulHearts(2)
+            SFXManager():Play(SoundEffect.SOUND_HOLY, 1, 0, false, 1)
+        elseif roll <= 20 then
+            player:UseActiveItem(PONTIUS_ESSENCE)
+        elseif roll <= 30 then
+            player:UseActiveItem(GUN_ITEM)
+        elseif roll <= 40 then
+            player:UseCard(RELIQUARY_CARD)
+        elseif roll <= 50 then
+            player:UseActiveItem(RAPTURE_ITEM)
+        elseif roll <= 60 then
+            player:UseActiveItem(CONCOCTION_ITEM)
+        elseif roll <= 70 then
+            player:UseCard(JUSTICE_CARD)
+        elseif roll <= 80 then
+            player:UseActiveItem(TRASH_ITEM)
+        elseif roll <= 90 then
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_DEAD_SEA_SCROLLS)
+        elseif roll <= 99 then
+            player:UseActiveItem(TOWER_CARD)
+        elseif roll <= 100 then
+            player:AddCollectible(DOGMA_ITEM)
+        end
+
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTempleItem, TEMPLE_ITEM)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

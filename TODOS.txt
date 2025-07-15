@@ -30,7 +30,6 @@ random dad item effect
 pick a stage and go there
 dogma familiar
 templeos
-deal more damage depending on how many enemies are in the room
 
 Trinket Ideas:
 

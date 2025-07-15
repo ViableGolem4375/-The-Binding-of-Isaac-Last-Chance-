@@ -214,5 +214,7 @@
     <locust id="134" tearFlags="0" tearFlags2="20" procChance="0.5"  color="fly_purple"/>
     <!--  Dark Motivator: high damage locust -->
     <locust id="136" damageMultiplier="1.5" color="fly_darkred"/>
+    <!--  TempleOS: 30% chance for random effects -->
+    <locust id="137" locustFlags2="1" procChance="1" gfx="templeos.png"/>
 
 </locusts>
