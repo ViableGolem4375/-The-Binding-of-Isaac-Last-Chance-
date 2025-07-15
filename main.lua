@@ -5940,12 +5940,13 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateJudasEssence)
 
+local currentRoomBB = Game():GetRoom()
 
 function Mod:OnNewRoomBlueBabyEssence()
     for i = 0, Game():GetNumPlayers() - 1 do
         local player = Isaac.GetPlayer(i)
         -- Ensure the player has the item before triggering effect
-        if player:HasCollectible(BLUE_BABY_ESSENCE) then
+        if player:HasCollectible(BLUE_BABY_ESSENCE) and currentRoomBB:IsFirstVisit() == true then
             local babynum = player:GetCollectibleNum(BLUE_BABY_ESSENCE) * 10
             -- Spawn Blue Flies around the player
             player:AddBlueFlies(babynum, player.Position, player)
