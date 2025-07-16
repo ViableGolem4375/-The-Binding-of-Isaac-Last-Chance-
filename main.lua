@@ -9109,18 +9109,19 @@ function Mod:OnEnterSpecialRoom()
     for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
         local data = player:GetData()
+        local abenum = player:GetCollectibleNum(ABRAHAM_ESSENCE_ITEM) * 6
 
         if player:HasCollectible(ABRAHAM_ESSENCE_ITEM) then
             if not data.HasClaimedHeartBonus then data.HasClaimedHeartBonus = {} end -- ✅ Track claimed bonuses
 
             -- ✅ Check if room is Angel or Devil and ensure effect hasn't triggered before
             if room:GetType() == RoomType.ROOM_ANGEL and not data.HasClaimedHeartBonus[RoomType.ROOM_ANGEL] then
-                player:AddSoulHearts(6) -- ✅ Grants 3 Soul Hearts (6 half-hearts)
+                player:AddSoulHearts(abenum) -- ✅ Grants 3 Soul Hearts (6 half-hearts)
 
                 data.HasClaimedHeartBonus[RoomType.ROOM_ANGEL] = true -- ✅ Marks Angel room bonus as claimed
                 print(player:GetName(), "entered Angel Room! Granted 3 Soul Hearts.")
             elseif room:GetType() == RoomType.ROOM_DEVIL and not data.HasClaimedHeartBonus[RoomType.ROOM_DEVIL] then
-                player:AddBlackHearts(6) -- ✅ Grants 3 Black Hearts (6 half-hearts)
+                player:AddBlackHearts(abenum) -- ✅ Grants 3 Black Hearts (6 half-hearts)
                 data.HasClaimedHeartBonus[RoomType.ROOM_DEVIL] = true -- ✅ Marks Devil room bonus as claimed
                 print(player:GetName(), "entered Devil Room! Granted 3 Black Hearts.")
             end
