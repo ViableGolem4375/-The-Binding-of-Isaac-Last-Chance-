@@ -5865,18 +5865,18 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.MagEssenceUse, MAGDALENE_ESSENCE) 
 
-local cain_essence_triggered = false
+--[[ local cain_essence_triggered = false
 
 -- Reset the flag when starting a new run
 function Mod:OnNewGame(isContinued)
     if not isContinued then -- Ensures it only resets for fresh runs, not continues
         cain_essence_triggered = false
     end
-end
+end ]]
 
 
 -- Function to grant resources upon pickup
-function Mod:OnPickupCainEssence(_, player)
+--[[ function Mod:OnPickupCainEssence(_, player)
     for i = 0, Game():GetNumPlayers() - 1 do
         local player = Isaac.GetPlayer(i)
         if player:HasCollectible(CAIN_ESSENCE) and cain_essence_triggered == false then
@@ -5886,7 +5886,7 @@ function Mod:OnPickupCainEssence(_, player)
             player:AddBombs(20)
         end
     end
-end
+end ]]
 
 -- Function to spawn golden items at the start of each floor
 function Mod:OnNewFloor()
@@ -5913,8 +5913,8 @@ function Mod:OnNewFloor()
     end
 end
 
-Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGame) -- Reset flag between runs
-Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupCainEssence) -- Detect item pickup
+--Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGame) -- Reset flag between runs
+--Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.OnPickupCainEssence) -- Detect item pickup
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloor) -- Spawn golden items at the start of each floor
 
 function Mod:OnCacheUpdateJudasEssence(player, cacheFlag)
