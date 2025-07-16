@@ -201,6 +201,7 @@ AXE_ITEM = Isaac.GetItemIdByName("Executioner's Axe")
 AXE_SWING = Isaac.GetEntityVariantByName("Axe Swing")
 MOTIVATOR_ITEM = Isaac.GetItemIdByName("Dark Motivator")
 TEMPLE_ITEM = Isaac.GetItemIdByName("TempleOS")
+SHARD_TRINKET = Isaac.GetTrinketIdByName("Essence Shard")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -229,6 +230,10 @@ MOON_CARD = Isaac.GetCardIdByName("Misprinted Moon")
 SUN_CARD = Isaac.GetCardIdByName("Misprinted Sun")
 JUDGEMENT_CARD = Isaac.GetCardIdByName("Misprinted Judgement")
 WORLD_CARD = Isaac.GetCardIdByName("Misprinted World")
+
+local Chest = {}
+
+Chest.CHEST_ESSENCE = 249376973
 
 ----------------------------------------------------------------------------------------
 -- Character code for Domino below.
@@ -2165,6 +2170,7 @@ if EID then
     EID:addCollectible(AXE_ITEM, "Swing a melee attack which deals 999999 damage to anything it hits.#{{Warning}} Hitting an enemy with this attack will consume the item.", "Executioner's Axe")
     EID:addCollectible(MOTIVATOR_ITEM, "{{ArrowUp}} Gain +10% damage for every enemy in the current room.", "Dark Motivator")
     EID:addCollectible(TEMPLE_ITEM, "Activates a random effect from a predefined list.#Has a 1% chance to grant Dogmatism on use.", "TempleOS")
+    EID:addTrinket(SHARD_TRINKET, "Turns all chests into Essence Chests.#{{Collectible202}} No additional effect when golden.", "Essence Shard")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -12706,6 +12712,41 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.OnPlayerDamagedNil)
 
+function Mod:ConvertChestsToEssence(pickup)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+
+        if player:HasTrinket(SHARD_TRINKET) then
+            if pickup.Variant == PickupVariant.PICKUP_CHEST 
+            or pickup.Variant == PickupVariant.PICKUP_BIGCHEST 
+            or pickup.Variant == PickupVariant.PICKUP_OLDCHEST 
+            or pickup.Variant == PickupVariant.PICKUP_REDCHEST 
+            or pickup.Variant == PickupVariant.PICKUP_BOMBCHEST 
+            or pickup.Variant == PickupVariant.PICKUP_MEGACHEST 
+            or pickup.Variant == PickupVariant.PICKUP_MIMICCHEST 
+            or pickup.Variant == PickupVariant.PICKUP_LOCKEDCHEST 
+            or pickup.Variant == PickupVariant.PICKUP_SPIKEDCHEST 
+            or pickup.Variant == PickupVariant.PICKUP_WOODENCHEST 
+            or pickup.Variant == PickupVariant.PICKUP_ETERNALCHEST then
+                local subtype = pickup.SubType
+                -- Only convert normal pills (subtype < 2048)
+                --if subtype > 0 and subtype < 2048 then
+                    --local horseSubtype = subtype + 2048
+                pickup:ToPickup():Morph(
+                    EntityType.ENTITY_PICKUP,
+                    Chest.CHEST_ESSENCE,
+                    0,
+                    true,
+                    true
+                    )
+                --end
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, Mod.ConvertChestsToEssence)
+
 ----------------------------------------------------------------------------------------
 --- Room Code For Essence Reliquary Below.
 
@@ -12817,9 +12858,9 @@ Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, OnNewRoom)
 ----------------------------------------------------------------------------------------
 --- Code For Chests Below
 
-local Chest = {}
+--local Chest = {}
 
-Chest.CHEST_ESSENCE = 249376973
+--Chest.CHEST_ESSENCE = 249376973
 
 function Chest:onPlayerCollideChest(player,collider,_low)
     if collider.Type == 5 and collider.Variant == Chest.CHEST_ESSENCE then
