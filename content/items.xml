@@ -138,5 +138,6 @@
     <passive id="136" name="Dark Motivator" gfx="motivator.png" description="Make them pay" quality="3" craftquality="3" devilprice="1" tags="offensive nocantrip devil summonable" cache="damage" />
     <active id="137" name="TempleOS" gfx="templeos.png" description="God's operating system" quality="3" craftquality="3" maxcharges="4" chargetype="normal" devilprice="2" tags="offensive nocantrip" />
     <trinket id="138" name="Essence Shard" gfx="essenceshard.png" description="Purified essence" />
+    <passive id="139" name="Glowing Key" gfx="glowingkey.png" description="???" quality="2" craftquality="2" devilprice="1" tags="offensive summonable nocantrip" />
 
 </items>

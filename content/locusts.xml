@@ -216,5 +216,7 @@
     <locust id="136" damageMultiplier="1.5" color="fly_darkred"/>
     <!--  TempleOS: 30% chance for random effects -->
     <locust id="137" locustFlags2="1" procChance="1" gfx="templeos.png"/>
+    <!--  Glowing Key: 30% chance for rune drop on kill -->
+    <locust id="139" tearFlags2="80" procChance="0.3" gfx="glowing.png"/>
 
 </locusts>

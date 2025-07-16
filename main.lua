@@ -202,6 +202,7 @@ AXE_SWING = Isaac.GetEntityVariantByName("Axe Swing")
 MOTIVATOR_ITEM = Isaac.GetItemIdByName("Dark Motivator")
 TEMPLE_ITEM = Isaac.GetItemIdByName("TempleOS")
 SHARD_TRINKET = Isaac.GetTrinketIdByName("Essence Shard")
+GLOWING_KEY_ITEM = Isaac.GetItemIdByName("Glowing Key")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2171,6 +2172,7 @@ if EID then
     EID:addCollectible(MOTIVATOR_ITEM, "{{ArrowUp}} Gain +10% damage for every enemy in the current room.", "Dark Motivator")
     EID:addCollectible(TEMPLE_ITEM, "Activates a random effect from a predefined list.#Has a 1% chance to grant Dogmatism on use.", "TempleOS")
     EID:addTrinket(SHARD_TRINKET, "Turns all chests into Essence Chests.#{{Collectible202}} No additional effect when golden.", "Essence Shard")
+    EID:addCollectible(GLOWING_KEY_ITEM, "Spawns an Essence Chest and an Essence Card in the starting room upon entering a new floor.", "Glowing Key")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -3605,6 +3607,21 @@ if EID then
     end
 
     EID:addDescriptionModifier("Temple Mod", TempleAbyss, TempleCallback)
+
+    function KeyAbyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == TEMPLE_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function KeyCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance for enemies to drop a rune on kill.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Key Mod", KeyAbyss, KeyCallback)
 
     function BondVoid(descObj)
 	    for i = 0, Game():GetNumPlayers() - 1 do
@@ -11175,6 +11192,30 @@ function Mod:UseTempleItem(item, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTempleItem, TEMPLE_ITEM)
+
+function Mod:OnNewFloorKey()
+    --local game = Game()
+    local level = game:GetLevel()
+    local room = game:GetRoom()
+    for i = 0, Game():GetNumPlayers() - 1 do
+    
+        local player = Isaac.GetPlayer(i)
+
+    -- Ensure player has the item before spawning golden rewards
+        if player:HasCollectible(GLOWING_KEY_ITEM) then
+            local spawnPositions = {
+                room:GetCenterPos() + Vector(0, 40),
+                room:GetCenterPos() + Vector(40, 40)
+            }
+
+            -- Spawn golden rewards
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, RELIQUARY_CARD, spawnPositions[2], Vector.Zero, player)
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, Chest.CHEST_ESSENCE, 0 ,spawnPositions[1], Vector.Zero, player)
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloorKey)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

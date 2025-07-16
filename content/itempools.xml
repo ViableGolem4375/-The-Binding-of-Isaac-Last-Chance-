@@ -35,6 +35,7 @@
         <Item Name="Sack of Hearts" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="TempleOS" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -87,6 +88,7 @@
         <Item Name="Trash Bag" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="TempleOS" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="boss">
@@ -157,6 +159,7 @@
         <Item Name="Sack of Hearts" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="TempleOS" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -213,6 +216,7 @@
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Executioner's Axe" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="TempleOS" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
@@ -274,6 +278,7 @@
         <Item Name="Trash Bag" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="TempleOS" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="craneGame">
@@ -382,7 +387,8 @@
 
     </Pool>
     <Pool Name="keyMaster">
-        
+        <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
 
     </Pool>
     <Pool Name="batteryBum">
