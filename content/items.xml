@@ -98,7 +98,7 @@
     <passive id="90" name="Charity" gfx="charity.png" description="The spirit of giving" quality="3" craftquality="3" devilprice="2" tags="angel offensive nocantrip summonable" />
     <passive id="91" name="Humility" gfx="humility.png" description="Humbleness" quality="3" craftquality="3" devilprice="2" tags="angel offensive nocantrip summonable" cache="damage" />
     <passive id="92" name="Love" gfx="love.png" description="Love thy neighbor" quality="0" craftquality="0" devilprice="1" tags="angel offensive nocantrip summonable" />
-    <passive id="93" name="Generosity" gfx="generosity.png" description="Giving = power" quality="3" craftquality="3" devilprice="2" tags="angel offensive nocantrip summonable" cache="damage" />
+    <passive id="93" name="Generosity" gfx="generosity.png" description="Tithe" quality="3" craftquality="3" devilprice="2" tags="angel offensive nocantrip summonable" cache="damage" />
     <passive id="94" name="Temperance" gfx="temperance.png" description="Tempered spirit" quality="3" craftquality="3" devilprice="2" tags="angel offensive nocantrip summonable" cache="firedelay" />
     <passive id="133" name="Zeal" gfx="zeal.png" description="Zealous companion" quality="4" craftquality="4" cache="familiars" devilprice="2" tags="baby offensive summonable monstermanual angel nocantrip" />
     <active id="95" name="Kindness" gfx="kindness.png" description="Kill them with kindness" quality="3" craftquality="3" devilprice="2" maxcharges="6" chargetype="normal" tags="angel offensive nocantrip" />
