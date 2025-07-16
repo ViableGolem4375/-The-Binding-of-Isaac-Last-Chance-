@@ -2017,8 +2017,8 @@ if EID then
     EID:addCollectible(AMP_ITEM, "Spawn a stationary familiar which projects a damage amplification area onto the ground.#{{ArrowUp}} Standing within this area will multiply Isaac's damage by 5.#Entering a new room will place the familiar at the door.#{{Warning}} Familiar expires after 20 seconds.", "Amplifier")
     EID:addCollectible(HUH_ITEM, "Rerolls all item pedestals in the room into The Poop.", "Huh?")
     EID:addTrinket(CLOVER_TRINKET, "{{ArrowUp}} +2 luck.#{{Collectible202}} +4 luck if golden.", "Four Leaf Clover")
-    EID:addTrinket(ORB_TRINKET, "Automatically rerolls quality 0 items.#{{Collectible202}} No effect if golden.", "Orb Shard")
-    EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.#{{Collectible202}} No effect if golden.", "Stitched Photo")
+    EID:addTrinket(ORB_TRINKET, "Automatically rerolls quality 0 items.#{{Collectible202}} No additional effect if golden.", "Orb Shard")
+    EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.#{{Collectible202}} No additional effect if golden.", "Stitched Photo")
     EID:addTrinket(CANDLE_TRINKET, "Grants 2 black hearts at the beginning of a floor if there is an active curse.#{{Collectible202}} Grants 4 black hearts if golden.", "Black Candle Wick")
     EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind creep which deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#Creep expires after 10 seconds.", "Eternal Bond 4")
     EID:addCollectible(BOND_ITEM2, "Become invincible and dash forward leaving behind creep which deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#Creep expires after 10 seconds", "Eternal Bond 3")
@@ -2160,7 +2160,7 @@ if EID then
     EID:addCollectible(DOGMA_ITEM, "Grants: #{{ArrowUp}} +1 damage#{{ArrowUp}} +50% damage multiplier#{{ArrowUp}} +7.5 Range#{{ArrowDown}} -1 Tear Delay#{{ArrowDown}} -0.5 Shot Speed#Tears gain spectral and piercing along with a static aura.#Enemies that stand within the aura for 0.25 seconds are struck with a beam of light dealing 5x Isaac's damage.", "Dogmatism")
     EID:addCollectible(INFESTATION_ITEM, "Enemies have a 10% chance to spawn a friendly swarm spider on death.#{{Luck}} +2% chance per point of luck.", "Infestation 3")
     EID:addCollectible(RAPTURE_ITEM, "Make all players briefly invulnerable and throw an orb of light which detonates into 7 beams of light fired in a circular pattern after a brief delay.", "Rapture")
-    EID:addTrinket(NIL_VALUE_ITEM, "Activates the effects of Dataminer when Isaac takes damage.#{{Collectible202}} No effect when golden.", "Nil Value")
+    EID:addTrinket(NIL_VALUE_ITEM, "Activates the effects of Dataminer when Isaac takes damage.#{{Collectible202}} No additional effect when golden.", "Nil Value")
     EID:addCollectible(SHATTERED_GLADIUS_ITEM, "Teleports Isaac to a challenge room separate to the one on the floor.#This challenge room always contains a random item from the treasure room pool.#Can only be used once per floor.", "Shattered Gladius")
     EID:addCollectible(TRASH_ITEM, "On activation will do one of the following:#Spawn an item pedestal containing a quality 0 item.#Spawn a random garbage related trinket.#Spawn a rotten heart.#Spawn several blue flies.", "Trash Bag")
     EID:addCollectible(CAKE_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.#{{ArrowUp}} +0.3 Speed#{{ArrowUp}} -0.5 Tear Delay#{{ArrowUp}} +1 Damage#{{ArrowUp}} +3.75 Range#{{ArrowUp}} +0.16 Shot Speed#{{ArrowUp}} +1 Luck", "Birthday Cake")
@@ -2316,7 +2316,7 @@ if EID then
 	    for i = 0, Game():GetNumPlayers() - 1 do
             local player = Game():GetPlayer(i)
         
-	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == AMP_AREA and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == AMP_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
         end
     end
     function AmpCallback(descObj)
