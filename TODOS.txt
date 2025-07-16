@@ -1,7 +1,6 @@
 - Maybe add some sound effects to items.
 - Cards are huge on J+E HUD.
 - make defense tech not interact with enviromnentals
-- amplifier locust desc not working
 - check paint can, it might not work in edge scenarios
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 

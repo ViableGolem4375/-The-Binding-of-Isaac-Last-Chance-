@@ -3937,6 +3937,8 @@ local quality3ItemsDullCoin = {
                     INFESTATION_ITEM,
                     CAKE_ITEM,
                     HEALTH_SACK_ITEM,
+                    CRUSHED_DICE_ITEM,
+                    MOTIVATOR_ITEM,
                     -- Vanilla items.
                     1,
                     2,
