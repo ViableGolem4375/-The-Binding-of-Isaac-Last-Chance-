@@ -2111,7 +2111,7 @@ if EID then
     EID:addCollectible(LUST_ITEM, "Enemies that touch Isaac become charmed for 10 seconds.", "Lust")
     EID:addCollectible(PRIDE_ITEM, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.", "Pride")
     EID:addCollectible(ENVY_ITEM, "Gain a familiar which copies your damage and tear effects.#{{Warning}} Envy replaces all of your non quest items (and itself) with envious rage.#{{ArrowUp}} Envy gains +50% damage and +20% fire rate for every copy of envious rage you posess.#{{Warning}} Envy cannot be removed or rerolled.", "Envy")
-    EID:addCollectible(WRATH_ITEM, "{{ArrowUp}} Killing bosses gives a trophy which grants +1 damage.", "Wrath")
+    EID:addCollectible(WRATH_ITEM, "{{ArrowUp}} Killing bosses and minibosses gives a trophy which grants +0.25 damage.#Can only trigger once per room.", "Wrath")
     EID:addCollectible(SLOTH_ITEM, "All enemies take constant damage equal to Isaac's damage divided by 10 every tick.#{{Warning}} Isaac becomes unable to shoot.", "Sloth")
     EID:addCollectible(CHARITY_ITEM, "Gain 1/2 of a soul heart for every 5 coins spent.", "Charity")
     EID:addCollectible(HUMILITY_ITEM, "{{ArrowUp}} Gain 2x damage.#{{ArrowDown}} The bonus is lost if Isaac holds any quality 4 items.", "Humility")
@@ -9657,7 +9657,7 @@ function Mod:bossTrophyPickup(player, cacheFlag)
     if player:HasCollectible(TROPHY_ITEM) then
         local numtrophy = player:GetCollectibleNum(TROPHY_ITEM)
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            player.Damage = (player.Damage + STAT_BOOST.DAMAGE) + (1 * numtrophy)
+            player.Damage = (player.Damage + STAT_BOOST.DAMAGE) + (0.25 * numtrophy)
         end
     end
 end

@@ -33,8 +33,8 @@ Trinket Ideas:
 
 
 Streaks:
-T Apollyon Win Streak: 30
-	Best: 30
+T Apollyon Win Streak: 32
+	Best: 32
 T Keeper Win Streak: 0
 	Best: 5
 Jacob and Esau:
