@@ -1,4 +1,3 @@
-- Essence items can give copies, maybe fix that or make sure they all stack.
 - Maybe add some sound effects to items.
 - Cards are huge on J+E HUD.
 - make defense tech not interact with enviromnentals
@@ -29,7 +28,6 @@ something with this effect: DOGMA_BLACKHOLE
 random dad item effect
 pick a stage and go there
 dogma familiar
-templeos
 
 Trinket Ideas:
 

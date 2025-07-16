@@ -8,6 +8,8 @@ local itemConfig = Isaac.GetItemConfig()
 local templateType = Isaac.GetPlayerTypeByName("Template", false)
 local pontiusType = Isaac.GetPlayerTypeByName("Longinus", false)
 local TAINTED_PONTIUS_TYPE = Isaac.GetPlayerTypeByName("Longinus", true)
+GLADIUS_SWING = Isaac.GetEntityVariantByName("Gladius")
+
 LUCKY_DICE_ID = Isaac.GetItemIdByName("Lucky Coin")
 DULL_COIN_ID = Isaac.GetItemIdByName("Dull Coin")
 HATRED_ITEM = Isaac.GetItemIdByName("Unholy Mantle") -- Change name as needed
@@ -196,6 +198,7 @@ BATTERY_ITEM = Isaac.GetItemIdByName("Expired Battery")
 POLTERGEIST_ITEM = Isaac.GetItemIdByName("Poltergeist")
 FAMILIAR_POLTERGEIST = Isaac.GetEntityVariantByName("Poltergeist")
 AXE_ITEM = Isaac.GetItemIdByName("Executioner's Axe")
+AXE_SWING = Isaac.GetEntityVariantByName("Axe Swing")
 MOTIVATOR_ITEM = Isaac.GetItemIdByName("Dark Motivator")
 TEMPLE_ITEM = Isaac.GetItemIdByName("TempleOS")
 
@@ -1073,11 +1076,11 @@ function PontiusMelee:MeleeWeaponSwing(player)
 
         -- ✅ Spawn melee hitbox in correct direction
         if direction.X ~= 0 or direction.Y ~= 0 then
-            local meleeHitbox = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, player.Position + direction * 40, Vector(0,0), player)
+            local meleeHitbox = Isaac.Spawn(EntityType.ENTITY_EFFECT, GLADIUS_SWING, 0, player.Position + direction * 40, Vector(0,0), player)
             if meleeHitbox then
                 local sprite = meleeHitbox:GetSprite()
-                sprite:Load("gfx/gladius.anm2", true) -- Load your custom animation
-                sprite:Play("Swing", true) -- Ensure correct animation plays
+                --sprite:Load("gfx/gladius.anm2", true) -- Load your custom animation
+                --sprite:Play("Swing", true) -- Ensure correct animation plays
                 -- ✅ Adjust sprite orientation based on attack direction
                 if direction.X < 0 then
                     sprite.FlipX = true -- ✅ Flip horizontally for left attacks
@@ -1097,7 +1100,7 @@ function PontiusMelee:MeleeWeaponSwing(player)
             meleeHitbox:GetData().IsMeleeHitbox = true
             meleeHitbox:GetData().ChargeLevel = chargeLevel
             meleeHitbox:GetData().DestroyNextFrame = true
-            meleeHitbox:GetSprite():Play("Appear")
+            meleeHitbox:GetSprite():Play("Throw")
             SFXManager():Play(SoundEffect.SOUND_SWORD_SPIN) -- ✅ Sword swing sound
         end
     end
@@ -1105,8 +1108,43 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, PontiusMelee.MeleeWeaponSwing)
 
+function Mod:OnEffectUpdateSword(effect)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local sprite = effect:GetSprite()
+
+        local dir = player:GetFireDirection()
+        print(dir)
+        local velocity = Vector(0, 0)
+
+        if dir == Direction.LEFT then
+            velocity = Vector(-1, 0)
+        elseif dir == Direction.RIGHT then
+            velocity = Vector(1, 0)
+        elseif dir == Direction.UP then
+            velocity = Vector(0, -1)
+        elseif dir == Direction.DOWN then
+            velocity = Vector(0, 1)
+        elseif dir == Direction.NO_DIRECTION then
+            velocity = Vector(0, 1)
+        end
+
+        if player and player:Exists() and player:GetPlayerType() == TAINTED_PONTIUS_TYPE then
+            effect.Position = player.Position + velocity * 10
+        end
+
+
+
+        if sprite:IsFinished("Throw") then
+            effect:Remove() -- Despawns the effect
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Mod.OnEffectUpdateSword, GLADIUS_SWING)
+
 function Mod:FixSpriteRotation()
-    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.POOF01)) do
+    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, GLADIUS_SWING)) do
         if effect:GetData().PersistRotation then
             effect:GetSprite().Rotation = effect:GetData().PersistRotation
         end
@@ -1116,7 +1154,7 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, Mod.FixSpriteRotation)
 
 function PontiusMelee:RemoveMeleeEffects()
-    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.POOF01)) do
+    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, GLADIUS_SWING)) do
         if effect:GetData().DestroyNextFrame then
             effect:Remove() -- ✅ Instantly deletes the effect after one frame
         end
@@ -1134,7 +1172,7 @@ function PontiusMelee:CheckMeleeHitbox(npc)
         data.LastMeleeHitFrame = -1 -- ✅ Initialize tracking
     end
 
-    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.POOF01)) do
+    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, GLADIUS_SWING)) do
         if effect:GetData().IsMeleeHitbox then
             local distance = npc.Position:Distance(effect.Position)
             
@@ -10942,37 +10980,76 @@ function Mod:UseAxe(item, rng, player)
         -- ✅ Spawn melee hitbox in correct direction
         --if direction.X ~= 0 or direction.Y ~= 0 then
             --print("2")
-            local meleeHitbox = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CLEAVER_SLASH, 0, player.Position + velocity * 120, Vector(0,0), player)
+            local meleeHitbox = Isaac.Spawn(EntityType.ENTITY_EFFECT, AXE_SWING, 0, player.Position + velocity * 10, Vector(0,0), player)
             if meleeHitbox then
                 --print("3")
-                local sprite = meleeHitbox:GetSprite()
+                Axesprite = meleeHitbox:GetSprite()
                 -- ✅ Adjust sprite orientation based on attack direction
                 if velocity.X < 0 then
-                    sprite.FlipX = false -- ✅ Flip horizontally for left attacks
-                    sprite.Rotation = 90 -- ✅ Keep default rotation
+                    Axesprite.FlipX = false -- ✅ Flip horizontally for left attacks
+                    Axesprite.Rotation = 90 -- ✅ Keep default rotation
                 elseif velocity.X > 0 then
-                    sprite.FlipX = false -- ✅ Keep normal for right attacks
-                    sprite.Rotation = -90 -- ✅ Keep default rotation
+                    Axesprite.FlipX = false -- ✅ Keep normal for right attacks
+                    Axesprite.Rotation = -90 -- ✅ Keep default rotation
                 elseif velocity.Y < 0 then
-                    sprite.Rotation = 0
-                    sprite.FlipY = true -- ✅ Rotate for upward attacks
+                    Axesprite.Rotation = 0
+                    Axesprite.FlipY = true -- ✅ Rotate for upward attacks
                 elseif velocity.Y > 0 then
-                    sprite.Rotation = 0
-                    sprite.FlipY = false -- ✅ Rotate for downward attacks
+                    Axesprite.Rotation = 0
+                    Axesprite.FlipY = false -- ✅ Rotate for downward attacks
                 end
                 -- ✅ Persist rotation until animation ends
-                meleeHitbox:GetData().PersistRotation = sprite.Rotation
+                meleeHitbox:GetData().PersistRotation = Axesprite.Rotation
 
             end
             meleeHitbox:GetData().IsAxeHitbox = true
             meleeHitbox:GetData().DestroyNextFrame = true
-            meleeHitbox:GetSprite():Play("Appear")
+            meleeHitbox:GetSprite():Play("Swing")
+            --[[ if Axesprite:IsFinished("Swing") then
+			    meleeHitbox:Remove()			
+		    end ]]
+
             SFXManager():Play(SoundEffect.SOUND_SWORD_SPIN) -- ✅ Sword swing sound
 
     end
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseAxe, AXE_ITEM)
+
+function Mod:OnEffectUpdateAxe(effect)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        local sprite = effect:GetSprite()
+
+        local dir = player:GetFireDirection()
+        print(dir)
+        local velocity = Vector(0, 0)
+
+        if dir == Direction.LEFT then
+            velocity = Vector(-1, 0)
+        elseif dir == Direction.RIGHT then
+            velocity = Vector(1, 0)
+        elseif dir == Direction.UP then
+            velocity = Vector(0, -1)
+        elseif dir == Direction.DOWN then
+            velocity = Vector(0, 1)
+        elseif dir == Direction.NO_DIRECTION then
+            velocity = Vector(0, 1)
+        end
+
+        if player and player:Exists() and player:HasCollectible(AXE_ITEM) then
+            effect.Position = player.Position + velocity * 10
+        end
+
+
+
+        if sprite:IsFinished("Swing") then
+            effect:Remove() -- Despawns the effect
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Mod.OnEffectUpdateAxe, AXE_SWING)
 
 function Mod:CheckAxeHitbox(npc)
     local data = npc:GetData()
@@ -10981,7 +11058,7 @@ function Mod:CheckAxeHitbox(npc)
         data.AxeHit = -1 -- ✅ Initialize tracking
     end
 
-    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.CLEAVER_SLASH)) do
+    for _, effect in ipairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, AXE_SWING)) do
         if effect:GetData().IsAxeHitbox then
             local distance = npc.Position:Distance(effect.Position)
             
@@ -11052,43 +11129,6 @@ function Mod:ApplyMotivatorDamage(player, cacheFlag)
 end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.ApplyMotivatorDamage)
-
---[[ function Mod:UseTempleItem(_, _, player, _)
-    local rng = RNG()
-    rng:SetSeed(Random(), 35) -- Use a unique offset for consistency
-    local random = rng:RandomFloat()
-
-    if random < 0.1 then
-        player:AddSoulHearts(2)
-        SFXManager():Play(SoundEffect.SOUND_HOLY, 1, 0, false, 1)
-    elseif random < 0.2 then
-        player:UseActiveItem(PONTIUS_ESSENCE)
-    elseif random < 0.3 then
-        player:UseActiveItem(GUN_ITEM)
-    elseif random < 0.4 then
-        player:UseCard(RELIQUARY_CARD)
-    elseif random < 0.5 then
-        player:UseActiveItem(RAPTURE_ITEM)
-    elseif random < 0.6 then
-        player:UseActiveItem(CONCOCTION_ITEM)
-    elseif random < 0.7 then
-        player:UseCard(JUSTICE_CARD)
-    elseif random < 0.8 then
-        player:UseActiveItem(TRASH_ITEM)
-    elseif random < 0.9 then
-        player:UseActiveItem(CollectibleType.COLLECTIBLE_DEAD_SEA_SCROLLS)
-    elseif random < 0.99 then
-        player:UseActiveItem(TOWER_CARD)
-    elseif random < 1 then
-        player:AddCollectible(DOGMA_ITEM)
-    else
-        SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 0, false, 1)
-    end
-
-    return true
-end
-
-Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTempleItem, TEMPLE_ITEM) ]]
 
 function Mod:UseTempleItem(item, rng, player)
     local sfx = SFXManager()

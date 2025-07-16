@@ -100,4 +100,7 @@
     <entity name="Lil' Jacob" id="3" anm2path="liljacob.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
     <entity name="Lil' Esau" id="3" anm2path="lilesau.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
     <entity name="The Soul" id="3" anm2path="thesoul.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
+    <entity name="Axe Swing" id="1000" variant="2098" anm2path="axeswing.anm2"/>
+    <entity name="Gladius" id="1000" variant="2099" anm2path="gladius.anm2"/>
+
 </entities>
