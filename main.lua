@@ -2060,7 +2060,7 @@ if EID then
     EID:addCard(RELIQUARY_CARD, "Spawns an Essence Collector.", "Essence Card")
     EID:addCollectible(ANGEL_BLAST_ITEM, "Fire a holy light beam which deals Isaac's damage.", "Angel Blast")
     EID:addTrinket(NOISEMAKER_TRINKET, "{{ArrowUp}} +0.25 speed.#{{ArrowUp}} -1 fire delay.#{{ArrowUp}} +1 damage.#{{ArrowUp}} +25% damage multiplier.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +0.3 shot speed.#{{ArrowUp}} +1 luck.#{{Warning}} While The Devil's Noisemaker is held random sound effects will be repeatedly played at an extremely high volume.#{{Collectible202}} When golden, all stat ups except for the damage multiplier are doubled and the volume of the sound effects is doubled.", "The Devil's Noisemaker")
-    EID:addEntity(6, 249376971, -1, "Essence Collector", "{{Warning}} Removes 1/2 soul heart or black heart when touched.#{{ArrowUp}} Has a 10% chance to pay out with an essence item and random consumables, then explode after every use.#Spawns random pickups when destroyed.")
+    EID:addEntity(6, 249376971, -1, "Essence Collector", "Removes 3 soul/black hearts and spawns a random item from the Essence Reliquary pool along with some random pickups in return.")
     EID:addCharacterInfo(templateType, "{{ArrowUp}} High luck stat.#Starts with Lucky Coin as a pocket active item.", "Domino")
     EID:addCharacterInfo(TAINTED_TEMPLATE_TYPE, "{{ArrowDown}} Items above quality 2 are automatically rerolled into lower quality items.#{{Warning}} These rerolls are chosen from random item pools.#{{ArrowUp}} Picking up quality 0 items has a chance to spawn another item pedestal containing a quality 0 item.#Starts with Dull Coin as a pocket active item.", "The Jinxed")
     EID:addCharacterInfo(pontiusType, "Throws spears instead of firing normal tears.#{{ArrowUp}} Spears pierce enemies and deal 5x normal damage.#{{ArrowDown}} Spears are unaffected by tears stat and do not interact with most special tear effects.#Tears up/down effects grant small increases/decreases to damage.", "Longinus")
@@ -11908,11 +11908,11 @@ function EssenceCollector:onPlayerCollide(player,collider,_low)
 			local slotSprite = collider:GetSprite()
 			
 			--If the machine isn't busy and the player can use it
-			if slotSprite:IsPlaying("Idle") and player:GetSoulHearts() >= 1 then
-                player:AddSoulHearts(-1)
+			if slotSprite:IsPlaying("Idle") and player:GetSoulHearts() >= 6 then
+                player:AddSoulHearts(-6)
                 slotSprite:Play("Prize")
-            elseif slotSprite:IsPlaying("Idle") and player:GetBlackHearts() >= 1 then
-                player:AddBlackHearts(-1)
+            elseif slotSprite:IsPlaying("Idle") and player:GetBlackHearts() >= 6 then
+                player:AddBlackHearts(-6)
                 slotSprite:Play("Prize")
             end
     end
@@ -11939,7 +11939,7 @@ function EssenceCollector:onUpdateCollector()
         local slotRNG2 = slot:GetDropRNG():RandomInt(105)
 
         if slotSprite:IsEventTriggered("Prize") then
-            if slotRNG <= 10 then
+            if slotRNG <= 100 then
                 slotSprite:Play("Death")
             end
 
