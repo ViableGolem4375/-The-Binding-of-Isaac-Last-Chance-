@@ -5956,61 +5956,6 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoomBlueBabyEssence) -- Trigger flies on room entry
 
---[[ local eveEssencetriggered = false
-local eveEssencetriggered2 = false
-
--- Reset the flag when starting a new run
-function Mod:OnNewGameEve(isContinued)
-    if not isContinued then -- Ensures it only resets for fresh runs, not continues
-        eveEssencetriggered = false
-        eveEssencetriggered2 = false
-    end
-end
-
--- Function to reset the flag at the start of a new floor
-function Mod:OnNewFloorEve()
-    eveEssencetriggered = false -- Allows effect to reactivate
-    eveEssencetriggered2 = false
-end
-
-function Mod:OnCacheUpdateEveEssence(player, cacheFlag)
-    if cacheFlag == CacheFlag.CACHE_DAMAGE then
-        if player:HasCollectible(EVE_ESSENCE) then
-            local evenum = player:GetCollectibleNum(EVE_ESSENCE) * 30
-            -- Calculate total hearts (Red, Soul, Bone converted to half-hearts)
-            local totalHearts = player:GetHearts() + player:GetSoulHearts() + player:GetBlackHearts() + player:GetRottenHearts() + (player:GetBoneHearts() * 2)
-
-            -- Add 30 damage when health is at 1 heart or less.
-            if totalHearts <= 2 and eveEssencetriggered == false then
-                eveEssencetriggered2 = true
-                player.Damage = player.Damage + evenum
-            end
-            
-        end
-    end
-end
-
--- Reset the effect when entering a new room
-function Mod:OnNewRoom()
-    if eveEssencetriggered2 == true then
-        eveEssencetriggered = true
-    end
-    for i = 1, Game():GetNumPlayers() do
-        local player = Isaac.GetPlayer(i - 1)
-        if player:HasCollectible(EVE_ESSENCE) then
-            player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
-            player:EvaluateItems()
-        end
-    end
-end
-
-Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, Mod.OnNewGameEve) -- Reset flag between runs
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloorEve) -- Reactivate effect at the start of 
-Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.OnCacheUpdateEveEssence)
-Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.OnNewRoom) -- Reset damage boost when the player leaves the room. ]]
-
-
-
 function Mod:OnCacheUpdateEveEssence(player, cacheFlag)
     --if cacheFlag == CacheFlag.CACHE_DAMAGE then
         if player:HasCollectible(EVE_ESSENCE) then
@@ -6242,7 +6187,6 @@ function Mod:onTearImpact(entity)
             laserRing.AngleDegrees = directionazazel:GetAngleDegrees() -- Rotate laser to match direction
             laserRing.CollisionDamage = azazelnum + player.Damage -- Set laser damage
             laserRing.Timeout = 15 -- Laser duration
-            laserRing:AddTearFlags(TearFlags.TEAR_HOMING) -- Apply homing effect
             laserRing.Parent = player -- Prevent self-damage
  
             
@@ -6565,6 +6509,7 @@ function Mod:OnNewRoomBethEssence()
         local player = Game():GetPlayer(i)
 
         local room = Game():GetLevel():GetCurrentRoomIndex()
+        local bethnum = player:GetCollectibleNum(BETHANY_ESSENCE)
 
         if player:HasCollectible(BETHANY_ESSENCE) then
 
@@ -6573,7 +6518,9 @@ function Mod:OnNewRoomBethEssence()
 
                 local randomCollectible = Mod:GetRandomWisppableItem()
                 if randomCollectible then
-                    player:AddWisp(randomCollectible, player.Position, true)
+                    for i = 1, bethnum do
+                        player:AddWisp(randomCollectible, player.Position, true)
+                    end
                 end
 
                 -- ✅ Mark the room as visited
