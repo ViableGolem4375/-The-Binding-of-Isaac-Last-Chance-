@@ -93,7 +93,7 @@
     </entity>
     <entity anm2path="tithe.anm2" baseHP="0" boss="0" collisionDamage="0" collisionMass="3" collisionRadius="12" friction="1" id="6" name="Tithe" numGridCollisionPoints="24" shadowSize="33" stageHP="0" variant="249376972" />
     <entity name="Dogmaticism Aura" id="1000" variant="2098" anm2path="dogmaticism_aura.anm2"/>
-    <entity anm2path="poltergeist2.anm2" baseHP="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Poltergeist" numGridCollisionPoints="12" shadowSize="10" stageHP="0" variant="586307010" />
+    <entity anm2path="poltergeist2.anm2" baseHP="0" champion="0" collisionDamage="1" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Poltergeist" numGridCollisionPoints="12" shadowSize="10" stageHP="0" variant="586307010" />
     <entity anm2path="essence_chest.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="10" collisionRadius="12" friction="1" id="5" name="Essence Chest" numGridCollisionPoints="24" shadowSize="28" stageHP="0" variant="249376973">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
