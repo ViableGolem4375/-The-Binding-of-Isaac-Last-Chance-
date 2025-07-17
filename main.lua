@@ -8299,7 +8299,12 @@ function Mod:MoonUpdate(Moon)
         local player = Game():GetPlayer(i)
     
         Moon.OrbitDistance = Vector(150,150)
-        Moon.OrbitSpeed = 0.15
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_GUARDIAN_ANGEL) then
+            Moon.OrbitSpeed = 0.3
+        else
+            Moon.OrbitSpeed = 0.15
+        end
+        --Moon.OrbitSpeed = 0.15
         --Moon.OrbitLayer = 7007
         Moon.Velocity = Moon:GetOrbitPosition(player.Position + player.Velocity) - Moon.Position
     end
@@ -8359,7 +8364,12 @@ function Mod:FluxUpdate(Flux)
 
         -- ✅ Apply the current orbit properties
         Flux.OrbitDistance = data.CurrentOrbitDistance
-        Flux.OrbitSpeed = 0.5
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_GUARDIAN_ANGEL) then
+            Flux.OrbitSpeed = 1
+        else
+            Flux.OrbitSpeed = 0.5
+        end
+        --Flux.OrbitSpeed = 0.5
         Flux.OrbitLayer = 7007
         Flux.Velocity = Flux:GetOrbitPosition(player.Position + player.Velocity) - Flux.Position
     end
@@ -10932,7 +10942,12 @@ function Mod:PoltergeistUpdate(Poltergeist)
         local player = Game():GetPlayer(i)
     
         Poltergeist.OrbitDistance = Vector(50,50)
-        Poltergeist.OrbitSpeed = 0.05
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_GUARDIAN_ANGEL) then
+            Poltergeist.OrbitSpeed = 0.1
+        else
+            Poltergeist.OrbitSpeed = 0.05
+        end
+        --Poltergeist.OrbitSpeed = 0.05
         --Moon.OrbitLayer = 7007
         Poltergeist.Velocity = Poltergeist:GetOrbitPosition(player.Position + player.Velocity) - Poltergeist.Position
     end

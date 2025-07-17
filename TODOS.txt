@@ -2,6 +2,7 @@
 - Cards are huge on J+E HUD.
 - make defense tech not interact with enviromnentals
 - check paint can, it might not work in edge scenarios
+- make orbitals get sped up by guardian angel
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -34,8 +35,8 @@ Trinket Ideas:
 
 
 Streaks:
-T Apollyon Win Streak: 33
-	Best: 33
+T Apollyon Win Streak: 36
+	Best: 36 
 T Keeper Win Streak: 0
 	Best: 5
 Jacob and Esau:
