@@ -2121,7 +2121,7 @@ if EID then
     EID:addCollectible(SLOTH_ITEM, "All enemies take constant damage equal to Isaac's damage divided by 10 every tick.#{{Warning}} Isaac becomes unable to shoot.", "Sloth")
     EID:addCollectible(CHARITY_ITEM, "Gain 1/2 of a soul heart for every 5 coins spent.", "Charity")
     EID:addCollectible(HUMILITY_ITEM, "{{ArrowUp}} Gain 2x damage.#{{ArrowDown}} The bonus is lost if Isaac holds any quality 4 items.", "Humility")
-    EID:addCollectible(LOVE_ITEM, "{{ArrowUp}}+1 heart container.#{{ArrowUp}} Heals 1 red heart.#Issac's tears heal enemies which have been turned friendly.#{{Warning}} Does not work on enemies with the charmed status effect.", "Love")
+    EID:addCollectible(LOVE_ITEM, "{{ArrowUp}} +1 heart container.#{{ArrowUp}} Heals 1 red heart.#Issac's tears heal enemies which have been turned friendly.#{{Warning}} Does not work on enemies with the charmed status effect.", "Love")
     EID:addCollectible(GENEROSITY_ITEM, "Spawns a Tithe in angel rooms.#Tithes are a unique slot machine variant which has unique payouts.", "Generosity")
     EID:addCollectible(TEMPERANCE_ITEM, "{{ArrowUp}} Gain -20% fire delay while below full red health.#Does not work on characters without red health.", "Temperance")
     EID:addCollectible(ZEAL_ITEM, "Gain a familiar which fires godhead tears that scales with your damage and fire rate.", "Zeal")
