@@ -12721,15 +12721,15 @@ function Mod:OnCoinPickupKing(pickup, collider)
 
                 -- ✅ Set chance based on coin type
                 if pickup.SubType == CoinSubType.COIN_PENNY or pickup.SubType == CoinSubType.COIN_LUCKYPENNY or pickup.SubType == CoinSubType.COIN_GOLDEN then
-                    chance = 0.001
-                elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
-                    chance = 0.002
-                elseif pickup.SubType == CoinSubType.COIN_NICKEL then
                     chance = 0.005
+                elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
+                    chance = 0.01
+                elseif pickup.SubType == CoinSubType.COIN_NICKEL then
+                    chance = 0.025
                 elseif pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
                     chance = 0
                 elseif pickup.SubType == CoinSubType.COIN_DIME then
-                    chance = 0.01
+                    chance = 0.05
                 end
 
                 -- ✅ Apply golden trinket multiplier
