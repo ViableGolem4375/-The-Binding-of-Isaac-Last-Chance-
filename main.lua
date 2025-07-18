@@ -203,6 +203,8 @@ MOTIVATOR_ITEM = Isaac.GetItemIdByName("Dark Motivator")
 TEMPLE_ITEM = Isaac.GetItemIdByName("TempleOS")
 SHARD_TRINKET = Isaac.GetTrinketIdByName("Essence Shard")
 GLOWING_KEY_ITEM = Isaac.GetItemIdByName("Glowing Key")
+WOOD_KEY_ITEM = Isaac.GetItemIdByName("Wooden Key")
+WOOD_BOMB_ITEM = Isaac.GetItemIdByName("Wooden Bomb")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2173,6 +2175,8 @@ if EID then
     EID:addCollectible(TEMPLE_ITEM, "Activates a random effect from a predefined list.#Has a 1% chance to grant Dogmatism on use.", "TempleOS")
     EID:addTrinket(SHARD_TRINKET, "Turns all chests into Essence Chests.#{{Collectible202}} No additional effect when golden.", "Essence Shard")
     EID:addCollectible(GLOWING_KEY_ITEM, "Spawns an Essence Chest and an Essence Card in the starting room upon entering a new floor.", "Glowing Key")
+    EID:addCollectible(WOOD_KEY_ITEM, "59% chance to spawn a random key.", "Wooden Key")
+    EID:addCollectible(WOOD_BOMB_ITEM, "59% chance to spawn a random bomb.", "Wooden Bomb")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -3622,6 +3626,36 @@ if EID then
     end
 
     EID:addDescriptionModifier("Key Mod", KeyAbyss, KeyCallback)
+
+    function WoodKeyAbyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == WOOD_KEY_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function WoodKeyCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance to destroy grid entities on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Wood Key Mod", WoodKeyAbyss, WoodKeyCallback)
+
+    function WoodBombAbyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == WOOD_BOMB_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function WoodBombCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance to explode on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Wood Bomb Mod", WoodBombAbyss, WoodBombCallback)
 
     function BondVoid(descObj)
 	    for i = 0, Game():GetNumPlayers() - 1 do
@@ -11233,6 +11267,44 @@ function Mod:OnNewFloorKey()
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Mod.OnNewFloorKey)
+
+function Mod:UseWoodKeyItem(item, rng, player)
+    local sfx = SFXManager()
+    if item == WOOD_KEY_ITEM then
+        player:AnimateCollectible(WOOD_KEY_ITEM, "UseItem", "PlayerPickupSparkle")
+        local room = Game():GetRoom()
+            
+        local roll = rng:RandomInt(100) + 1 -- 1 to 4
+        local position =  room:FindFreeTilePosition(player.Position + Vector(20,20), 100)
+
+        if roll <= 59 then
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_KEY, 0, position, Vector(0,0), nil)
+        end
+
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseWoodKeyItem, WOOD_KEY_ITEM)
+
+function Mod:UseWoodBombItem(item, rng, player)
+    local sfx = SFXManager()
+    if item == WOOD_BOMB_ITEM then
+        player:AnimateCollectible(WOOD_BOMB_ITEM, "UseItem", "PlayerPickupSparkle")
+        local room = Game():GetRoom()
+            
+        local roll = rng:RandomInt(100) + 1 -- 1 to 4
+        local position =  room:FindFreeTilePosition(player.Position + Vector(20,20), 100)
+
+        if roll <= 59 then
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_BOMB, 0, position, Vector(0,0), nil)
+        end
+
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseWoodBombItem, WOOD_BOMB_ITEM)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

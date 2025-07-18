@@ -36,6 +36,8 @@
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="TempleOS" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -110,6 +112,8 @@
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Trash Bag" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Expired Battery" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -160,6 +164,8 @@
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="TempleOS" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -217,6 +223,8 @@
         <Item Name="Executioner's Axe" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="TempleOS" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
@@ -330,7 +338,9 @@
 
     </Pool>
     <Pool Name="woodenChest">
-        
+        <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
 
     </Pool>
     <Pool Name="rottenBeggar">
@@ -338,7 +348,8 @@
 
     </Pool>
     <Pool Name="bombBum">
-        
+        <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
 
     </Pool>
     <Pool Name="planetarium">
@@ -388,11 +399,13 @@
     </Pool>
     <Pool Name="keyMaster">
         <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
     <Pool Name="batteryBum">
-        
+        <Item Name="Expired Battery" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+
 
     </Pool>
     <Pool Name="momsChest">
