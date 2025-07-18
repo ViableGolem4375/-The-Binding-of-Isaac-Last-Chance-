@@ -218,8 +218,8 @@
     <locust id="137" locustFlags2="1" procChance="1" gfx="templeos.png"/>
     <!--  Glowing Key: 30% chance for rune drop on kill -->
     <locust id="139" tearFlags2="80" procChance="0.3" gfx="glowing.png"/>
-    <!--  Wooden Key: locust with a 30% chance to explode -->
-    <locust id="140" locustFlags2="0" procChance="0.3" gfx="bomb.png" color="fly_brown"/>
-    <!--  Wooden Bomb: locust with a 30% chance to destroy rocks -->
-    <locust id="141" tearFlags2="70" procChance="0.3" color="fly_brown"/>
+    <!--  Wooden Bomb: locust with a 30% chance to explode -->
+    <locust id="141" locustFlags2="0" procChance="0.3" gfx="bomb.png" color="fly_brown"/>
+    <!--  Wooden Key: locust with a 30% chance to destroy rocks -->
+    <locust id="140" tearFlags2="70" procChance="0.3" color="fly_brown"/>
 </locusts>
