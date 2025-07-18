@@ -2188,6 +2188,8 @@ if EID then
 
     Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.GetThePlayer) ]]
 
+    -- Functions for abyss descriptions.
+
     function LuckyDiceAbyss(descObj)
         for i = 0, Game():GetNumPlayers() - 1 do
             local player = Game():GetPlayer(i)
@@ -3657,6 +3659,8 @@ if EID then
 
     EID:addDescriptionModifier("Wood Bomb Mod", WoodBombAbyss, WoodBombCallback)
 
+    -- Functions for misc descriptions.
+
     function BondVoid(descObj)
 	    for i = 0, Game():GetNumPlayers() - 1 do
             local player = Game():GetPlayer(i)
@@ -3809,6 +3813,680 @@ if EID then
     EID:addDescriptionModifier("Holy Mantle Mod", HolyMantle, HolyMantleCallback)
 
     
+    -- Functions for wisp descriptions.
+
+    function LuckyCoinBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LUCKY_DICE_ID and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function LuckyCoinBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "4 health, 3 dps")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Lucky Coin Book Mod", LuckyCoinBook, LuckyCoinBookCallback)
+
+    function DullCoinBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DULL_COIN_ID and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function DullCoinBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "0.5 health, cannot shoot")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Dull Coin Book Mod", DullCoinBook, DullCoinBookCallback)
+
+    function CatalystBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CATALYST_SHEET_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function CatalystBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 middle ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "4 health, 3 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "30% chance to apply confusion")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "30% chance to apply bait")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Catalyst Book Mod", CatalystBook, CatalystBookCallback)
+
+    function LilithBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LILITH_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function LilithBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 middle ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "10 health, 3 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "100% chance to apply charm")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Lilith Book Mod", LilithBook, LilithBookCallback)
+
+    function AmpBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == AMP_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function AmpBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 outer ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "4 health, 20 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "Very low fire rate")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Amp Book Mod", AmpBook, AmpBookCallback)
+
+    function HuhBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == HUH_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function HuhBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 outer ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 health, 1 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "10% chance to turn enemies into poop on hit")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Huh Book Mod", HuhBook, HuhBookCallback)
+
+    function Bond4Book(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM4 and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function Bond4BookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "10 health, 5 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "100% chance for enemies to drop red hearts on kill")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Bond4 Book Mod", Bond4Book, Bond4BookCallback)
+
+    function Bond3Book(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM3 and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function Bond3BookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "10 health, 5 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "100% chance for enemies to drop red hearts on kill")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Bond3 Book Mod", Bond3Book, Bond3BookCallback)
+
+    function Bond2Book(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM2 and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function Bond2BookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "10 health, 5 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "100% chance for enemies to drop red hearts on kill")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Bond2 Book Mod", Bond2Book, Bond2BookCallback)
+
+    function Bond1Book(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function Bond1BookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "10 health, 5 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "100% chance for enemies to drop red hearts on kill")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Bond1 Book Mod", Bond1Book, Bond1BookCallback)
+
+    function BondEmptyBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BOND_ITEM_EMPTY and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function BondEmptyBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "10 health, 5 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "100% chance for enemies to drop red hearts on kill")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Bond Empty Book Mod", BondEmptyBook, BondEmptyBookCallback)
+
+    function MagBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == MAGDALENE_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function MagBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "10 health, 5 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "100% chance for enemies to drop red hearts on kill")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Mag Book Mod", MagBook, MagBookCallback)
+
+    function SamsonBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == SAMSON_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function SamsonBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "10 health, cannot shoot")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Samson Book Mod", SamsonBook, SamsonBookCallback)
+
+    function EdenBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == EDEN_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function EdenBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 middle ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "2 health, 3 dps")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Eden Book Mod", EdenBook, EdenBookCallback)
+
+    function ApollyonBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == APOLLYON_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function ApollyonBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 middle ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "4 health, 4 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "33% chance to spawn black holes on hit")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Apollyon Book Mod", ApollyonBook, ApollyonBookCallback)
+
+    function LonginusBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PONTIUS_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function LonginusBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 outer ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "0.5 health, 4 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "High speed piercing tears")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Longinus Book Mod", LonginusBook, LonginusBookCallback)
+
+    function LostBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == LOST_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function LostBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 health, 1 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "Shielded tears")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Lost Book Mod", LostBook, LostBookCallback)
+
+    function ForgottenBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == FORGOTTEN_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function ForgottenBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "2 outer ring wisps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "0.5 health, 1 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "33% chance to teleport enemies on hit")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Forgotten Book Mod", ForgottenBook, ForgottenBookCallback)
+
+    function GunBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GUN_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function GunBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 outer ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "0.5 health, 4 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "High speed piercing tears")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Gun Book Mod", GunBook, GunBookCallback)
+
+    function MoneyBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == MONEY_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function MoneyBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1000000 health, 4 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "30% chance to drop coins on hit")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "30% chance to drop coins on kill")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Money Book Mod", MoneyBook, MoneyBookCallback)
+
+    function PaintBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PAINT_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function PaintBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 middle ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "4 health, 4 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "20% chance for midas touch effect on hit")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Paint Book Mod", PaintBook, PaintBookCallback)
+
+    function DebugBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DEBUG_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function DebugBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 middle ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "10 health, 10 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "100% chance for euthanasia shot")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Debug Book Mod", DebugBook, DebugBookCallback)
+
+    function GlitchBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GLITCH_ESSENCE and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function GlitchBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 middle ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "4 health, 3 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "10% chance for a lot of different effects")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Glitch Book Mod", GlitchBook, GlitchBookCallback)
+
+    function OmegaBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == OMEGA_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function OmegaBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "6 outer ring wisps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "0.5 health, 0.5 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "Extremely fast fire rate")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Omega Book Mod", OmegaBook, OmegaBookCallback)
+
+    function Jubilees3Book(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == JUBILEES_ITEM3 and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function Jubilees3BookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1000000 health, 4 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "33% chance for light beams on hit")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Jubilees3 Book Mod", Jubilees3Book, Jubilees3BookCallback)
+
+    function Jubilees2Book(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == JUBILEES_ITEM2 and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function Jubilees2BookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1000000 health, 4 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "33% chance for light beams on hit")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Jubilees2 Book Mod", Jubilees2Book, Jubilees2BookCallback)
+
+    function JubileesBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == JUBILEES_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function JubileesBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1000000 health, 4 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "33% chance for light beams on hit")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Jubilees Book Mod", JubileesBook, JubileesBookCallback)
+
+    function PageBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PAGE_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function PageBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 middle ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "2 health, 3 dps")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Page Book Mod", PageBook, PageBookCallback)
+
+    function PrideBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == PRIDE_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function PrideBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1000000 health, 20 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "Very low fire rate")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Pride Book Mod", PrideBook, PrideBookCallback)
+
+    function KindnessBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == KINDNESS_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function KindnessBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 middle ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "4 health, 4 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "33% chance to apply charm on hit")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Kindness Book Mod", KindnessBook, KindnessBookCallback)
+
+    function ConcoctionBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CONCOCTION_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function ConcoctionBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 middle ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "4 health, 3 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "10% chance for a lot of different effects")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Concoction Book Mod", ConcoctionBook, ConcoctionBookCallback)
+
+    function BibbleBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == BIBBLE_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function BibbleBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 middle ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "4 health, 3 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "10% chance for a lot of different effects")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Bibble Book Mod", BibbleBook, BibbleBookCallback)
+
+    function CommunismBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == COMMUNISM_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function CommunismBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 middle ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "2 health, 3 dps")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Communism Book Mod", CommunismBook, CommunismBookCallback)
+
+    function RaptureBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == RAPTURE_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function RaptureBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "2 health, 5 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "33% chance for light beams on hit")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Rapture Book Mod", RaptureBook, RaptureBookCallback)
+
+    function GladiusBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == SHATTERED_GLADIUS_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function GladiusBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "20 health, 4 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "High speed piercing shots")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Gladius Book Mod", GladiusBook, GladiusBookCallback)
+
+    function TrashBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == TRASH_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function TrashBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "4 health, 2 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "16% chance to spawn a fly on hit")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Trash Book Mod", TrashBook, TrashBookCallback)
+
+    function AxeBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == AXE_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function AxeBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 outer ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "0.5 health, 5 dps")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Axe Book Mod", AxeBook, AxeBookCallback)
+
+    function TempleBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == TEMPLE_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function TempleBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "5 health, 4 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "15% chance for a lot of different effects")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Temple Book Mod", TempleBook, TempleBookCallback)
+
+    function WoodKeyBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == WOOD_KEY_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function WoodKeyBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 health, 1 dps")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Wood Key Book Mod", WoodKeyBook, WoodKeyBookCallback)
+
+    function WoodBombBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == WOOD_BOMB_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function WoodBombBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 health, 1 dps")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Wood Bomb Book Mod", WoodBombBook, WoodBombBookCallback)
 end
 
 --Function to handle dice item rerolls.
