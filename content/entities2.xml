@@ -102,5 +102,7 @@
     <entity name="The Soul" id="3" anm2path="thesoul.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
     <entity name="Axe Swing" id="1000" variant="2098" anm2path="axeswing.anm2"/>
     <entity name="Gladius" id="1000" variant="2099" anm2path="gladius.anm2"/>
-
+    <entity anm2path="playing_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="12 of Clubs" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="911">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
+    </entity>
 </entities>

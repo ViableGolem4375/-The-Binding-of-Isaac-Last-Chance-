@@ -25,4 +25,6 @@
     <card type="tarot" mimiccharge="12" name="Misprinted Sun" hud="Misprinted Sun" description="May the light cleanse your soul" pickup="908"/>
     <card type="tarot" mimiccharge="1" name="Misprinted Judgement" hud="Misprinted Judgement" description="Judge not" pickup="909"/>
     <card type="tarot" mimiccharge="12" name="Misprinted World" hud="Misprinted World" description="Close your eyes and let go" pickup="910"/>
+    <card type="tarot" mimiccharge="6" name="12 of Clubs" hud="12 of Clubs" description="???" pickup="911"/>
+
 </pocketitems>

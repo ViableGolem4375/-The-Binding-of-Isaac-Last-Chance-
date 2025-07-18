@@ -233,6 +233,7 @@ MOON_CARD = Isaac.GetCardIdByName("Misprinted Moon")
 SUN_CARD = Isaac.GetCardIdByName("Misprinted Sun")
 JUDGEMENT_CARD = Isaac.GetCardIdByName("Misprinted Judgement")
 WORLD_CARD = Isaac.GetCardIdByName("Misprinted World")
+BOMB_CARD = Isaac.GetCardIdByName("12 of Clubs")
 
 local Chest = {}
 
@@ -2153,6 +2154,7 @@ if EID then
     EID:addCard(SUN_CARD, "Damages Isaac for 1/2 of his total HP and activates the effect of Book of Jubilees.#Tarot cloth reduces the damage taken by 1 heart.", "Misprinted Sun")
     EID:addCard(JUDGEMENT_CARD, "Spawns a donation machine.#Spawns 2 donation machines while holding tarot cloth.", "Misprinted Judgement")
     EID:addCard(WORLD_CARD, "Adds curse of the lost for the floor and removes any other active curses.#Removes all curses for the floor while holding tarot cloth.", "Misprinted World")
+    EID:addCard(BOMB_CARD, "Creates a Mama Mega style explosion in the current room.", "12 of Clubs")
     EID:addEntity(6, 249376972, -1, "Tithe", "{{Warning}} Removes 1 coin when touched.#{{ArrowUp}} Has a chance to grant various payouts when destroyed including angel room item wisps, eternal hearts, Key Pieces, soul hearts, HP ups, and angel room items.#Tithe rewards are given to all players.#Spawns random pickups when destroyed.")
     EID:addCollectible(PILL_ITEM, "All pills spawn as horse pills.#Spawns a pill.", "The Pill")
     EID:addCollectible(BIBBLE_ITEM, "Activates the effect of a random book item.#Will not activate the effects of Duae Viae or Book of Jubilees.", "The Bibble")
@@ -12689,6 +12691,21 @@ function Mod:UseWorldMisprint(card, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseWorldMisprint, WORLD_CARD)
+
+function Mod:UseTwelveOfClubs(card, player)
+    if card == BOMB_CARD then
+        Isaac.Spawn(
+                EntityType.ENTITY_EFFECT,
+                EffectVariant.MAMA_MEGA_EXPLOSION,
+                0,
+                player.Position,
+                Vector.Zero,
+                player
+            )
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseTwelveOfClubs, BOMB_CARD)
 
 ----------------------------------------------------------------------------------------
 --- Machine code below.
