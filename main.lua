@@ -4815,7 +4815,7 @@ function Mod:DullCoinUse(item, rng, player, flags)
                     -- Find valid lower-quality replacements
                     for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
                         local replacementConfig = Isaac.GetItemConfig():GetCollectible(i)
-                        if replacementConfig and replacementConfig.Quality == currentQuality - 1 then
+                        if replacementConfig and replacementConfig.Quality == currentQuality - 1 and (replacementConfig.Type == ItemType.ITEM_PASSIVE or replacementConfig.Type == ItemType.ITEM_FAMILIAR) then
                             table.insert(lowerQualityItems, i)
                         end
                     end
