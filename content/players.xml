@@ -27,6 +27,7 @@
         coins="1" 
         keys="1" 
         bombs="1"
+        trinket="88"
         skinColor="-1"
         canShoot="True"
         costumeSuffix="b"
