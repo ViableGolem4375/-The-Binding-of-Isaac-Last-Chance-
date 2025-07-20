@@ -398,7 +398,7 @@ function Mod:FilterHighQualityItems(pickup)
 
                 for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
                     local lowerItemConfig = Isaac.GetItemConfig():GetCollectible(i)
-                    if lowerItemConfig and lowerItemConfig.Quality <= 2 and not lowerItemConfig.Hidden and not itemID == 626 and not itemID == 627 and not itemID == 668 and not itemID == 551 and not itemID == 552 and not itemID == 550 and not itemID == 327 and not itemID == 328 then
+                    if lowerItemConfig and lowerItemConfig.Quality <= 2 and not lowerItemConfig.Hidden then
                         table.insert(validItems, i)
                     end
                 end
