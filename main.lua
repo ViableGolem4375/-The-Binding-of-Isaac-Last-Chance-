@@ -384,7 +384,7 @@ function Mod:FilterHighQualityItems(player, pickup)
         local itemConfig = Isaac.GetItemConfig():GetCollectible(itemID)
 
         -- **Exclude Birthright from rerolling**
-        if itemID == CollectibleType.COLLECTIBLE_BIRTHRIGHT or itemID == 551 or itemID == 552 or itemID == 550 then
+        if itemID == CollectibleType.COLLECTIBLE_BIRTHRIGHT or itemID == 551 or itemID == 552 or itemID == 550 or itemID == 626 or itemID == 627 or itemID == 668 or itemID == 551 or itemID == 552 or itemID == 550 or itemID == 327 or itemID == 328 then
             return
         end
 
@@ -396,7 +396,7 @@ function Mod:FilterHighQualityItems(player, pickup)
 
             for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
                 local lowerItemConfig = Isaac.GetItemConfig():GetCollectible(i)
-                if lowerItemConfig and lowerItemConfig.Quality <= 2 and not lowerItemConfig.Hidden then
+                if lowerItemConfig and lowerItemConfig.Quality <= 2 and not lowerItemConfig.Hidden and not itemID == 626 and not itemID == 627 and not itemID == 668 and not itemID == 551 and not itemID == 552 and not itemID == 550 and not itemID == 327 and not itemID == 328 then
                     table.insert(validItems, i)
                 end
             end
@@ -556,7 +556,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.onPlayerUpdate)
 
 
 function Mod:RemoveEmptyPedestals(player)
-    local player = Isaac.GetPlayer(0) -- Retrieves the first player
+    --local player = Isaac.GetPlayer(0) -- Retrieves the first player
 
     if player:GetPlayerType() == TAINTED_TEMPLATE_TYPE then -- Replace with your character's ID
         local entities = Isaac.GetRoomEntities()
