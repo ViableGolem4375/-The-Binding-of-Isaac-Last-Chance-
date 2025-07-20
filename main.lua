@@ -370,8 +370,8 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Templateb.onCache)
 
-function Mod:FilterHighQualityItems(pickup)
-    local player = Isaac.GetPlayer(0)
+function Mod:FilterHighQualityItems(player, pickup)
+    --local player = Isaac.GetPlayer(0)
 
     -- Ensure this only applies to your tainted character
     if player:GetPlayerType() ~= TAINTED_TEMPLATE_TYPE then
@@ -416,42 +416,6 @@ local previousItems = {}
 local recentPickups = {}
 
 local QUALITY_ZERO_ITEMS = {
-    HUH_ITEM,
-    65,
-    136,
-    186,
-    287,
-    294,
-    40,
-    56,
-    295,
-    39,
-    41,
-    86,
-    177,
-    126,
-    137,
-    325,
-    44,
-    111,
-    66,
-    290,
-    35,
-    36,
-    421,
-    504,
-    482,
-    480,
-    481,
-    486,
-    478,
-    475,
-    578,
-    555,
-    631,
-    655,
-    605,
-    582,
     9,
     19,
     74,
@@ -2109,7 +2073,7 @@ if EID then
     EID:addTrinket(NOISEMAKER_TRINKET, "{{ArrowUp}} +0.25 speed.#{{ArrowUp}} -1 fire delay.#{{ArrowUp}} +1 damage.#{{ArrowUp}} +25% damage multiplier.#{{ArrowUp}} +3.75 range.#{{ArrowUp}} +0.3 shot speed.#{{ArrowUp}} +1 luck.#{{Warning}} While The Devil's Noisemaker is held random sound effects will be repeatedly played at an extremely high volume.#{{Collectible202}} When golden, all stat ups except for the damage multiplier are doubled and the volume of the sound effects is doubled.", "The Devil's Noisemaker")
     EID:addEntity(6, 249376971, -1, "Essence Collector", "Removes 3 soul/black hearts and spawns a random item from the Essence Reliquary pool along with some random pickups in return.")
     EID:addCharacterInfo(templateType, "{{ArrowUp}} High luck stat.#Starts with Lucky Coin as a pocket active item.", "Domino")
-    EID:addCharacterInfo(TAINTED_TEMPLATE_TYPE, "{{ArrowDown}} Items above quality 2 are automatically rerolled into lower quality items.#{{Warning}} These rerolls are chosen from random item pools.#{{ArrowUp}} Picking up quality 0 items has a chance to spawn another item pedestal containing a quality 0 item.#Starts with Dull Coin as a pocket active item.", "The Jinxed")
+    EID:addCharacterInfo(TAINTED_TEMPLATE_TYPE, "{{ArrowDown}} Items above quality 2 are automatically rerolled into lower quality items.#{{Warning}} These rerolls are chosen from random item pools.#{{ArrowUp}} Picking up quality 0 items has a chance to spawn another item pedestal containing a passive quality 0 item.#Starts with Dull Coin as a pocket active item.", "The Jinxed")
     EID:addCharacterInfo(pontiusType, "Throws spears instead of firing normal tears.#{{ArrowUp}} Spears pierce enemies and deal 5x normal damage.#{{ArrowDown}} Spears are unaffected by tears stat and do not interact with most special tear effects.#Tears up/down effects grant small increases/decreases to damage.", "Longinus")
     EID:addCharacterInfo(TAINTED_PONTIUS_TYPE, "Cannot fire normal tears.#Attacks using a melee weapon.#Melee weapon can be charged up by holding the attack button, this will trigger increasingly strong effects depending on how long the button is held.", "The Awoken")
     EID:addCharacterInfo(abrahamType, "Starts with Duae Viae as a pocket active item.", "Abraham")
