@@ -370,41 +370,44 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Templateb.onCache)
 
-function Mod:FilterHighQualityItems(player, pickup)
+function Mod:FilterHighQualityItems(pickup)
     --local player = Isaac.GetPlayer(0)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
 
-    -- Ensure this only applies to your tainted character
-    if player:GetPlayerType() ~= TAINTED_TEMPLATE_TYPE then
-        return
-    end
-
-    -- Check if the pickup is a pedestal item
-    if pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE then
-        local itemID = pickup.SubType
-        local itemConfig = Isaac.GetItemConfig():GetCollectible(itemID)
-
-        -- **Exclude Birthright from rerolling**
-        if itemID == CollectibleType.COLLECTIBLE_BIRTHRIGHT or itemID == 551 or itemID == 552 or itemID == 550 or itemID == 626 or itemID == 627 or itemID == 668 or itemID == 551 or itemID == 552 or itemID == 550 or itemID == 327 or itemID == 328 then
+        -- Ensure this only applies to your tainted character
+        if player:GetPlayerType() ~= TAINTED_TEMPLATE_TYPE then
             return
         end
 
-        if itemConfig and itemConfig.Quality > 2 then
-            -- Find a lower-quality replacement item
-            local validItems = {}
-            local itemPool = Game():GetItemPool()
-            local newItem
+        -- Check if the pickup is a pedestal item
+        if pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE then
+            local itemID = pickup.SubType
+            local itemConfig = Isaac.GetItemConfig():GetCollectible(itemID)
 
-            for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
-                local lowerItemConfig = Isaac.GetItemConfig():GetCollectible(i)
-                if lowerItemConfig and lowerItemConfig.Quality <= 2 and not lowerItemConfig.Hidden and not itemID == 626 and not itemID == 627 and not itemID == 668 and not itemID == 551 and not itemID == 552 and not itemID == 550 and not itemID == 327 and not itemID == 328 then
-                    table.insert(validItems, i)
-                end
+            -- **Exclude Birthright from rerolling**
+            if itemID == CollectibleType.COLLECTIBLE_BIRTHRIGHT or itemID == 551 or itemID == 552 or itemID == 550 or itemID == 626 or itemID == 627 or itemID == 668 or itemID == 551 or itemID == 552 or itemID == 550 or itemID == 327 or itemID == 328 then
+                return
             end
 
-            -- If valid replacements exist, reroll the item
-            if #validItems > 0 then
-                local newItem = validItems[math.random(#validItems)]
-                pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
+            if itemConfig and itemConfig.Quality > 2 then
+                -- Find a lower-quality replacement item
+                local validItems = {}
+                local itemPool = Game():GetItemPool()
+                local newItem
+
+                for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
+                    local lowerItemConfig = Isaac.GetItemConfig():GetCollectible(i)
+                    if lowerItemConfig and lowerItemConfig.Quality <= 2 and not lowerItemConfig.Hidden and not itemID == 626 and not itemID == 627 and not itemID == 668 and not itemID == 551 and not itemID == 552 and not itemID == 550 and not itemID == 327 and not itemID == 328 then
+                        table.insert(validItems, i)
+                    end
+                end
+
+                -- If valid replacements exist, reroll the item
+                if #validItems > 0 then
+                    local newItem = validItems[math.random(#validItems)]
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
+                end
             end
         end
     end
@@ -514,41 +517,44 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.onPlayerUpdate) ]]
 
 function Mod:onPlayerUpdate(player)
-    if player:GetPlayerType() == TAINTED_TEMPLATE_TYPE then
-        local currentItems = {}
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+        if player:GetPlayerType() == TAINTED_TEMPLATE_TYPE then
+            local currentItems = {}
 
-        -- ✅ Store player's current items
-        for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
-            if player:HasCollectible(i) then
-                currentItems[i] = true
-            end
-        end
-
-        -- ✅ Compare with previous items to detect **new** pickups
-        for itemID, _ in pairs(currentItems) do
-            if not previousItems[itemID] then
-                local itemQuality = Isaac.GetItemConfig():GetCollectible(itemID).Quality
-
-                -- ✅ Ensure this item hasn't been repeatedly picked up/dropped
-                if itemQuality == 0 and not recentPickups[itemID] then
-                    local rng = player:GetCollectibleRNG(itemID)
-                    if rng:RandomFloat() < 0.5 then -- ✅ 50% chance
-
-                        -- ✅ Spawn a pedestal with a random item from our predefined list
-                        if #QUALITY_ZERO_ITEMS > 0 then
-                            local newItem = QUALITY_ZERO_ITEMS[rng:RandomInt(#QUALITY_ZERO_ITEMS) + 1]
-                            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, player.Position, Vector(0,0), nil)
-                        end
-                    end
-
-                    -- ✅ Mark item as recently picked up to prevent repeat triggers
-                    recentPickups[itemID] = true
+            -- ✅ Store player's current items
+            for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
+                if player:HasCollectible(i) then
+                    currentItems[i] = true
                 end
             end
-        end
 
-        -- ✅ Update previous items for next check
-        previousItems = currentItems
+            -- ✅ Compare with previous items to detect **new** pickups
+            for itemID, _ in pairs(currentItems) do
+                if not previousItems[itemID] then
+                    local itemQuality = Isaac.GetItemConfig():GetCollectible(itemID).Quality
+
+                    -- ✅ Ensure this item hasn't been repeatedly picked up/dropped
+                    if itemQuality == 0 and not recentPickups[itemID] then
+                        local rng = player:GetCollectibleRNG(itemID)
+                        if rng:RandomFloat() < 0.5 then -- ✅ 50% chance
+
+                            -- ✅ Spawn a pedestal with a random item from our predefined list
+                            if #QUALITY_ZERO_ITEMS > 0 then
+                                local newItem = QUALITY_ZERO_ITEMS[rng:RandomInt(#QUALITY_ZERO_ITEMS) + 1]
+                                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, player.Position, Vector(0,0), nil)
+                            end
+                        end
+
+                        -- ✅ Mark item as recently picked up to prevent repeat triggers
+                        recentPickups[itemID] = true
+                    end
+                end
+            end
+
+            -- ✅ Update previous items for next check
+            previousItems = currentItems
+        end
     end
 end
 
@@ -557,15 +563,18 @@ Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.onPlayerUpdate)
 
 function Mod:RemoveEmptyPedestals(player)
     --local player = Isaac.GetPlayer(0) -- Retrieves the first player
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
 
-    if player:GetPlayerType() == TAINTED_TEMPLATE_TYPE then -- Replace with your character's ID
-        local entities = Isaac.GetRoomEntities()
+        if player:GetPlayerType() == TAINTED_TEMPLATE_TYPE then -- Replace with your character's ID
+            local entities = Isaac.GetRoomEntities()
 
-        for _, entity in ipairs(entities) do
-            if entity.Type == EntityType.ENTITY_PICKUP and entity.Variant == PickupVariant.PICKUP_COLLECTIBLE then
-                local pedestal = entity:ToPickup()
-                if pedestal and pedestal.SubType == 0 then -- Empty pedestal check
-                    pedestal:Remove()
+            for _, entity in ipairs(entities) do
+                if entity.Type == EntityType.ENTITY_PICKUP and entity.Variant == PickupVariant.PICKUP_COLLECTIBLE then
+                    local pedestal = entity:ToPickup()
+                    if pedestal and pedestal.SubType == 0 then -- Empty pedestal check
+                        pedestal:Remove()
+                    end
                 end
             end
         end
