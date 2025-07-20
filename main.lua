@@ -4821,7 +4821,7 @@ function Mod:DullCoinUse(item, rng, player, flags)
         local itemConfig = Isaac.GetItemConfig():GetCollectible(itemID)
 
         -- Ensure item exists, is Quality 0, and is Passive
-        if itemConfig and itemConfig.Quality == 0 and player:HasCollectible(itemID) then
+        if itemConfig and itemConfig.Quality == 0 and player:HasCollectible(itemID) and itemID ~= 626 and itemID ~= 627 and itemID ~= 327 and itemID ~= 328 and itemID ~= 668 and itemID ~= 550 and itemID ~= 552 and itemID ~= 551 and itemID ~= 238 and itemID ~= 239 then
             if itemConfig.Type == ItemType.ITEM_PASSIVE or itemConfig.Type == ItemType.ITEM_FAMILIAR then -- Only allow passive items
             table.insert(removedItems, itemID)
             end
@@ -4832,13 +4832,13 @@ function Mod:DullCoinUse(item, rng, player, flags)
         --[[ if #qualityZeroItems == 0 then
             return
         end ]]
-        if #removedItems < 10 then
+        if #removedItems < 5 then
             print("Not enough quality 0 items to convert.")
             return false
         end
 
         -- Shuffle and remove 10 items
-        for i = 1, 10 do
+        for i = 1, 5 do
             local index = rng:RandomInt(#removedItems) + 1
             local toRemove = removedItems[index]
             table.remove(removedItems, index)
