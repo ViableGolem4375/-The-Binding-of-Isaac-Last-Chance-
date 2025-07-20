@@ -398,7 +398,7 @@ function Mod:FilterHighQualityItems(pickup)
 
                 for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
                     local lowerItemConfig = Isaac.GetItemConfig():GetCollectible(i)
-                    if lowerItemConfig and lowerItemConfig.Quality <= 2 and not lowerItemConfig.Hidden then
+                    if lowerItemConfig and lowerItemConfig.Quality <= 2 and not lowerItemConfig.Hidden and not lowerItemConfig:HasTags(ItemConfig.TAG_QUEST) then
                         table.insert(validItems, i)
                     end
                 end
@@ -4788,7 +4788,7 @@ function Mod:DullCoinUse(item, rng, player, flags)
                     -- Find valid lower-quality replacements
                     for i = 1, CollectibleType.NUM_COLLECTIBLES - 1 do
                         local replacementConfig = Isaac.GetItemConfig():GetCollectible(i)
-                        if replacementConfig and replacementConfig.Quality == currentQuality - 1 and (replacementConfig.Type == ItemType.ITEM_PASSIVE or replacementConfig.Type == ItemType.ITEM_FAMILIAR) then
+                        if replacementConfig and replacementConfig.Quality == currentQuality - 1 and (replacementConfig.Type == ItemType.ITEM_PASSIVE or replacementConfig.Type == ItemType.ITEM_FAMILIAR) and not replacementConfig:HasTags(ItemConfig.TAG_QUEST) then
                             table.insert(lowerQualityItems, i)
                         end
                     end
