@@ -2106,27 +2106,27 @@ if EID then
     EID:addTrinket(KING_TRINKET, "Extremely small chance for a pedestal item to drop when picking up a coin.#Higher value coins have a higher chance to trigger this effect.#This trinket is destroyed after triggering.#{{Collectible202}} Chances are doubled when golden.", "King Penny")
     EID:addCollectible(CONCOCTION_ITEM, "For the room your tears apply:# Poison# Bait# Fear# Slowness# Concussed# Charm# Burning# Shrinking# Magnetism", "Mysterious Concoction")
     EID:addCard(FOOL_CARD, "Activates the effect of Teleport 2.0.", "Misprinted Fool")
-    EID:addCard(MAGICIAN_CARD, "For the room gain:#{{ArrowUp}} +10 damage.#{{ArrowDown}} 0.25x range.#Damage bonus and range down are doubled when holding tarot cloth.", "Misprinted Magician")
-    EID:addCard(PRIESTESS_CARD, "Activates the effect of Doctor's Remote.#Also activates the effect of Crack the Sky when holding tarot cloth.", "Misprinted High Priestess")
-    EID:addCard(EMPRESS_CARD, "Activates the effect of Gello.#Also activates the effect of Box of Friends twice when holding tarot cloth.", "Misprinted Empress")
-    EID:addCard(EMPEROR_CARD, "Spawns a friendly Monstro to fight alongside you for the room.#Spawns Monstro 2 when holding tarot cloth.#{{Warning}} The summoned Monstros have a chance to be champion variants.", "Misprinted Emperor")
-    EID:addCard(HIEROPHANT_CARD, "Spawns 2 black hearts.#Spawns 4 black hearts when holding tarot cloth.", "Misprinted Hierophant")
-    EID:addCard(LOVERS_CARD, "Spawns 2 golden hearts.#Spawns 4 golden hearts when holding tarot cloth.", "Misprinted Lovers")
+    EID:addCard(MAGICIAN_CARD, "For the room gain:#{{ArrowUp}} +10 damage.#{{ArrowDown}} 0.25x range.", "Misprinted Magician")
+    EID:addCard(PRIESTESS_CARD, "Activates the effect of Doctor's Remote.", "Misprinted High Priestess")
+    EID:addCard(EMPRESS_CARD, "Activates the effect of Gello.", "Misprinted Empress")
+    EID:addCard(EMPEROR_CARD, "Spawns a friendly Monstro to fight alongside you for the room.#{{Warning}} The summoned Monstros have a chance to be champion variants.", "Misprinted Emperor")
+    EID:addCard(HIEROPHANT_CARD, "Spawns 2 black hearts.", "Misprinted Hierophant")
+    EID:addCard(LOVERS_CARD, "Spawns 2 golden hearts.", "Misprinted Lovers")
     EID:addCard(CHARIOT_CARD, "Charge in the current movement direction dealing 100 damage to all enemies you collide with.", "Misprinted Chariot")
-    EID:addCard(JUSTICE_CARD, "Spawns 4 random pickups.#The pickups are doubled when holding tarot cloth.", "Misprinted Justice")
-    EID:addCard(HERMIT_CARD, "Activates the effect of Keeper's Box.#Activates the effect twice and spawns a nickel when holding tarot cloth.", "Misprinted Hermit")
-    EID:addCard(WHEEL_CARD, "Activates the effect of a random item for the room.#Activates the effects of two random items for the room when holding tarot cloth.", "Misprinted Wheel of Fortune")
-    EID:addCard(STRENGTH_CARD, "Gain 1/2 of a soul heart.#For the room gain:#{{ArrowUp}} +0.1 speed#{{ArrowUp}} +0.03 tears#{{ArrowUp}} +0.2 damage#{{ArrowUp}} +11.25 range#{{ArrowUp}} +3 shot speed#{{ArrowUp}} +1 luck.#Gives a full soul heart and doubled stat bonuses when holding tarot cloth.", "Misprinted Strength")
-    EID:addCard(HANGED_CARD, "Gain the effect of The Pinking Shears for the current room.#Activated twice when holding tarot cloth.", "Misprinted Hanged Man")
-    EID:addCard(DEATH_CARD, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.#{{Warning}} Activated twice when holding tarot cloth, this is guaranteed to kill Isaac.", "Misprinted Death")
-    EID:addCard(TEMPERANCE_CARD, "Spawns a confessional.#Spawns 2 confessionals while holding tarot cloth.", "Misprinted Temperance")
-    EID:addCard(DEVIL_CARD, "Activates the effect of Satanic Bible.#Activates the effect twice while holding tarot cloth.", "Misprinted Devil")
-    EID:addCard(TOWER_CARD, "Spawns a giga bomb pickup.#Spawns two giga bomb pickups while holding tarot cloth.", "Misprinted Tower")
+    EID:addCard(JUSTICE_CARD, "Spawns 4 random pickups.", "Misprinted Justice")
+    EID:addCard(HERMIT_CARD, "Activates the effect of Keeper's Box.", "Misprinted Hermit")
+    EID:addCard(WHEEL_CARD, "Activates the effect of Crooked Penny.", "Misprinted Wheel of Fortune")
+    EID:addCard(STRENGTH_CARD, "Gain 1/2 of a soul heart.#For the room gain:#{{ArrowUp}} +0.1 speed#{{ArrowUp}} +0.03 tears#{{ArrowUp}} +0.2 damage#{{ArrowUp}} +11.25 range#{{ArrowUp}} +3 shot speed#{{ArrowUp}} +1 luck.", "Misprinted Strength")
+    EID:addCard(HANGED_CARD, "Gain the effect of The Pinking Shears for the current room.", "Misprinted Hanged Man")
+    EID:addCard(DEATH_CARD, "50% chance to instantly kill all enemies in the room.#50% chance to instantly kill you instead.", "Misprinted Death")
+    EID:addCard(TEMPERANCE_CARD, "Spawns a confessional.", "Misprinted Temperance")
+    EID:addCard(DEVIL_CARD, "Activates the effect of Satanic Bible.", "Misprinted Devil")
+    EID:addCard(TOWER_CARD, "Spawns a giga bomb pickup.", "Misprinted Tower")
     EID:addCard(STARS_CARD, "Rerolls all item pedestals in the room into TMTRAINER items.", "Misprinted Stars")
-    EID:addCard(MOON_CARD, "Teleports Isaac to a black market.#This black market is separate from the one spawned on the floor, multiple uses of Misprinted Moon will send Isaac to multiple different black markets.#Grants The Fool to leave.#Spawns an extra fool card while holding tarot cloth.", "Misprinted Moon")
-    EID:addCard(SUN_CARD, "Damages Isaac for 1/2 of his total HP and activates the effect of Book of Jubilees.#Tarot cloth reduces the damage taken by 1 heart.", "Misprinted Sun")
-    EID:addCard(JUDGEMENT_CARD, "Spawns a donation machine.#Spawns 2 donation machines while holding tarot cloth.", "Misprinted Judgement")
-    EID:addCard(WORLD_CARD, "Adds curse of the lost for the floor and removes any other active curses.#Removes all curses for the floor while holding tarot cloth.", "Misprinted World")
+    EID:addCard(MOON_CARD, "Teleports Isaac to a black market.#This black market is separate from the one spawned on the floor, multiple uses of Misprinted Moon will send Isaac to multiple different black markets.#Grants The Fool to leave.", "Misprinted Moon")
+    EID:addCard(SUN_CARD, "Damages Isaac for 1/2 of his total HP and activates the effect of Book of Jubilees.", "Misprinted Sun")
+    EID:addCard(JUDGEMENT_CARD, "Spawns a donation machine.", "Misprinted Judgement")
+    EID:addCard(WORLD_CARD, "Adds curse of the lost for the floor and removes any other active curses.", "Misprinted World")
     EID:addCard(BOMB_CARD, "Creates a Mama Mega style explosion in the current room.", "12 of Clubs")
     EID:addEntity(6, 249376972, -1, "Tithe", "{{Warning}} Removes 1 coin when touched.#{{ArrowUp}} Has a chance to grant various payouts when destroyed including angel room item wisps, eternal hearts, Key Pieces, soul hearts, HP ups, and angel room items.#Tithe rewards are given to all players.#Spawns random pickups when destroyed.")
     EID:addCollectible(PILL_ITEM, "All pills spawn as horse pills.#Spawns a pill.", "The Pill")
@@ -4462,6 +4462,324 @@ if EID then
     end
 
     EID:addDescriptionModifier("Wood Bomb Book Mod", WoodBombBook, WoodBombBookCallback)
+
+    function TarotMagician(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == MAGICIAN_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotMagicianCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(MAGICIAN_CARD, "" .. textColor .. "For the room gain:#{{ArrowUp}} +20 damage.#{{ArrowDown}} 0.125x range.", "Misprinted Magician")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Magician Mod", TarotMagician, TarotMagicianCallback)
+
+    function TarotPriestess(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == PRIESTESS_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotPriestessCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(PRIESTESS_CARD, "" .. textColor .. "Activates the effects of Doctor's Remote and Crack the Sky.", "Misprinted High Priestess")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Priestess Mod", TarotPriestess, TarotPriestessCallback)
+
+    function TarotEmpress(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == EMPRESS_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotEmpressCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(EMPRESS_CARD, "" .. textColor .. "Activates the effect of Gello and Box of Friends twice.", "Misprinted Empress")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Empress Mod", TarotEmpress, TarotEmpressCallback)
+
+    function TarotEmperor(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == EMPEROR_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotEmperorCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(EMPEROR_CARD, "" .. textColor .. "Spawns two friendly Monstro 2's to fight alongside you for the room.#{{Warning}} The summoned Monstros have a chance to be champion variants.", "Misprinted Emperor")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Emperor Mod", TarotEmperor, TarotEmperorCallback)
+
+    function TarotHeirophant(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == HIEROPHANT_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotHeirophantCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(HIEROPHANT_CARD, "" .. textColor .. "Spawns 4 black hearts.", "Misprinted Heirophant")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Heirophant Mod", TarotHeirophant, TarotHeirophantCallback)
+
+    function TarotLovers(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == LOVERS_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotLoversCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(LOVERS_CARD, "" .. textColor .. "Spawns 4 golden hearts.", "Misprinted Lovers")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Lovers Mod", TarotLovers, TarotLoversCallback)
+
+    function TarotJustice(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == JUSTICE_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotJusticeCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(JUSTICE_CARD, "" .. textColor .. "Spawns 8 random pickups.", "Misprinted Justice")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Justice Mod", TarotJustice, TarotJusticeCallback)
+
+    function TarotHermit(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == HERMIT_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotHermitCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(HERMIT_CARD, "" .. textColor .. "Activates the effect of Keeper's Box twice and spawns a nickel.", "Misprinted Hermit")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Hermit Mod", TarotHermit, TarotHermitCallback)
+
+    function TarotWheel(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == WHEEL_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotWheelCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(WHEEL_CARD, "" .. textColor .. "Activates the effect of Crooked Penny twice, double or nothing.", "Misprinted Wheel of Fortune")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Wheel Mod", TarotWheel, TarotWheelCallback)
+
+    function TarotStrength(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == STRENGTH_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotStrengthCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(STRENGTH_CARD, "" .. textColor .. "Gain 1 soul heart.#For the room gain:#{{ArrowUp}} +0.2 speed#{{ArrowUp}} +0.06 tears#{{ArrowUp}} +0.4 damage#{{ArrowUp}} +22.5 range#{{ArrowUp}} +6 shot speed#{{ArrowUp}} +2 luck.", "Misprinted Strength")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Strength Mod", TarotStrength, TarotStrengthCallback)
+
+    function TarotHanged(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == HANGED_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotHangedCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(HANGED_CARD, "" .. textColor .. "Gain the effect of Pinking Shears activated twice for the room.", "Misprinted Hanged Man")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Hanged Mod", TarotHanged, TarotHangedCallback)
+
+    function TarotDeath(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == DEATH_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotDeathCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(DEATH_CARD, "" .. textColor .. "Instantly kills Isaac.", "Misprinted Death")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Death Mod", TarotDeath, TarotDeathCallback)
+
+    function TarotTemperance(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == TEMPERANCE_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotTemperanceCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(TEMPERANCE_CARD, "" .. textColor .. "Spawns 2 confessionals.", "Misprinted Temperance")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Temperance Mod", TarotTemperance, TarotTemperanceCallback)
+
+    function TarotDevil(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == DEVIL_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotDevilCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(DEVIL_CARD, "" .. textColor .. "Activates the effect of Satanic Bible twice.", "Misprinted Devil")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Devil Mod", TarotDevil, TarotDevilCallback)
+
+    function TarotTower(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == TOWER_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotTowerCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(TOWER_CARD, "" .. textColor .. "Spawns 2 giga bomb pickups.", "Misprinted Tower")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Tower Mod", TarotTower, TarotTowerCallback)
+
+    function TarotMoon(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == MOON_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotMoonCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        --EID:addCard(MOON_CARD, "" .. textColor .. "Teleports Isaac to a black market.#This black market is separate from the one spawned on the floor, multiple uses of Misprinted Moon will send Isaac to multiple different black markets.#Grants The Fool to leave.#Spawns an extra fool card.", "Misprinted Moon")
+        EID:appendToDescription(MOON_CARD, "" .. textColor .. "Spawns an extra fool card.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Moon Mod", TarotTower, TarotTowerCallback)
+
+    function TarotSun(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == SUN_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotSunCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(SUN_CARD, "" .. textColor .. "Damages Isaac for 1/2 of his total HP minus 1 heart and activates the effect of Book of Jubilees.", "Misprinted Sun")
+        --EID:appendToDescription(SUN_CARD, "" .. textColor .. "Damage taken is reduced by 1 heart.")
+
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Sun Mod", TarotSun, TarotSunCallback)
+
+    function TarotJudgement(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == JUDGEMENT_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotJudgementCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(JUDGEMENT_CARD, "" .. textColor .. "Spawns 2 donation machines.", "Misprinted Judgement")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Judgement Mod", TarotJudgement, TarotJudgementCallback)
+
+    function TarotWorld(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == WORLD_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotWorldCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(WORLD_CARD, "" .. textColor .. "Removes any active curses for the floor.", "Misprinted World")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot World Mod", TarotWorld, TarotWorldCallback)
+
+    function TarotEssence(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == RELIQUARY_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotEssenceCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(RELIQUARY_CARD, "" .. textColor .. "Spawns 2 Essence Collectors.", "Essence Card")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Essence Mod", TarotEssence, TarotEssenceCallback)
+
+    function TarotBomb(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 300 and descObj.ObjSubType == BOMB_CARD and player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then return true end
+        end
+    end
+    function TarotBombCallback(descObj)
+        local textColor = "{{ColorRainbow}}"
+        EID:addCard(BOMB_CARD, "" .. textColor .. "Creates two Mama Mega style explosions in the current room.", "12 of Clubs")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Tarot Bomb Mod", TarotBomb, TarotBombCallback)
 end
 
 --Function to handle dice item rerolls.
@@ -12363,12 +12681,11 @@ Mod:AddCallback(ModCallbacks.MC_USE_CARD, Mod.UseHermitMisprint, HERMIT_CARD)
 
 function Mod:UseWheelMisprint(card,player)
     if card == WHEEL_CARD then
-        if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
-            player:UseActiveItem(CollectibleType.COLLECTIBLE_METRONOME, UseFlag.USE_NOANIM)
-            player:UseActiveItem(CollectibleType.COLLECTIBLE_METRONOME, UseFlag.USE_NOANIM)
-        else
-            player:UseActiveItem(CollectibleType.COLLECTIBLE_METRONOME, UseFlag.USE_NOANIM)
-        end
+        --if player:HasCollectible(CollectibleType.COLLECTIBLE_TAROT_CLOTH) then
+        --    player:UseActiveItem(CollectibleType.COLLECTIBLE_METRONOME, UseFlag.USE_NOANIM)
+        --else
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_CROOKED_PENNY, UseFlag.USE_NOANIM)
+        --end
 
     end
 end
