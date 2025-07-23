@@ -79,7 +79,7 @@
 
     </Pool>
     <Pool Name="secret">
-        <Item Name="Eternal Bond" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Eternal Bond 4" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="'/<<L7" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Debug Console" Weight="0.2" DecreaseBy="0.1" RemoveOn="0.1" />
@@ -275,7 +275,7 @@
 
     </Pool>
     <Pool Name="greedSecret">
-        <Item Name="Eternal Bond" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Eternal Bond 4" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Blank Slate" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="'/<<L7" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Debug Console" Weight="0.2" DecreaseBy="0.1" RemoveOn="0.1" />
