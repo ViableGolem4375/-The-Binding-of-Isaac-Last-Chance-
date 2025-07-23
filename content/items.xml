@@ -141,6 +141,7 @@
     <passive id="139" name="Glowing Key" gfx="glowingkey.png" description="???" quality="2" craftquality="2" devilprice="1" tags="offensive summonable nocantrip" />
     <active id="140" name="Wooden Key" gfx="woodkey.png" description="Turn the key" quality="1" craftquality="1" maxcharges="1" chargetype="normal" devilprice="1" tags="offensive nocantrip" />
     <active id="141" name="Wooden Bomb" gfx="woodbomb.png" description="Light the fuse" quality="1" craftquality="1" maxcharges="1" chargetype="normal" devilprice="1" tags="offensive nocantrip" />
-    <passive id="142" name="Experimental Treatment 2.0" gfx="treatment.png" description="All stats up?" quality="2" craftquality="2" devilprice="1" tags="offensive nocantrip" cache="all" />
+    <passive id="142" name="Experimental Treatment 2.0" gfx="treatment.png" description="All stats up?" quality="2" craftquality="2" devilprice="1" tags="offensive nocantrip summonable" cache="all" />
+    <passive id="143" name="Lil' Dogma" gfx="lildogma.png" description="Dogmatic friend" quality="4" craftquality="4" devilprice="2" tags="offensive nocantrip" cache="familiars" />
 
 </items>

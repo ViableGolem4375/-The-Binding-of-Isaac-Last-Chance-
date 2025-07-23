@@ -224,4 +224,6 @@
     <locust id="140" tearFlags2="70" procChance="0.3" color="fly_brown"/>
     <!--  Experimental Treatment 2.0: 30% chance for random effects -->
     <locust id="142" locustFlags2="1" procChance="0.3" gfx="experimental.png"/>
+    <!--  Lil Dogma: 2x damage, 100% chance for brimstone lasers -->
+    <locust id="143" damageMultiplier="2" locustFlags2="12" procChance="1" gfx="dogma.png"/>
 </locusts>

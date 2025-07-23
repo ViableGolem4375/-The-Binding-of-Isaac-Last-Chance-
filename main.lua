@@ -207,6 +207,9 @@ WOOD_KEY_ITEM = Isaac.GetItemIdByName("Wooden Key")
 WOOD_BOMB_ITEM = Isaac.GetItemIdByName("Wooden Bomb")
 TREATMENT_ITEM = Isaac.GetItemIdByName("Experimental Treatment 2.0")
 
+DOGMA_FAMILIAR_ITEM = Isaac.GetItemIdByName("Lil' Dogma")
+CONFIG_DOGMA = itemConfig:GetCollectible(DOGMA_FAMILIAR_ITEM)
+FAMILIAR_VARIANT_DOGMA = Isaac.GetEntityVariantByName("Lil' Dogma")
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Longinus")
@@ -239,6 +242,11 @@ BOMB_CARD = Isaac.GetCardIdByName("12 of Clubs")
 local Chest = {}
 
 Chest.CHEST_ESSENCE = 249376973
+
+Mod.ModdedSounds = {
+	LIL_DOGMA_FIRE_SOUND = Isaac.GetSoundIdByName("DogmaLaser"),
+}
+local moddedSounds = Mod.ModdedSounds
 
 ----------------------------------------------------------------------------------------
 -- Character code for Domino below.
@@ -2154,6 +2162,7 @@ if EID then
     EID:addCollectible(WOOD_KEY_ITEM, "59% chance to spawn a random key.", "Wooden Key")
     EID:addCollectible(WOOD_BOMB_ITEM, "59% chance to spawn a random bomb.", "Wooden Bomb")
     EID:addCollectible(TREATMENT_ITEM, "{{ArrowUp}} Grants a random stat increase choosing from Damage, Range, Shot Speed, and Luck.#The stat increase changes on every frame.", "Experimental Treatment 2.0")
+    EID:addCollectible(DOGMA_FAMILIAR_ITEM, "Grants a familiar which charged up and fires a homing laser.#The laser scales with Isaac's damage and fire rate.", "Lil' Dogma")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -3650,6 +3659,22 @@ if EID then
     end
 
     EID:addDescriptionModifier("treatment Mod", TreatmentAbyss, TreatmentCallback)
+
+    function LilDogmaAbyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DOGMA_FAMILIAR_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function LilDogmaCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Extra 2x damage multiplier.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance for anti-gravity brimstone lasers on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Lil Dogma Mod", LilDogmaAbyss, LilDogmaCallback)
 
     -- Functions for misc descriptions.
 
@@ -5294,17 +5319,17 @@ function Mod:HandleUpdate(familiar)
 
     if fireDirection == Direction.LEFT then
         direction = Vector(-1, 0)
-        shootAnim = "FloatShootSide"
+        shootAnim = "FloatSide"
         doFlip = true
     elseif fireDirection == Direction.RIGHT then
         direction = Vector(1, 0)
-        shootAnim = "FloatShootSide"
+        shootAnim = "FloatSide"
     elseif fireDirection == Direction.DOWN then
         direction = Vector(0, 1)
-        shootAnim = "FloatShootDown"
+        shootAnim = "FloatDown"
     elseif fireDirection == Direction.UP then
         direction = Vector(0, -1)
-        shootAnim = "FloatShootUp"
+        shootAnim = "FloatUp"
     end
 
     if direction ~= nil and familiar.FireCooldown == 0 then
@@ -5386,17 +5411,17 @@ function Mod:HandleUpdateb(familiarb)
 
     if fireDirectionb == Direction.LEFT then
         directionb = Vector(-1, 0)
-        shootAnimb = "FloatShootSide"
+        shootAnimb = "FloatSide"
         doFlipb = true
     elseif fireDirectionb == Direction.RIGHT then
         directionb = Vector(1, 0)
-        shootAnimb = "FloatShootSide"
+        shootAnimb = "FloatSide"
     elseif fireDirectionb == Direction.DOWN then
         directionb = Vector(0, 1)
-        shootAnimb = "FloatShootDown"
+        shootAnimb = "FloatDown"
     elseif fireDirectionb == Direction.UP then
         directionb = Vector(0, -1)
-        shootAnimb = "FloatShootUp"
+        shootAnimb = "FloatUp"
     end
 
     if directionb ~= nil and familiarb.FireCooldown == 0 then
@@ -12341,6 +12366,168 @@ end
 
 
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.TreatmentPickup)
+
+---@param player EntityPlayer
+function Mod:EvaluateCacheDogma(player)
+    local effects = player:GetEffects()
+    local count = effects:GetCollectibleEffectNum(DOGMA_FAMILIAR_ITEM) + player:GetCollectibleNum(DOGMA_FAMILIAR_ITEM)
+    local rng = RNG()
+    local seed = math.max(Random(), 1)
+    rng:SetSeed(seed, RNG_SHIFT_INDEX_FAIL)
+
+    player:CheckFamiliar(FAMILIAR_VARIANT_DOGMA, count, rng, CONFIG_DOGMA)
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.EvaluateCacheDogma, CacheFlag.CACHE_FAMILIARS)
+
+---@param familiar EntityFamiliar
+function Mod:HandleInitDogma(familiar)
+    familiar:AddToFollowers()
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.HandleInitDogma, FAMILIAR_VARIANT_DOGMA)
+
+local chargetime = 8
+
+---@param familiar EntityFamiliar
+function Mod:HandleUpdateDogma(familiar)
+    local sprite = familiar:GetSprite()
+    local player = familiar.Player or Isaac.GetPlayer(0)
+
+    familiar:FollowParent()
+
+    -- Setup charge data storage per familiar
+    local data = familiar:GetData()
+    data.ChargeFrame = data.ChargeFrame or 0
+    data.ChargeCooldown = data.ChargeCooldown or 0
+    data.LastDirection = data.LastDirection or Direction.NO_DIRECTION
+
+    local fireDirection = player:GetFireDirection()
+    local directionVector
+    local shootAnim
+    local doFlip = false
+    --local chargetime = 8
+
+    if player:HasTrinket(TrinketType.TRINKET_FORGOTTEN_LULLABY) then
+        chargetime = 5
+    else
+        chargetime = 10
+    end
+
+    if fireDirection == Direction.LEFT then
+        directionVector = Vector(-1, 0)
+        shootAnim = "FloatShootSide"
+        doFlip = true
+    elseif fireDirection == Direction.RIGHT then
+        directionVector = Vector(1, 0)
+        shootAnim = "FloatShootSide"
+    elseif fireDirection == Direction.DOWN then
+        directionVector = Vector(0, 1)
+        shootAnim = "FloatShootDown"
+    elseif fireDirection == Direction.UP then
+        directionVector = Vector(0, -1)
+        shootAnim = "FloatShootUp"
+    end
+
+    -- Charging logic
+    if fireDirection ~= Direction.NO_DIRECTION and data.ChargeCooldown == 0 then
+        data.LastDirection = fireDirection
+        data.ChargeFrame = math.min(player.MaxFireDelay * chargetime, data.ChargeFrame + 1)
+
+        -- Optional charging visual cue
+        if data.ChargeFrame == player.MaxFireDelay * chargetime then
+            familiar:SetColor(Color(1, 0, 0, 0.8, 0, 0, 0), 1, 0, false, false)
+            sprite:Play("FloatShootUp")
+        end
+    elseif fireDirection == Direction.NO_DIRECTION and data.ChargeFrame == player.MaxFireDelay * chargetime then
+        -- Fully charged and release trigger
+
+        local dir = data.LastDirection
+        if dir == Direction.LEFT then
+            directionVector = Vector(-1, 0)
+            shootAnim = "FloatSide"
+            doFlip = true
+        elseif dir == Direction.RIGHT then
+            directionVector = Vector(1, 0)
+            shootAnim = "FloatSide"
+        elseif dir == Direction.DOWN then
+            directionVector = Vector(0, 1)
+            shootAnim = "FloatDown"
+        elseif dir == Direction.UP then
+            directionVector = Vector(0, -1)
+            shootAnim = "FloatUp"
+        end
+
+        -- Spawn custom laser
+        local laser = Isaac.Spawn(
+            EntityType.ENTITY_LASER,
+            LaserVariant.SHOOP,
+            0,
+            familiar.Position,
+            Vector.Zero,
+            familiar
+        ):ToLaser()
+
+        if laser then
+            local laserSprite = laser:GetSprite()
+            laserSprite:ReplaceSpritesheet(0, "gfx/effects/lildogmabeam.png")
+            laserSprite:LoadGraphics()
+
+            laser.AngleDegrees = directionVector:GetAngleDegrees()
+            laser.PositionOffset = Vector(0, -10)
+            laser.Parent = familiar
+            laser.Timeout = 30
+            laser.TearFlags = TearFlags.TEAR_HOMING | TearFlags.TEAR_SPECTRAL
+            if player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+                laser.CollisionDamage = (5 + player.Damage) * 2
+            else
+                laser.CollisionDamage = 5 + player.Damage
+            end
+            LaserData = laser:GetData()
+			if LaserData.DogmaImpact == nil then LaserData.DogmaImpact = true end
+        end
+
+        -- Reset charge and begin cooldown
+        data.ChargeFrame = 0
+        data.ChargeCooldown = 45
+
+        SFXManager():Play(moddedSounds.LIL_DOGMA_FIRE_SOUND, 1, 2, false, 1)
+        sprite.FlipX = doFlip
+        sprite:Play(shootAnim, true)
+    end
+
+    -- Reset visual and cooldown
+    if sprite:IsFinished() then
+        sprite:Play("FloatDown")
+    end
+    data.ChargeCooldown = math.max(0, data.ChargeCooldown - 1)
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdateDogma, FAMILIAR_VARIANT_DOGMA)
+
+
+function Mod:ReplaceLaserImpactGraphics(effectEntity)
+
+	--unique interaction with impact fx, since its spawner is the parent laser
+	if effectEntity.SpawnerEntity ~= nil
+	and effectEntity.Variant == EffectVariant.LASER_IMPACT
+	then
+		--check for the impact's laser's player
+		if effectEntity.SpawnerEntity.SpawnerType == EntityType.ENTITY_FAMILIAR then
+			
+			--check flag for non-replacable impact (trisagion)
+			LaserData = effectEntity.SpawnerEntity:GetData()
+			if LaserData.DogmaImpact ~= nil then
+				local fxSprite = effectEntity:GetSprite()
+				fxSprite:ReplaceSpritesheet(0, "gfx/effects/lildogmabeamcollision.png")
+				fxSprite:LoadGraphics()
+			end
+		end
+	end
+			
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_INIT, Mod.ReplaceLaserImpactGraphics)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
