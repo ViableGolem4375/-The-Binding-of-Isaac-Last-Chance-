@@ -38,6 +38,7 @@
         <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -91,6 +92,7 @@
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="TempleOS" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="boss">
@@ -102,6 +104,7 @@
         <Item Name="Sack of Lucky Pennies" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Birthday Cake" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Sack of Hearts" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="shop">
@@ -166,6 +169,7 @@
         <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -177,6 +181,7 @@
         <Item Name="Sack of Lucky Pennies" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Sack of Hearts" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Birthday Cake" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedShop">
@@ -225,6 +230,7 @@
         <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
@@ -287,6 +293,7 @@
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="TempleOS" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Glowing Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="craneGame">

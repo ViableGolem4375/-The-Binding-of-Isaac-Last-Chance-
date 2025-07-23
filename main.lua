@@ -205,6 +205,7 @@ SHARD_TRINKET = Isaac.GetTrinketIdByName("Essence Shard")
 GLOWING_KEY_ITEM = Isaac.GetItemIdByName("Glowing Key")
 WOOD_KEY_ITEM = Isaac.GetItemIdByName("Wooden Key")
 WOOD_BOMB_ITEM = Isaac.GetItemIdByName("Wooden Bomb")
+TREATMENT_ITEM = Isaac.GetItemIdByName("Experimental Treatment 2.0")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2152,6 +2153,7 @@ if EID then
     EID:addCollectible(GLOWING_KEY_ITEM, "Spawns an Essence Chest and an Essence Card in the starting room upon entering a new floor.", "Glowing Key")
     EID:addCollectible(WOOD_KEY_ITEM, "59% chance to spawn a random key.", "Wooden Key")
     EID:addCollectible(WOOD_BOMB_ITEM, "59% chance to spawn a random bomb.", "Wooden Bomb")
+    EID:addCollectible(TREATMENT_ITEM, "{{ArrowUp}} Grants a random stat increase choosing from Damage, Range, Shot Speed, and Luck.#The stat increase changes on every frame.", "Experimental Treatment 2.0")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -3633,6 +3635,21 @@ if EID then
     end
 
     EID:addDescriptionModifier("Wood Bomb Mod", WoodBombAbyss, WoodBombCallback)
+
+    function TreatmentAbyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == TREATMENT_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function TreatmentCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "30% chance for random effects on hit.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("treatment Mod", TreatmentAbyss, TreatmentCallback)
 
     -- Functions for misc descriptions.
 
@@ -12276,6 +12293,54 @@ function Mod:UseWoodBombItem(item, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseWoodBombItem, WOOD_BOMB_ITEM)
+
+local statTypes = {
+    CacheFlag.CACHE_DAMAGE,
+    CacheFlag.CACHE_RANGE,
+    CacheFlag.CACHE_SHOTSPEED,
+    CacheFlag.CACHE_LUCK,
+    -- Add others like CACHE_TEARFLAG or CACHE_FAMILIARS if needed
+}
+
+local function GetRandomStat(rng)
+    local first = statTypes[rng:RandomInt(#statTypes) + 1]
+
+
+    return first
+end
+
+
+function Mod:TreatmentPickup(player, cacheFlag)
+    if player:HasCollectible(TREATMENT_ITEM) then
+        local numtreat = player:GetCollectibleNum(TREATMENT_ITEM)
+        local rng = RNG()
+        rng:SetSeed(Random(), 1)
+
+        local stat1 = GetRandomStat(rng)
+        player:GetData().statItemStats = {stat1}
+        player:AddCacheFlags(stat1)
+
+        local stats = player:GetData().statItemStats
+        if not stats then return end
+
+        for _, stat in ipairs(stats) do
+            if cacheFlag == stat then
+                if stat == CacheFlag.CACHE_DAMAGE then
+                player.Damage = player.Damage + (3 * numtreat)
+                elseif stat == CacheFlag.CACHE_RANGE then
+                player.TearRange = player.TearRange + (200 * numtreat)
+                elseif stat == CacheFlag.CACHE_SHOTSPEED then
+                player.ShotSpeed = player.ShotSpeed + (0.3 * numtreat)
+                elseif stat == CacheFlag.CACHE_LUCK then
+                    player.Luck = player.Luck + (3 * numtreat)
+                end
+            end
+        end
+    end
+end
+
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.TreatmentPickup)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

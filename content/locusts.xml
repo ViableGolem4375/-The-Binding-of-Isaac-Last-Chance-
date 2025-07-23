@@ -222,4 +222,6 @@
     <locust id="141" locustFlags2="0" procChance="0.3" gfx="bomb.png" color="fly_brown"/>
     <!--  Wooden Key: locust with a 30% chance to destroy rocks -->
     <locust id="140" tearFlags2="70" procChance="0.3" color="fly_brown"/>
+    <!--  Experimental Treatment 2.0: 30% chance for random effects -->
+    <locust id="142" locustFlags2="1" procChance="0.3" gfx="experimental.png"/>
 </locusts>
