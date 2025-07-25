@@ -2,6 +2,8 @@
 - Cards are huge on J+E HUD.
 - make defense tech not interact with enviromnentals
 - check paint can, it might not work in edge scenarios
+- lil dogma charge stays when letting go of the attack button
+- abyssal rift might not be giving a 2x damage locust
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -28,7 +30,6 @@ all stats down plus something
 something with this effect: DOGMA_BLACKHOLE
 random dad item effect
 pick a stage and go there
-dogma familiar
 dreidel - activate crooked penny a bunch of times
 old testament
 
@@ -40,5 +41,5 @@ T Apollyon Win Streak: 0
 	Best: 40
 T Keeper Win Streak: 0
 	Best: 5
-Jacob and Esau: 6
+Jacob and Esau: 10
 	Best: 52

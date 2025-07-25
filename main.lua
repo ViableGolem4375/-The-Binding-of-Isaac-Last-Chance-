@@ -12398,9 +12398,9 @@ function Mod:HandleUpdateDogma(familiar)
 
     -- Setup charge data storage per familiar
     local data = familiar:GetData()
-    data.ChargeFrame = data.ChargeFrame or 0
-    data.ChargeCooldown = data.ChargeCooldown or 0
-    data.LastDirection = data.LastDirection or Direction.NO_DIRECTION
+    if data.ChargeFrame == nil then data.ChargeFrame = 0 end
+    if data.ChargeCooldown == nil then data.ChargeCooldown = 0 end
+    if data.LastDirection == nil then data.LastDirection = Direction.NO_DIRECTION end
 
     local fireDirection = player:GetFireDirection()
     local directionVector
@@ -12414,7 +12414,7 @@ function Mod:HandleUpdateDogma(familiar)
         chargetime = 10
     end
 
-    if fireDirection == Direction.LEFT then
+    --[[ if fireDirection == Direction.LEFT then
         directionVector = Vector(-1, 0)
         shootAnim = "FloatShootSide"
         doFlip = true
@@ -12427,7 +12427,7 @@ function Mod:HandleUpdateDogma(familiar)
     elseif fireDirection == Direction.UP then
         directionVector = Vector(0, -1)
         shootAnim = "FloatShootUp"
-    end
+    end ]]
 
     -- Charging logic
     if fireDirection ~= Direction.NO_DIRECTION and data.ChargeCooldown == 0 then
@@ -12439,6 +12439,8 @@ function Mod:HandleUpdateDogma(familiar)
             familiar:SetColor(Color(1, 0, 0, 0.8, 0, 0, 0), 1, 0, false, false)
             sprite:Play("FloatShootUp")
         end
+    elseif fireDirection == Direction.NO_DIRECTION and data.ChargeFrame ~= player.MaxFireDelay * chargetime then
+        data.ChargeFrame = 0
     elseif fireDirection == Direction.NO_DIRECTION and data.ChargeFrame == player.MaxFireDelay * chargetime then
         -- Fully charged and release trigger
 
@@ -12495,6 +12497,7 @@ function Mod:HandleUpdateDogma(familiar)
         sprite.FlipX = doFlip
         sprite:Play(shootAnim, true)
     end
+    
 
     -- Reset visual and cooldown
     if sprite:IsFinished() then
