@@ -2,7 +2,6 @@
 - Cards are huge on J+E HUD.
 - make defense tech not interact with enviromnentals
 - check paint can, it might not work in edge scenarios
-- lil dogma charge stays when letting go of the attack button
 - abyssal rift might not be giving a 2x damage locust
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 

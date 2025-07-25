@@ -11882,7 +11882,7 @@ function Mod:CheckPassiveItemPickup(player)
         local locust4 = Isaac.Spawn(
             EntityType.ENTITY_FAMILIAR,
             FamiliarVariant.ABYSS_LOCUST,
-            7,
+            DEMON_DASH_ITEM,
             player.Position,
             Vector.Zero,
             player
