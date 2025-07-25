@@ -2,7 +2,6 @@
 - Cards are huge on J+E HUD.
 - make defense tech not interact with enviromnentals
 - check paint can, it might not work in edge scenarios
-- abyssal rift might not be giving a 2x damage locust
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -40,5 +39,5 @@ T Apollyon Win Streak: 0
 	Best: 40
 T Keeper Win Streak: 0
 	Best: 5
-Jacob and Esau: 10
+Jacob and Esau: 12
 	Best: 52
