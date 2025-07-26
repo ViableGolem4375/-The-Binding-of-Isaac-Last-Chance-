@@ -2162,7 +2162,7 @@ if EID then
     EID:addCollectible(WOOD_KEY_ITEM, "59% chance to spawn a random key.", "Wooden Key")
     EID:addCollectible(WOOD_BOMB_ITEM, "59% chance to spawn a random bomb.", "Wooden Bomb")
     EID:addCollectible(TREATMENT_ITEM, "{{ArrowUp}} Grants a random stat increase choosing from Damage, Range, Shot Speed, and Luck.#The stat increase changes on every frame.", "Experimental Treatment 2.0")
-    EID:addCollectible(DOGMA_FAMILIAR_ITEM, "Grants a familiar which charged up and fires a homing laser.#The laser scales with Isaac's damage and fire rate.", "Lil' Dogma")
+    EID:addCollectible(DOGMA_FAMILIAR_ITEM, "Grants a familiar which charges up and fires a homing laser.#The laser scales with Isaac's damage and fire rate.", "Lil' Dogma")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
