@@ -2002,7 +2002,7 @@ if EID then
     EID:addCollectible(AMP_ITEM, "Spawn a stationary familiar which projects a damage amplification area onto the ground.#{{ArrowUp}} Standing within this area will multiply Isaac's damage by 5.#Entering a new room will place the familiar at the door.#{{Warning}} Familiar expires after 20 seconds.", "Amplifier")
     EID:addCollectible(HUH_ITEM, "Rerolls all item pedestals in the room into The Poop.", "Huh?")
     EID:addTrinket(CLOVER_TRINKET, "{{ArrowUp}} +2 luck.#{{Collectible202}} +4 luck if golden.", "Four Leaf Clover")
-    EID:addTrinket(ORB_TRINKET, "Automatically rerolls quality 0 items.#{{Collectible202}} No additional effect if golden.", "Orb Shard")
+    EID:addTrinket(ORB_TRINKET, "Automatically rerolls quality 0 items.#Rerolls are chosen from random item pools.#{{Collectible202}} No additional effect if golden.", "Orb Shard")
     EID:addTrinket(PHOTO_TRINKET, "Picking up either The Polaroid or The Negative will grant the opposite item.#{{Collectible202}} No additional effect if golden.", "Stitched Photo")
     EID:addTrinket(CANDLE_TRINKET, "Grants 2 black hearts at the beginning of a floor if there is an active curse.#{{Collectible202}} Grants 4 black hearts if golden.", "Black Candle Wick")
     EID:addCollectible(BOND_ITEM, "Become invincible and dash forward leaving behind creep which deals damage to enemies and heals Isaac's red hearts.#This effect can be used up to 4 times before the item needs to be recharged.#Creep expires after 10 seconds.", "Eternal Bond 4")
