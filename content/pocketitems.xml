@@ -10,7 +10,7 @@
     <card type="tarot" mimiccharge="12" name="Misprinted Emperor" hud="Misprinted Emperor" description="Rule above all" pickup="893"/>
     <card type="tarot" mimiccharge="12" name="Misprinted Hierophant" hud="Misprinted Hierophant" description="Two prayers for the damned" pickup="894"/>
     <card type="tarot" mimiccharge="12" name="Misprinted Lovers" hud="Misprinted Lovers" description="May you prosper and be in good wealth" pickup="895"/>
-    <card type="tarot" mimiccharge="12" name="Misprinted Chariot" hud="Misprinted Chariot" description="Get out of my way" pickup="896"/>
+    <card type="tarot" mimiccharge="1" name="Misprinted Chariot" hud="Misprinted Chariot" description="Get out of my way" pickup="896"/>
     <card type="tarot" mimiccharge="12" name="Misprinted Justice" hud="Misprinted Justice" description="May your future be entropic" pickup="897"/>
     <card type="tarot" mimiccharge="4" name="Misprinted Hermit" hud="Misprinted Hermit" description="May you see what life has to take" pickup="898"/>
     <card type="tarot" mimiccharge="2" name="Misprinted Wheel of Fortune" hud="Misprinted Wheel of Fortune" description="Feeling lucky?" pickup="899"/>
