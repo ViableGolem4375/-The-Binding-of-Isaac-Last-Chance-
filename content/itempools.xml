@@ -329,6 +329,7 @@
         <Item Name="Sack of Hearts" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Dark Motivator" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lil' Dogma" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="The Communist Manifesto" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="library">
