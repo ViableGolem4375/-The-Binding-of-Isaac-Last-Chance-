@@ -89,7 +89,7 @@
     <active id="81" name="Angel Blast" gfx="finaljudgement.png" description="Be Afraid" quality="4" craftquality="-1" maxcharges="50" chargetype="timed" hidden="true" devilprice="1" tags="quest noeden nocantrip"/>
     <trinket id="82" name="The Devil's Noisemaker" gfx="noisemaker.png" description="All stats up + annoyance up!" cache="all" />
     <passive id="83" name="Gluttony" gfx="gluttony.png" description="All consuming" quality="3" craftquality="3" devilprice="2" tags="devil nocantrip offensive tearsup summonable" cache="all" />
-    <passive id="84" name="Greed" gfx="greed.png" description="Hoard your wealth" quality="2" craftquality="3" devilprice="1" tags="devil nocantrip offensive summonable" cache="damage" />
+    <passive id="84" name="Greed" gfx="greed.png" description="Hoard your wealth" quality="2" craftquality="2" devilprice="1" tags="devil nocantrip offensive summonable" cache="damage" />
     <passive id="85" name="Lust" gfx="lust.png" description="Love at first touch" quality="1" craftquality="1" devilprice="1" tags="devil nocantrip nolostbr summonable" />
     <active id="86" name="Pride" gfx="pride.png" description="Don't fly too close to the sun" quality="0" craftquality="2" maxcharges="1" devilprice="1" chargetype="normal" tags="devil offensive nocantrip" />
     <passive id="87" name="Sloth" gfx="sloth.png" description="Laziness incarnate" quality="3" craftquality="3" devilprice="1" tags="devil offensive nocantrip" />
