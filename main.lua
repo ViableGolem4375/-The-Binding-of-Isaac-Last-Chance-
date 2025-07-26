@@ -2143,7 +2143,7 @@ if EID then
     EID:addCollectible(COMMUNISM_ITEM, "Evenly distributes Isaac's coins, keys, and bombs.#As Tainted Blue Baby this effect only evenly distributes coins and keys.", "The Communist Manifesto")
     EID:addCollectible(NEURO_ITEM, "5% chance to fire a tear that applies weakness to enemies for 5 seconds.#{{Luck}} +5% chance per point of luck.", "Neurotoxin")
     EID:addCollectible(CRUSHED_DICE_ITEM, "Spawns 3 dice shards in the starting room upon entering a new floor.", "Crushed Dice")
-    EID:addCollectible(DOGMA_ITEM, "Grants: #{{ArrowUp}} +1 damage#{{ArrowUp}} +50% damage multiplier#{{ArrowUp}} +7.5 Range#{{ArrowDown}} -1 Tear Delay#{{ArrowDown}} -0.5 Shot Speed#Tears gain spectral and piercing along with a static aura.#Enemies that stand within the aura for 0.25 seconds are struck with a beam of light dealing 5x Isaac's damage.", "Dogmatism")
+    EID:addCollectible(DOGMA_ITEM, "Grants: #{{ArrowUp}} +1 damage#{{ArrowUp}} +50% damage multiplier#{{ArrowUp}} +7.5 Range#{{ArrowDown}} +1 Tear Delay#{{ArrowDown}} -0.5 Shot Speed#Tears gain spectral and piercing along with a static aura.#Enemies that stand within the aura for 0.25 seconds are struck with a beam of light dealing 5x Isaac's damage.", "Dogmatism")
     EID:addCollectible(INFESTATION_ITEM, "Enemies have a 10% chance to spawn a friendly swarm spider on death.#{{Luck}} +2% chance per point of luck.", "Infestation 3")
     EID:addCollectible(RAPTURE_ITEM, "Make all players briefly invulnerable and throw an orb of light which detonates into 7 beams of light fired in a circular pattern after a brief delay.", "Rapture")
     EID:addTrinket(NIL_VALUE_ITEM, "Activates the effects of Dataminer when Isaac takes damage.#{{Collectible202}} No additional effect when golden.", "Nil Value")
