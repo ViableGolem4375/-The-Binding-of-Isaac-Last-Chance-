@@ -3604,7 +3604,7 @@ if EID then
 	    for i = 0, Game():GetNumPlayers() - 1 do
             local player = Game():GetPlayer(i)
         
-	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == TEMPLE_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GLOWING_KEY_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
         end
     end
     function KeyCallback(descObj)
