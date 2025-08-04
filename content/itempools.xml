@@ -41,6 +41,7 @@
         <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Golden D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Spindown Tears" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -122,6 +123,7 @@
         <Item Name="Expired Battery" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -177,6 +179,7 @@
         <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Golden D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Spindown Tears" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -241,6 +244,7 @@
         <Item Name="Lil' Dogma" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Golden D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Spindown Tears" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
@@ -315,6 +319,7 @@
         <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Shattered Gladius" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Golden D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -365,6 +370,7 @@
     <Pool Name="woodenChest">
         <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>

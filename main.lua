@@ -212,6 +212,7 @@ CONFIG_DOGMA = itemConfig:GetCollectible(DOGMA_FAMILIAR_ITEM)
 FAMILIAR_VARIANT_DOGMA = Isaac.GetEntityVariantByName("Lil' Dogma")
 D20_ITEM = Isaac.GetItemIdByName("Golden D20")
 SPINDOWN_ITEM = Isaac.GetItemIdByName("Spindown Tears")
+DREIDEL_ITEM = Isaac.GetItemIdByName("Lopsided Dreidel")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2168,6 +2169,7 @@ if EID then
     EID:addCollectible(DOGMA_FAMILIAR_ITEM, "Grants a familiar which charges up and fires a homing laser.#The laser scales with Isaac's damage and fire rate.", "Lil' Dogma")
     EID:addCollectible(D20_ITEM, "Upgrades all pickups in the room.#i.e. penny -> double pack penny, chest -> locked chest, etc.#Pickups at their maximum level are turned into collectibles.#Does not affect pills, cards, or runes.", "Golden D20")
     EID:addCollectible(SPINDOWN_ITEM, "5% chance to fire a tear that delevels an enemy.#{{Luck}} +5% chance per point of luck capping at a 50% chance to proc.", "Spindown Tears")
+    EID:addCollectible(DREIDEL_ITEM, "50% chance to instantly kill all enemies in the room and damage bosses for 25% of their HP.#50% chance to double all enemies in the room and heal bosses for 25% of their HP.", "Lopsided Dreidel")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -3160,7 +3162,7 @@ if EID then
     end
     function PrideCallback(descObj)
         local textColor = "{{ColorRed}}"
-        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "100% chance to apply the effect of Euthanasia on hit.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "50% chance to apply the effect of Euthanasia on hit.")
         EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Deals no direct damage.")
 	    return descObj
     end
@@ -3710,6 +3712,22 @@ if EID then
     end
 
     EID:addDescriptionModifier("Spindown Mod", SpindownAbyss, SpindownCallback)
+
+    function DreidelAbyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DREIDEL_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function DreidelCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "50% chance to apply the effect of Euthanasia on hit.")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Deals no direct damage.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Dreidel Mod", DreidelAbyss, DreidelCallback)
 
     -- Functions for misc descriptions.
 
@@ -4555,6 +4573,23 @@ if EID then
     end
 
     EID:addDescriptionModifier("Lucky Coin Book Mod", D20Book, D20BookCallback)
+
+    function DreidelBook(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == DREIDEL_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function DreidelBookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 health, 0 dps")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "50% chance to fire a euthanasia tear")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Dreidel Book Mod", DreidelBook, DreidelBookCallback)
 
     -- Card description functions.
 
@@ -12779,6 +12814,53 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateDelevel)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitDelevel)
+
+function Mod:UseDreidelItem(item, rng, player)
+    local sfx = SFXManager()
+    if item == DREIDEL_ITEM then
+        player:AnimateCollectible(DREIDEL_ITEM, "UseItem", "PlayerPickupSparkle")
+        local entities = Isaac.GetRoomEntities()
+    local enemyRoll = rng:RandomFloat()
+
+    for _, entity in ipairs(entities) do
+        if entity:IsVulnerableEnemy() and not entity:IsDead() then
+            local isBoss = entity:IsBoss()
+
+            if isBoss then
+                if enemyRoll <= 0.5 then
+                    -- Heal all bosses for 25% of max HP
+                    entity.HitPoints = math.min(entity.HitPoints + entity.MaxHitPoints * 0.25, entity.MaxHitPoints)
+                    SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 0, false, 1)
+                else
+                    -- Damage all bosses for 25% of max HP
+                    local damageAmount = entity.MaxHitPoints * 0.25
+                    entity:TakeDamage(damageAmount, DamageFlag.DAMAGE_FAKE, EntityRef(player), 0)
+                    local particle = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, entity.Position, Vector.Zero, player)
+                    particle:ToEffect():SetTimeout(10) -- ✅ Make effect fade quickly
+                end
+            else
+                if enemyRoll <= 0.5 then
+                    -- Duplicate all normal enemies
+                    local clone = Isaac.Spawn(entity.Type, entity.Variant, entity.SubType, entity.Position + Vector(20, 0), Vector.Zero, player)
+                    clone:ToNPC().HitPoints = entity.HitPoints
+                    SFXManager():Play(SoundEffect.SOUND_THUMBS_DOWN, 1, 0, false, 1)
+                    --clone:ToNPC():MakeChampion(entity:GetChampionColorIdx(), entity:GetDropRNG():GetSeed())
+                else
+                    -- Remove all normal enemies
+                    local particle = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, entity.Position, Vector.Zero, player)
+                    particle:ToEffect():SetTimeout(10) -- ✅ Make effect fade quickly
+                    entity:Remove()
+                end
+            end
+        end
+    end
+
+    return true
+
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseDreidelItem, DREIDEL_ITEM)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

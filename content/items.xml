@@ -145,5 +145,6 @@
     <passive id="143" name="Lil' Dogma" gfx="lildogma.png" description="Dogmatic friend" quality="4" craftquality="4" devilprice="2" tags="offensive angel baby summonable monstermanual nocantrip" cache="familiars" />
     <active id="144" name="Golden D20" gfx="goldend20.png" description="Upgrade the basics" quality="4" craftquality="4" maxcharges="6" chargetype="normal" devilprice="2" tags="offensive nocantrip" />
     <passive id="145" name="Spindown Tears" gfx="spindowntears.png" description="Deleveling tears" quality="3" craftquality="3" devilprice="1" tags="offensive nocantrip" />
+    <active id="146" name="Lopsided Dreidel" gfx="dreidel.png" description="50/50?" quality="1" craftquality="1" maxcharges="3" chargetype="normal" devilprice="1" tags="offensive nocantrip" />
 
 </items>

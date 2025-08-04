@@ -26,7 +26,6 @@ active item like birthright
 item rooms have no items but secret rooms do
 all stats down plus something
 something with this effect: DOGMA_BLACKHOLE
-random dad item effect
 pick a stage and go there
 dreidel - crooked penny for enemies
 old testament
@@ -37,9 +36,9 @@ Trinket Ideas:
 
 
 Streaks:
-T Apollyon Win Streak: 0
+T Apollyon Win Streak: 3
 	Best: 40
-T Keeper Win Streak: 1
+T Keeper Win Streak: 0
 	Best: 5
 Jacob and Esau: 0
 	Best: 52
