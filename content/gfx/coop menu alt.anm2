@@ -1,5 +1,5 @@
 <AnimatedActor>
-	<Info CreatedBy="catinsurance" CreatedOn="8/4/2025 12:33:50 PM" Version="4" Fps="30"/>
+	<Info CreatedBy="catinsurance" CreatedOn="8/4/2025 12:37:33 PM" Version="6" Fps="30"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="coop menu.png" Id="0"/>

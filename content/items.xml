@@ -101,7 +101,7 @@
     <passive id="93" name="Generosity" gfx="generosity.png" description="Tithe" quality="3" craftquality="3" devilprice="2" tags="angel offensive nocantrip summonable" cache="damage" />
     <passive id="94" name="Temperance" gfx="temperance.png" description="Tempered spirit" quality="3" craftquality="3" devilprice="2" tags="angel offensive nocantrip summonable" cache="firedelay" />
     <passive id="133" name="Zeal" gfx="zeal.png" description="Zealous companion" quality="4" craftquality="4" cache="familiars" devilprice="2" tags="baby offensive summonable monstermanual angel nocantrip" />
-    <active id="95" name="Kindness" gfx="kindness.png" description="Kill them with kindness" quality="3" craftquality="3" devilprice="2" maxcharges="6" chargetype="normal" tags="angel offensive nocantrip" />
+    <active id="95" name="Kindness" gfx="kindness.png" description="Kill them with kindness" quality="1" craftquality="1" devilprice="1" maxcharges="4" chargetype="normal" tags="angel offensive nocantrip" />
     <active id="96" name="Glass Heart" gfx="kindness.png" description="Reusable heart container" quality="2" craftquality="2" devilprice="1" maxcharges="4" chargetype="normal" hidden="true" tags="offensive nocantrip" />
     <active id="97" name="Legion Charge" gfx="phalanx.png" description="Roma Invictus" quality="4" craftquality="-1" devilprice="1" maxcharges="50" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
     <active id="98" name="Pugio" gfx="gladius.png" description="Roma Invictus" quality="4" craftquality="-1" devilprice="1" maxcharges="300" chargetype="timed" hidden="true" tags="quest noeden nocantrip" />
@@ -130,7 +130,7 @@
     <active id="121" name="Shattered Gladius" gfx="shatteredgladius.png" description="Challenge bringer" quality="3" craftquality="3" maxcharges="1" chargetype="special" devilprice="1" tags="offensive nocantrip" />
     <active id="122" name="Trash Bag" gfx="trashbag.png" description="One man's trash..." quality="3" craftquality="3" maxcharges="6" chargetype="normal" devilprice="1" tags="offensive nocantrip" />
     <passive id="123" name="Birthday Cake" gfx="cake.png" description="All stats up!" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive tearsup" maxhearts="2" hearts="4" cache="all" />
-    <passive id="124" name="Abyssal Rift" gfx="abyssalrift.png" description="Apocalyptic friends" quality="2" craftquality="2" devilprice="1" tags="nocantrip offensive summonable" cache="familiars" />
+    <passive id="124" name="Abyssal Rift" gfx="abyssalrift.png" description="Apocalyptic friends" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive summonable" cache="familiars" />
     <passive id="125" name="Sack of Hearts" gfx="heartsack.png" description="Health up" quality="3" craftquality="3" devilprice="1" tags="nocantrip nolostbr" maxhearts="2" hearts="4" soulhearts="2" blackhearts="2" />
     <passive id="126" name="Expired Battery" gfx="expired_battery.png" description="It's leaking" quality="2" craftquality="2" devilprice="1" tags="nocantrip offensive summonable" />
     <passive id="134" name="Poltergeist" gfx="poltergeist.png" description="Spooky friend" quality="1" craftquality="1" devilprice="1" cache="familiars" tags="offensive summonable monstermanual nocantrip" />

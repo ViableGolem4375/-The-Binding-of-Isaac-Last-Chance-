@@ -30,7 +30,6 @@ random dad item effect
 pick a stage and go there
 dreidel - crooked penny for enemies
 old testament
-delevel enemies on hit proc effect
 
 add a machine that uses a card or something
 
