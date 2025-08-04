@@ -1,30 +1,30 @@
 <pocketitems>
-    <rune type="rune" mimiccharge="3" name="Soul of Domino" hud="Soul of Domino" description="Luck up!" pickup="885"/>
-    <rune type="rune" mimiccharge="3" name="Soul of Longinus" hud="Soul of Longinus" description="The glory of rome" pickup="886"/>
-    <rune type="rune" mimiccharge="6" name="Soul of Abraham" hud="Soul of Abraham" description="Salvation" pickup="887"/>
-    <card type="tarot" mimiccharge="12" name="Essence Card" hud="Essence Card" description="Essence Summoner" pickup="888"/>
-    <card type="tarot" mimiccharge="4" name="Misprinted Fool" hud="Misprinted Fool" description="Where journey wishes to be" pickup="889"/>
-    <card type="tarot" mimiccharge="6" name="Misprinted Magician" hud="Misprinted Magician" description="May you strike with fury and intensity" pickup="890"/>
-    <card type="tarot" mimiccharge="2" name="Misprinted High Priestess" hud="Misprinted High Priestess" description="Help from above" pickup="891"/>
-    <card type="tarot" mimiccharge="4" name="Misprinted Empress" hud="Misprinted Empress" description="May your friends bring help" pickup="892"/>
-    <card type="tarot" mimiccharge="12" name="Misprinted Emperor" hud="Misprinted Emperor" description="Rule above all" pickup="893"/>
-    <card type="tarot" mimiccharge="12" name="Misprinted Hierophant" hud="Misprinted Hierophant" description="Two prayers for the damned" pickup="894"/>
-    <card type="tarot" mimiccharge="12" name="Misprinted Lovers" hud="Misprinted Lovers" description="May you prosper and be in good wealth" pickup="895"/>
-    <card type="tarot" mimiccharge="1" name="Misprinted Chariot" hud="Misprinted Chariot" description="Get out of my way" pickup="896"/>
-    <card type="tarot" mimiccharge="12" name="Misprinted Justice" hud="Misprinted Justice" description="May your future be entropic" pickup="897"/>
-    <card type="tarot" mimiccharge="4" name="Misprinted Hermit" hud="Misprinted Hermit" description="May you see what life has to take" pickup="898"/>
-    <card type="tarot" mimiccharge="4" name="Misprinted Wheel of Fortune" hud="Misprinted Wheel of Fortune" description="Feeling lucky?" pickup="899"/>
-    <card type="tarot" mimiccharge="6" name="Misprinted Strength" hud="Misprinted Strength" description="May your lack of power bring persistence" pickup="900"/>
-    <card type="tarot" mimiccharge="4" name="Misprinted Hanged Man" hud="Misprinted Hanged Man" description="May you have no head to hang from" pickup="901"/>
-    <card type="tarot" mimiccharge="1" name="Misprinted Death" hud="Misprinted Death" description="Like life" pickup="902"/>
-    <card type="tarot" mimiccharge="6" name="Misprinted Temperance" hud="Misprinted Temperance" description="May you be pure in spirit" pickup="903"/>
-    <card type="tarot" mimiccharge="6" name="Misprinted Devil" hud="Misprinted Devil" description="Submit to the might of Lucifer" pickup="904"/>
-    <card type="tarot" mimiccharge="6" name="Misprinted Tower" hud="Misprinted Tower" description="Destruction brings destruction" pickup="905"/>
-    <card type="tarot" mimiccharge="1" name="Misprinted Stars" hud="Misprinted Stars" description="ire May yfind wha ou des" pickup="906"/>
-    <card type="tarot" mimiccharge="12" name="Misprinted Moon" hud="Misprinted Moon" description="May you lose all you have found" pickup="907"/>
-    <card type="tarot" mimiccharge="12" name="Misprinted Sun" hud="Misprinted Sun" description="May the light cleanse your soul" pickup="908"/>
-    <card type="tarot" mimiccharge="1" name="Misprinted Judgement" hud="Misprinted Judgement" description="Judge not" pickup="909"/>
-    <card type="tarot" mimiccharge="12" name="Misprinted World" hud="Misprinted World" description="Close your eyes and let go" pickup="910"/>
-    <card type="tarot" mimiccharge="6" name="12 of Clubs" hud="12 of Clubs" description="???" pickup="911"/>
+    <rune type="rune" mimiccharge="3" name="Soul of Domino" hud="Soul of Domino" description="Luck up!" pickup="696969"/>
+    <rune type="rune" mimiccharge="3" name="Soul of Longinus" hud="Soul of Longinus" description="The glory of rome" pickup="696970"/>
+    <rune type="rune" mimiccharge="6" name="Soul of Abraham" hud="Soul of Abraham" description="Salvation" pickup="696971"/>
+    <card type="tarot" mimiccharge="12" name="Essence Card" hud="Essence Card" description="Essence Summoner" pickup="696972"/>
+    <card type="tarot" mimiccharge="4" name="Misprinted Fool" hud="Misprinted Fool" description="Where journey wishes to be" pickup="696973"/>
+    <card type="tarot" mimiccharge="6" name="Misprinted Magician" hud="Misprinted Magician" description="May you strike with fury and intensity" pickup="696974"/>
+    <card type="tarot" mimiccharge="2" name="Misprinted High Priestess" hud="Misprinted High Priestess" description="Help from above" pickup="696975"/>
+    <card type="tarot" mimiccharge="4" name="Misprinted Empress" hud="Misprinted Empress" description="May your friends bring help" pickup="696976"/>
+    <card type="tarot" mimiccharge="12" name="Misprinted Emperor" hud="Misprinted Emperor" description="Rule above all" pickup="696977"/>
+    <card type="tarot" mimiccharge="12" name="Misprinted Hierophant" hud="Misprinted Hierophant" description="Two prayers for the damned" pickup="696978"/>
+    <card type="tarot" mimiccharge="12" name="Misprinted Lovers" hud="Misprinted Lovers" description="May you prosper and be in good wealth" pickup="696979"/>
+    <card type="tarot" mimiccharge="1" name="Misprinted Chariot" hud="Misprinted Chariot" description="Get out of my way" pickup="696980"/>
+    <card type="tarot" mimiccharge="12" name="Misprinted Justice" hud="Misprinted Justice" description="May your future be entropic" pickup="696981"/>
+    <card type="tarot" mimiccharge="4" name="Misprinted Hermit" hud="Misprinted Hermit" description="May you see what life has to take" pickup="696982"/>
+    <card type="tarot" mimiccharge="4" name="Misprinted Wheel of Fortune" hud="Misprinted Wheel of Fortune" description="Feeling lucky?" pickup="696983"/>
+    <card type="tarot" mimiccharge="6" name="Misprinted Strength" hud="Misprinted Strength" description="May your lack of power bring persistence" pickup="696984"/>
+    <card type="tarot" mimiccharge="4" name="Misprinted Hanged Man" hud="Misprinted Hanged Man" description="May you have no head to hang from" pickup="696985"/>
+    <card type="tarot" mimiccharge="1" name="Misprinted Death" hud="Misprinted Death" description="Like life" pickup="696986"/>
+    <card type="tarot" mimiccharge="6" name="Misprinted Temperance" hud="Misprinted Temperance" description="May you be pure in spirit" pickup="696987"/>
+    <card type="tarot" mimiccharge="6" name="Misprinted Devil" hud="Misprinted Devil" description="Submit to the might of Lucifer" pickup="696988"/>
+    <card type="tarot" mimiccharge="6" name="Misprinted Tower" hud="Misprinted Tower" description="Destruction brings destruction" pickup="696989"/>
+    <card type="tarot" mimiccharge="1" name="Misprinted Stars" hud="Misprinted Stars" description="ire May yfind wha ou des" pickup="696990"/>
+    <card type="tarot" mimiccharge="12" name="Misprinted Moon" hud="Misprinted Moon" description="May you lose all you have found" pickup="696991"/>
+    <card type="tarot" mimiccharge="12" name="Misprinted Sun" hud="Misprinted Sun" description="May the light cleanse your soul" pickup="696992"/>
+    <card type="tarot" mimiccharge="1" name="Misprinted Judgement" hud="Misprinted Judgement" description="Judge not" pickup="696993"/>
+    <card type="tarot" mimiccharge="12" name="Misprinted World" hud="Misprinted World" description="Close your eyes and let go" pickup="696994"/>
+    <card type="tarot" mimiccharge="6" name="12 of Clubs" hud="12 of Clubs" description="???" pickup="696995"/>
 
 </pocketitems>

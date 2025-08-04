@@ -3,7 +3,6 @@
 - make defense tech not interact with enviromnentals
 - check paint can, it might not work in edge scenarios
 - soul of domino sprite is getting replaced when retribution is installed
-- glowing key has no locust description
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -32,6 +31,8 @@ random dad item effect
 pick a stage and go there
 dreidel - activate crooked penny a bunch of times
 old testament
+delevel enemies on hit proc effect
+upgrade consumables
 
 add a machine that uses a card or something
 

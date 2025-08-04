@@ -8,16 +8,16 @@
     <entity name="Bond Orb" id="3" anm2path="bond_orb.anm2" shadowSize="11" friction="1" />
     <entity name="Awoken Weapon" id="3" anm2path="awoken_weapon.anm2" shadowSize="11" friction="1" />
     <entity name="Apollyon Essence Black Hole" id="3" anm2path="apollyon_blackhole.anm2" shadowSize="11" friction="1" />
-    <entity anm2path="soul_of_matt.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Soul of Domino" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="885">
+    <entity anm2path="soul_of_matt.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Soul of Domino" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696969">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="soul_of_pontius.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Soul of Pontius" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="886">
+    <entity anm2path="soul_of_pontius.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Soul of Pontius" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696970">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="soul_of_abraham.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Soul of Abraham" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="887">
+    <entity anm2path="soul_of_abraham.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Soul of Abraham" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696971">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="essence_card.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Essence Card" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="888">
+    <entity anm2path="essence_card.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Essence Card" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696972">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
     <entity anm2path="essence_collector.anm2" baseHP="0" boss="0" collisionDamage="0" collisionMass="3" collisionRadius="12" friction="1" id="6" name="Essence Collector" numGridCollisionPoints="24" shadowSize="33" stageHP="0" variant="249376971" />
@@ -25,70 +25,70 @@
     <entity anm2path="flux_capacitor.anm2" baseHP="0" champion="0" collisionDamage="20" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Broken Flux Capacitor" numGridCollisionPoints="12" shadowSize="10" stageHP="0" variant="5863070089" />
     <entity name="Envy" id="3" anm2path="envy_familiar.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
     <entity name="Zeal" id="3" anm2path="zeal_familiar.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Fool" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="889">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Fool" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696973">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Magician" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="890">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Magician" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696974">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted High Priestess" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="891">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted High Priestess" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696975">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Empress" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="892">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Empress" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696976">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Emperor" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="893">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Emperor" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696977">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Hierophant" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="894">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Hierophant" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696978">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Lovers" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="895">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Lovers" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696979">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Chariot" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="896">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Chariot" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696980">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Justice" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="897">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Justice" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696981">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Hermit" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="898">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Hermit" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696982">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Wheel of Fortune" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="899">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Wheel of Fortune" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696983">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Wheel of Fortune" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="900">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Wheel of Fortune" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696984">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Hanged Man" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="901">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Hanged Man" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696985">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Death" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="902">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Death" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696986">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Temperance" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="903">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Temperance" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696987">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Devil" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="904">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Devil" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696988">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Tower" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="905">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Tower" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696989">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Stars" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="906">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Stars" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696990">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Moon" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="907">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Moon" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696991">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Sun" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="908">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Sun" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696992">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Judgement" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="909">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted Judgement" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696993">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
-    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted World" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="910">
+    <entity anm2path="misprint_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="Misprinted World" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696994">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
     <entity anm2path="tithe.anm2" baseHP="0" boss="0" collisionDamage="0" collisionMass="3" collisionRadius="12" friction="1" id="6" name="Tithe" numGridCollisionPoints="24" shadowSize="33" stageHP="0" variant="249376972" />
@@ -102,7 +102,7 @@
     <entity name="The Soul" id="3" anm2path="thesoul.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
     <entity name="Axe Swing" id="1000" variant="2098" anm2path="axeswing.anm2"/>
     <entity name="Gladius" id="1000" variant="2099" anm2path="gladius.anm2"/>
-    <entity anm2path="playing_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="12 of Clubs" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="911">
+    <entity anm2path="playing_cards.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="20" friction="1" id="5" name="12 of Clubs" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="696995">
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
     <entity name="Lil' Dogma" id="3" anm2path="dogma.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
