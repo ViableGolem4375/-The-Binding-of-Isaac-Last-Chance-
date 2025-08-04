@@ -39,6 +39,7 @@
         <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Golden D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -172,6 +173,7 @@
         <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Golden D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -234,6 +236,7 @@
         <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lil' Dogma" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Golden D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
@@ -306,6 +309,7 @@
         <Item Name="Crushed Dice" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Infestation 3" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Shattered Gladius" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Golden D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>

@@ -259,4 +259,6 @@
     <wisp id="140" hp="1" damage="1" layer="1" flameColor="flame_brown" coreColor="core_brown" tearColor="tear_brown" coreGfx="key.png" />
 	<!-- Wooden Key -->
     <wisp id="141" hp="1" damage="1" layer="1" flameColor="flame_brown" coreColor="core_brown" tearColor="tear_brown" coreGfx="bomb.png" />
+	<!-- Golden D20 -->
+	<wisp id="144" hp="4" damage="3" layer="0" flameColor="flame_gold" coreColor="core_gold" tearColor="tear_gold" coreGfx="dice.png" />
 </wisps>

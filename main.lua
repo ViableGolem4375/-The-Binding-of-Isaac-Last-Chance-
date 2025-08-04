@@ -210,6 +210,7 @@ TREATMENT_ITEM = Isaac.GetItemIdByName("Experimental Treatment 2.0")
 DOGMA_FAMILIAR_ITEM = Isaac.GetItemIdByName("Lil' Dogma")
 CONFIG_DOGMA = itemConfig:GetCollectible(DOGMA_FAMILIAR_ITEM)
 FAMILIAR_VARIANT_DOGMA = Isaac.GetEntityVariantByName("Lil' Dogma")
+D20_ITEM = Isaac.GetItemIdByName("Golden D20")
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Longinus")
@@ -2163,6 +2164,7 @@ if EID then
     EID:addCollectible(WOOD_BOMB_ITEM, "59% chance to spawn a random bomb.", "Wooden Bomb")
     EID:addCollectible(TREATMENT_ITEM, "{{ArrowUp}} Grants a random stat increase choosing from Damage, Range, Shot Speed, and Luck.#The stat increase changes on every frame.", "Experimental Treatment 2.0")
     EID:addCollectible(DOGMA_FAMILIAR_ITEM, "Grants a familiar which charges up and fires a homing laser.#The laser scales with Isaac's damage and fire rate.", "Lil' Dogma")
+    EID:addCollectible(D20_ITEM, "Upgrades all pickups in the room.#i.e. penny -> double pack penny, chest -> locked chest, etc.#Pickups at their maximum level are turned into collectibles.#Does not affect pills, cards, or runes.", "Golden D20")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -3676,6 +3678,21 @@ if EID then
 
     EID:addDescriptionModifier("Lil Dogma Mod", LilDogmaAbyss, LilDogmaCallback)
 
+    function D20Abyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == D20_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function D20Callback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance to reroll enemies.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("D20 Mod", D20Abyss, D20Callback)
+
     -- Functions for misc descriptions.
 
     function BondVoid(descObj)
@@ -4504,6 +4521,24 @@ if EID then
     end
 
     EID:addDescriptionModifier("Wood Bomb Book Mod", WoodBombBook, WoodBombBookCallback)
+
+    function D20Book(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == D20_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then return true end
+        end
+    end
+    function D20BookCallback(descObj)
+        local textColor = "{{ColorCyan}}"
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "1 inner ring wisp")
+        EID:appendToDescription(descObj, "#{{Collectible584}} " .. textColor .. "4 health, 3 dps")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Lucky Coin Book Mod", D20Book, D20BookCallback)
+
+    -- Card description functions.
 
     function TarotMagician(descObj)
 	    for i = 0, Game():GetNumPlayers() - 1 do
@@ -12531,6 +12566,144 @@ function Mod:ReplaceLaserImpactGraphics(effectEntity)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_EFFECT_INIT, Mod.ReplaceLaserImpactGraphics)
+
+function Mod:UseD20(item, rng, player, flags)
+    local sfx = SFXManager()
+    if item == D20_ITEM then
+        local entities = Isaac.GetRoomEntities()
+
+        for _, entity in ipairs(entities) do
+            if entity.Type == EntityType.ENTITY_PICKUP then
+                local pickup = entity:ToPickup()
+                if pickup == nil then goto continue end  -- Skip if not a valid pickup
+
+                -- Upgrade coins
+                if pickup.Variant == PickupVariant.PICKUP_COIN then
+                    if pickup.SubType == CoinSubType.COIN_PENNY then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_DOUBLEPACK, true, false, false)
+                    elseif pickup.SubType == CoinSubType.COIN_DOUBLEPACK then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_STICKYNICKEL, true, false, false)
+                    elseif pickup.SubType == CoinSubType.COIN_STICKYNICKEL then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_NICKEL, true, false, false)
+                    elseif pickup.SubType == CoinSubType.COIN_NICKEL then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_DIME, true, false, false)
+                    elseif pickup.SubType == CoinSubType.COIN_DIME then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_GOLDEN, true, false, false)
+                    elseif pickup.SubType == CoinSubType.COIN_GOLDEN then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_LUCKYPENNY, true, false, false)
+                    elseif pickup.SubType == CoinSubType.COIN_GOLDEN then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_LUCKYPENNY, true, false, false)
+                    elseif pickup.SubType == CoinSubType.COIN_LUCKYPENNY then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, 0 ,true, false, false)
+                    end
+
+                -- Upgrade hearts
+                elseif pickup.Variant == PickupVariant.PICKUP_HEART then
+                    if pickup.SubType == HeartSubType.HEART_HALF then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_SCARED, true, false, false)
+                    elseif pickup.SubType == HeartSubType.HEART_SCARED then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_FULL, true, false, false)
+                    elseif pickup.SubType == HeartSubType.HEART_FULL then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_DOUBLEPACK, true, false, false)
+                    elseif pickup.SubType == HeartSubType.HEART_DOUBLEPACK then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_ROTTEN, true, false, false)
+                    elseif pickup.SubType == HeartSubType.HEART_ROTTEN then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_GOLDEN, true, false, false)
+                    elseif pickup.SubType == HeartSubType.HEART_GOLDEN then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_HALF_SOUL, true, false, false)
+                    elseif pickup.SubType == HeartSubType.HEART_HALF_SOUL then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_SOUL, true, false, false)
+                    elseif pickup.SubType == HeartSubType.HEART_SOUL then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_BLENDED, true, false, false)
+                    elseif pickup.SubType == HeartSubType.HEART_BLENDED then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_BLACK, true, false, false)
+                    elseif pickup.SubType == HeartSubType.HEART_BLACK then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_BONE, true, false, false)
+                    elseif pickup.SubType == HeartSubType.HEART_BONE then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_ETERNAL, true, false, false)
+                    elseif pickup.SubType == HeartSubType.HEART_ETERNAL then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, 0 ,true, false, false)
+                    end
+
+                -- Upgrade chests
+                elseif pickup.Variant == PickupVariant.PICKUP_MIMICCHEST then
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_SPIKEDCHEST, 0, true, false, false)
+                elseif pickup.Variant == PickupVariant.PICKUP_SPIKEDCHEST then
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HAUNTEDCHEST, 0, true, false, false)
+                elseif pickup.Variant == PickupVariant.PICKUP_HAUNTEDCHEST then
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_CHEST, 0, true, false, false)
+                elseif pickup.Variant == PickupVariant.PICKUP_CHEST then
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_LOCKEDCHEST, 0, true, false, false)
+                elseif pickup.Variant == PickupVariant.PICKUP_LOCKEDCHEST then
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_BOMBCHEST, 0, true, false, false)
+                elseif pickup.Variant == PickupVariant.PICKUP_BOMBCHEST then
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_REDCHEST, 0, true, false, false)
+                elseif pickup.Variant == PickupVariant.PICKUP_REDCHEST then
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_WOODENCHEST, 0, true, false, false)
+                elseif pickup.Variant == PickupVariant.PICKUP_WOODENCHEST then
+                    pickup:Morph(EntityType.ENTITY_PICKUP, 249376973, 0, true, false, false)
+                elseif pickup.Variant == 249376973 then
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_ETERNALCHEST, 0, true, false, false)
+                elseif pickup.Variant == PickupVariant.PICKUP_ETERNALCHEST then
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_OLDCHEST, 0, true, false, false)
+                elseif pickup.Variant == PickupVariant.PICKUP_OLDCHEST then
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_MEGACHEST, 0, true, false, false)
+                elseif pickup.Variant == PickupVariant.PICKUP_MEGACHEST then
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, 0 ,true, false, false)
+
+
+                -- Upgrade bombs
+                elseif pickup.Variant == PickupVariant.PICKUP_BOMB then
+                    if pickup.SubType == BombSubType.BOMB_NORMAL then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_BOMB, BombSubType.BOMB_DOUBLEPACK, true, false, false)
+                    elseif pickup.SubType == BombSubType.BOMB_DOUBLEPACK then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_BOMB, BombSubType.BOMB_GIGA, true, false, false)
+                    elseif pickup.SubType == BombSubType.BOMB_GIGA then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_BOMB, BombSubType.BOMB_GOLDEN, true, false, false)
+                    elseif pickup.SubType == BombSubType.BOMB_GOLDEN then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, 0 ,true, false, false)
+                    end
+
+                -- Upgrade Keys
+                elseif pickup.Variant == PickupVariant.PICKUP_KEY then
+                    if pickup.SubType == KeySubType.KEY_NORMAL then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_KEY, KeySubType.KEY_DOUBLEPACK, true, false, false)
+                    elseif pickup.SubType == KeySubType.KEY_DOUBLEPACK then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_KEY, KeySubType.KEY_CHARGED, true, false, false)
+                    elseif pickup.SubType == KeySubType.KEY_CHARGED then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_KEY, KeySubType.KEY_GOLDEN, true, false, false)
+                    elseif pickup.SubType == KeySubType.KEY_GOLDEN then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, 0 ,true, false, false)
+                    end
+
+                -- Upgrade batteries
+                elseif pickup.Variant == PickupVariant.PICKUP_LIL_BATTERY then
+                    if pickup.SubType == BatterySubType.BATTERY_MICRO then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_LIL_BATTERY, BatterySubType.BATTERY_NORMAL, true, false, false)
+                    elseif pickup.SubType == BatterySubType.BATTERY_NORMAL then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_LIL_BATTERY, BatterySubType.BATTERY_MEGA, true, false, false)
+                    elseif pickup.SubType == BatterySubType.BATTERY_MEGA then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_LIL_BATTERY, BatterySubType.BATTERY_GOLDEN, true, false, false)
+                    elseif pickup.SubType == BatterySubType.BATTERY_GOLDEN then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, 0 ,true, false, false)
+                    end
+
+                -- Upgrade sacks
+                elseif pickup.Variant == PickupVariant.PICKUP_GRAB_BAG then
+                    if pickup.SubType == SackSubType.SACK_NORMAL then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_GRAB_BAG, SackSubType.SACK_BLACK, true, false, false)
+                    elseif pickup.SubType == SackSubType.SACK_BLACK then
+                        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_REDCHEST, 0, true, false, false)
+                    end
+                end
+            end
+            ::continue::
+        end
+        return true
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseD20, D20_ITEM)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
