@@ -263,4 +263,6 @@
 	<wisp id="144" hp="4" damage="3" layer="0" flameColor="flame_gold" coreColor="core_gold" tearColor="tear_gold" coreGfx="dice.png" />
 	<!-- Lopsided Dreidel -->
 	<wisp id="146" hp="1" damage="0" layer="0" tearFlags2="54" procChance="0.5" flameColor="flame_gold" coreColor="core_brown" tearColor="tear_brown" coreGfx="dreidel.png" />
+	<!-- The Old Testament -->
+    <wisp id="147" hp="1000000" damage="20" layer="0" flameColor="flame_gold" coreColor="core_white" tearColor="tear_white" coreGfx="cross.png" />
 </wisps>

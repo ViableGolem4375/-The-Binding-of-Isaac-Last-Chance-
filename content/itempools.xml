@@ -42,6 +42,7 @@
         <Item Name="Golden D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Spindown Tears" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="The Old Testament" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
 
 
     </Pool>
@@ -81,7 +82,7 @@
         <Item Name="Abyssal Rift" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="TempleOS" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lil' Dogma" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-
+        <Item Name="The Old Testament" Weight="0.5" DecreaseBy="0.5" RemoveOn="0.1" />
     </Pool>
     <Pool Name="secret">
         <Item Name="Eternal Bond 4" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
@@ -177,7 +178,7 @@
         <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Golden D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Golden D20" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
         <Item Name="Spindown Tears" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
@@ -242,7 +243,7 @@
         <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lil' Dogma" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-        <Item Name="Golden D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Golden D20" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
         <Item Name="Spindown Tears" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
@@ -352,7 +353,7 @@
         <Item Name="Book of Jubilees" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Bibble" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Communist Manifesto" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-
+        <Item Name="The Old Testament" Weight="0.5" DecreaseBy="0.5" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="babyShop">
