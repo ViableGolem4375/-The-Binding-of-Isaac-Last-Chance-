@@ -4980,6 +4980,7 @@ local quality4ItemsDullCoin = {
                     ZEAL_ITEM,
                     PROTO_ITEM,
                     NECROMANCY_ITEM,
+                    DOGMA_FAMILIAR_ITEM,
                     -- Vanilla items.
                     330,  -- Sacred Heart
                     169,  -- Polyphemus
@@ -5040,6 +5041,8 @@ local quality3ItemsDullCoin = {
                     HEALTH_SACK_ITEM,
                     CRUSHED_DICE_ITEM,
                     MOTIVATOR_ITEM,
+                    RIFT_ITEM,
+                    SPINDOWN_ITEM,
                     -- Vanilla items.
                     1,
                     2,
