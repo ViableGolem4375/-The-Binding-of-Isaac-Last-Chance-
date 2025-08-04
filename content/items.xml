@@ -144,5 +144,6 @@
     <passive id="142" name="Experimental Treatment 2.0" gfx="treatment.png" description="All stats up?" quality="2" craftquality="2" devilprice="1" tags="offensive nocantrip summonable" cache="all" />
     <passive id="143" name="Lil' Dogma" gfx="lildogma.png" description="Dogmatic friend" quality="4" craftquality="4" devilprice="2" tags="offensive angel baby summonable monstermanual nocantrip" cache="familiars" />
     <active id="144" name="Golden D20" gfx="goldend20.png" description="Upgrade the basics" quality="4" craftquality="4" maxcharges="6" chargetype="normal" devilprice="2" tags="offensive nocantrip" />
+    <passive id="145" name="Spindown Tears" gfx="spindowntears.png" description="Deleveling tears" quality="3" craftquality="3" devilprice="1" tags="offensive nocantrip" />
 
 </items>

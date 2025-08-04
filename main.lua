@@ -211,6 +211,8 @@ DOGMA_FAMILIAR_ITEM = Isaac.GetItemIdByName("Lil' Dogma")
 CONFIG_DOGMA = itemConfig:GetCollectible(DOGMA_FAMILIAR_ITEM)
 FAMILIAR_VARIANT_DOGMA = Isaac.GetEntityVariantByName("Lil' Dogma")
 D20_ITEM = Isaac.GetItemIdByName("Golden D20")
+SPINDOWN_ITEM = Isaac.GetItemIdByName("Spindown Tears")
+
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Longinus")
@@ -2165,6 +2167,7 @@ if EID then
     EID:addCollectible(TREATMENT_ITEM, "{{ArrowUp}} Grants a random stat increase choosing from Damage, Range, Shot Speed, and Luck.#The stat increase changes on every frame.", "Experimental Treatment 2.0")
     EID:addCollectible(DOGMA_FAMILIAR_ITEM, "Grants a familiar which charges up and fires a homing laser.#The laser scales with Isaac's damage and fire rate.", "Lil' Dogma")
     EID:addCollectible(D20_ITEM, "Upgrades all pickups in the room.#i.e. penny -> double pack penny, chest -> locked chest, etc.#Pickups at their maximum level are turned into collectibles.#Does not affect pills, cards, or runes.", "Golden D20")
+    EID:addCollectible(SPINDOWN_ITEM, "5% chance to fire a tear that delevels an enemy.#{{Luck}} +5% chance per point of luck capping at a 50% chance to proc.", "Spindown Tears")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -3693,6 +3696,21 @@ if EID then
 
     EID:addDescriptionModifier("D20 Mod", D20Abyss, D20Callback)
 
+    function SpindownAbyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == SPINDOWN_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function SpindownCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance to reroll enemies.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Spindown Mod", SpindownAbyss, SpindownCallback)
+
     -- Functions for misc descriptions.
 
     function BondVoid(descObj)
@@ -4870,6 +4888,7 @@ function Mod:LuckyDiceUse(item, rng, player, flags)
         GLITCH_ITEM,
         NEURO_ITEM,
         INFESTATION_ITEM,
+        SPINDOWN_ITEM,
         576,
         87, --Loki's Horns
         89, --Spider Bite
@@ -7695,6 +7714,7 @@ local predefinedItemList = {
     GLITCH_ITEM,
     NEURO_ITEM,
     INFESTATION_ITEM,
+    SPINDOWN_ITEM,
     576,
     87, --Loki's Horns
     89, --Spider Bite
@@ -12704,6 +12724,58 @@ function Mod:UseD20(item, rng, player, flags)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseD20, D20_ITEM)
+
+local HasDelevelEffect = false
+
+function Mod:onUpdateDelevel(player)
+	if game:GetFrameCount() == 1 then
+		HasDelevelEffect = false
+	end
+	if not HasDelevelEffect and player:HasCollectible(SPINDOWN_ITEM) then
+		HasDelevelEffect = true
+	end
+end
+
+local function getRandomDelevelEffect(player)
+    local baseChance = 0.05
+    local luckScaling = 0.05 * player:GetCollectibleNum(SPINDOWN_ITEM)
+
+    local teardropScaling = 0
+
+    if player:HasTrinket(TrinketType.TRINKET_TEARDROP_CHARM) then
+        teardropScaling = 0.15
+    end
+
+
+    local luckBonus = math.max(0, (player.Luck * luckScaling) + teardropScaling) -- Ensure non-negative
+    local finalChance = math.min(0.5, baseChance + luckBonus)
+
+    local rand = math.random()
+    return rand <= finalChance -- Effect triggers if random number falls within chance
+end
+
+function Mod:onTearInitDelevel(tear)
+    if HasDelevelEffect then
+        local parent = tear.SpawnerEntity
+        if parent and parent:ToPlayer() then
+            local player = parent:ToPlayer()
+            if player:HasCollectible(SPINDOWN_ITEM) and getRandomDelevelEffect(player) then
+                tear:GetData().delevelTrigger = true
+                --tear:SetColor(Color(0.4, 0.1, 0.5, 1.0, 0, 0, 0), 30, 1, false, false)
+                tear.TearFlags = TearFlags.TEAR_REROLL_ENEMY
+                local sprite = tear:GetSprite()
+                sprite:Load("gfx/deleveltear.anm2", true)
+                sprite:Play("Stone4Move", true)
+                
+
+
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateDelevel)
+Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitDelevel)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

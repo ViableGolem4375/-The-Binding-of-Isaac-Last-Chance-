@@ -230,4 +230,6 @@
     <locust id="74" color="fly_black"/>
     <!--  Golden D20: 20% reroll enemies -->
     <locust id="144" locustFlags="3" gfx="dice.png" color="fly_gold"/>
+    <!--  Spindown Tears: 20% reroll enemies -->
+    <locust id="145" locustFlags="3" gfx="spindowndice.png" />
 </locusts>

@@ -28,10 +28,9 @@ all stats down plus something
 something with this effect: DOGMA_BLACKHOLE
 random dad item effect
 pick a stage and go there
-dreidel - activate crooked penny a bunch of times
+dreidel - crooked penny for enemies
 old testament
 delevel enemies on hit proc effect
-upgrade consumables
 
 add a machine that uses a card or something
 

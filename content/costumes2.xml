@@ -57,5 +57,6 @@
     <costume id="136" anm2path="motivator.anm2" type="passive" priority="0" />
     <costume id="139" anm2path="glowingkey.anm2" type="passive" priority="0" />
     <costume id="142" anm2path="treatment.anm2" type="passive" priority="0" />
+    <costume id="145" anm2path="spindowntears.anm2" type="passive" priority="0" />
 
 </costumes>
