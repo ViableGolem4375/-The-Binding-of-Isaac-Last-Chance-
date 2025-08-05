@@ -5,7 +5,7 @@ local game = Game()
 
 local itemConfig = Isaac.GetItemConfig()
 
-local templateType = Isaac.GetPlayerTypeByName("Template", false)
+local templateType = Isaac.GetPlayerTypeByName("Domino", false)
 local pontiusType = Isaac.GetPlayerTypeByName("Longinus", false)
 local TAINTED_PONTIUS_TYPE = Isaac.GetPlayerTypeByName("Longinus", true)
 GLADIUS_SWING = Isaac.GetEntityVariantByName("Gladius")
@@ -320,7 +320,7 @@ Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Template.onCache)
 ----------------------------------------------------------------------------------------
 -- Code for the tainted version of Domino below
 
-local TAINTED_TEMPLATE_TYPE = Isaac.GetPlayerTypeByName("Template", true)
+local TAINTED_TEMPLATE_TYPE = Isaac.GetPlayerTypeByName("Domino", true)
 
 local Templateb = { -- shown below are default values, as shown on Isaac, for you to change around
     SPEED = 1.10,
@@ -1110,7 +1110,6 @@ function Mod:OnEffectUpdateSword(effect)
         local sprite = effect:GetSprite()
 
         local dir = player:GetFireDirection()
-        print(dir)
         local velocity = Vector(0, 0)
 
         if dir == Direction.LEFT then
@@ -1189,7 +1188,6 @@ function PontiusMelee:CheckMeleeHitbox(npc)
                         SFXManager():Play(SoundEffect.SOUND_MEATY_DEATHS)
                     end
                     data.LastMeleeHitFrame = Game():GetFrameCount()
-                    print("Melee hit applied! Damage:", scaledDamage)
                 end
 
             end
@@ -1456,7 +1454,6 @@ function Mod:ResetUsedDice()
 
     if usedDice == true then
         usedDice = false -- ✅ Resets the flag when a new room loads
-        --print("Resetting usedDice - TMTRAINER will now be restored normally.")
     end
 end
 
@@ -1705,12 +1702,10 @@ function Mod:ResetDeathTimerOnGameStart(isContinued)
             if not isContinued then
                 data.DeathTimer = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 900 or 600
                 Isaac.SaveModData(Mod, tostring(data.DeathTimer))
-                print("New game detected—Death Timer reset to:", data.DeathTimer)
             else
                 -- ✅ Load timer from save if continuing a previous run
                 local savedTimer = Isaac.LoadModData(Mod)
                 data.DeathTimer = (savedTimer ~= "" and tonumber(savedTimer)) or 600
-                print("Continuing previous run—Death Timer restored:", data.DeathTimer)
             end
         end
     end
@@ -1744,7 +1739,6 @@ function Mod:UpdateDeathTimer(player)
 
 
         end
-        print(data.DeathTimer)
 
 
         data.DeathTimer = math.max(0, data.DeathTimer - 1) -- ✅ Reduce timer every frame
@@ -1805,7 +1799,6 @@ function Mod:DealContactDamage(player)
             for _, enemy in ipairs(enemies) do
                 if enemy:IsVulnerableEnemy() then
                     enemy:TakeDamage(20, DamageFlag.DAMAGE_IGNORE_ARMOR | DamageFlag.DAMAGE_NO_PENALTIES, EntityRef(player), 0)
-                    --print("Enemy hit by contact damage!")
                 end
             end
             data.LastContactHitFrame = Game():GetFrameCount() -- ✅ Updates cooldown time
@@ -1984,7 +1977,7 @@ local EIDicons = Sprite()
 EIDicons:Load("gfx/EIDIcons.anm2", true)
 
 if EID then
-    EID:addIcon("Player"..templateType, "Template", 0, 16, 16, 0, 0, EIDicons)
+    EID:addIcon("Player"..templateType, "Domino", 0, 16, 16, 0, 0, EIDicons)
     EID:addIcon("Player"..TAINTED_TEMPLATE_TYPE, "Jinxed", 0, 16, 16, 0, 0, EIDicons)
     EID:addIcon("Player"..pontiusType, "Longinus", 0, 16, 16, 0, 0, EIDicons)
     EID:addIcon("Player"..TAINTED_PONTIUS_TYPE, "Awoken", 0, 16, 16, 0, 0, EIDicons)
@@ -5287,14 +5280,12 @@ function Mod:DullCoinUse(item, rng, player, flags)
                         if pedestal and pedestal.SubType ~= 0 then -- ✅ Ensure pedestal isn't nil
                             pedestal:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
                         else
-                            print("Warning: Attempted to morph a nil pedestal!")
                         end
 
                         table.insert(validRerolls, newItem) -- Track successful rerolls
                     end
                 end
             else
-                print("ERROR: Failed to retrieve item config for:", currentItem)
             end
         end
     end
@@ -5320,7 +5311,6 @@ function Mod:DullCoinUse(item, rng, player, flags)
             return
         end ]]
         if #removedItems < 5 then
-            print("Not enough quality 0 items to convert.")
             return false
         end
 
@@ -6165,7 +6155,6 @@ function Mod:OnFamiliarUpdate(familiar)
         end
         --removethestupidfamiliar = false
         --[[ if Mod:NewRoomEnter() then
-            print("why")
             data.SpawnTime = -600
         end ]]
 
@@ -6264,7 +6253,6 @@ function Mod:RemoveAmpFamiliarsOnStart()
     for _, familiar in ipairs(Isaac.FindByType(EntityType.ENTITY_FAMILIAR, FAMILIAR_VARIANT_AMP)) do
         if familiar and familiar:Exists() then
             familiar:Remove() -- ✅ Instantly removes existing familiars on start
-            print("Removed misplaced familiar from previous session!")
         end
     end
 end
@@ -7321,7 +7309,6 @@ function Mod:OnEnemyKilled(entity)
         Mod:ApplySamsonEssenceEffect(nil, player, CacheFlag.CACHE_DAMAGE)
 
 
-        print("Cache flags triggered! Damage bonus stored:", samsonEssenceBonus[player.Index])
     end
 end
 
@@ -7428,7 +7415,6 @@ function Mod:onTearImpact(entity)
  
             
         else
-            print("Laser failed to spawn!") -- Debug statement
         end
 
 
@@ -7488,7 +7474,6 @@ function Mod:OnPlayerUpdateLaz(player)
             wasDead[playerID] = true -- Track death
         elseif wasDead[playerID] then
             wasDead[playerID] = false -- Reset death tracking
-            print("Player revived - Granting stats item and removing revival item!")
 
             -- ✅ Give the player the all-stats-up item
             player:AddCollectible(LAZARUS_ESSENCE_UNLOCKED)
@@ -8333,7 +8318,6 @@ function Mod:UseSoulItemForgotten(item, rng, player)
                 player.Position = closestFamiliar.Position
                 --player:SetVelocity(Vector.Zero)
             else
-                print("Forgotten Soul teleport failed: no familiar found")
             end
         end
     --end
@@ -8425,7 +8409,6 @@ function Mod:onEnemyDeath(entity)
 
         if player:HasCollectible(STAR_OF_DAVID) and entity:IsEnemy() then
             -- ✅ Base chance (5%) + Luck scaling (5% per Luck point)
-            print("work")
             local luckFactor = math.max(0, player.Luck * starnumheart) -- Prevent negative values
             local finalChance = math.min(0.5, 0.01 + luckFactor) -- Cap at 50% drop rate
 
@@ -8755,7 +8738,6 @@ function Mod:UseRefundItem(item, rng, player)
             player:AnimateCollectible(MONEY_ITEM, "UseItem", "PlayerPickupSparkle")
 
             local refundAmount = player:GetData().moneySpent or 0
-            print(refundAmount)
             if refundAmount > 0 then
 
                 -- ✅ Give the stored money back to the player
@@ -8815,6 +8797,7 @@ end
 
 local function getRandomGlitchEffect(player)
     local baseChance = 0.00000001
+    --local baseChance = 1
     local teardropScaling = 0
     local luckScaling = 0.00000001 * player:GetCollectibleNum(GLITCH_ITEM)
 
@@ -8836,9 +8819,15 @@ function Mod:onTearInitGlitch(tear)
             local player = parent:ToPlayer()
             if player:HasCollectible(GLITCH_ITEM) and getRandomGlitchEffect(player) then
                 tear:GetData().starTrigger = true
-                local sprite = tear:GetSprite()
-                sprite:Load("gfx/glitch_tear.anm2", true)
-                sprite:Play("Stone4Move", true)
+                print("glitch")
+
+                if tear:ToTear() then
+                    local sprite = tear:GetSprite()
+                    sprite:Load("gfx/glitch_tear.anm2", true)
+                    sprite:Play("Stone4Move", true)
+                else
+                    tear:SetColor(Color(0.1, 0.1, 1.0, 1.0, 0, 0, 0), 30, 1, false, false)
+                end
 
 
                 tear.CollisionDamage = tear.CollisionDamage * 999999999
@@ -8851,6 +8840,8 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateGlitch)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitGlitch)
+Mod:AddCallback(ModCallbacks.MC_POST_LASER_INIT, Mod.onTearInitGlitch)
+Mod:AddCallback(ModCallbacks.MC_POST_KNIFE_UPDATE, Mod.onTearInitGlitch)
 
 ProtoTech = {}
 LaserType = { THICK_RED = 1}
@@ -9175,7 +9166,6 @@ function Mod:FindTMTrainerPedestals()
         if entity.Type == EntityType.ENTITY_PICKUP and entity.Variant == PickupVariant.PICKUP_COLLECTIBLE then
             local itemConfig = Isaac.GetItemConfig():GetCollectible(entity.SubType)
             --if  entity.SubType >= 4294967296 then -- ✅ TMTRAINER items are marked "Hidden"
-            print("Found TMTRAINER pedestal at:", entity.Position)
             table.insert(pedestals, entity)
             --end
         end
@@ -9267,7 +9257,6 @@ function Mod:UseTMTrainerFixItem(item, rng, player, flags)
                 player:RemoveCollectible(lastItem) -- ✅ Take it from inventory
             else
                 SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
-                print("No pedestals and no items left to remove!") -- ✅ Debug check
             end
             return
         end
@@ -9312,7 +9301,6 @@ function Mod:UseTMTrainerFixItemBirthright(item, rng, player, flags)
                 player:RemoveCollectible(lastItem) -- ✅ Take it from inventory
             else
                 SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
-                print("No pedestals and no items left to remove!") -- ✅ Debug check
             end
             return
         end
@@ -9340,14 +9328,12 @@ function Mod:UseTMTrainerReroll(item, rng, player, flags)
             local pedestals = Mod:FindItemPedestalsGlitchEssence()
 
             if #pedestals == 0 then
-                print("No pedestals to reroll!")
                 return
             end
 
             player:AddCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
 
             for _, pedestal in ipairs(pedestals) do
-                print("Rerolling pedestal at:", pedestal.Position)
 
                 pedestal:Remove() -- ✅ Remove original pedestal
 
@@ -9359,7 +9345,6 @@ function Mod:UseTMTrainerReroll(item, rng, player, flags)
             SFX:Play(SoundEffect.SOUND_EDEN_GLITCH, 1, 0, false, 1)
             Game():SpawnParticles(player.Position, EffectVariant.TEAR_POOF_A, 10, 5, Color(1, 0, 0, 1, 0, 0, 0), 0)
             player:RemoveCollectible(CollectibleType.COLLECTIBLE_TMTRAINER)
-            print("Successfully rerolled all pedestals into TMTRAINER items!")
         end
     --end
 end
@@ -9408,17 +9393,14 @@ function Mod:ConvertActiveToPocket(player)
         local activeItem = player:GetActiveItem(ActiveSlot.SLOT_PRIMARY)
         local pocketActive = player:GetActiveItem(ActiveSlot.SLOT_POCKET)
         if pocketActive and pocketActive ~= CollectibleType.COLLECTIBLE_NULL then
-            print("Player already has a pocket active! Dropping pedestal item instead.")
             Mod:DropActiveItemOnPedestal(player)
             
         --end
 
         elseif activeItem and activeItem ~= CollectibleType.COLLECTIBLE_NULL then
-            print("Converting active item to pocket active:", activeItem)
             player:RemoveCollectible(activeItem, false, ActiveSlot.SLOT_PRIMARY)
             player:SetPocketActiveItem(activeItem, ActiveSlot.SLOT_POCKET, true)
         else
-            print("Player has no active item—assigning a new one!")
             Mod:GiveRandomActiveItem(player)
         end
         toolbeltTriggered[id] = true
@@ -9434,7 +9416,6 @@ function Mod:GiveRandomActiveItem(player)
     local pocketActive = player:GetActiveItem(ActiveSlot.SLOT_POCKET)
 
     --[[ if pocketActive and pocketActive ~= CollectibleType.COLLECTIBLE_NULL then
-        print("Player already has a pocket active! Dropping pedestal item instead.")
         Mod:DropActiveItemOnPedestal(player)
         return
     end ]]
@@ -9450,7 +9431,6 @@ function Mod:GiveRandomActiveItem(player)
     end
 
 
-    print("Player received new active item:", randomActive)
     player:SetPocketActiveItem(randomActive, ActiveSlot.SLOT_POCKET, true)
 end
 
@@ -9465,7 +9445,6 @@ function Mod:DropActiveItemOnPedestal(player)
         randomActive = itemPool:GetCollectible(ItemPoolType.POOL_TREASURE, true, rng:Next())
     end
 
-    print("Dropping pedestal active item:", randomActive)
     Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, randomActive, pedPosition, Vector(0,0), player)
 end
 
@@ -9636,7 +9615,6 @@ function Mod:onEnemyDamaged(entity, amount, flag, source, countdown)
         
         if tear:GetData().burnOnHit then
             entity:AddBurn(EntityRef(tear), 120, 2.0) -- ✅ Burns enemy for 120 frames at 2 dmg/sec
-            print("Enemy hit by burning tear! Applied fire effect.")
         end
     end
 end
@@ -9715,7 +9693,6 @@ function Mod:BurnEnemiesOnCreep(effect)
         for _, entity in ipairs(enemies) do
             if entity:IsVulnerableEnemy() then
                 entity:AddBurn(EntityRef(effect), 120, 2.0) -- ✅ Burn for 120 frames at 2 dmg/sec
-                print("Enemy burned by fire creep!")
             end
         end
     end
@@ -9838,7 +9815,6 @@ function Mod:onTearImpactAngelThree(entity)
  
             
         else
-            print("Laser failed to spawn!") -- Debug statement
         end
     end
 end
@@ -9948,7 +9924,6 @@ function Mod:UpdateChoiceCounter(player)
     -- ✅ Update the counter based on item amounts
     data.ChoiceCounter = math.min(4, math.max(-4, darkCount - lightCount)) -- ✅ Caps between -4 and 4
 
-    --print("Counter updated! Light:", lightCount, "Dark:", darkCount, "Total:", data.ChoiceCounter)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Mod.UpdateChoiceCounter)
@@ -10375,11 +10350,9 @@ function Mod:OnEnterSpecialRoom()
                 player:AddSoulHearts(abenum) -- ✅ Grants 3 Soul Hearts (6 half-hearts)
 
                 data.HasClaimedHeartBonus[RoomType.ROOM_ANGEL] = true -- ✅ Marks Angel room bonus as claimed
-                print(player:GetName(), "entered Angel Room! Granted 3 Soul Hearts.")
             elseif room:GetType() == RoomType.ROOM_DEVIL and not data.HasClaimedHeartBonus[RoomType.ROOM_DEVIL] then
                 player:AddBlackHearts(abenum) -- ✅ Grants 3 Black Hearts (6 half-hearts)
                 data.HasClaimedHeartBonus[RoomType.ROOM_DEVIL] = true -- ✅ Marks Devil room bonus as claimed
-                print(player:GetName(), "entered Devil Room! Granted 3 Black Hearts.")
             end
         end
     end
@@ -10395,7 +10368,6 @@ function Mod:ResetHeartBonusOnNewFloor()
 
         if data.HasClaimedHeartBonus then
             data.HasClaimedHeartBonus = {} -- ✅ Clears stored room bonuses for each player
-            print(player:GetName(), "entered a new floor! Heart bonus reset.")
         end
     end
 end
@@ -10478,7 +10450,6 @@ function Mod:UseJubilees(item, rng, player)
             player:AnimateCollectible(JUBILEES_ITEM, "UseItem", "PlayerPickupSparkle")
             local level = Game():GetLevel()
             --local currentChance = level:GetAngelRoomChance()
-            --print(currentChance)
 
             -- ✅ Increase Angel room chance by 10%
             --level:AddAngelRoomChance(currentChance)
@@ -10517,7 +10488,6 @@ function Mod:UseJubilees2(item, rng, player)
             player:AnimateCollectible(JUBILEES_ITEM2, "UseItem", "PlayerPickupSparkle")
             local level = Game():GetLevel()
             --local currentChance = level:GetAngelRoomChance()
-            --print(currentChance)
 
             -- ✅ Increase Angel room chance by 10%
             --level:AddAngelRoomChance(currentChance)
@@ -10556,7 +10526,6 @@ function Mod:UseJubilees3(item, rng, player)
             player:AnimateCollectible(JUBILEES_ITEM3, "UseItem", "PlayerPickupSparkle")
             local level = Game():GetLevel()
             --local currentChance = level:GetAngelRoomChance()
-            --print(currentChance)
 
             -- ✅ Increase Angel room chance by 10%
             --level:AddAngelRoomChance(currentChance)
@@ -10914,7 +10883,6 @@ Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Mod.ResetTrophyGiven)
         -- ✅ Increase damage by 1 per boss killed
         player.Damage = player.Damage + (data.bossKillCount * 1)
 
-        print(player:GetName(), "received a damage boost! Current damage:", player.Damage)
     end
 end
 
@@ -11184,7 +11152,6 @@ Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, Mod.ConvertEnemiesToFriendly)
 function Mod:SaveTemporaryHealth()
     local jsonString = json.encode(Mod.SaveData) -- ✅ Convert table to JSON
     Isaac.SaveModData(Mod, jsonString) -- ✅ Store JSON string instead of a table
-    print("Saved temporary health:", jsonString)
 end
 
 function Mod:LoadTemporaryHealth()
@@ -11192,7 +11159,6 @@ function Mod:LoadTemporaryHealth()
 
     if savedString ~= "" then
         Mod.SaveData = json.decode(savedString) -- ✅ Convert JSON string back into a table
-        print("Loaded temporary health:", savedString)
     else
         Mod.SaveData = {} -- ✅ Initialize fresh data if nothing was stored
     end
@@ -11533,7 +11499,6 @@ function Mod:onTearInitToxin(tear)
                 tear:GetData().weakTrigger = true
                 makethelaserswork = true
                 tear:SetColor(Color(0.4, 0.1, 0.5, 1.0, 0, 0, 0), 30, 1, false, false)
-                print("tearinittoxinrunning")
 
 
             end
@@ -11543,12 +11508,9 @@ end
 
 function Mod:onToxinWeaknessHit(entity, damage, flags, source, countdown)
     --if (source.Type == EntityType.ENTITY_TEAR or source.Type == EntityType.ENTITY_LASER or source.Type == EntityType.ENTITY_KNIFE) and source.Entity then
-        print("toxinweaknesshitrunning")
         local tear = source.Entity
         if tear:GetData().weakTrigger or makethelaserswork == true then
-            print("toxinweaknesshitrunning2")
             if entity:IsVulnerableEnemy() then
-                print("toxinweaknesshitrunning2")
                 entity:AddEntityFlags(EntityFlag.FLAG_WEAKNESS)
                 entity:Update() -- Force update so the flag applies immediately
                 -- Apply dark purple tint (R, G, B, Alpha, Duration)
@@ -12192,7 +12154,6 @@ function Mod:UseAxe(item, rng, player)
         local direction = Vector(0, 0) -- ✅ Default: No movement
     
         local dir = player:GetFireDirection()
-        print(dir)
         local velocity = Vector(0, 0)
 
         if dir == Direction.LEFT then
@@ -12206,14 +12167,11 @@ function Mod:UseAxe(item, rng, player)
         elseif dir == Direction.NO_DIRECTION then
             velocity = Vector(0, 1)
         end
-        print(dir)
 
         -- ✅ Spawn melee hitbox in correct direction
         --if direction.X ~= 0 or direction.Y ~= 0 then
-            --print("2")
             local meleeHitbox = Isaac.Spawn(EntityType.ENTITY_EFFECT, AXE_SWING, 0, player.Position + velocity * 10, Vector(0,0), player)
             if meleeHitbox then
-                --print("3")
                 Axesprite = meleeHitbox:GetSprite()
                 -- ✅ Adjust sprite orientation based on attack direction
                 if velocity.X < 0 then
@@ -12253,7 +12211,6 @@ function Mod:OnEffectUpdateAxe(effect)
         local sprite = effect:GetSprite()
 
         local dir = player:GetFireDirection()
-        print(dir)
         local velocity = Vector(0, 0)
 
         if dir == Direction.LEFT then
@@ -12844,20 +12801,25 @@ local function getRandomDelevelEffect(player)
 end
 
 function Mod:onTearInitDelevel(tear)
+    print("1")
     if HasDelevelEffect then
+        print("2")
         local parent = tear.SpawnerEntity
         if parent and parent:ToPlayer() then
+            print("3")
             local player = parent:ToPlayer()
             if player:HasCollectible(SPINDOWN_ITEM) and getRandomDelevelEffect(player) then
-                tear:GetData().delevelTrigger = true
+                print("4")
+                --tear:GetData().delevelTrigger = true
                 --tear:SetColor(Color(0.4, 0.1, 0.5, 1.0, 0, 0, 0), 30, 1, false, false)
-                tear.TearFlags = TearFlags.TEAR_REROLL_ENEMY
-                local sprite = tear:GetSprite()
-                sprite:Load("gfx/deleveltear.anm2", true)
-                sprite:Play("Stone4Move", true)
-                
-
-
+                tear.TearFlags = tear.TearFlags | TearFlags.TEAR_REROLL_ENEMY
+                if tear:ToTear() then
+                    local sprite = tear:GetSprite()
+                    sprite:Load("gfx/deleveltear.anm2", true)
+                    sprite:Play("Stone4Move", true)
+                else
+                    tear:SetColor(Color(0.1, 0.1, 1.0, 1.0, 0, 0, 0), 30, 1, false, false)
+                end
             end
         end
     end
@@ -12865,6 +12827,8 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateDelevel)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitDelevel)
+Mod:AddCallback(ModCallbacks.MC_POST_LASER_UPDATE, Mod.onTearInitDelevel)
+Mod:AddCallback(ModCallbacks.MC_PRE_KNIFE_COLLISION, Mod.onTearInitDelevel)
 
 function Mod:UseDreidelItem(item, rng, player)
     local sfx = SFXManager()
@@ -13696,7 +13660,6 @@ function EssenceCollector:onUpdateCollector()
     local slotsTable = Isaac.FindByType(EntityType.ENTITY_SLOT,EssenceCollector.SLOT_ESSENCE_COLLECTOR,-1,false,false)
     local player = Isaac.GetPlayer(0)
     for k in pairs(slotsTable) do
-        --print("working")
         local slot = slotsTable[k]
 
         local slotData = slot:GetData()
@@ -13862,7 +13825,6 @@ function Tithe:onUpdateTithe()
     local player = Isaac.GetPlayer(0)
     for k in pairs(slotsTable) do
 
-        --print("working")
         local slot = slotsTable[k]
 
         local slotData = slot:GetData()
@@ -13882,7 +13844,6 @@ function Tithe:onUpdateTithe()
 
 
         if slotSprite:IsEventTriggered("Prize") then
-            print(slotRNG2)
             if slotRNG <= 34 then
 
                 if slotRNG2 < 10 then
@@ -14016,11 +13977,9 @@ end
 local currentRoomTithe = Game():GetRoom()
 
 function Tithe:onNewRoomTithe()
-    print("working")
     for i = 0, Game():GetNumPlayers() - 1 do
         local player = Game():GetPlayer(i)
         if currentRoomTithe:IsFirstVisit() == true and currentRoomTithe:GetType() == RoomType.ROOM_ANGEL and player:HasCollectible(GENEROSITY_ITEM) then
-            print("working2")
             local pos = Game():GetRoom():FindFreeTilePosition(Vector(180,210), 100)
             local donTable = Isaac.FindByType(EntityType.ENTITY_EFFECT,5001,-1,false,false)
             Isaac.Spawn(EntityType.ENTITY_SLOT,Tithe.SLOT_TITHE,0,pos,Vector(0,0),nil)
@@ -14058,7 +14017,6 @@ function Mod:OnCacheUpdateClover(player, cacheFlag)
                 luckBonus = 4
             end
             if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
-                print(luckBonus)
                 luckBonus = 4
             end
             if player:GetTrinketMultiplier(CLOVER_TRINKET) > 1 and player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_BOX) then
@@ -14187,7 +14145,6 @@ function Mod:OnCoinPickup(pickup, collider)
                 -- ✅ Roll RNG for black heart drop
                 if rng:RandomFloat() < chance then
                     Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_BLACK, pickup.Position, Vector(0,0), nil)
-                    print(player:GetName(), "triggered a Black Heart drop!")
                 end
             end
         end
@@ -14232,7 +14189,6 @@ function Mod:OnCoinPickupBone(pickup, collider)
                 -- ✅ Roll RNG for bone heart drop
                 if rng:RandomFloat() < chance then
                     Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_BONE, pickup.Position, Vector(0,0), nil)
-                    print(player:GetName(), "triggered a Bone Heart drop!")
                 end
             end
         end
@@ -14278,7 +14234,6 @@ function Mod:OnCoinPickupRot(pickup, collider)
                 -- ✅ Roll RNG for Rotten Heart drop
                 if rng:RandomFloat() < chance then
                     Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_ROTTEN, pickup.Position, Vector(0,0), nil)
-                    print(player:GetName(), "triggered a Rotten Heart drop!")
                 end
             end
         end
@@ -14307,7 +14262,6 @@ function Mod:ReplaceTearWithLaser(tear)
         if math.random() < chance then
             Mod:FireLaserInstead(player, tear.Position, tear.Velocity) -- ✅ Replace tear with a laser
             tear:Remove() -- ✅ Remove original tear
-            print("Laser fired instead of tear!")
         end
     end
 end
@@ -14575,8 +14529,6 @@ function Mod:FilterItemPoolOnRoomEntry()
     local level = Game():GetLevel():GetCurrentRoomIndex()
     local roomType = room:GetType()
     local roomSize = room:GetGridSize()
-    --print(level)
-    --print(roomSize)
     --local roomDesc = level:GetRoomByIdx(level:GetCurrentRoomIndex())
     --local roomID = roomDesc.GridIndex -- This gives you the unique room ID
     --local roomID2 = roomDesc.Data
@@ -14586,8 +14538,7 @@ function Mod:FilterItemPoolOnRoomEntry()
 
     -- Check if the current room matches your custom rooms
     if roomType == RoomType.ROOM_LIBRARY and roomSize == 448 then
-        --print(level)
-        --print(roomSize)
+
         local itemPool = Game():GetItemPool()
 
         -- Find all collectible pedestals and reroll them
@@ -14672,7 +14623,6 @@ function Chest:onUpdateChest()
     local player = Isaac.GetPlayer(0)
     for k in pairs(slotsTable) do
 
-        --print("working")
         local slot = slotsTable[k]
 
         local slotData = slot:GetData()
@@ -14692,7 +14642,6 @@ function Chest:onUpdateChest()
 
 
         if slotSprite:IsEventTriggered("Opened") then
-            print(slotRNG2)
             if slotRNG <= 100 then
 
                 if slotRNG2 < 10 then

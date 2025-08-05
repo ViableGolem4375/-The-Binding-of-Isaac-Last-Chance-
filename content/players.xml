@@ -3,7 +3,7 @@
         portraitroot="gfx/ui/stage/" 
         nameimageroot="gfx/ui/boss/">
     <player 
-        name="Template" 
+        name="Domino" 
         skin="character_template.png" 
         nameimage="playername_template.png" 
         portrait="playerportrait_template.png"
@@ -16,9 +16,9 @@
         canShoot="True" 
     />
     <player 
-        name="Template"
+        name="Domino"
         skin="character_template_b.png" 
-        bSkinParent="Template"
+        bSkinParent="Domino"
         nameimage="playername_template_b.png" 
         portrait="playerportrait_template_b.png"
         birthright="Jinx breaker"
