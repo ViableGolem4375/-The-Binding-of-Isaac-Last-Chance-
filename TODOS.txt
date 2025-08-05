@@ -2,6 +2,12 @@
 - Cards are huge on J+E HUD.
 - make defense tech not interact with enviromnentals
 - check paint can, it might not work in edge scenarios
+- proc things dont work with special attacks like lasers, items to fix:
+ - essence of azazel
+ - star of david
+ - //7
+ - neurotoxin
+ - spindown tears
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -27,7 +33,6 @@ item rooms have no items but secret rooms do
 all stats down plus something
 something with this effect: DOGMA_BLACKHOLE
 pick a stage and go there
-old testament
 plagues
 
 add a machine that uses a card or something
@@ -36,7 +41,7 @@ Trinket Ideas:
 
 
 Streaks:
-T Apollyon Win Streak: 3
+T Apollyon Win Streak: 5
 	Best: 40
 T Keeper Win Streak: 0
 	Best: 5

@@ -7389,7 +7389,7 @@ end
 
 
 function Mod:onTearImpact(entity)
-    if entity.Type == EntityType.ENTITY_TEAR and entity:GetData().laserRingTrigger then
+    if (entity.Type == EntityType.ENTITY_TEAR or entity.Type == EntityType.ENTITY_LASER  or entity.Type == EntityType.ENTITY_KNIFE) and entity:GetData().laserRingTrigger then
         local position = entity.Position
         local player = Isaac.GetPlayer(0)
         local fireDirectionAzazel = player:GetFireDirection()
@@ -7438,6 +7438,8 @@ end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateAzazel)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitAzazel)
+Mod:AddCallback(ModCallbacks.MC_POST_LASER_INIT, Mod.onTearInitAzazel)
+--Mod:AddCallback(ModCallbacks.MC_PRE_KNIFE_COLLISION, Mod.onTearInitAzazel)
 Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_REMOVE, Mod.onTearImpact)
 
 local STAT_BOOST = {
@@ -8392,9 +8394,13 @@ function Mod:onTearInitStar(tear)
                 tear:GetData().starTrigger = true
                 local starnum = player:GetCollectibleNum(STAR_OF_DAVID) * 1.3
 
-                local sprite = tear:GetSprite()
-                sprite:Load("gfx/star_of_david_tear.anm2", true)
-                sprite:Play("Stone4Move", true)
+                if tear:ToTear() then
+                    local sprite = tear:GetSprite()
+                    sprite:Load("gfx/star_of_david_tear.anm2", true)
+                    sprite:Play("Stone4Move", true)
+                else
+                    tear:SetColor(Color(0.1, 0.1, 1.0, 1.0, 0, 0, 0), 30, 1, false, false)
+                end
 
                 -- ✅ Increase damage by 30%
                 tear.CollisionDamage = tear.CollisionDamage * starnum
@@ -8434,6 +8440,8 @@ end
 Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.onEnemyDeath)
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateStarDavid)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitStar)
+Mod:AddCallback(ModCallbacks.MC_POST_LASER_UPDATE, Mod.onTearInitStar)
+Mod:AddCallback(ModCallbacks.MC_POST_KNIFE_UPDATE, Mod.onTearInitStar)
 
 function Mod:UseGun(item, rng, player)
     --local player = Isaac.GetPlayer(0)
@@ -11485,11 +11493,13 @@ end
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseCommunismItem, COMMUNISM_ITEM)
 
 local HasWeaknessEffect = false
+local makethelaserswork = false
 
 
 function Mod:onUpdateToxin(player)
 	if game:GetFrameCount() == 1 then
 		HasWeaknessEffect = false
+        makethelaserswork = false
 	end
 	if not HasWeaknessEffect and player:HasCollectible(NEURO_ITEM) then
 		HasWeaknessEffect = true
@@ -11521,8 +11531,9 @@ function Mod:onTearInitToxin(tear)
             local player = parent:ToPlayer()
             if player:HasCollectible(NEURO_ITEM) and getRandomToxinEffect(player) then
                 tear:GetData().weakTrigger = true
+                makethelaserswork = true
                 tear:SetColor(Color(0.4, 0.1, 0.5, 1.0, 0, 0, 0), 30, 1, false, false)
-                
+                print("tearinittoxinrunning")
 
 
             end
@@ -11531,10 +11542,13 @@ function Mod:onTearInitToxin(tear)
 end
 
 function Mod:onToxinWeaknessHit(entity, damage, flags, source, countdown)
-    if source.Type == EntityType.ENTITY_TEAR and source.Entity then
-        local tear = source.Entity:ToTear()
-        if tear and tear:GetData().weakTrigger then
+    --if (source.Type == EntityType.ENTITY_TEAR or source.Type == EntityType.ENTITY_LASER or source.Type == EntityType.ENTITY_KNIFE) and source.Entity then
+        print("toxinweaknesshitrunning")
+        local tear = source.Entity
+        if tear:GetData().weakTrigger or makethelaserswork == true then
+            print("toxinweaknesshitrunning2")
             if entity:IsVulnerableEnemy() then
+                print("toxinweaknesshitrunning2")
                 entity:AddEntityFlags(EntityFlag.FLAG_WEAKNESS)
                 entity:Update() -- Force update so the flag applies immediately
                 -- Apply dark purple tint (R, G, B, Alpha, Duration)
@@ -11544,7 +11558,7 @@ function Mod:onToxinWeaknessHit(entity, damage, flags, source, countdown)
 
             end
         end
-    end
+    --end
 end
 
 function Mod:onEnemyUpdateWeakness(entity)
@@ -11561,6 +11575,8 @@ Mod:AddCallback(ModCallbacks.MC_NPC_UPDATE, Mod.onEnemyUpdateWeakness)
 Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.onToxinWeaknessHit)
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateToxin)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitToxin)
+Mod:AddCallback(ModCallbacks.MC_POST_LASER_INIT, Mod.onTearInitToxin)
+Mod:AddCallback(ModCallbacks.MC_PRE_KNIFE_COLLISION, Mod.onTearInitToxin)
 
 function Mod:OnNewFloorDice()
     --local game = Game()
