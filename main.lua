@@ -11655,6 +11655,8 @@ function Mod:onTearInitDogma(tear)
                 sprite:Load("gfx/dogmaticism_aura.anm2", true)
                 sprite:Play("Aura", true)
 
+                sprite.Scale = Vector(tear.Scale, tear.Scale)
+
                 --tear:SetColor(Color(0.4, 0.1, 0.5, 1.0, 0, 0, 0), 30, 1, false, false)
                 local data = tear:GetData()
                 data.dogmaTrigger = true
@@ -11676,8 +11678,10 @@ function Mod:UpdateDogmaTears()
         if not tear:Exists() then
             table.remove(DogmaTears, i)
         else
+            local aurasize = 120 * tear.Scale
+            print(aurasize)
             local data = tear:GetData()
-            local enemies = Isaac.FindInRadius(tear.Position, 120, EntityPartition.ENEMY)
+            local enemies = Isaac.FindInRadius(tear.Position, aurasize, EntityPartition.ENEMY)
             for _, enemy in ipairs(enemies) do
                 if enemy:IsVulnerableEnemy() and not enemy:IsDead() and not enemy:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) then
                     local id = GetPtrHash(enemy)
