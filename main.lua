@@ -12772,10 +12772,12 @@ end
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseD20, D20_ITEM)
 
 local HasDelevelEffect = false
+local laserDelevel = false
 
 function Mod:onUpdateDelevel(player)
 	if game:GetFrameCount() == 1 then
 		HasDelevelEffect = false
+        laserDelevel = false
 	end
 	if not HasDelevelEffect and player:HasCollectible(SPINDOWN_ITEM) then
 		HasDelevelEffect = true
@@ -12812,22 +12814,37 @@ function Mod:onTearInitDelevel(tear)
                 print("4")
                 --tear:GetData().delevelTrigger = true
                 --tear:SetColor(Color(0.4, 0.1, 0.5, 1.0, 0, 0, 0), 30, 1, false, false)
+                --player.TearFlags = tear.TearFlags | TearFlags.TEAR_REROLL_ENEMY
                 tear.TearFlags = tear.TearFlags | TearFlags.TEAR_REROLL_ENEMY
                 if tear:ToTear() then
                     local sprite = tear:GetSprite()
                     sprite:Load("gfx/deleveltear.anm2", true)
                     sprite:Play("Stone4Move", true)
                 else
+                    print("5")
                     tear:SetColor(Color(0.1, 0.1, 1.0, 1.0, 0, 0, 0), 30, 1, false, false)
+                    player.TearFlags = tear.TearFlags | TearFlags.TEAR_REROLL_ENEMY
+                    laserDelevel = true
                 end
             end
+            --player.TearFlags = tear.TearFlags &(~TearFlags.TEAR_REROLL_ENEMY)
         end
     end
 end
 
+function Mod:removeDelevelEffect(player)
+    if laserDelevel == true then
+        player.TearFlags = player.TearFlags &(~TearFlags.TEAR_REROLL_ENEMY)
+        laserDelevel = false
+    end
+end
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.removeDelevelEffect)
+
+
+
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateDelevel)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitDelevel)
-Mod:AddCallback(ModCallbacks.MC_POST_LASER_UPDATE, Mod.onTearInitDelevel)
+Mod:AddCallback(ModCallbacks.MC_POST_LASER_INIT, Mod.onTearInitDelevel)
 Mod:AddCallback(ModCallbacks.MC_PRE_KNIFE_COLLISION, Mod.onTearInitDelevel)
 
 function Mod:UseDreidelItem(item, rng, player)
