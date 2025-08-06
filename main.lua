@@ -8833,7 +8833,6 @@ function Mod:onTearInitGlitch(tear)
             local player = parent:ToPlayer()
             if player:HasCollectible(GLITCH_ITEM) and getRandomGlitchEffect(player) then
                 tear:GetData().starTrigger = true
-                print("glitch")
 
                 if tear:ToTear() then
                     local sprite = tear:GetSprite()
@@ -12828,15 +12827,11 @@ local function getRandomDelevelEffect(player)
 end
 
 function Mod:onTearInitDelevel(tear)
-    print("1")
     if HasDelevelEffect then
-        print("2")
         local parent = tear.SpawnerEntity
         if parent and parent:ToPlayer() then
-            print("3")
             local player = parent:ToPlayer()
             if player:HasCollectible(SPINDOWN_ITEM) and getRandomDelevelEffect(player) then
-                print("4")
                 --tear:GetData().delevelTrigger = true
                 --tear:SetColor(Color(0.4, 0.1, 0.5, 1.0, 0, 0, 0), 30, 1, false, false)
                 --player.TearFlags = tear.TearFlags | TearFlags.TEAR_REROLL_ENEMY
@@ -12846,7 +12841,6 @@ function Mod:onTearInitDelevel(tear)
                     sprite:Load("gfx/deleveltear.anm2", true)
                     sprite:Play("Stone4Move", true)
                 else
-                    print("5")
                     tear:SetColor(Color(0.1, 0.1, 1.0, 1.0, 0, 0, 0), 30, 1, false, false)
                     player.TearFlags = tear.TearFlags | TearFlags.TEAR_REROLL_ENEMY
                     laserDelevel = true
