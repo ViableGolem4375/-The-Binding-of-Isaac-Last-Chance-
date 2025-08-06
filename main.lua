@@ -12844,7 +12844,7 @@ function Mod:onTearInitDelevel(tear)
                     sprite:Play("Stone4Move", true)
                 else
                     tear:SetColor(Color(0.1, 0.1, 1.0, 1.0, 0, 0, 0), 30, 1, false, false)
-                    player.TearFlags = tear.TearFlags | TearFlags.TEAR_REROLL_ENEMY
+                    player.TearFlags = player.TearFlags | TearFlags.TEAR_REROLL_ENEMY
                     laserDelevel = true
                 end
             end
