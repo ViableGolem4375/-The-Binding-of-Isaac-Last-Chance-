@@ -2164,7 +2164,7 @@ if EID then
     EID:addCollectible(D20_ITEM, "Upgrades all pickups in the room.#i.e. penny -> double pack penny, chest -> locked chest, etc.#Pickups at their maximum level are turned into collectibles.#Does not affect pills, cards, or runes.", "Golden D20")
     EID:addCollectible(SPINDOWN_ITEM, "5% chance to fire a tear that delevels an enemy.#{{Luck}} +5% chance per point of luck capping at a 50% chance to proc.", "Spindown Tears")
     EID:addCollectible(DREIDEL_ITEM, "50% chance to instantly kill all enemies in the room and damage bosses for 25% of their HP.#50% chance to double all enemies in the room and heal bosses for 25% of their HP.", "Lopsided Dreidel")
-    EID:addCollectible(TESTAMENT_ITEM, "#{{Warning}} ONE TIME USE!#On activation, sends Isaac to the Home floor and grants Magic Mushroom, Raw Liver, Birthday Cake, PJs, and a Holy Card.", "The Old Testament")
+    EID:addCollectible(TESTAMENT_ITEM, "#{{Warning}} ONE TIME USE!#On activation, sends Isaac to the Home floor and grants Magic Mushroom, Raw Liver, Birthday Cake, PJs, Dad's Note, and a Holy Card.", "The Old Testament")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -12925,14 +12925,16 @@ function Mod:UseTestamentItem(item, rng, player)
         player:AddCollectible(CAKE_ITEM)
         player:AddCollectible(CollectibleType.COLLECTIBLE_PJS)
         player:AddCollectible(CollectibleType.COLLECTIBLE_RAW_LIVER)
-        Isaac.Spawn(
+        player:AddCollectible(668)
+        --[[ Isaac.Spawn(
             EntityType.ENTITY_PICKUP,
             PickupVariant.PICKUP_TAROTCARD,
             Card.CARD_HOLY,
             player.Position,
             Vector.Zero,
             player
-        )
+        ) ]]
+        player:AddCard(51)
 
         player:RemoveCollectible(TESTAMENT_ITEM)
 

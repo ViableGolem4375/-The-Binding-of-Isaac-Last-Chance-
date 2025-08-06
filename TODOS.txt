@@ -2,13 +2,9 @@
 - Cards are huge on J+E HUD.
 - make defense tech not interact with enviromnentals
 - check paint can, it might not work in edge scenarios
-- domino still shows as template
-- proc things dont work with special attacks like lasers, items to fix:
- - essence of azazel
- - star of david
- - //7
- - neurotoxin
- - spindown tears
+- on line 11536 its indexing a nil value tear with trisagion or jacobs ladder or muromycvosis
+- test if the proc stuff works with trisagion
+- old testament needs to give dads note
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -42,7 +38,7 @@ Trinket Ideas:
 
 
 Streaks:
-T Apollyon Win Streak: 5
+T Apollyon Win Streak: 8
 	Best: 40
 T Keeper Win Streak: 0
 	Best: 5
