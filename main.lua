@@ -11529,9 +11529,10 @@ function Mod:onTearInitToxin(tear)
         end
     end
 end
+-- (source.Type == EntityType.ENTITY_TEAR or source.Type == EntityType.ENTITY_LASER or source.Type == EntityType.ENTITY_KNIFE) and s
 
 function Mod:onToxinWeaknessHit(entity, damage, flags, source, countdown)
-    --if (source.Type == EntityType.ENTITY_TEAR or source.Type == EntityType.ENTITY_LASER or source.Type == EntityType.ENTITY_KNIFE) and source.Entity then
+    if source.Entity then
         local tear = source.Entity
         if tear:GetData().weakTrigger or makethelaserswork == true then
             if entity:IsVulnerableEnemy() then
@@ -11544,7 +11545,8 @@ function Mod:onToxinWeaknessHit(entity, damage, flags, source, countdown)
 
             end
         end
-    --end
+    end
+    makethelaserswork = false
 end
 
 function Mod:onEnemyUpdateWeakness(entity)
