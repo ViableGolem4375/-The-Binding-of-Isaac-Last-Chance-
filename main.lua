@@ -8341,6 +8341,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.GiveSoulEssence)
 
 
 local HasStarEffect = false
+local increaselaserdamage = false
 
 
 function Mod:onUpdateStarDavid(player)
@@ -8382,12 +8383,15 @@ function Mod:onTearInitStar(tear)
                     local sprite = tear:GetSprite()
                     sprite:Load("gfx/star_of_david_tear.anm2", true)
                     sprite:Play("Stone4Move", true)
+                    tear.CollisionDamage = tear.CollisionDamage * starnum
                 else
                     tear:SetColor(Color(0.1, 0.1, 1.0, 1.0, 0, 0, 0), 30, 1, false, false)
+                    player.Damage = player.Damage * starnum
+                    increaselaserdamage = true
                 end
 
                 -- ✅ Increase damage by 30%
-                tear.CollisionDamage = tear.CollisionDamage * starnum
+                --tear.CollisionDamage = tear.CollisionDamage * starnum
                 --tear.AddTearFlags(TearFlags.TEAR_HP_DROP)
 
                 -- ✅ Apply bleed effect on hit
@@ -8420,11 +8424,20 @@ function Mod:onEnemyDeath(entity)
     end
 end
 
+function Mod:removeDamageEffect(player)
+    local starnum2 = player:GetCollectibleNum(STAR_OF_DAVID) * 1.3
+    if increaselaserdamage == true then
+        player.Damage = player.Damage / starnum2
+        increaselaserdamage = false
+    end
+end
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.removeDamageEffect)
+
 Mod:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, Mod.onEnemyDeath)
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateStarDavid)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitStar)
-Mod:AddCallback(ModCallbacks.MC_POST_LASER_UPDATE, Mod.onTearInitStar)
-Mod:AddCallback(ModCallbacks.MC_POST_KNIFE_UPDATE, Mod.onTearInitStar)
+Mod:AddCallback(ModCallbacks.MC_POST_LASER_INIT, Mod.onTearInitStar)
+Mod:AddCallback(ModCallbacks.MC_PRE_KNIFE_COLLISION, Mod.onTearInitStar)
 
 function Mod:UseGun(item, rng, player)
     --local player = Isaac.GetPlayer(0)
@@ -8784,6 +8797,7 @@ end
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseGoldSprayPaint, PAINT_ITEM)
 
 local HasGlitchEffect = false
+local increaseglitchdamage = false
 
 
 function Mod:onUpdateGlitch(player)
@@ -8825,23 +8839,34 @@ function Mod:onTearInitGlitch(tear)
                     local sprite = tear:GetSprite()
                     sprite:Load("gfx/glitch_tear.anm2", true)
                     sprite:Play("Stone4Move", true)
+                    tear.CollisionDamage = tear.CollisionDamage * 999999999
                 else
                     tear:SetColor(Color(0.1, 0.1, 1.0, 1.0, 0, 0, 0), 30, 1, false, false)
+                    player.Damage = player.Damage * 999999999
+                    increaseglitchdamage = true
                 end
 
 
-                tear.CollisionDamage = tear.CollisionDamage * 999999999
+                --tear.CollisionDamage = tear.CollisionDamage * 999999999
 
             end
         end
     end
 end
 
+function Mod:removeDamageEffect2(player)
+    if increaseglitchdamage == true then
+        player.Damage = player.Damage / 999999999
+        increaseglitchdamage = false
+    end
+end
+Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.removeDamageEffect2)
+
 
 Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, Mod.onUpdateGlitch)
 Mod:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Mod.onTearInitGlitch)
 Mod:AddCallback(ModCallbacks.MC_POST_LASER_INIT, Mod.onTearInitGlitch)
-Mod:AddCallback(ModCallbacks.MC_POST_KNIFE_UPDATE, Mod.onTearInitGlitch)
+Mod:AddCallback(ModCallbacks.MC_PRE_KNIFE_COLLISION, Mod.onTearInitGlitch)
 
 ProtoTech = {}
 LaserType = { THICK_RED = 1}
