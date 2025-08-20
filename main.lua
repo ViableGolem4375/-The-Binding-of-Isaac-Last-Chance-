@@ -214,6 +214,7 @@ D20_ITEM = Isaac.GetItemIdByName("Golden D20")
 SPINDOWN_ITEM = Isaac.GetItemIdByName("Spindown Tears")
 DREIDEL_ITEM = Isaac.GetItemIdByName("Lopsided Dreidel")
 TESTAMENT_ITEM = Isaac.GetItemIdByName("The Old Testament")
+GUNK_TRINKET = Isaac.GetTrinketIdByName("Gunk Remover")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2137,7 +2138,7 @@ if EID then
     EID:addCard(BOMB_CARD, "Creates a Mama Mega style explosion in the current room.", "12 of Clubs")
     EID:addEntity(6, 249376972, -1, "Tithe", "{{Warning}} Removes 1 coin when touched.#{{ArrowUp}} Has a chance to grant various payouts when destroyed including angel room item wisps, eternal hearts, Key Pieces, soul hearts, HP ups, and angel room items.#Tithe rewards are given to all players.#Spawns random pickups when destroyed.")
     EID:addCollectible(PILL_ITEM, "All pills spawn as horse pills.#Spawns a pill.", "The Pill")
-    EID:addCollectible(BIBBLE_ITEM, "Activates the effect of a random book item.#Will not activate the effects of Duae Viae or Book of Jubilees.", "The Bibble")
+    EID:addCollectible(BIBBLE_ITEM, "Activates the effect of a random book item.#Will not activate the effects of Duae Viae, The Old Testament, or Book of Jubilees.", "The Bibble")
     EID:addCollectible(COMMUNISM_ITEM, "Evenly distributes Isaac's coins, keys, and bombs.#As Tainted Blue Baby this effect only evenly distributes coins and keys.", "The Communist Manifesto")
     EID:addCollectible(NEURO_ITEM, "5% chance to fire a tear that applies weakness to enemies for 5 seconds.#{{Luck}} +5% chance per point of luck.", "Neurotoxin")
     EID:addCollectible(CRUSHED_DICE_ITEM, "Spawns 3 dice shards in the starting room upon entering a new floor.", "Crushed Dice")
@@ -2165,6 +2166,7 @@ if EID then
     EID:addCollectible(SPINDOWN_ITEM, "5% chance to fire a tear that delevels an enemy.#{{Luck}} +5% chance per point of luck capping at a 50% chance to proc.", "Spindown Tears")
     EID:addCollectible(DREIDEL_ITEM, "50% chance to instantly kill all enemies in the room and damage bosses for 25% of their HP.#50% chance to double all enemies in the room and heal bosses for 25% of their HP.", "Lopsided Dreidel")
     EID:addCollectible(TESTAMENT_ITEM, "#{{Warning}} ONE TIME USE!#On activation, sends Isaac to the Home floor and grants Magic Mushroom, Raw Liver, Birthday Cake, PJs, Dad's Note, and a Holy Card.", "The Old Testament")
+    EID:addTrinket(GUNK_TRINKET, "Sticky nickels are converted into regular nickels.#{{Collectible202}} Golden variant/Mom's Box cause sticky nickels to be replaced by higher value coins.", "Gunk Remover")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -14524,6 +14526,60 @@ function Mod:ConvertChestsToEssence(pickup)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, Mod.ConvertChestsToEssence)
+
+function Mod:ConvertStickyNickelsToNickels(pickup)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+
+        if player:HasTrinket(GUNK_TRINKET) then
+            local multgunk = 1
+
+            if player:GetTrinketMultiplier(GUNK_TRINKET) == 2 then
+                multgunk = 2
+            end
+            if player:GetTrinketMultiplier(GUNK_TRINKET) == 3 then
+                multgunk = 2
+            end
+            if player:GetTrinketMultiplier(GUNK_TRINKET) >= 3 then
+                multgunk = 3
+            end
+            if pickup.Variant == PickupVariant.PICKUP_COIN then
+                print(multgunk)
+                print(player:GetTrinketMultiplier(GUNK_TRINKET))
+                local subtype = pickup.SubType
+                -- Only convert normal pills (subtype < 2048)
+                if subtype == CoinSubType.COIN_STICKYNICKEL and multgunk == 1 then
+                    pickup:ToPickup():Morph(
+                        pickup.Type,
+                        pickup.Variant,
+                        CoinSubType.COIN_NICKEL,
+                        true,
+                        true
+                    )
+                --end
+                elseif subtype == CoinSubType.COIN_STICKYNICKEL and multgunk == 2 then
+                    pickup:ToPickup():Morph(
+                        pickup.Type,
+                        pickup.Variant,
+                        CoinSubType.COIN_DIME,
+                        true,
+                        true
+                    )
+                elseif subtype == CoinSubType.COIN_STICKYNICKEL and multgunk == 3 then
+                    pickup:ToPickup():Morph(
+                        pickup.Type,
+                        pickup.Variant,
+                        CoinSubType.COIN_GOLDEN,
+                        true,
+                        true
+                    )
+                end
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, Mod.ConvertStickyNickelsToNickels)
 
 ----------------------------------------------------------------------------------------
 --- Room Code For Essence Reliquary Below.

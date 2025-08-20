@@ -3,6 +3,9 @@
 - make defense tech not interact with enviromnentals
 - check paint can, it might not work in edge scenarios
 - maybe make spindown tears work with trisagion
+- dogmatism might be removing homing
+- neurotoxin not working with tech x
+- the glow behind soul of longinus is rgb when spawning in
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
 
  - Choco milk: works alongside spears on pontius, works alongside sword on T pontius, works alongside proto tech
@@ -27,16 +30,17 @@ active item like birthright
 item rooms have no items but secret rooms do
 all stats down plus something
 something with this effect: DOGMA_BLACKHOLE
-pick a stage and go there
 plagues
+more golden pickups
 
 add a machine that uses a card or something
 
 Trinket Ideas:
 
+goo gone - no more sticky nickels
 
 Streaks:
-T Apollyon Win Streak: 8
+T Apollyon Win Streak: 13
 	Best: 40
 T Keeper Win Streak: 0
 	Best: 5

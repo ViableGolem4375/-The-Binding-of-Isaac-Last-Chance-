@@ -147,5 +147,6 @@
     <passive id="145" name="Spindown Tears" gfx="spindowntears.png" description="Deleveling tears" quality="3" craftquality="3" devilprice="1" tags="offensive nocantrip" cache="tearflag" />
     <active id="146" name="Lopsided Dreidel" gfx="dreidel.png" description="50/50?" quality="1" craftquality="1" maxcharges="3" chargetype="normal" devilprice="1" tags="offensive nocantrip" />
     <active id="147" name="The Old Testament" gfx="oldtestament.png" description="End of an era" quality="4" craftquality="4" charge="0" devilprice="2" tags="offensive nocantrip book" />
+    <trinket id="148" name="Gunk Remover" gfx="gunkremover.png" description="Nickel unsticker" />
 
 </items>
