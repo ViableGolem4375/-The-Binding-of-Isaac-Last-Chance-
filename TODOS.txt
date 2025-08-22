@@ -3,7 +3,6 @@
 - make defense tech not interact with enviromnentals
 - check paint can, it might not work in edge scenarios
 - maybe make spindown tears work with trisagion
-- dogmatism might be removing homing
 - neurotoxin not working with tech x
 - the glow behind soul of longinus is rgb when spawning in
 - Should have unique synergies for pontius/T pontius/proto tech. list of items to make synergies for:
