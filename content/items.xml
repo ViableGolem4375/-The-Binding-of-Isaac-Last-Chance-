@@ -65,7 +65,7 @@
     <active id="59" name="64 36" gfx="glitch_essence.png" description="72 65 72 6F 6C 6C" quality="1" craftquality="1" maxcharges="1" devilprice="1" chargetype="normal" tags="offensive nocantrip"/>
     <passive id="60" name="Sack of Lucky Pennies" gfx="sack_of_lucky_pennies.png" description="Sold at your local souvenir shop for only 39.99!" quality="2" craftquality="2" devilprice="1" tags="nocantrip offensive summonable" />
     <passive id="61" name="Toolbelt" gfx="toolbelt.png" description="Pocket active" quality="3" craftquality="3" devilprice="1" tags="nocantrip offensive" />
-    <passive id="131" name="Deep Orbit" gfx="orbiting_moons.png" description="One small step for man..." quality="3" craftquality="3" devilprice="2" cache="familiars" tags="offensive summonable monstermanual" />
+    <passive id="131" name="Deep Orbit" gfx="orbiting_moons.png" description="One small step for man..." quality="3" craftquality="3" devilprice="2" cache="familiars" tags="summonable monstermanual" />
     <passive id="132" name="Broken Flux Capacitor" gfx="flux_capacitor_2.png" description="Localized time distortion" quality="1" craftquality="1" devilprice="1" cache="familiars" tags="offensive summonable monstermanual" />
     <active id="62" name="Duae Viae" gfx="duae.png" description="Make your choice" quality="4" craftquality="-1" maxcharges="6" chargetype="normal" initcharge="0" devilprice="1" hidden="true" tags="quest nocantrip book noeden" />
     <passive id="63" name="Path of Salvation" gfx="angelpath.png" description="I am saved" quality="4" craftquality="-1" hidden="true" devilprice="1" tags="quest noeden nocantrip" />
