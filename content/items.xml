@@ -151,5 +151,6 @@
     <passive id="149" name="Greed's Assets" gfx="greedasset.png" description="Gold up" quality="2" craftquality="2" devilprice="1" tags="offensive nocantrip nogreed summonable" />
     <passive id="150" name="Curse of The Chariot" gfx="curseofthechariot.png" description="Rampage!" quality="3" craftquality="3" devilprice="1" tags="nolostbr nocantrip summonable" />
     <passive id="151" name="Lil' Hush" gfx="hush.png" description="Continuous buddy" quality="2" craftquality="2" devilprice="1" tags="offensive nocantrip monstermanual summonable" cache="familiars" />
+    <active id="152" name="Eternal D20" gfx="eternald20.png" description="Reroll the basics?" quality="2" craftquality="2" maxcharges="1" chargetype="normal" devilprice="1" tags="offensive nocantrip" />
 
 </items>

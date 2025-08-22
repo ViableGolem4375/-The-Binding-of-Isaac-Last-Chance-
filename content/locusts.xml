@@ -240,6 +240,8 @@
     <locust id="149" tearFlags2="53" procChance="0.2" color="fly_gold"/>
     <!--  Curse of The Chariot: shielded -->
     <locust id="150" speed="3" tearFlags="34" gfx="chariot.png" overlayGfx="chariot.png"/>
-    <!--  Lil' Hush:  -->
+    <!--  Lil' Hush: 3 locusts -->
     <locust id="151" count="3" gfx="hush.png"/>
+    <!--  Eternal D20: 20% reroll enemies -->
+    <locust id="152" locustFlags="3" gfx="dice.png" gfx="eternal.png"/>
 </locusts>

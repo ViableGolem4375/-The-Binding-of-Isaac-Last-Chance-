@@ -46,6 +46,7 @@
         <Item Name="Greed's Assets" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
         <Item Name="Curse of The Chariot" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
         <Item Name="Lil' Hush" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
+        <Item Name="Eternal D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>
@@ -189,6 +190,7 @@
         <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Curse of The Chariot" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
         <Item Name="Lil' Hush" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
+        <Item Name="Eternal D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -256,6 +258,7 @@
         <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Curse of The Chariot" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
         <Item Name="Lil' Hush" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
+        <Item Name="Eternal D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
@@ -334,6 +337,7 @@
         <Item Name="Golden D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Greed's Assets" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
+        <Item Name="Eternal D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
 
 
     </Pool>

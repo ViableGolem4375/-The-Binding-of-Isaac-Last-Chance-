@@ -222,6 +222,9 @@ HUSH_ITEM = Isaac.GetItemIdByName("Lil' Hush")
 CONFIG_HUSH = itemConfig:GetCollectible(HUSH_ITEM)
 FAMILIAR_VARIANT_HUSH = Isaac.GetEntityVariantByName("Lil' Hush")
 
+ETERNAL_D20_ITEM = Isaac.GetItemIdByName("Eternal D20")
+
+
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Longinus")
 SOUL_ABRAHAM = Isaac.GetCardIdByName("Soul of Abraham")
@@ -2175,6 +2178,7 @@ if EID then
     EID:addCollectible(GREED_ASSET_ITEM, "Pickups have a 5% chance to be turned into their golden version.#This effect can only trigger during the first visit to a room.#{{Luck}} +1% chance per point of luck.", "Greed's Assets")
     EID:addCollectible(CHARIOT_ITEM, "Activates the effect of The Chariot upon taking damage.", "Curse of The Chariot")
     EID:addCollectible(HUSH_ITEM, "Familiar which fires tears that deal 3.5 damage.#The tears have the effects of Continuum, Wiggle Worm, Spectral, and an infinite range value.", "Lil' Hush")
+    EID:addCollectible(ETERNAL_D20_ITEM, "Rerolls all pickups in the room.#Has a 20% chance to remove all pickups instead.", "Eternal D20")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -3794,6 +3798,21 @@ if EID then
     end
 
     EID:addDescriptionModifier("Hush Mod", HushAbyss, HushCallback)
+
+    function EternalD20Abyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == ETERNAL_D20_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function EternalD20Callback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance to reroll enemies.")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Eternal D20 Mod", EternalD20Abyss, EternalD20Callback)
 
     -- Functions for misc descriptions.
 
@@ -13264,6 +13283,30 @@ function Mod:HandleUpdateHush(familiar)
 end
 
 Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdateHush, FAMILIAR_VARIANT_HUSH)
+
+function Mod:UseEternalD20Item(item, rng, player)
+    local sfx = SFXManager()
+    if item == ETERNAL_D20_ITEM then
+        player:AnimateCollectible(ETERNAL_D20_ITEM, "UseItem", "PlayerPickupSparkle")
+        local room = Game():GetRoom()
+            
+        local roll = rng:RandomInt(100) + 1 -- 1 to 4
+        local position =  room:FindFreeTilePosition(player.Position + Vector(20,20), 100)
+        local entities = Isaac.GetRoomEntities()
+
+        if roll <= 80 then
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_D20, false, false)
+        else
+            for _, entity in ipairs(entities) do
+                if entity.Type == EntityType.ENTITY_PICKUP and entity.Variant ~= PickupVariant.PICKUP_COLLECTIBLE then
+                    entity:Remove()
+                end
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseEternalD20Item, ETERNAL_D20_ITEM)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
