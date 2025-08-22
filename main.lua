@@ -11682,7 +11682,7 @@ function Mod:onTearInitDogma(tear)
                 data.nearbyEnemies = data.nearbyEnemies or {}
                 table.insert(DogmaTears, tear)
                 AuraDamage = player.Damage
-                tear.TearFlags = TearFlags.TEAR_SPECTRAL | TearFlags.TEAR_PIERCING
+                tear.TearFlags = player.TearFlags | TearFlags.TEAR_SPECTRAL | TearFlags.TEAR_PIERCING
 
 
                 

@@ -31,13 +31,11 @@ item rooms have no items but secret rooms do
 all stats down plus something
 something with this effect: DOGMA_BLACKHOLE
 plagues
-more golden pickups
 
 add a machine that uses a card or something
 
 Trinket Ideas:
 
-goo gone - no more sticky nickels
 
 Streaks:
 T Apollyon Win Streak: 13
