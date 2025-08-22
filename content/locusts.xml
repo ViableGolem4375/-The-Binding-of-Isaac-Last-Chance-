@@ -236,4 +236,6 @@
     <locust id="146" damageMultiplier="0" tearFlags2="54" procChance="0.5" collisionInterval="10000" gfx="dreidel.png" color="fly_brown"/>
     <!--  Old Testament:  -->
     <locust id="147" damageMultiplier="20" gfx="testament.png" />
+    <!--  Greed's Assets: midas touch 20% chance -->
+    <locust id="149" tearFlags2="53" procChance="0.2" color="fly_gold"/>
 </locusts>

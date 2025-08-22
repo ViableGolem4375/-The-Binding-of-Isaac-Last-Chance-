@@ -215,6 +215,7 @@ SPINDOWN_ITEM = Isaac.GetItemIdByName("Spindown Tears")
 DREIDEL_ITEM = Isaac.GetItemIdByName("Lopsided Dreidel")
 TESTAMENT_ITEM = Isaac.GetItemIdByName("The Old Testament")
 GUNK_TRINKET = Isaac.GetTrinketIdByName("Gunk Remover")
+GREED_ASSET_ITEM = Isaac.GetItemIdByName("Greed's Assets")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2167,6 +2168,7 @@ if EID then
     EID:addCollectible(DREIDEL_ITEM, "50% chance to instantly kill all enemies in the room and damage bosses for 25% of their HP.#50% chance to double all enemies in the room and heal bosses for 25% of their HP.", "Lopsided Dreidel")
     EID:addCollectible(TESTAMENT_ITEM, "#{{Warning}} ONE TIME USE!#On activation, sends Isaac to the Home floor and grants Magic Mushroom, Raw Liver, Birthday Cake, PJs, Dad's Note, and a Holy Card.", "The Old Testament")
     EID:addTrinket(GUNK_TRINKET, "Sticky nickels are converted into regular nickels.#{{Collectible202}} Golden variant/Mom's Box cause sticky nickels to be replaced by higher value coins.", "Gunk Remover")
+    EID:addCollectible(GREED_ASSET_ITEM, "Pickups have a 5% chance to be turned into their golden version.#This effect can only trigger during the first visit to a room.#{{Luck}} +1% chance per point of luck.", "Greed's Assets")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -3740,6 +3742,21 @@ if EID then
     end
 
     EID:addDescriptionModifier("Testament Mod", TestamentAbyss, TestamentCallback)
+
+    function GreedAssetAbyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == GREED_ASSET_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function GreedAssetCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "20% chance to turn enemies to gold")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("greed Asset Mod", GreedAssetAbyss, GreedAssetCallback)
 
     -- Functions for misc descriptions.
 
@@ -12951,6 +12968,149 @@ function Mod:UseTestamentItem(item, rng, player)
 end
 
 Mod:AddCallback(ModCallbacks.MC_USE_ITEM, Mod.UseTestamentItem, TESTAMENT_ITEM)
+
+local function getGoldenPickupChance(player)
+    local baseChance = 0.05 -- 10% base chance
+    local luckScaling = 0.05 * player:GetCollectibleNum(GREED_ASSET_ITEM)
+    local luckBonus = math.max(0, player.Luck * luckScaling)
+    return math.min(0.5, baseChance + luckBonus) -- Cap at 50%
+end
+
+function Mod:ConvertToGold(pickup)
+    for i = 0, Game():GetNumPlayers() - 1 do
+        local player = Game():GetPlayer(i)
+
+        if player:HasCollectible(GREED_ASSET_ITEM) then
+            local chance = getGoldenPickupChance(player)
+            local chance2 = math.random()
+            local currentRoom = Game():GetRoom()
+            if currentRoom:IsFirstVisit() == true then
+                if pickup.Variant == PickupVariant.PICKUP_COIN and chance2 <= chance then
+                    local subtype = pickup.SubType
+                    if subtype == CoinSubType.COIN_PENNY then
+                        pickup:ToPickup():Morph(
+                            pickup.Type,
+                            pickup.Variant,
+                            CoinSubType.COIN_GOLDEN,
+                            true,
+                            true
+                        )
+                    end
+                end
+                if pickup.Variant == PickupVariant.PICKUP_BOMB and chance2 <= chance then
+                    local subtype = pickup.SubType
+                    if subtype == BombSubType.BOMB_NORMAL then
+                        pickup:ToPickup():Morph(
+                            pickup.Type,
+                            pickup.Variant,
+                            BombSubType.BOMB_GOLDEN,
+                            true,
+                            true
+                        )
+                    end
+                    if subtype == BombSubType.BOMB_DOUBLEPACK then
+                        pickup:ToPickup():Morph(
+                            pickup.Type,
+                            pickup.Variant,
+                            BombSubType.BOMB_GOLDEN,
+                            true,
+                            true
+                        )
+                    end
+                end
+                if pickup.Variant == PickupVariant.PICKUP_LIL_BATTERY and chance2 <= chance then
+                    local subtype = pickup.SubType
+                    if subtype == BatterySubType.BATTERY_MICRO then
+                        pickup:ToPickup():Morph(
+                            pickup.Type,
+                            pickup.Variant,
+                            BatterySubType.BATTERY_GOLDEN,
+                            true,
+                            true
+                        )
+                    end
+                    if subtype == BatterySubType.BATTERY_NORMAL then
+                        pickup:ToPickup():Morph(
+                            pickup.Type,
+                            pickup.Variant,
+                            BatterySubType.BATTERY_GOLDEN,
+                            true,
+                            true
+                        )
+                    end
+                end
+                if pickup.Variant == PickupVariant.PICKUP_KEY and chance2 <= chance then
+                    local subtype = pickup.SubType
+                    if subtype == KeySubType.KEY_NORMAL then
+                        pickup:ToPickup():Morph(
+                            pickup.Type,
+                            pickup.Variant,
+                            KeySubType.KEY_GOLDEN,
+                            true,
+                            true
+                        )
+                    end
+                    if subtype == KeySubType.KEY_DOUBLEPACK then
+                        pickup:ToPickup():Morph(
+                            pickup.Type,
+                            pickup.Variant,
+                            KeySubType.KEY_GOLDEN,
+                            true,
+                            true
+                        )
+                    end
+                end
+                if pickup.Variant == PickupVariant.PICKUP_HEART and chance2 <= chance then
+                    local subtype = pickup.SubType
+                    if subtype == HeartSubType.HEART_HALF then
+                        pickup:ToPickup():Morph(
+                            pickup.Type,
+                            pickup.Variant,
+                            HeartSubType.HEART_GOLDEN,
+                            true,
+                            true
+                        )
+                    end
+                    if subtype == HeartSubType.HEART_FULL then
+                        pickup:ToPickup():Morph(
+                            pickup.Type,
+                            pickup.Variant,
+                            HeartSubType.HEART_GOLDEN,
+                            true,
+                            true
+                        )
+                    end
+                end
+                if (pickup.Variant == PickupVariant.PICKUP_CHEST or pickup.Variant == PickupVariant.PICKUP_SPIKEDCHEST or pickup.Variant == PickupVariant.PICKUP_MIMICCHEST) and chance2 <= chance then
+                    local subtype = pickup.SubType
+                    --if subtype == HeartSubType.HEART_HALF then
+                        pickup:ToPickup():Morph(
+                            pickup.Type,
+                            PickupVariant.PICKUP_LOCKEDCHEST,
+                            0,
+                            true,
+                            true
+                        )
+                    --end
+                end
+                if (pickup.Variant == PickupVariant.PICKUP_PILL or pickup.Variant == PickupVariant.PICKUP_SPIKEDCHEST or pickup.Variant == PickupVariant.PICKUP_MIMICCHEST) and chance2 <= chance then
+                    local subtype = pickup.SubType
+                    --if subtype == HeartSubType.HEART_HALF then
+                        pickup:ToPickup():Morph(
+                            pickup.Type,
+                            PickupVariant.PICKUP_PILL,
+                            14,
+                            true,
+                            true
+                        )
+                    --end
+                end
+            end
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, Mod.ConvertToGold)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

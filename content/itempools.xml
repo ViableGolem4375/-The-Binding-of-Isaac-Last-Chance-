@@ -43,6 +43,7 @@
         <Item Name="Spindown Tears" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Old Testament" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
+        <Item Name="Greed's Assets" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
 
 
     </Pool>
@@ -125,6 +126,7 @@
         <Item Name="Wooden Key" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Wooden Bomb" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Greed's Assets" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
 
 
     </Pool>
@@ -321,6 +323,7 @@
         <Item Name="Shattered Gladius" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Golden D20" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Greed's Assets" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
 
 
     </Pool>
