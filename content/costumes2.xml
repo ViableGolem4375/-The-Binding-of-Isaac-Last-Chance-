@@ -59,5 +59,6 @@
     <costume id="142" anm2path="treatment.anm2" type="passive" priority="0" />
     <costume id="145" anm2path="spindowntears.anm2" type="passive" priority="0" />
     <costume id="149" anm2path="greedasset.anm2" type="passive" priority="0" />
+    <costume id="150" anm2path="curseofthechariot.anm2" type="passive" priority="0" />
 
 </costumes>

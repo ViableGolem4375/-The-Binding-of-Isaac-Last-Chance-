@@ -44,6 +44,7 @@
         <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="The Old Testament" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
         <Item Name="Greed's Assets" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
+        <Item Name="Curse of The Chariot" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
 
 
     </Pool>
@@ -101,6 +102,7 @@
         <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lil' Dogma" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Spindown Tears" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Curse of The Chariot" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="boss">
@@ -137,6 +139,7 @@
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Executioner's Axe" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Dark Motivator" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Curse of The Chariot" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
 
 
     </Pool>
@@ -183,6 +186,7 @@
         <Item Name="Golden D20" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
         <Item Name="Spindown Tears" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Curse of The Chariot" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedBoss">
@@ -248,6 +252,7 @@
         <Item Name="Golden D20" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
         <Item Name="Spindown Tears" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lopsided Dreidel" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Curse of The Chariot" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="greedCurse">
@@ -257,6 +262,7 @@
         <Item Name="Poltergeist" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Executioner's Axe" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Dark Motivator" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Curse of The Chariot" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
 
 
     </Pool>
@@ -314,6 +320,7 @@
         <Item Name="Experimental Treatment 2.0" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Lil' Dogma" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
         <Item Name="Spindown Tears" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+        <Item Name="Curse of The Chariot" Weight="0.2" DecreaseBy="0.2" RemoveOn="0.1" />
 
     </Pool>
     <Pool Name="craneGame">

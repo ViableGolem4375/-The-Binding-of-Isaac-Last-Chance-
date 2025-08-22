@@ -238,4 +238,6 @@
     <locust id="147" damageMultiplier="20" gfx="testament.png" />
     <!--  Greed's Assets: midas touch 20% chance -->
     <locust id="149" tearFlags2="53" procChance="0.2" color="fly_gold"/>
+    <!--  Curse of The Chariot: shielded -->
+    <locust id="150" speed="3" tearFlags="34" gfx="chariot.png" overlayGfx="chariot.png"/>
 </locusts>

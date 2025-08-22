@@ -216,6 +216,7 @@ DREIDEL_ITEM = Isaac.GetItemIdByName("Lopsided Dreidel")
 TESTAMENT_ITEM = Isaac.GetItemIdByName("The Old Testament")
 GUNK_TRINKET = Isaac.GetTrinketIdByName("Gunk Remover")
 GREED_ASSET_ITEM = Isaac.GetItemIdByName("Greed's Assets")
+CHARIOT_ITEM = Isaac.GetItemIdByName("Curse of The Chariot")
 
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
@@ -2169,6 +2170,7 @@ if EID then
     EID:addCollectible(TESTAMENT_ITEM, "#{{Warning}} ONE TIME USE!#On activation, sends Isaac to the Home floor and grants Magic Mushroom, Raw Liver, Birthday Cake, PJs, Dad's Note, and a Holy Card.", "The Old Testament")
     EID:addTrinket(GUNK_TRINKET, "Sticky nickels are converted into regular nickels.#{{Collectible202}} Golden variant/Mom's Box cause sticky nickels to be replaced by higher value coins.", "Gunk Remover")
     EID:addCollectible(GREED_ASSET_ITEM, "Pickups have a 5% chance to be turned into their golden version.#This effect can only trigger during the first visit to a room.#{{Luck}} +1% chance per point of luck.", "Greed's Assets")
+    EID:addCollectible(CHARIOT_ITEM, "Activates the effect of The Chariot upon taking damage.", "Curse of The Chariot")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -3757,6 +3759,22 @@ if EID then
     end
 
     EID:addDescriptionModifier("greed Asset Mod", GreedAssetAbyss, GreedAssetCallback)
+
+    function ChariotAbyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == CHARIOT_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function ChariotCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Fast")
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Shielded")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Chariot Mod", ChariotAbyss, ChariotCallback)
 
     -- Functions for misc descriptions.
 
@@ -13111,6 +13129,20 @@ function Mod:ConvertToGold(pickup)
 end
 
 Mod:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, Mod.ConvertToGold)
+
+function Mod:OnPlayerDamagedChariot(entity, amount, flags, source, countdown)
+    if entity.Type == EntityType.ENTITY_PLAYER then
+        local player = entity:ToPlayer()
+
+        if player:HasCollectible(CHARIOT_ITEM) then
+            -- Trigger Dataminer effect manually
+            player:UseActiveItem(CollectibleType.COLLECTIBLE_MY_LITTLE_UNICORN, false, false)
+            
+        end
+    end
+end
+
+Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.OnPlayerDamagedChariot)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below
