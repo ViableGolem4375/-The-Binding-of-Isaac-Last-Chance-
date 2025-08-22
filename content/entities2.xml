@@ -106,5 +106,6 @@
         <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0"/>
     </entity>
     <entity name="Lil' Dogma" id="3" anm2path="dogma.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
+    <entity name="Lil' Hush" id="3" anm2path="hush.anm2" tags="cansacrifice" shadowSize="11" friction="1" />
 
 </entities>

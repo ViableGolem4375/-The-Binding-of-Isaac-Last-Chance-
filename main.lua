@@ -218,6 +218,9 @@ GUNK_TRINKET = Isaac.GetTrinketIdByName("Gunk Remover")
 GREED_ASSET_ITEM = Isaac.GetItemIdByName("Greed's Assets")
 CHARIOT_ITEM = Isaac.GetItemIdByName("Curse of The Chariot")
 
+HUSH_ITEM = Isaac.GetItemIdByName("Lil' Hush")
+CONFIG_HUSH = itemConfig:GetCollectible(HUSH_ITEM)
+FAMILIAR_VARIANT_HUSH = Isaac.GetEntityVariantByName("Lil' Hush")
 
 SOUL_DOMINO = Isaac.GetCardIdByName("Soul of Domino")
 SOUL_PONTIUS = Isaac.GetCardIdByName("Soul of Longinus")
@@ -2171,6 +2174,7 @@ if EID then
     EID:addTrinket(GUNK_TRINKET, "Sticky nickels are converted into regular nickels.#{{Collectible202}} Golden variant/Mom's Box cause sticky nickels to be replaced by higher value coins.", "Gunk Remover")
     EID:addCollectible(GREED_ASSET_ITEM, "Pickups have a 5% chance to be turned into their golden version.#This effect can only trigger during the first visit to a room.#{{Luck}} +1% chance per point of luck.", "Greed's Assets")
     EID:addCollectible(CHARIOT_ITEM, "Activates the effect of The Chariot upon taking damage.", "Curse of The Chariot")
+    EID:addCollectible(HUSH_ITEM, "Familiar which fires tears that deal 3.5 damage.#The tears have the effects of Continuum, Wiggle Worm, Spectral, and an infinite range value.", "Lil' Hush")
 
     --[[ THE_PLAYER = Game():GetPlayer(0)
 
@@ -3775,6 +3779,21 @@ if EID then
     end
 
     EID:addDescriptionModifier("Chariot Mod", ChariotAbyss, ChariotCallback)
+
+    function HushAbyss(descObj)
+	    for i = 0, Game():GetNumPlayers() - 1 do
+            local player = Game():GetPlayer(i)
+        
+	        if descObj.ObjType == 5 and descObj.ObjVariant == 100 and descObj.ObjSubType == HUSH_ITEM and player:HasCollectible(CollectibleType.COLLECTIBLE_ABYSS) then return true end
+        end
+    end
+    function HushCallback(descObj)
+        local textColor = "{{ColorRed}}"
+        EID:appendToDescription(descObj, "#{{Collectible706}} " .. textColor .. "Grants 3 locusts")
+	    return descObj
+    end
+
+    EID:addDescriptionModifier("Hush Mod", HushAbyss, HushCallback)
 
     -- Functions for misc descriptions.
 
@@ -13143,6 +13162,108 @@ function Mod:OnPlayerDamagedChariot(entity, amount, flags, source, countdown)
 end
 
 Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Mod.OnPlayerDamagedChariot)
+
+---@param player EntityPlayer
+function Mod:EvaluateCacheHush(player)
+    local effects = player:GetEffects()
+    local count = effects:GetCollectibleEffectNum(HUSH_ITEM) + player:GetCollectibleNum(HUSH_ITEM)
+    local rng = RNG()
+    local seed = math.max(Random(), 1)
+    rng:SetSeed(seed, RNG_SHIFT_INDEX_FAIL)
+
+    player:CheckFamiliar(FAMILIAR_VARIANT_HUSH, count, rng, CONFIG_HUSH)
+end
+
+Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Mod.EvaluateCacheHush, CacheFlag.CACHE_FAMILIARS)
+
+---@param familiar EntityFamiliar
+function Mod:HandleInitHush(familiar)
+    familiar:AddToFollowers()
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, Mod.HandleInitHush, FAMILIAR_VARIANT_HUSH)
+
+---@param familiar EntityFamiliar
+function Mod:HandleUpdateHush(familiar)
+    local sprite = familiar:GetSprite()
+    local player = familiar.Player
+
+    local fireDirection = player:GetFireDirection()
+    local direction
+    local shootAnim
+    local doFlip = false
+
+    if fireDirection == Direction.LEFT then
+        direction = Vector(-1, 0)
+        shootAnim = "FloatShootSide"
+        doFlip = true
+    elseif fireDirection == Direction.RIGHT then
+        direction = Vector(1, 0)
+        shootAnim = "FloatShootSide"
+    elseif fireDirection == Direction.DOWN then
+        direction = Vector(0, 1)
+        shootAnim = "FloatShootDown"
+    elseif fireDirection == Direction.UP then
+        direction = Vector(0, -1)
+        shootAnim = "FloatShootUp"
+    end
+
+    if direction ~= nil and familiar.FireCooldown == 0 then
+        local velocity = direction * TEAR_SPEED_FAIL + player:GetTearMovementInheritance(direction)
+        local tear = Isaac.Spawn(
+            EntityType.ENTITY_TEAR,
+            TearVariant.MULTIDIMENSIONAL,
+            0,
+            familiar.Position,
+            velocity,
+            familiar
+        ):ToTear()
+        if tear then
+            tear:SetColor(Color(0.4, 0.1, 0.5, 1.0, 0, 0, 0), 30, 1, false, false)
+        end
+        if player:HasTrinket(TrinketType.TRINKET_BABY_BENDER) and tear then
+            tear.TearFlags = TearFlags.TEAR_HOMING | TearFlags.TEAR_CONTINUUM | TearFlags.TEAR_SPECTRAL | TearFlags.TEAR_WIGGLE
+        else
+            tear.TearFlags = TearFlags.TEAR_CONTINUUM | TearFlags.TEAR_SPECTRAL | TearFlags.TEAR_WIGGLE
+        end
+
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+            tear.CollisionDamage = 7
+        else
+            tear.CollisionDamage = 3.5
+        end
+
+        
+        tear.Scale = 1
+        tear.FallingSpeed = 0.2
+        tear.FallingAcceleration = -0.1
+        --tear.Height = 2
+        
+        --tear.CollisionDamage = TEAR_DAMAGE_FAIL
+        --tear.TearFlags = TearFlags.TEAR_BURSTSPLIT -- Makes tears explode into smaller projectiles.
+
+         if player:HasTrinket(TrinketType.TRINKET_FORGOTTEN_LULLABY) then
+            familiar.FireCooldown = 10
+        else
+            familiar.FireCooldown = 20
+        end
+ 
+
+        --familiar.FireCooldown = SHOOTING_TICK_COOLDOWN_FAIL
+
+        sprite.FlipX = doFlip
+        sprite:Play(shootAnim, true)
+    end
+
+    if sprite:IsFinished() then
+        sprite:Play("FloatDown")
+    end
+
+    familiar:FollowParent()
+    familiar.FireCooldown = math.max(familiar.FireCooldown - 1, 0)
+end
+
+Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Mod.HandleUpdateHush, FAMILIAR_VARIANT_HUSH)
 
 ----------------------------------------------------------------------------------------
 --- Consumable Code Below

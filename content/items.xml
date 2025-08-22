@@ -148,7 +148,8 @@
     <active id="146" name="Lopsided Dreidel" gfx="dreidel.png" description="50/50?" quality="1" craftquality="1" maxcharges="3" chargetype="normal" devilprice="1" tags="offensive nocantrip" />
     <active id="147" name="The Old Testament" gfx="oldtestament.png" description="End of an era" quality="4" craftquality="4" charge="0" devilprice="2" tags="offensive nocantrip book" />
     <trinket id="148" name="Gunk Remover" gfx="gunkremover.png" description="Nickel unsticker" />
-    <passive id="149" name="Greed's Assets" gfx="greedasset.png" description="Gold up" quality="2" craftquality="2" devilprice="1" tags="offensive nocantrip nogreed" />
-    <passive id="150" name="Curse of The Chariot" gfx="curseofthechariot.png" description="Rampage!" quality="3" craftquality="3" devilprice="1" tags="offensive nocantrip" />
+    <passive id="149" name="Greed's Assets" gfx="greedasset.png" description="Gold up" quality="2" craftquality="2" devilprice="1" tags="offensive nocantrip nogreed summonable" />
+    <passive id="150" name="Curse of The Chariot" gfx="curseofthechariot.png" description="Rampage!" quality="3" craftquality="3" devilprice="1" tags="nolostbr nocantrip summonable" />
+    <passive id="151" name="Lil' Hush" gfx="hush.png" description="Continuous buddy" quality="2" craftquality="2" devilprice="1" tags="offensive nocantrip monstermanual summonable" cache="familiars" />
 
 </items>
